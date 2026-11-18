@@ -18,7 +18,8 @@
     "check": "pnpm typecheck && pnpm lint && pnpm test",
     "e2e": "playwright test",
     "shots": "node scripts/shots.ts",
-    "echo-server": "node scripts/echo-server.ts"
+    "echo-server": "node scripts/echo-server.ts",
+    "audio-trial": "node scripts/audio-trial.ts"
   },
   "dependencies": {
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",

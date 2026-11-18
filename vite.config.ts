@@ -1,8 +1,8 @@
 import react from '@vitejs/plugin-react';
 import type { Plugin, ProxyOptions } from 'vite';
 import { defineConfig } from 'vitest/config';
-import { echoServerPort } from './scripts/echo-server';
-import { devEndpoints } from './src/app/routes';
+import { echoServerPort } from './scripts/echo-server.ts';
+import { devEndpoints } from './src/app/routes.ts';
 
 /**
  * Content security policy for built pages (docs/mimari.md, "Capacitor'a hazır kalmak için";

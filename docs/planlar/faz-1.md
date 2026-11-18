@@ -21,7 +21,7 @@
 - [x] Task 6: Kayıt ve geri çalma
 - [x] Task 7: Yankı sunucusu ve yankı testi
 - [x] Task 8: Cihaz raporu
-- [ ] Task 9: Cihaz denemesi sunucusu
+- [x] Task 9: Cihaz denemesi sunucusu
 - [ ] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
 - [ ] Task 11: Capacitor kurulumu
 - [ ] Task 12: Kabukta derleme ve açılış
@@ -586,11 +586,11 @@ readMicrophonePermission(): Promise<PermissionReading>
   6. Her adres için `https://<ip>:4443/gelistirme/ses` adresini ve kök sertifikanın yolunu (`mkcert -CAROOT`/`rootCA.pem`) yazar.
   7. Ctrl+C ile iki sunucuyu da kapatır.
 - Bu bir geliştirme betiği; otomatik testi yok, aşağıdaki doğrulamayla kanıtlanır.
-- [ ] Doğrulama:
+- [x] Doğrulama:
   - `pnpm audio-trial` arka planda çalışırken `curl --cacert "$(mkcert -CAROOT)/rootCA.pem" -sI https://<yerel ip>:4443/gelistirme/ses` → 200;
   - geçici bir Playwright betiği, Chromium ve WebKit'te sertifika hatası yoksaymadan `https://<yerel ip>:4443/gelistirme/ses` adresini açar: mikrofon açılır, yankı testi `wss:` üzerinden 500 / 500 verir. Ekran görüntüsü `shots/audio-trial-lan.png`;
   - Ctrl+C sonrası 4443 ve 4318 kapıları boşalır.
-- [ ] Commit: `feat(scripts): serve the audio lab over HTTPS for device trials`
+- [x] Commit: `feat(scripts): serve the audio lab over HTTPS for device trials`
 
 ### Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
 

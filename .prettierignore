@@ -6,6 +6,7 @@ docs/
 pnpm-lock.yaml
 dist/
 dist-e2e/
+dist-trial/
 coverage/
 shots/
 test-results/
