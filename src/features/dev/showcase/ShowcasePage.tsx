@@ -1,4 +1,12 @@
 import { ButtonDemo, IconButtonDemo } from './ButtonDemo';
+import {
+  CheckboxDemo,
+  OptionCardDemo,
+  SegmentedControlDemo,
+  SwitchDemo,
+  TextAreaDemo,
+  TextFieldDemo,
+} from './FormDemo';
 import { IconDemo } from './IconDemo';
 import { BookCoverDemo, CompanionDemo, MonsterDemo, TileDemo } from './IllustrationDemo';
 import styles from './Showcase.module.css';
@@ -22,6 +30,12 @@ export function ShowcasePage() {
       <MonsterDemo />
       <TileDemo />
       <BookCoverDemo />
+      <SegmentedControlDemo />
+      <OptionCardDemo />
+      <SwitchDemo />
+      <CheckboxDemo />
+      <TextFieldDemo />
+      <TextAreaDemo />
       <IconDemo />
     </main>
   );

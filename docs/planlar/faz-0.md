@@ -24,7 +24,7 @@
 - [x] Task 9: Button ve IconButton
 - [x] Task 10: Chip, Card, PageCard ve SpeechBubble
 - [x] Task 11: Companion, Monster, Tile ve BookCover
-- [ ] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
+- [x] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
 - [ ] Task 13: StepTiles ve MicButton
 - [ ] Task 14: StatCard, LineChart ve ProgressBar
 - [ ] Task 15: ReadingText, PhraseText ve RaceBar
@@ -329,9 +329,9 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 - `SegmentedControl`: gerçek `radio` grubu; seçili bölme safran; köşe 14.
 - `OptionCard`: `button[aria-pressed]`; seçiliyken safran, gölgeli ve onay işaretli.
 
-- [ ] Önce testler: Switch'in tıklama ve boşluk tuşuyla açılıp kapanması; SegmentedControl'de seçim ve ok tuşları; OptionCard'da `aria-pressed`; Checkbox'ta etikete tıklayınca işaretlenmesi; TextField'ın etiketle bulunması.
-- [ ] Vitrine eklenir. Görüntü K1, K2, U2, U3 ve V4 ile karşılaştırılır.
-- [ ] Commit: `feat(components): add form controls`
+- [x] Önce testler: Switch'in tıklama ve boşluk tuşuyla açılıp kapanması; SegmentedControl'de seçim ve ok tuşları; OptionCard'da `aria-pressed`; Checkbox'ta etikete tıklayınca işaretlenmesi; TextField'ın etiketle bulunması.
+- [x] Vitrine eklenir. Görüntü K1, K2, U2, U3 ve V4 ile karşılaştırılır.
+- [x] Commit: `feat(components): add form controls`
 
 ### Task 13: StepTiles ve MicButton
 

@@ -1,0 +1,23 @@
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.box {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 1px 0 0;
+  accent-color: var(--color-cobalt);
+  cursor: pointer;
+}
+
+.text {
+  color: var(--color-ink);
+  font-size: var(--size-control-text);
+  font-weight: var(--weight-medium);
+  line-height: 1.4;
+}

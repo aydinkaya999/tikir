@@ -28,6 +28,12 @@ describe('Icon', () => {
     expect(svg?.innerHTML).toBe(iconSet.icons[name]);
   });
 
+  it('takes a heavier stroke for tiny badges (U3 check: 12 px, stroke 3.4)', () => {
+    const { container } = render(<Icon name="check" size={12} strokeWidth={3.4} />);
+
+    expect(container.querySelector('svg')).toHaveAttribute('stroke-width', '3.4');
+  });
+
   it('takes a size', () => {
     const { container } = render(<Icon name="play" size={18} />);
     const svg = container.querySelector('svg');

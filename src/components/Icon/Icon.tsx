@@ -7,6 +7,8 @@ interface IconProps {
   name: IconName;
   /** Pixel size of the square icon; the drawings use a 24-unit grid. */
   size?: number;
+  /** The set's 2.2 by default; the design thickens tiny badge icons (U3 check: 3.4). */
+  strokeWidth?: number;
   className?: string;
 }
 
@@ -15,7 +17,12 @@ interface IconProps {
  * round caps, drawn in currentColor. Always decorative; the control that holds an icon carries
  * the accessible name.
  */
-export function Icon({ name, size = 24, className }: IconProps) {
+export function Icon({
+  name,
+  size = 24,
+  strokeWidth = iconGeometry.strokeWidth,
+  className,
+}: IconProps) {
   return (
     <svg
       aria-hidden="true"
@@ -26,7 +33,7 @@ export function Icon({ name, size = 24, className }: IconProps) {
       viewBox={iconGeometry.viewBox}
       fill={iconGeometry.fill}
       stroke="currentColor"
-      strokeWidth={iconGeometry.strokeWidth}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
