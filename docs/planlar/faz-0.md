@@ -21,7 +21,7 @@
 - [x] Task 6: `domain/readability.ts` ve sınıf eşikleri
 - [x] Task 7: Stiller, yazı tipleri ve `tr.ts`
 - [x] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
-- [ ] Task 9: Button ve IconButton
+- [x] Task 9: Button ve IconButton
 - [ ] Task 10: Chip, Card, PageCard ve SpeechBubble
 - [ ] Task 11: Companion, Monster, Tile ve BookCover
 - [ ] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
@@ -293,10 +293,10 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
   - Pasif durumu vardır.
 - `IconButton`: `{ icon: IconName; label: string; size?: 44|48|52; raised?: boolean; to?: string }`. Yuvarlaktır; `label` erişilebilir addır.
 
-- [ ] Önce testler: rol ve erişilebilir ad; `to` verilince bağlantı ve `href`; pasif durum.
-- [ ] Ölçüler G1, G4, K1 ve U3 HTML'inden. Vitrinde her tür, her boyut, ikonlu, tam genişlik ve pasif.
-- [ ] Doğrulama: `pnpm check`; vitrinin üç genişlikte görüntüsü tasarımdaki düğmelerle karşılaştırılır.
-- [ ] Commit: `feat(components): add Button and IconButton`
+- [x] Önce testler: rol ve erişilebilir ad; `to` verilince bağlantı ve `href`; pasif durum.
+- [x] Ölçüler G1, G4, K1 ve U3 HTML'inden. Vitrinde her tür, her boyut, ikonlu, tam genişlik ve pasif.
+- [x] Doğrulama: `pnpm check`; vitrinin üç genişlikte görüntüsü tasarımdaki düğmelerle karşılaştırılır.
+- [x] Commit: `feat(components): add Button and IconButton`
 
 ### Task 10: Chip, Card, PageCard ve SpeechBubble
 

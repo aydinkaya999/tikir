@@ -18,3 +18,18 @@ export function Section({ name, children }: SectionProps) {
     </section>
   );
 }
+
+interface RowProps {
+  /** Which props or state the row shows, in code terms. */
+  label: string;
+  children: ReactNode;
+}
+
+export function Row({ label, children }: RowProps) {
+  return (
+    <div className={styles.example}>
+      <p className={styles.label}>{label}</p>
+      <div className={styles.row}>{children}</div>
+    </div>
+  );
+}

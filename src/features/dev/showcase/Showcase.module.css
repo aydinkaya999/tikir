@@ -33,6 +33,13 @@
 }
 
 /* A labelled row of examples inside a section. */
+.example {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;

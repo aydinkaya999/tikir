@@ -5,4 +5,9 @@
  * design/ekranlar/*.html. Components add what they need; nothing here is invented.
  */
 :root {
+  /* Buttons: the same text size on every device ("Başla", "Kelimeyi dinle"; G1, G2, K1, U1). */
+  --size-button: 17px;
+  --size-button-large: 18px;
+  /* Pressed state, not drawn: 2 px down, shadow 2 px shorter (docs/tasarim-sistemi.md). */
+  --lift-button-pressed: 0 2px 0 var(--color-ink);
 }

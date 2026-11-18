@@ -1,3 +1,4 @@
+import { ButtonDemo, IconButtonDemo } from './ButtonDemo';
 import { IconDemo } from './IconDemo';
 import styles from './Showcase.module.css';
 
@@ -9,6 +10,8 @@ export function ShowcasePage() {
   return (
     <main className={styles.page}>
       <h1 className={styles.title}>Vitrin</h1>
+      <ButtonDemo />
+      <IconButtonDemo />
       <IconDemo />
     </main>
   );
