@@ -14,10 +14,13 @@
   --size-label: 14px;
   /* Tıkır's speech bubble text: 15 px on phones (G2, G4), 17 px from 700 px (G1, G2, K1). */
   --size-bubble: 15px;
+  /* Book title on the ready-page cover: 15 px on phones, 21 px from 700 px (U4). */
+  --size-cover-title: 15px;
 }
 
 @media (min-width: 700px) {
   :root {
     --size-bubble: 17px;
+    --size-cover-title: 21px;
   }
 }

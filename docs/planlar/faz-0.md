@@ -23,7 +23,7 @@
 - [x] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
 - [x] Task 9: Button ve IconButton
 - [x] Task 10: Chip, Card, PageCard ve SpeechBubble
-- [ ] Task 11: Companion, Monster, Tile ve BookCover
+- [x] Task 11: Companion, Monster, Tile ve BookCover
 - [ ] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
 - [ ] Task 13: StepTiles ve MicButton
 - [ ] Task 14: StatCard, LineChart ve ProgressBar
@@ -317,9 +317,9 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 - `Tile`: `{ state: 'done'|'today'|'locked'; pattern?: 1|2|3|4|5|6; size?: number }`. Ölçü ve görünüm G1 ve kurulum panosundan.
 - `BookCover`: çini desenli kapak; ölçüler U1 ve U4'ten.
 
-- [ ] Önce testler: `alt` ya da süs görseli; ifadeye göre doğru görsel.
-- [ ] Vitrine eklenir (6 ifade, 2 tür × 2 durum, 3 karo durumu, kapaklar).
-- [ ] Commit: `feat(components): add Companion, Monster, Tile and BookCover`
+- [x] Önce testler: `alt` ya da süs görseli; ifadeye göre doğru görsel.
+- [x] Vitrine eklenir (6 ifade, 2 tür × 2 durum, 3 karo durumu, kapaklar).
+- [x] Commit: `feat(components): add Companion, Monster, Tile and BookCover`
 
 ### Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
 

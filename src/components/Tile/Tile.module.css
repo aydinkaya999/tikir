@@ -1,0 +1,41 @@
+.tile {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius-tile);
+  background: var(--color-white);
+}
+
+.done {
+  box-shadow: var(--lift-tile);
+}
+
+/* Today stands one step higher, with the button lift (G1). */
+.today {
+  background: var(--color-saffron);
+  box-shadow: var(--lift-button);
+}
+
+.locked {
+  border-color: var(--color-line);
+  box-shadow: none;
+}
+
+.fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock {
+  color: var(--color-muted);
+}

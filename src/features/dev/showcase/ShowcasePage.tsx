@@ -1,5 +1,6 @@
 import { ButtonDemo, IconButtonDemo } from './ButtonDemo';
 import { IconDemo } from './IconDemo';
+import { BookCoverDemo, CompanionDemo, MonsterDemo, TileDemo } from './IllustrationDemo';
 import styles from './Showcase.module.css';
 import { CardDemo, ChipDemo, PageCardDemo, SpeechBubbleDemo } from './SurfaceDemo';
 
@@ -17,6 +18,10 @@ export function ShowcasePage() {
       <CardDemo />
       <PageCardDemo />
       <SpeechBubbleDemo />
+      <CompanionDemo />
+      <MonsterDemo />
+      <TileDemo />
+      <BookCoverDemo />
       <IconDemo />
     </main>
   );
