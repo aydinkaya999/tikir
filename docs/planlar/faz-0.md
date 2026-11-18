@@ -17,7 +17,7 @@
 - [x] Task 2: Proje iskeleti
 - [x] Task 3: Lint ve biçim
 - [x] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
-- [ ] Task 5: `domain/text.ts`
+- [x] Task 5: `domain/text.ts`
 - [ ] Task 6: `domain/readability.ts` ve sınıf eşikleri
 - [ ] Task 7: Stiller, yazı tipleri ve `tr.ts`
 - [ ] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
@@ -189,7 +189,7 @@ export function countSyllables(word: string): number
   - kesme işareti bulunduğu yerde kalır, böylece `syllables.join('') === word`.
 - `countSyllables` = ünlü sayısı.
 
-- [ ] Önce testler:
+- [x] Önce testler:
   - mimari'deki 13 heceleme örneği birebir (tablo testi);
   - `Tıkır’ın` → `['Tı','kı','r’ın']`, 3 hece;
   - `IŞIK` → `['I','ŞIK']`;
@@ -198,8 +198,8 @@ export function countSyllables(word: string): number
   - `splitSentences`: Ateşman örneği 2 cümle; `“Işığım geri geliyor!” diye bağırdı.` 1 cümle; `…` ile biten cümle;
   - `splitPhraseUnits('Dar patika, | çam ağaçlarının arasından | yukarıya kıvrılıyordu.')` → 3 ünite;
   - `toUpperTr('istanbul ılık')` → `İSTANBUL ILIK`; `toLowerTr('İSTANBUL IŞIK')` → `istanbul ışık`.
-- [ ] Kırmızıyı gör (`pnpm test src/domain/text.test.ts`), sonra yaz, yeşili gör.
-- [ ] Commit: `feat(domain): add Turkish text utilities`
+- [x] Kırmızıyı gör (`pnpm test src/domain/text.test.ts`), sonra yaz, yeşili gör.
+- [x] Commit: `feat(domain): add Turkish text utilities`
 
 ### Task 6: `domain/readability.ts` ve sınıf eşikleri
 
