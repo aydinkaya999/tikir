@@ -12,30 +12,33 @@ const allPaths = [
 
 interface Watch {
   foreign: string[];
-  violations: () => Promise<string[]>;
+  violations: string[];
 }
 
-/** Records every request to another origin and every CSP violation on the page. */
+/**
+ * Records every request to another origin and every CSP violation. Violations are reported to
+ * the test as they happen, so loading the next page cannot wipe them.
+ */
 async function watch(page: Page, origin: string): Promise<Watch> {
   const foreign: string[] = [];
+  const violations: string[] = [];
   page.on('request', (request) => {
     const url = new URL(request.url());
     if (url.protocol !== 'data:' && url.protocol !== 'blob:' && url.origin !== origin) {
       foreign.push(request.url());
     }
   });
+  await page.exposeFunction('reportCspViolation', (violation: string) => {
+    violations.push(violation);
+  });
   await page.addInitScript(() => {
-    const seen: string[] = [];
-    Object.assign(window, { cspViolations: seen });
+    const report = (window as unknown as { reportCspViolation: (violation: string) => unknown })
+      .reportCspViolation;
     document.addEventListener('securitypolicyviolation', (event) => {
-      seen.push(`${event.violatedDirective} ${event.blockedURI}`);
+      void report(`${event.violatedDirective} ${event.blockedURI} on ${location.pathname}`);
     });
   });
-  return {
-    foreign,
-    violations: () =>
-      page.evaluate(() => (window as unknown as { cspViolations: string[] }).cspViolations),
-  };
+  return { foreign, violations };
 }
 
 async function settle(page: Page) {
@@ -48,16 +51,14 @@ async function settle(page: Page) {
 test('loading every route asks nothing from another origin', async ({ page, baseURL }) => {
   const origin = new URL(baseURL ?? '').origin;
   const watcher = await watch(page, origin);
-  const violations: string[] = [];
 
   for (const path of allPaths) {
     await page.goto(path);
     await settle(page);
-    violations.push(...(await watcher.violations()));
   }
 
   expect(watcher.foreign).toEqual([]);
-  expect(violations).toEqual([]);
+  expect(watcher.violations).toEqual([]);
 });
 
 for (const viewport of [
@@ -98,7 +99,7 @@ for (const viewport of [
     await settle(page);
 
     expect(watcher.foreign).toEqual([]);
-    expect(await watcher.violations()).toEqual([]);
+    expect(watcher.violations).toEqual([]);
   });
 }
 
