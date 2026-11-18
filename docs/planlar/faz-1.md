@@ -15,7 +15,7 @@
 - [x] Task 0: Plan dosyası ve dal
 - [x] Task 1: PCM ve WAV
 - [x] Task 2: Örnekleme hızı dönüştürücü
-- [ ] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
+- [x] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
 - [ ] Task 4: `AudioCapture` ve `WebAudioCapture`
 - [ ] Task 5: AudioWorklet ve mikrofon bölümü
 - [ ] Task 6: Kayıt ve geri çalma
@@ -235,12 +235,12 @@ export class CaptureChain { constructor(inputRate: number); process(input: Float
 ```
 
 - Zincirin sırası: `Resampler(inputRate → 16000)` → düzey ölçer (kayan noktalı örneklerde) → `toInt16` → çerçeveleyici.
-- [ ] Önce testler:
+- [x] Önce testler:
   - çerçeveleyici: 10 000 örneklik sayaç dizisi, 0–1000 arası rastgele parçalarla (tohumlu) verilir. Her çerçeve 320 örnektir; çerçeveler art arda eklenince girişin ilk 31 × 320 örneğini verir; `pending` 80'dir. Çerçeveler girişin kopyasıdır: giriş sonradan değişirse çerçeve değişmez (işleyici tamponları aktarıyor);
   - düzey ölçer: sabit 0,5 girişte her değer 0,5'tir; 16 000 örnek 20 değer verir; sonuç parçalamadan bağımsızdır;
   - zincir: 48 kHz'te 1 sn 1 kHz sinüs 128'lik parçalarla verilir, ardından `flush` çağrılır. Sonuç: 50 çerçeve, 20 düzey (ilki hariç 0,3536 ± %1), çerçevelerin frekansı 1000 ± 2 Hz. Aynı girdi 44,1 kHz'te de 50 çerçeve verir.
-- [ ] Kırmızı, sonra yeşil.
-- [ ] Commit: `feat(audio): add framer, level meter and capture chain`
+- [x] Kırmızı, sonra yeşil.
+- [x] Commit: `feat(audio): add framer, level meter and capture chain`
 
 ### Task 4: `AudioCapture` ve `WebAudioCapture`
 
