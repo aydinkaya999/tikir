@@ -1,0 +1,59 @@
+.iconButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: var(--border);
+  border-radius: 50%;
+  background: var(--color-white);
+  box-shadow: none;
+  color: var(--color-ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.size44 {
+  width: 44px;
+  height: 44px;
+}
+
+.size46 {
+  width: 46px;
+  height: 46px;
+}
+
+.size48 {
+  width: 48px;
+  height: 48px;
+}
+
+.size52 {
+  width: 52px;
+  height: 52px;
+}
+
+.saffron {
+  background: var(--color-saffron);
+}
+
+.raised {
+  box-shadow: var(--lift-button);
+  transition:
+    transform 80ms ease-out,
+    box-shadow 80ms ease-out;
+}
+
+.raised:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--lift-button-pressed);
+}
+
+/* TODO(design): the disabled look is not drawn. */
+.iconButton:disabled {
+  border-color: var(--color-line);
+  background: var(--color-white);
+  box-shadow: none;
+  color: var(--color-muted);
+  cursor: not-allowed;
+}

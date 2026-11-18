@@ -1,0 +1,29 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: var(--border-chip);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  font-size: var(--size-label);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.white {
+  background: var(--color-white);
+}
+
+.saffron {
+  background: var(--color-saffron);
+}
+
+.saffronLight {
+  background: var(--color-saffron-light);
+}
+
+.turquoiseLight {
+  background: var(--color-turquoise-light);
+}

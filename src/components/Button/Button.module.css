@@ -1,0 +1,69 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: var(--control-height);
+  padding: 0 20px;
+  border: var(--border);
+  border-radius: var(--radius-button);
+  box-shadow: var(--lift-button);
+  font-size: var(--size-button);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 80ms ease-out,
+    box-shadow 80ms ease-out;
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--lift-button-pressed);
+}
+
+.large {
+  min-height: var(--control-height-large);
+  padding: 0 26px;
+  font-size: var(--size-button-large);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.primary {
+  background: var(--color-cobalt);
+  color: var(--color-white);
+}
+
+.saffron {
+  background: var(--color-saffron);
+  color: var(--color-ink);
+}
+
+.secondary {
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.dark {
+  background: var(--color-ink);
+  color: var(--color-white);
+}
+
+.danger {
+  background: var(--color-coral-dark);
+  color: var(--color-white);
+}
+
+/* TODO(design): the disabled look is not drawn. Calm white face, muted text, no lift. */
+.button:disabled {
+  border-color: var(--color-line);
+  background: var(--color-white);
+  box-shadow: none;
+  color: var(--color-muted);
+  cursor: not-allowed;
+}

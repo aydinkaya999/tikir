@@ -1,0 +1,71 @@
+.text {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--reading-font);
+  font-size: var(--reading-size);
+  font-weight: var(--weight-regular);
+  font-variant-ligatures: no-common-ligatures;
+  line-height: var(--leading-reading);
+  letter-spacing: var(--reading-letter-spacing);
+  word-spacing: var(--reading-word-spacing);
+  text-wrap: pretty;
+  hyphens: none;
+  overflow-wrap: normal;
+}
+
+/*
+ * The shown text and its bold copy share one grid cell: the cell is as wide as the bold copy.
+ * Centring the shown text splits the reserved extra width between both sides of the word, so
+ * the gaps between words stay even.
+ */
+.word {
+  display: inline-grid;
+  justify-items: center;
+  vertical-align: baseline;
+}
+
+.shown,
+.reserve {
+  grid-area: 1 / 1;
+}
+
+.reserve {
+  visibility: hidden;
+  font-weight: var(--weight-semibold);
+  user-select: none;
+}
+
+.word[data-read] {
+  color: var(--color-ink);
+}
+
+/* The current word moves without any transition (docs/tasarim-sistemi.md, "Hareket"). */
+.word[data-current] {
+  border-radius: var(--radius-word);
+  background: var(--color-saffron);
+  box-shadow: var(--ring-word);
+  color: var(--color-ink);
+}
+
+.word[data-current] .shown {
+  font-weight: var(--weight-semibold);
+}
+
+.word[data-ghost] {
+  border-radius: var(--radius-ghost);
+  outline: 2.5px dashed var(--color-cobalt);
+  outline-offset: 4px;
+}
+
+/* Marks differ by line style as well as colour. */
+.word[data-mark='hesitation'] .shown {
+  text-decoration: underline dotted var(--color-hesitation);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+
+.word[data-mark='error'] .shown {
+  text-decoration: underline wavy var(--color-coral-dark);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}

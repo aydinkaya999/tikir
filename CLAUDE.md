@@ -22,14 +22,15 @@ Hepsini her seferinde okuma; yaptığın işe karşılık geleni oku.
 
 ## Komutlar
 
-Faz 0 bu komutları kurar. Kurduktan sonra bu bölümü gerçek haliyle güncelle.
+Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulum: `pnpm install` ve `pnpm exec playwright install chromium webkit`.
 
-- `pnpm dev`: geliştirme sunucusu
-- `pnpm check`: tip denetimi + lint + birim testleri (her görevden sonra çalıştır)
-- `pnpm test -- <dosya>`: tek test dosyası (bütün takım yerine bunu tercih et)
-- `pnpm e2e`: Playwright uçtan uca testleri
-- `pnpm shots <rota>`: o rotanın üç boyutta ekran görüntüsü (`shots/` klasörüne)
-- `pnpm build`: üretim derlemesi
+- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses`.
+- `pnpm check`: tip denetimi + lint (ESLint, Stylelint, Prettier denetimi) + birim testleri. Her görevden sonra çalıştır.
+- `pnpm test <dosya>`: tek test dosyası; bütün takım yerine bunu tercih et. Araya `--` koyma: `pnpm test -- <dosya>` bütün takımı koşar.
+- `pnpm e2e`: Playwright uçtan uca testleri, Chromium ve WebKit'te. `e2e` kipinde derleyip (`dist-e2e/`) `vite preview` ile sınar. Tek dosya için: `pnpm e2e e2e/<ad>.spec.ts`.
+- `pnpm shots <rota> [<rota> …]`: rotaların 390 × 844, 1180 × 820 ve 1440 × 900 ekran görüntüsü. Dosyalar `shots/<ad>-telefon.png`, `-tablet.png` ve `-web.png` adlarıyla yazılır; `/` için ad `index`.
+- `pnpm build`: üretim derlemesi (tip denetimi + `vite build`). Geliştirme sayfaları derlemeye girmez.
+- `pnpm format`: Prettier ile biçimle.
 
 ## Kod kuralları
 
@@ -37,7 +38,7 @@ Faz 0 bu komutları kurar. Kurduktan sonra bu bölümü gerçek haliyle güncell
 - Arayüz metinlerini tasarım dosyalarından birebir al. Kendin yazma, çevirme, kısaltma.
 - Alan terimlerinin kod adları `docs/urun.md` sonundaki sözlükte. Yeni ad uydurma.
 - TypeScript `strict`; `any` yok.
-- Stil: CSS Modules ve `src/styles/tokens.css` değişkenleri. Renk, yazı boyutu, yarıçap ve gölge için sabit değer yazma. Tailwind, hazır bileşen kiti, CSS-in-JS yok.
+- Stil: CSS Modules ve `src/styles/tokens.css` değişkenleri. Renk, yazı boyutu, yarıçap ve gölge için sabit değer yazma. Tasarımda olup `tokens.css` dosyasında olmayan değer, kaynağıyla birlikte `src/styles/tokens-extra.css` dosyasına eklenir; Stylelint denetler. Tailwind, hazır bileşen kiti, CSS-in-JS yok.
 - Arayüzde emoji yok. İkonlar `design/svg/ikonlar.json` içindeki çizimlerden gelir.
 - Bileşenler mikrofona, ağa ve depolamaya doğrudan dokunmaz; `src/services` altındaki arayüzleri kullanır.
 - `src/domain` saf mantıktır: React ve tarayıcı API'si içermez, tamamı birim testlidir.

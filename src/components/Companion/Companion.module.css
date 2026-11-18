@@ -1,0 +1,16 @@
+.companion {
+  display: block;
+  flex-shrink: 0;
+  animation: face-change 150ms ease-out;
+}
+
+/* docs/tasarim-sistemi.md, "Hareket": the face changes within 150 ms. */
+@keyframes face-change {
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

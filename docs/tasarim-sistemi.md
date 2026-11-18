@@ -4,7 +4,7 @@ Yön: **çini macera**. İznik çinisinden alınmış lacivert, kobalt, turkuaz,
 
 Kaynaklar:
 
-- Değerler: `design/tokens.css` (CSS değişkenleri) ve `design/tokens.json`. Faz 0'da `src/styles/tokens.css` olarak kopyalanır.
+- Değerler: `design/tokens.css` (CSS değişkenleri) ve `design/tokens.json`. Faz 0'da `src/styles/tokens.css` olarak kopyalandı. Tasarım HTML'inin kullandığı ama token'larda olmayan değerler (bileşene özgü yazı boyutları, köşeler, halka gölgeleri, yazı ayarı kademeleri) `src/styles/tokens-extra.css` dosyasında, rol adıyla ve kaynağıyla birlikte durur (`docs/kararlar.md` D10).
 - Görünüm: `design/ekranlar/*.html` (tarayıcıda açılır, bağlantılar çalışır) ve `design/png/*.png`.
 - Çizimler: `design/svg/`.
 

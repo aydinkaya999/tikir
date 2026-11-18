@@ -1,0 +1,52 @@
+.bubble {
+  position: relative;
+  min-width: 0;
+  padding: 12px 16px;
+  border: var(--border);
+  border-radius: var(--radius-bubble);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.text {
+  font-size: var(--size-bubble);
+  font-weight: var(--weight-medium);
+  line-height: 1.4;
+}
+
+/* The arrow is a rotated square showing two of its borders (G1, G2, K1). */
+.arrow-left,
+.arrow-top,
+.arrow-adaptive {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--color-white);
+  transform: rotate(45deg);
+}
+
+.arrow-left,
+.arrow-adaptive {
+  top: 22px;
+  left: -9px;
+  border-bottom: var(--border);
+  border-left: var(--border);
+}
+
+.arrow-top {
+  top: -9px;
+  left: 50%;
+  margin-left: -7px;
+  border-top: var(--border);
+  border-left: var(--border);
+}
+
+@media (min-width: 700px) {
+  .arrow-adaptive {
+    top: -9px;
+    left: 50%;
+    margin-left: -7px;
+    border-top: var(--border);
+    border-bottom: 0;
+  }
+}

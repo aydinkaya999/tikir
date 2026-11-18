@@ -33,9 +33,11 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | D4 | Boyutlar | Telefon, tablet ve web eşit öncelikli | kesin | |
 | D5 | Hazır malzeme | Emoji, hazır ikon kütüphanesi ve hazır bileşen kiti yok | kesin | |
 | D6 | Tasarımı olmayan durumlar | `docs/ekranlar.md` sonundaki varsayılanlar | varsayım | Kodda `// TODO(design)`; tasarım gelince değişir |
-| D7 | Albüm ve Stüdyo | Tasarım bekliyor | açık | Asgari liste ekranları |
+| D7 | Albüm ve Stüdyo | Tasarım bekliyor | açık | Asgari liste ekranları. Rotalar Faz 0'da açıldı: `/album`, `/studyo` (çocuk kabuğu). |
 | D8 | Tıkır'ın çizimi | Son hali onaylanmadı | açık | `design/svg` içindeki çizimler |
 | D9 | Hareket | Tasarımda tanımlanmadı | varsayım | `docs/tasarim-sistemi.md` → "Hareket" |
+| D10 | Token'da olmayan tasarım değerleri | `src/styles/tokens-extra.css`, rol adıyla ve tasarımdaki kaynağıyla | varsayım | Tasarım HTML'i `tokens.css` dosyasının tanımlamadığı yazı boyutları, köşeler ve halka gölgeleri kullanıyor. Sabit değer yalnız `tokens.css` (birebir kopya), `tokens-extra.css` ve `fonts.css` içinde; Stylelint denetler. |
+| D11 | MicButton'ın çizilmemiş durumları | Duraklatıldı: beyaz zemin, halka yok, ad "Duraklatıldı. Sürdürmek için dokun". İzin yok: soluk ikon, kesik kenarlık, ad "Mikrofon izni yok". | varsayım | Faz 0 planıyla onaylandı; kodda `TODO(design)`. |
 
 ## Teknik
 
@@ -51,7 +53,9 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T8 | Model okuma sesi | Tıkır'ın sesi nereden gelecek | açık | Tarayıcının konuşma sentezi; cihazda Türkçe ses yoksa sessiz, zamanlı vurgu |
 | T9 | Ses biçimi | 16 kHz, tek kanal, 16 bit PCM, 20 ms çerçeve | varsayım | Faz 6'da seçilen tanıma yoluna göre gözden geçirilir |
 | T10 | Dil | Kod, yorum ve commit İngilizce; arayüz Türkçe ve tek dilli | varsayım | Çeviri kütüphanesi yok; metinler `src/i18n/tr.ts` |
-| T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | |
+| T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | Faz 0'da Node 26 LTS (`.nvmrc`, `engines`) ve pnpm 12 (`packageManager`) seçildi. Güncel `react-router`, `jsdom` ve `stylelint` en az Node 22.22 istiyor. |
+| T14 | TypeScript sürümü | 6.0.x | varsayım | Güncel kararlı sürüm 7.0, ama `typescript-eslint` yalnız 6.1'den eskisini destekliyor. Destek gelince 7'ye geçilir. |
+| T15 | İçerik güvenlik politikası | Derlenen sayfada meta etiketi: `default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'` | varsayım | Geliştirme sunucusunda yok (Vite'in satır içi yenileme betiğini engellerdi). `e2e/no-external-requests.spec.ts` dış istekleri ve CSP ihlallerini yakalar. Faz 7'de mağaza denetimiyle gözden geçirilir. |
 | T12 | Üçüncü taraf | Çalışma anında dış adrese istek yok; analitik ve reklam yok | kesin | Yazı tipleri depoda barındırılır |
 | T13 | Depo düzeni | Kök web uygulaması; `server/` sonra; `ios/` ve `android/` Capacitor ile | varsayım | |
 
@@ -94,13 +98,41 @@ Tuvaldeki ekranlar tek bir andan değil, ayrı ayrı örnek anlardan çizildi. A
 7. Capacitor denemesi için bir Mac ve bir iPhone var mı? (T1)
 8. Gelir modeli ne olacak? (P12)
 
+Faz 0'da tasarımla belgeler karşılaştırılırken çıkanlar:
+
+9. K2 (sınıf, ilgi alanları) ve U2'deki ("Sınıf düzeyi", "Uzunluk") 48 px yuvarlak seçim düğmeleri bileşen envanterinde yok. Envanter K2 için OptionCard diyor, ama K2'de seçim kartı yok. Envantere bir bileşen olarak eklensin mi? (Faz 3'ten önce)
+10. U1 ve U4 kapaklarında `design/svg` içinde olmayan bir çini deseni var (açık kobalt zeminde safran yıldız). Şimdilik kapaklar mevcut altı desenle kuruluyor. (Faz 5'ten önce)
+11. Telefon ve tablette çocuk ekranından veli alanına giden yol yok; "Veli alanı" bağlantısı yalnız webde. (Faz 3'ten önce)
+12. G4 tasarımında 4. bölümün "1 / 2" sayfası, içerikteki 1. ve 2. sayfanın birleşimi. İçerikte bu bölüm 6 sayfa. Faz 2'deki `design` senaryosu hangisini izlesin? (Faz 2'den önce)
+13. İki bölmeli kabukların alt alta dizilmiş hâli çizilmedi (içerik 720 px altında: seans ve odak kabuğunda 700–783 px, kurulum kabuğunda 700–719 px). Şimdilik bölmeler sırasını koruyarak alt alta dizilir; kurulumda kobalt pano sayfanın başına geçer (`TODO(design)`). Ayrıca kurulum kabuğunda pano tablette 420 px sabit: 768 px'lik dikey tablette form sütununa 260 px kalır. Pano bu genişliklerde daralsın mı, yoksa kurulum telefon düzenine mi geçsin? (Faz 1'den önce)
+14. Okuma metninde rakamlar kelime sayılmıyor: "Deniz 3 elma aldı." metninde "3" önceki kelimeye yapışık görünür, kelime sayısına ve dinleme beklentisine girmez; "100’ü" yalnız "ü" olarak okunur. Rakamlar okuma metinlerinde hiç olmamalı mı (içerik kuralı), yoksa okunuşlarıyla ("üç") mı eşlensin? (Faz 2'den önce)
+
 ## Bağımlılıklar
 
 Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 
 | Paket | Ne için | Eklendiği faz |
 |---|---|---|
+| `react`, `react-dom` | Arayüz (T2) | 0 |
+| `vite`, `@vitejs/plugin-react` | Derleme ve geliştirme sunucusu (T2) | 0 |
+| `typescript` (6.0.x) | Strict tip denetimi; neden 7 değil: T14 | 0 |
+| `@types/react`, `@types/react-dom`, `@types/node` | Tipler. Node tipleri yalnız testlerde, ayar dosyalarında ve betiklerde | 0 |
+| `vitest` | Birim ve bileşen testleri (T11) | 0 |
+| `jsdom` | Bileşen testleri için DOM ortamı | 0 |
+| `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` | Bileşen testleri: rol ve erişilebilir adla sorgu, klavye ve işaretçi etkileşimi, DOM eşleyicileri | 0 |
+| `eslint`, `@eslint/js`, `typescript-eslint`, `globals` | Lint; tip bilgili strict kurallar. CLAUDE.md'deki katman, metin ve harf çevirisi kuralları da burada denetlenir | 0 |
+| `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh` | Hook kuralları; Vite'in canlı yenilemesini bozan dışa aktarımları yakalar | 0 |
+| `eslint-plugin-jsx-a11y` | Erişilebilirlik: div'e tıklama, etiket ve rol kuralları. Eş-bağımlılık aralığı ESLint 9'da bitiyor; ESLint 10 ile denendi ve çalışıyor. Uyarı `pnpm-workspace.yaml` içinde susturuldu | 0 |
+| `stylelint` | CSS'te sabit renk, yazı boyutu, köşe ve gölge yasağı; `text-transform: uppercase` yasağı (CLAUDE.md "Stil") | 0 |
+| `prettier` | Biçim | 0 |
+| `@playwright/test` | Uçtan uca testler (Chromium ve WebKit) ve `pnpm shots` ekran görüntüleri (T11) | 0 |
+| `@fontsource-variable/atkinson-hyperlegible-next` | Tek yazı ailesi, depodan sunulur (D2, T12). `src/styles/fonts.css` paketin dosyalarını token'daki aile adıyla bağlar | 0 |
+| `react-router` | Yönlendirme (T4); rotalar `docs/ekranlar.md`, geliştirme sayfaları tembel yüklenir ve üretim derlemesine girmez | 0 |
+| `@fontsource/didact-gothic` | Okul harfleri yer tutucusu (D3). Türkçe harflerin hepsi bu yazı tipinden çiziliyor (Faz 0'da denetlendi) | 0 |
 
 ## Değişiklik günlüğü
 
 - 2026-11-18: İlk sürüm (başlangıç paketi).
+- 2026-11-18: Faz 0: Node 26 LTS ve pnpm 12 (T11), TypeScript 6.0 (T14), ilk bağımlılıklar.
+- 2026-11-18: Faz 0: CSP (T15); `tokens-extra.css` (D10); MicButton'ın çizilmemiş durumları (D11); Albüm ve Stüdyo rotaları (D7); yanıt bekleyen sorulara 9–12. maddeler eklendi.
+- 2026-11-18: Faz 0 son incelemesi: 13. soru (iki bölmeli kabukların alt alta dizilmiş hâli, kurulum panosunun dikey tablette genişliği) ve 14. soru (okuma metninde rakamlar) eklendi.

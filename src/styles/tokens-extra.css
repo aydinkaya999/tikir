@@ -1,0 +1,106 @@
+/*
+ * Values the design uses that src/styles/tokens.css (an exact copy of design/tokens.css) does
+ * not define. Fixed colour, font, radius and shadow values may only appear in these two files
+ * (docs/planlar/faz-0.md, decision 3; enforced by Stylelint). Each value names its source in
+ * design/ekranlar/*.html. Components add what they need; nothing here is invented.
+ */
+:root {
+  /* Buttons: the same text size on every device ("Başla", "Kelimeyi dinle"; G1, G2, K1, U1). */
+  --size-button: 17px;
+  --size-button-large: 18px;
+  /* Pressed state, not drawn: 2 px down, shadow 2 px shorter (docs/tasarim-sistemi.md). */
+  --lift-button-pressed: 0 2px 0 var(--color-ink);
+  /* Small bold labels, 14 px on every device: chips, page-card header (G1, G4, V1). */
+  --size-label: 14px;
+  /* Tıkır's speech bubble text: 15 px on phones (G2, G4), 17 px from 700 px (G1, G2, K1). */
+  --size-bubble: 15px;
+  /* Book title on the ready-page cover: 15 px on phones, 21 px from 700 px (U4). */
+  --size-cover-title: 15px;
+  /* Form controls (K1, U2, V4): labels above fields and groups, field text, segments. */
+  --size-field-label: 15px;
+  --size-field: 17px;
+  --size-textarea: 15px;
+  --size-segment: 15px;
+  /* Checkbox text (K1) and the switch row (V4). */
+  --size-control-text: 16px;
+  /* Option cards: tile label 14 px on phones and 17 px from 700 px (U3); detail card (V4). */
+  --size-option-label: 14px;
+  --size-option-title: 16px;
+  --size-option-description: 13.5px;
+  --size-option-sample: 32px;
+  /* Session step tiles (G2–G7): corner, and the step names shown from 700 px. */
+  --radius-step: 7px;
+  --size-step-label: 15px;
+  /* Microphone button while listening: light turquoise ring inside an ink ring (G2, G4, K3). */
+  --ring-mic: 0 0 0 7px var(--color-turquoise-light), 0 0 0 9.5px var(--color-ink);
+  /* Stat cards (V1): plain number 24 → 34 px, hero number 52 → 64 px, hero label 15 px. */
+  --size-stat: 24px;
+  --size-stat-hero: 52px;
+  --size-stat-hero-label: 15px;
+  /* Reading text states (docs/tasarim-sistemi.md, "Okuma metni"; G3, G4). */
+  --radius-word: 3px;
+  --radius-ghost: 4px;
+  --ring-word: 0 0 0 4px var(--color-saffron);
+  --ring-phrase: 0 0 0 5px var(--color-saffron);
+  /* Race bar marker labels "sen" and "dün" (G4). */
+  --size-race-label: 13px;
+  /* Reading style steps (design/tokens.json readingSettings); sizes change per device below. */
+  --reading-size-0: 20px;
+  --reading-size-1: 22px;
+  --reading-size-2: 25px;
+  --reading-size-3: 28px;
+  --reading-letter-spacing-0: 0;
+  --reading-letter-spacing-1: 0.05em;
+  --reading-letter-spacing-2: 0.1em;
+  --reading-word-spacing-0: 0;
+  --reading-word-spacing-1: 0.12em;
+  --reading-word-spacing-2: 0.24em;
+  /* The child's reading style; a container overrides these (default: size 1, spacing 0). */
+  --reading-font: var(--font-text);
+  --reading-size: var(--reading-size-1);
+  --reading-letter-spacing: var(--reading-letter-spacing-0);
+  --reading-word-spacing: var(--reading-word-spacing-0);
+  /* Shell chrome (G1, V1, G4, U3): bar and rail labels, sidebar items, links and strip titles. */
+  --size-nav-label: 13px;
+  --size-nav-item: 16px;
+  --size-link: 15px;
+  /* Line under a page title: 16 px on tablets, 15 px on the web (U3, U4). */
+  --size-subtitle: 16px;
+  /* Onboarding progress: corner of the dots and the current pill (K1–K4). */
+  --radius-progress: 6px;
+  /* The "Tıkır" wordmark: rail (tablet), top bar (web), sidebar (web), onboarding panel. */
+  --size-wordmark-rail: 22px;
+  --size-wordmark-bar: 26px;
+  --size-wordmark-sidebar: 30px;
+  --size-wordmark-panel: 40px;
+  /* Line chart text in SVG units (V1): compact 12/17, wide 13/18 (axis labels / last value). */
+  --size-chart-compact: 12px;
+  --size-chart-compact-value: 17px;
+  --size-chart-wide: 13px;
+  --size-chart-wide-value: 18px;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --size-bubble: 17px;
+    --size-cover-title: 21px;
+    --size-textarea: 17px;
+    --size-option-label: 17px;
+    --size-stat: 34px;
+    --size-stat-hero: 64px;
+    --reading-size-0: 24px;
+    --reading-size-1: 27px;
+    --reading-size-2: 31px;
+    --reading-size-3: 35px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --size-subtitle: 15px;
+    --reading-size-0: 22px;
+    --reading-size-1: 25px;
+    --reading-size-2: 29px;
+    --reading-size-3: 33px;
+  }
+}

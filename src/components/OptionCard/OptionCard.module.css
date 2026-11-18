@@ -1,0 +1,99 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--border);
+  border-radius: var(--radius-button);
+  background: var(--color-white);
+  box-shadow: none;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.card[aria-pressed='true'] {
+  background: var(--color-saffron);
+  box-shadow: var(--lift-button);
+}
+
+/* U3: 92 px tall on phones, 124 px from 700 px; icon 34 / 44 px. */
+.tile {
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 92px;
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.tile .label {
+  font-size: var(--size-option-label);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+}
+
+.tile[aria-pressed='true'] .label {
+  font-weight: var(--weight-extrabold);
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+}
+
+@media (min-width: 700px) {
+  .tile {
+    min-height: 124px;
+  }
+
+  .icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: var(--border-chip);
+  border-radius: 50%;
+  background: var(--color-white);
+}
+
+.media {
+  display: flex;
+}
+
+/* V4: type sample, title, description. */
+.detail {
+  align-items: flex-start;
+  gap: 3px;
+  padding: 12px 14px 13px;
+  text-align: left;
+}
+
+.detail .media {
+  font-size: var(--size-option-sample);
+  font-weight: var(--weight-regular);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.detail .label {
+  font-size: var(--size-option-title);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.25;
+}
+
+.description {
+  color: var(--color-muted);
+  font-size: var(--size-option-description);
+  font-weight: var(--weight-semibold);
+  line-height: 1.3;
+}

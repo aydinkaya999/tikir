@@ -1,0 +1,31 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--color-ground);
+}
+
+/* G1 content padding: 22/20/16 on phones, 30/32 on tablets, 36/44/44 on the web. */
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: calc(22px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 16px
+    max(20px, env(safe-area-inset-left));
+}
+
+@media (min-width: 700px) {
+  .shell {
+    flex-direction: row;
+  }
+
+  .main {
+    padding: calc(30px + env(safe-area-inset-top)) max(32px, env(safe-area-inset-right)) 30px 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main {
+    flex: 999 1 560px;
+    padding: 36px 44px 44px;
+  }
+}

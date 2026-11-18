@@ -1,0 +1,18 @@
+# Reference material and prose are not reformatted.
+design/
+seed/
+docs/
+*.md
+pnpm-lock.yaml
+dist/
+dist-e2e/
+coverage/
+shots/
+test-results/
+playwright-report/
+blob-report/
+.superpowers/
+# Byte-identical copy of design/tokens.css (src/design-copies.test.ts).
+src/styles/tokens.css
+# Byte-identical copy of design/svg/ikonlar.json (src/design-copies.test.ts).
+src/components/Icon/icons.json

@@ -1,0 +1,68 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.label {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-field-label);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+.bar {
+  display: flex;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius-segment);
+  background: var(--color-white);
+}
+
+.segment {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.segment + .segment {
+  border-left: var(--border);
+}
+
+/* The radio stays in the accessibility tree and takes the keyboard; the face is what shows. */
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.face {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 4px;
+  color: var(--color-ink);
+  font-size: var(--size-segment);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.input:checked + .face {
+  background: var(--color-saffron);
+  font-weight: var(--weight-extrabold);
+}
+
+.input:focus-visible + .face {
+  outline: 3px solid var(--color-cobalt);
+  outline-offset: -5px;
+}
