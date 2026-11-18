@@ -12,13 +12,17 @@
   min-width: 0;
 }
 
-/* V1: ink strip with "Veli alanı" and the child chip; phones and tablets only. */
+/*
+ * V1: ink strip with "Veli alanı" and the child chip; phones and tablets only. The minimum
+ * height is the strip's height with the chip in it, so the bar keeps its size before the
+ * profile exists.
+ */
 .strip {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  min-height: 48px;
+  min-height: calc(61px + env(safe-area-inset-top));
   padding: calc(14px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 14px
     max(20px, env(safe-area-inset-left));
   background: var(--color-ink);
@@ -44,6 +48,7 @@
   }
 
   .strip {
+    min-height: calc(57px + env(safe-area-inset-top));
     padding: calc(12px + env(safe-area-inset-top)) 32px 12px;
   }
 
