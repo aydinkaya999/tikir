@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import { toneFile } from './e2e/support/tone';
+import { echoServerPort } from './scripts/echo-server';
 
 const port = 4317;
 
@@ -41,10 +42,19 @@ export default defineConfig({
         ]
       : []),
   ],
-  webServer: {
-    command: `vite build --mode e2e --outDir dist-e2e && vite preview --mode e2e --outDir dist-e2e --port ${port} --strictPort`,
-    url: `http://localhost:${port}`,
-    reuseExistingServer: false,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command: `vite build --mode e2e --outDir dist-e2e && vite preview --mode e2e --outDir dist-e2e --port ${port} --strictPort`,
+      url: `http://localhost:${port}`,
+      reuseExistingServer: false,
+      timeout: 120_000,
+    },
+    // The audio lab's echo test; the preview server forwards /gelistirme/yanki to it. A running
+    // `pnpm echo-server` or `pnpm audio-trial` is reused: the server keeps no state.
+    {
+      command: 'node scripts/echo-server.ts',
+      url: `http://127.0.0.1:${String(echoServerPort)}`,
+      reuseExistingServer: true,
+    },
+  ],
 });

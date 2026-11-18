@@ -1,6 +1,8 @@
 import react from '@vitejs/plugin-react';
-import type { Plugin } from 'vite';
+import type { Plugin, ProxyOptions } from 'vite';
 import { defineConfig } from 'vitest/config';
+import { echoServerPort } from './scripts/echo-server';
+import { devEndpoints } from './src/app/routes';
 
 /**
  * Content security policy for built pages (docs/mimari.md, "Capacitor'a hazır kalmak için";
@@ -31,18 +33,28 @@ function contentSecurityPolicyMeta(): Plugin {
   };
 }
 
+/**
+ * The audio lab's echo test connects to its own origin; the dev and preview servers forward the
+ * WebSocket to scripts/echo-server.ts, so the CSP needs no connect-src (docs/kararlar.md T20).
+ */
+const echoProxy: Record<string, ProxyOptions> = {
+  [devEndpoints.echo]: { target: `ws://127.0.0.1:${String(echoServerPort)}`, ws: true },
+};
+
 export default defineConfig({
   plugins: [react(), contentSecurityPolicyMeta()],
   // audioWorklet.addModule loads an ES module; `?worker&url` imports (the capture worklet) are
   // built as modules in development and in builds alike.
   worker: { format: 'es' },
+  server: { proxy: echoProxy },
+  preview: { proxy: echoProxy },
   test: {
     projects: [
       {
         extends: true,
         test: {
           name: 'node',
-          include: ['src/**/*.test.ts'],
+          include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
           environment: 'node',
         },
       },

@@ -19,7 +19,7 @@
 - [x] Task 4: `AudioCapture` ve `WebAudioCapture`
 - [x] Task 5: AudioWorklet ve mikrofon bölümü
 - [x] Task 6: Kayıt ve geri çalma
-- [ ] Task 7: Yankı sunucusu ve yankı testi
+- [x] Task 7: Yankı sunucusu ve yankı testi
 - [ ] Task 8: Cihaz raporu
 - [ ] Task 9: Cihaz denemesi sunucusu
 - [ ] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
@@ -496,8 +496,8 @@ defaultEchoUrl(): string        // pageWebSocketUrl(devEndpoints.echo)
   - test tamamlanmadıysa sonucu açıklayan cümle.
   Sonuç sayfaya bildirilir (rapor için).
 - Dış istek testindeki izleme yardımcısı (`watch`) `e2e/support/watch.ts` dosyasına taşınır; davranışı değişmez.
-- [ ] `docs/kararlar.md`: Bağımlılıklar tablosuna `ws` ve `@types/ws`; T20 (yankı aynı kökenden, mkcert ile HTTPS; karar 11–12). Sonra paketler kurulur.
-- [ ] Önce testler:
+- [x] `docs/kararlar.md`: Bağımlılıklar tablosuna `ws` ve `@types/ws`; T20 (yankı aynı kökenden, mkcert ile HTTPS; karar 11–12). Sonra paketler kurulur.
+- [x] Önce testler:
   - `roundTrip`:
     - 1..100 dizisinde p50 → 50, p95 → 95;
     - tek değerli dizide her yüzdelik o değeri verir;
@@ -512,12 +512,12 @@ defaultEchoUrl(): string        // pageWebSocketUrl(devEndpoints.echo)
     - test sürerken bağlantı kapanırsa sonuç `closed` olur ve özet o ana kadar dönen çerçevelerden hesaplanır;
     - `cancel()` ya da mikrofonun kapanması sonucu `stopped` yapar; gönderim durur ve soket kapanır (inceleme odağı 3 ve 4);
   - `scripts/echo-server.test.ts`: sunucu 0 numaralı kapıda açılır; Node'un yerleşik `WebSocket` istemcisiyle gönderilen baytlar aynen döner; düz HTTP isteği 200 döner; `close()` sonrası kapı boşalır.
-- [ ] Önce e2e testleri (iki tarayıcıda):
+- [x] Önce e2e testleri (iki tarayıcıda):
   - "the echo test sends 500 frames and reports the round trip": mikrofon açılır, test başlatılır; 20 sn içinde "Gönderilen 500", "Dönen 500", "Kayıp 0" ve ortanca ile 95. yüzdelik için ms değerleri görünür. Başka kökene istek ve CSP ihlali yoktur (`watch`);
   - "an unreachable echo server is explained": adres aynı kökende var olmayan bir yol (`/gelistirme/yok`) yapılır; 8 sn içinde "ulaşılamadı" cümlesi görünür ve sayfa çalışmayı sürdürür.
-- [ ] Uygula; yeşili gör. `pnpm e2e e2e/no-external-requests.spec.ts` taşınmadan sonra da geçer.
-- [ ] Doğrulama: `pnpm check`; bütün `pnpm e2e`; `pnpm echo-server` elle açılıp kapanır.
-- [ ] Commit: `feat(dev): measure echo round trips through a local WebSocket server`
+- [x] Uygula; yeşili gör. `pnpm e2e e2e/no-external-requests.spec.ts` taşınmadan sonra da geçer.
+- [x] Doğrulama: `pnpm check`; bütün `pnpm e2e`; `pnpm echo-server` elle açılıp kapanır.
+- [x] Commit: `feat(dev): measure echo round trips through a local WebSocket server`
 
 ### Task 8: Cihaz raporu
 

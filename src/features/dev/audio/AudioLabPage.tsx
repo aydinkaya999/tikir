@@ -1,7 +1,9 @@
 import type { AudioCapture, CaptureSettings } from '../../../services/audio/AudioCapture';
 import type { WavPlayer } from '../../../services/audio/WavPlayer';
+import type { EchoProbe } from '../../../services/echo/EchoProbe';
 import styles from './AudioLabPage.module.css';
 import { copy } from './copy';
+import { EchoSection } from './EchoSection';
 import { MicSection } from './MicSection';
 import { RecordingSection } from './RecordingSection';
 import { useCapture } from './useCapture';
@@ -11,6 +13,9 @@ export interface AudioLabServices {
   createCapture: (settings: CaptureSettings) => AudioCapture;
   player: WavPlayer;
   saveFile: (fileName: string, data: Blob) => void;
+  createEchoProbe: () => EchoProbe;
+  /** The echo endpoint on the page's own origin (ws or wss). */
+  defaultEchoUrl: () => string;
 }
 
 /**
@@ -26,6 +31,11 @@ export function AudioLabPage({ services }: { services: AudioLabServices }) {
       <p className={styles.intro}>{copy.intro}</p>
       <MicSection handle={capture} />
       <RecordingSection handle={capture} player={services.player} saveFile={services.saveFile} />
+      <EchoSection
+        handle={capture}
+        createProbe={services.createEchoProbe}
+        defaultUrl={services.defaultEchoUrl()}
+      />
     </main>
   );
 }

@@ -51,4 +51,26 @@ export const copy = {
     playHint: 'Çalmadan önce mikrofon kapanır.',
     download: 'Kaydı indir (WAV)',
   },
+  echo: {
+    heading: 'Yankı testi',
+    url: 'Yankı adresi',
+    start: 'Yankı testini başlat',
+    stop: 'Testi durdur',
+    progress: (sent: number, total: number) =>
+      `Gönderilen çerçeve: ${String(sent)} / ${String(total)}`,
+    sent: 'Gönderilen',
+    received: 'Dönen',
+    lost: 'Kayıp',
+    median: 'Ortanca',
+    p95: '95. yüzdelik',
+    min: 'En kısa',
+    max: 'En uzun',
+    ms: (value: string) => `${value} ms`,
+    outcomes: {
+      unreachable:
+        'Yankı sunucusuna ulaşılamadı; bilgisayarda pnpm audio-trial ya da pnpm echo-server çalışıyor mu, bak.',
+      closed: 'Bağlantı test bitmeden kapandı; sonuçlar o ana kadar dönen çerçevelerden.',
+      stopped: 'Test yarıda durdu; sonuçlar o ana kadar dönen çerçevelerden.',
+    },
+  },
 } as const;

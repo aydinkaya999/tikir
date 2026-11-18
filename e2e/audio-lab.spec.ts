@@ -14,6 +14,7 @@ import {
   trackStreams,
 } from './support/media';
 import { toneHz } from './support/tone';
+import { watch } from './support/watch';
 
 // Phase 1 (docs/yol-haritasi.md): the /gelistirme/ses page end to end. Chromium's fake microphone
 // plays a 440 Hz tone (e2e/support/tone.ts); WebKit's mock device plays its own tone once the
@@ -164,4 +165,35 @@ test('a recording cut short by hiding the tab keeps what it has', async ({ page 
   expect(wav.samples.length).toBeGreaterThan(0);
   expect(wav.samples.length).toBeLessThan(160_000);
   expect(wav.samples.length % 320).toBe(0);
+});
+
+test('the echo test sends 500 frames and reports the round trip', async ({ page, baseURL }) => {
+  test.setTimeout(60_000);
+  const watcher = await watch(page, new URL(baseURL ?? '').origin);
+  await openMicrophone(page);
+
+  await page.getByRole('button', { name: 'Yankı testini başlat' }).click();
+
+  await expect(fact(page, 'Gönderilen')).toHaveText('500', { timeout: 20_000 });
+  await expect(fact(page, 'Dönen')).toHaveText('500');
+  await expect(fact(page, 'Kayıp')).toHaveText('0');
+  await expect(fact(page, 'Ortanca')).toHaveText(/^\d+,\d ms$/);
+  await expect(fact(page, '95. yüzdelik')).toHaveText(/^\d+,\d ms$/);
+  // The frames went to the page's own origin (/gelistirme/yanki), so the CSP stays as it is.
+  expect(watcher.foreign).toEqual([]);
+  expect(watcher.violations).toEqual([]);
+});
+
+test('an unreachable echo server is explained', async ({ page, baseURL }) => {
+  await openMicrophone(page);
+  const missing = new URL('/gelistirme/yok', baseURL);
+  missing.protocol = 'ws:';
+
+  await page.getByLabel('Yankı adresi').fill(missing.href);
+  await page.getByRole('button', { name: 'Yankı testini başlat' }).click();
+
+  await expect(page.getByText('Yankı sunucusuna ulaşılamadı', { exact: false })).toBeVisible({
+    timeout: 8_000,
+  });
+  await expect(fact(page, 'Durum')).toHaveText('Açık'); // the page carries on
 });

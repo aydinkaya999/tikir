@@ -60,6 +60,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T13 | Depo düzeni | Kök web uygulaması; `server/` sonra; `ios/` ve `android/` Capacitor ile | varsayım | |
 | T16 | Ses denemesi sayfasında veli onayı | `/gelistirme/ses` mikrofonu veli onayı kaydı olmadan açar: Faz 1'de depo ve `consent.voiceProcessing` yok, sayfa üretim derlemesine girmez, denemeyi yetişkin yapar | kesin | Ürün sahibi, 2026-11-19. Ürün ekranlarındaki onay denetimi ve testi Faz 2'de seansla gelir. |
 | T17 | Geliştirme sayfalarının metinleri | `src/features/dev/` içinde, `src/i18n/tr.ts` dışında: `tr.ts` üretim paketine girer, geliştirme sayfaları girmez | varsayım | Tasarımları yok; ses denemesi sayfasının metinleri Faz 1 planıyla onaylandı (`docs/planlar/faz-1.md`). Emoji denetimi bu metinleri de tarar. |
+| T20 | Yankı ölçümü ve cihaz denemesi yolu | Yankı sunucusu `scripts/echo-server.ts` (`ws`, yalnız `127.0.0.1:4318`). Vite'in geliştirme ve önizleme sunucusu `/gelistirme/yanki` adresini ona aktarır; sayfa kendi kökenine bağlanır, CSP değişmez. Gerçek cihaz için `pnpm audio-trial` mkcert sertifikasıyla HTTPS açar | varsayım | Chromium ve WebKit'te `default-src 'self'` aynı kökenli `ws:` bağlantısını engellemiyor (Faz 1'de ölçüldü). Uygulama kabuğunda aynı köken olmadığı için kabuktan yankı testi kapsam dışı. |
 | T18 | Ses yakalama ayarları ve açılış sırası | Varsayılan: yankı giderme, gürültü bastırma ve otomatik kazanç açık (tarayıcıların varsayılanı). Sıra: `getUserMedia` → `AudioContext` → AudioWorklet → `resume()`; tek kanala tarayıcı indirger | varsayım | Ses denemesinin ayar setleri (`docs/ses-denemesi-sonuclari.md`) gelince gözden geçirilecek. Chromium'da gürültü bastırma sabit bir tonu ~19 dB bastırıyor (Faz 1'de ölçüldü). |
 
 ## İçerik
@@ -132,6 +133,7 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `@fontsource-variable/atkinson-hyperlegible-next` | Tek yazı ailesi, depodan sunulur (D2, T12). `src/styles/fonts.css` paketin dosyalarını token'daki aile adıyla bağlar | 0 |
 | `react-router` | Yönlendirme (T4); rotalar `docs/ekranlar.md`, geliştirme sayfaları tembel yüklenir ve üretim derlemesine girmez | 0 |
 | `@fontsource/didact-gothic` | Okul harfleri yer tutucusu (D3). Türkçe harflerin hepsi bu yazı tipinden çiziliyor (Faz 0'da denetlendi) | 0 |
+| `ws`, `@types/ws` | Yerel yankı sunucusu (`scripts/echo-server.ts`, T20): çerçeveleri olduğu gibi geri gönderir. Node'da yerleşik WebSocket sunucusu yok; protokolü elle yazmak yerine yaygın, bağımlılıksız paket. Yalnız geliştirme bağımlılığı, uygulamaya girmez | 1 |
 
 ## Değişiklik günlüğü
 

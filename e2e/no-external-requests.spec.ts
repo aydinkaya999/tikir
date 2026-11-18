@@ -1,5 +1,6 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { devPaths, extraPaths, screenPaths } from '../src/app/routes';
+import { settle, watch } from './support/watch';
 
 // Phase 0 acceptance criterion 6: while pages load and while you move around, no request leaves
 // the app's own origin (CLAUDE.md; docs/kararlar.md T12). The build's CSP must not be violated.
@@ -9,44 +10,6 @@ const allPaths = [
   ...Object.values(extraPaths),
   ...Object.values(devPaths),
 ];
-
-interface Watch {
-  foreign: string[];
-  violations: string[];
-}
-
-/**
- * Records every request to another origin and every CSP violation. Violations are reported to
- * the test as they happen, so loading the next page cannot wipe them.
- */
-async function watch(page: Page, origin: string): Promise<Watch> {
-  const foreign: string[] = [];
-  const violations: string[] = [];
-  page.on('request', (request) => {
-    const url = new URL(request.url());
-    if (url.protocol !== 'data:' && url.protocol !== 'blob:' && url.origin !== origin) {
-      foreign.push(request.url());
-    }
-  });
-  await page.exposeFunction('reportCspViolation', (violation: string) => {
-    violations.push(violation);
-  });
-  await page.addInitScript(() => {
-    const report = (window as unknown as { reportCspViolation: (violation: string) => unknown })
-      .reportCspViolation;
-    document.addEventListener('securitypolicyviolation', (event) => {
-      void report(`${event.violatedDirective} ${event.blockedURI} on ${location.pathname}`);
-    });
-  });
-  return { foreign, violations };
-}
-
-async function settle(page: Page) {
-  await page.waitForLoadState('networkidle');
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
-}
 
 test('loading every route asks nothing from another origin', async ({ page, baseURL }) => {
   const origin = new URL(baseURL ?? '').origin;
