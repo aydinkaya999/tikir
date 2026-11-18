@@ -45,7 +45,8 @@
   color: var(--color-ink);
   font-size: var(--size-nav-label);
   font-weight: var(--weight-semibold);
-  line-height: var(--leading-ui);
+  /* The design's navigation links inherit the page's body leading. */
+  line-height: var(--leading-body);
   text-decoration: none;
 }
 
@@ -93,6 +94,7 @@
 
   .wordmark {
     display: block;
+    margin-bottom: 14px;
     font-size: var(--size-wordmark-rail);
     font-weight: var(--weight-extrabold);
     line-height: 1;
