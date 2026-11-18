@@ -108,6 +108,11 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `vitest` | Birim ve bileşen testleri (T11) | 0 |
 | `jsdom` | Bileşen testleri için DOM ortamı | 0 |
 | `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` | Bileşen testleri: rol ve erişilebilir adla sorgu, klavye ve işaretçi etkileşimi, DOM eşleyicileri | 0 |
+| `eslint`, `@eslint/js`, `typescript-eslint`, `globals` | Lint; tip bilgili strict kurallar. CLAUDE.md'deki katman, metin ve harf çevirisi kuralları da burada denetlenir | 0 |
+| `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh` | Hook kuralları; Vite'in canlı yenilemesini bozan dışa aktarımları yakalar | 0 |
+| `eslint-plugin-jsx-a11y` | Erişilebilirlik: div'e tıklama, etiket ve rol kuralları. Eş-bağımlılık aralığı ESLint 9'da bitiyor; ESLint 10 ile denendi ve çalışıyor. Uyarı `pnpm-workspace.yaml` içinde susturuldu | 0 |
+| `stylelint` | CSS'te sabit renk, yazı boyutu, köşe ve gölge yasağı; `text-transform: uppercase` yasağı (CLAUDE.md "Stil") | 0 |
+| `prettier` | Biçim | 0 |
 
 ## Değişiklik günlüğü
 

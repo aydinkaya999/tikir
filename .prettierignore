@@ -1,0 +1,14 @@
+# Reference material and prose are not reformatted.
+design/
+seed/
+docs/
+*.md
+pnpm-lock.yaml
+dist/
+dist-e2e/
+coverage/
+shots/
+test-results/
+playwright-report/
+blob-report/
+.superpowers/

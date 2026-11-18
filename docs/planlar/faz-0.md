@@ -15,7 +15,7 @@
 - [x] Task 0: Plan dosyası
 - [x] Task 1: Ortam: Node 26 ve pnpm (commit yok)
 - [x] Task 2: Proje iskeleti
-- [ ] Task 3: Lint ve biçim
+- [x] Task 3: Lint ve biçim
 - [ ] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
 - [ ] Task 5: `domain/text.ts`
 - [ ] Task 6: `domain/readability.ts` ve sınıf eşikleri
@@ -121,8 +121,8 @@
 
 **Dosyalar:** `eslint.config.js`, `stylelint.config.js`, `.prettierrc.json`, `.prettierignore`, `package.json`, `docs/kararlar.md`.
 
-- [ ] Paketler: `eslint`, `@eslint/js`, `typescript-eslint`, `globals`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `eslint-plugin-jsx-a11y` (ESLint 10 eş-bağımlılık uyarısı bilinçli olarak susturulur), `stylelint`, `prettier`.
-- [ ] ESLint (`--max-warnings 0`):
+- [x] Paketler: `eslint`, `@eslint/js`, `typescript-eslint`, `globals`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `eslint-plugin-jsx-a11y` (ESLint 10 eş-bağımlılık uyarısı bilinçli olarak susturulur), `stylelint`, `prettier`.
+- [x] ESLint (`--max-warnings 0`):
   - `@eslint/js` önerilenleri, `typescript-eslint` strict ve tip bilgili kuralları, react-hooks, react-refresh, jsx-a11y önerilenleri.
   - Proje kuralları:
     - `src/domain/**`: yalnız `./` ile başlayan içe aktarma; `Date.now()` ve argümansız `new Date()` yok (test dosyaları hariç).
@@ -130,18 +130,18 @@
     - `src/domain/**` ve `src/components/**`: `window`, `document`, `navigator`, `localStorage`, `sessionStorage`, `indexedDB`, `fetch`, `XMLHttpRequest`, `WebSocket` yok.
     - `src/**/*.tsx` (vitrin ve testler hariç): boş olmayan JSX metni yok; `aria-label`, `alt`, `title` ve `placeholder` içinde boş olmayan düz dizgi yok.
     - Her yerde `toUpperCase()` ve `toLowerCase()` yok; `text.ts` içindeki Türkçe yardımcılar kullanılır.
-- [ ] Stylelint:
+- [x] Stylelint:
   - `color-no-hex`, `color-named: never`; renk işlevleri yasak.
   - Yalnız `var(--…)` (ve `inherit`, `currentColor`, `transparent`, `none`, `0`, `50%` gibi anahtar değerler) şu özelliklerde: renkler, `background`, `font-size`, `font-family`, `font-weight`, `border-radius`, `box-shadow`.
   - `text-transform: uppercase` yasak.
   - `src/styles/tokens.css` ve `src/styles/tokens-extra.css` muaf.
-- [ ] Prettier: `singleQuote`, `printWidth: 100`. Biçimlenmez: `design/`, `seed/`, `docs/`, `*.md`, derleme ve rapor klasörleri, `.superpowers/`, `pnpm-lock.yaml`.
-- [ ] Betikler:
+- [x] Prettier: `singleQuote`, `printWidth: 100`. Biçimlenmez: `design/`, `seed/`, `docs/`, `*.md`, derleme ve rapor klasörleri, `.superpowers/`, `pnpm-lock.yaml`.
+- [x] Betikler:
   - `lint` = `eslint . --max-warnings 0 && stylelint "src/**/*.css" && prettier --check .`
   - `format` = `prettier --write .`
   - `check` = `pnpm typecheck && pnpm lint && pnpm test`
-- [ ] Doğrulama: `pnpm check` geçer. Commit'e girmeyen geçici örneklerle her kuralın hata verdiği çıktı gösterilir, sonra örnekler silinir. Örnekler: domain'de React içe aktarma, `<div onClick>`, JSX metni, `toUpperCase()`, CSS'te `#fff`, `font-size: 13px`, `text-transform: uppercase`.
-- [ ] Commit: `chore: add lint and format checks`
+- [x] Doğrulama: `pnpm check` geçer. Commit'e girmeyen geçici örneklerle her kuralın hata verdiği çıktı gösterilir, sonra örnekler silinir. Örnekler: domain'de React içe aktarma, `<div onClick>`, JSX metni, `toUpperCase()`, CSS'te `#fff`, `font-size: 13px`, `text-transform: uppercase`.
+- [x] Commit: `chore: add lint and format checks`
 
 ### Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
 
