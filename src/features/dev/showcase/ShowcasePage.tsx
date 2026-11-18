@@ -1,4 +1,5 @@
 import { ButtonDemo, IconButtonDemo } from './ButtonDemo';
+import { LineChartDemo, ProgressBarDemo, StatCardDemo } from './DataDemo';
 import {
   CheckboxDemo,
   OptionCardDemo,
@@ -39,6 +40,9 @@ export function ShowcasePage() {
       <CheckboxDemo />
       <TextFieldDemo />
       <TextAreaDemo />
+      <StatCardDemo />
+      <LineChartDemo />
+      <ProgressBarDemo />
       <IconDemo />
     </main>
   );

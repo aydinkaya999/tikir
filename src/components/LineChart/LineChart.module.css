@@ -1,0 +1,103 @@
+.wrap {
+  min-width: 0;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Phones get the compact drawing, wider screens the wide one (V1). */
+.wide {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .compact {
+    display: none;
+  }
+
+  .wide {
+    display: block;
+  }
+}
+
+.compact text {
+  font-size: var(--size-chart-compact);
+}
+
+.wide text {
+  font-size: var(--size-chart-wide);
+}
+
+.grid {
+  stroke: var(--color-line);
+  stroke-width: 1.5;
+}
+
+.axis {
+  fill: var(--color-muted);
+  font-weight: var(--weight-semibold);
+}
+
+.average {
+  stroke: var(--color-muted);
+  stroke-width: 2.5;
+  stroke-dasharray: 3 6;
+  stroke-linecap: round;
+}
+
+.averageLabel {
+  fill: var(--color-muted);
+  font-weight: var(--weight-bold);
+}
+
+.target {
+  stroke: var(--color-hesitation);
+  stroke-width: 2.5;
+  stroke-dasharray: 9 6;
+}
+
+.targetLabel {
+  fill: var(--color-ink);
+  font-weight: var(--weight-bold);
+}
+
+.line {
+  fill: none;
+  stroke: var(--color-cobalt);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.point {
+  fill: var(--color-white);
+  stroke: var(--color-ink);
+  stroke-width: 3;
+}
+
+.lastPoint {
+  fill: var(--color-saffron);
+  stroke: var(--color-ink);
+  stroke-width: 3;
+}
+
+.lastLabel {
+  fill: var(--color-ink);
+  font-weight: var(--weight-extrabold);
+}
+
+.compact .value {
+  font-size: var(--size-chart-compact-value);
+}
+
+.wide .value {
+  font-size: var(--size-chart-wide-value);
+}
+
+.value {
+  fill: var(--color-ink);
+  font-weight: var(--weight-extrabold);
+}

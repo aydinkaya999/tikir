@@ -26,7 +26,7 @@
 - [x] Task 11: Companion, Monster, Tile ve BookCover
 - [x] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
 - [x] Task 13: StepTiles ve MicButton
-- [ ] Task 14: StatCard, LineChart ve ProgressBar
+- [x] Task 14: StatCard, LineChart ve ProgressBar
 - [ ] Task 15: ReadingText, PhraseText ve RaceBar
 - [ ] Task 16: Vitrin testi
 - [ ] Task 17: Çocuk ve veli kabukları
@@ -351,9 +351,9 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 - `LineChart`: `{ points: number[]; labels: string[]; yTicks: number[]; target?: { value: number; label: string }; average?: { value: number; label: string }; label: string }`. `svg[role=img]` ve `aria-label`; ortalama yoksa ortalama çizgisi çizilmez.
 - `ProgressBar`: `{ value: number; label: string }`, `role="progressbar"` ve `aria-valuenow`.
 
-- [ ] Önce testler: grafiğin adı, nokta sayısı ve ortalamanın olmaması; ilerleme değeri.
-- [ ] Vitrinde V1 tasarımındaki örnek değerler kullanılır. Görüntü V1 ve U1 ile karşılaştırılır.
-- [ ] Commit: `feat(components): add StatCard, LineChart and ProgressBar`
+- [x] Önce testler: grafiğin adı, nokta sayısı ve ortalamanın olmaması; ilerleme değeri.
+- [x] Vitrinde V1 tasarımındaki örnek değerler kullanılır. Görüntü V1 ve U1 ile karşılaştırılır.
+- [x] Commit: `feat(components): add StatCard, LineChart and ProgressBar`
 
 ### Task 15: ReadingText, PhraseText ve RaceBar
 

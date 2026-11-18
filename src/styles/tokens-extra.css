@@ -33,6 +33,15 @@
   --size-step-label: 15px;
   /* Microphone button while listening: light turquoise ring inside an ink ring (G2, G4, K3). */
   --ring-mic: 0 0 0 7px var(--color-turquoise-light), 0 0 0 9.5px var(--color-ink);
+  /* Stat cards (V1): plain number 24 → 34 px, hero number 52 → 64 px, hero label 15 px. */
+  --size-stat: 24px;
+  --size-stat-hero: 52px;
+  --size-stat-hero-label: 15px;
+  /* Line chart text in SVG units (V1): compact 12/17, wide 13/18 (axis labels / last value). */
+  --size-chart-compact: 12px;
+  --size-chart-compact-value: 17px;
+  --size-chart-wide: 13px;
+  --size-chart-wide-value: 18px;
 }
 
 @media (min-width: 700px) {
@@ -41,5 +50,7 @@
     --size-cover-title: 21px;
     --size-textarea: 17px;
     --size-option-label: 17px;
+    --size-stat: 34px;
+    --size-stat-hero: 64px;
   }
 }

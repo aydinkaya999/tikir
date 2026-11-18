@@ -25,7 +25,14 @@ export default {
       'color-mix',
     ],
     'declaration-property-value-allowed-list': {
-      [colorProperties]: [onlyVars, 'inherit', 'currentColor', 'currentcolor', 'transparent'],
+      [colorProperties]: [
+        onlyVars,
+        'inherit',
+        'currentColor',
+        'currentcolor',
+        'transparent',
+        'none',
+      ],
       background: [onlyVars, 'none', 'transparent', 'inherit'],
       font: ['inherit'],
       'font-size': [onlyVars, 'inherit', '1em', '100%'],
