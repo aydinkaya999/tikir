@@ -39,4 +39,16 @@ export const copy = {
       detail: (name: string, message: string) => `Ayrıntı: ${name}: ${message}`,
     },
   },
+  recording: {
+    heading: 'Kayıt',
+    record: '10 saniye kaydet',
+    progress: (seconds: string) => `Kaydediliyor: ${seconds} sn`,
+    ready: (seconds: string) => `Kayıt hazır: ${seconds} sn`,
+    partial: (seconds: string) => `Kayıt yarıda kaldı: ${seconds} sn`,
+    play: 'Kaydı çal',
+    stop: 'Çalmayı durdur',
+    playing: 'Çalıyor',
+    playHint: 'Çalmadan önce mikrofon kapanır.',
+    download: 'Kaydı indir (WAV)',
+  },
 } as const;

@@ -18,7 +18,7 @@
 - [x] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
 - [x] Task 4: `AudioCapture` ve `WebAudioCapture`
 - [x] Task 5: AudioWorklet ve mikrofon bölümü
-- [ ] Task 6: Kayıt ve geri çalma
+- [x] Task 6: Kayıt ve geri çalma
 - [ ] Task 7: Yankı sunucusu ve yankı testi
 - [ ] Task 8: Cihaz raporu
 - [ ] Task 9: Cihaz denemesi sunucusu
@@ -430,10 +430,10 @@ saveFile(fileName: string, data: Blob): void
 - Mikrofon kayıt bitmeden kapanırsa (durum `capturing` dışına çıkarsa) kayıt eldekiyle biter ve "Kayıt yarıda kaldı" yazar.
 - "Kaydı çal" önce `capture.stop()` çağırır, sonra çalar.
 - Kayıt özeti (`RecordingSummary`) sayfaya bildirilir; Task 8'deki rapor bunu kullanır.
-- [ ] Önce birim testleri:
+- [x] Önce birim testleri:
   - `PcmRecording`: 500 çerçeveden sonra dolu, 10 sn ve sırası korunmuş 160 000 örnek; doluyken gelen çerçeve yok sayılır; 210 çerçeve 4,2 sn eder;
   - `trialFileName(new Date(2026, 10, 19, 14, 32), 'wav')` → `ses-denemesi-20261119-1432.wav`.
-- [ ] Önce e2e testleri (iki tarayıcıda):
+- [x] Önce e2e testleri (iki tarayıcıda):
   - "ten seconds are recorded as 16 kHz WAV and played back":
     1. Üç anahtar kapatılır, mikrofon açılır, "10 saniye kaydet"e basılır.
     2. 15 sn içinde "Kayıt hazır: 10,0 sn" görünür.
@@ -443,9 +443,9 @@ saveFile(fileName: string, data: Blob): void
     6. "Çalmayı durdur"a basılınca yeniden "Kayıt hazır: 10,0 sn" yazar.
   - "a recording cut short by hiding the tab keeps what it has" (inceleme odağı 3): kayıt sürerken sekme gizlenir → "Kayıt yarıda kaldı" yazar ve WAV indirilebilir.
   - 10 sn süren testlerde `test.setTimeout(60_000)` kullanılır (Task 7'deki yankı testi de böyle).
-- [ ] Uygula; yeşili gör.
-- [ ] Doğrulama: `pnpm check`; `pnpm e2e e2e/audio-lab.spec.ts`.
-- [ ] Commit: `feat(dev): record, play back and download ten seconds of audio`
+- [x] Uygula; yeşili gör.
+- [x] Doğrulama: `pnpm check`; `pnpm e2e e2e/audio-lab.spec.ts`.
+- [x] Commit: `feat(dev): record, play back and download ten seconds of audio`
 
 ### Task 7: Yankı sunucusu ve yankı testi
 

@@ -48,6 +48,11 @@
   font-size: var(--size-small);
 }
 
+.status {
+  margin: 0;
+  font-weight: var(--weight-bold);
+}
+
 .problem {
   display: flex;
   flex-direction: column;

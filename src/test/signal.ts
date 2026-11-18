@@ -55,3 +55,36 @@ export function seededRandom(seed: number): () => number {
     return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+/**
+ * The strongest frequency in a range (Goertzel scan). Unlike zero crossings, it is not fooled by
+ * the dropped samples of Chromium's file-fed fake microphone, which runs about 2 % fast (measured
+ * in phase 1: zero crossings read 449 Hz where the spectral peak is 440.5 Hz).
+ */
+export function peakFrequency(
+  samples: ArrayLike<number>,
+  sampleRate: number,
+  range: { from: number; to: number; step: number },
+): number {
+  let bestHz = range.from;
+  let bestPower = -1;
+  for (let hz = range.from; hz <= range.to + 1e-9; hz += range.step) {
+    const coefficient = 2 * Math.cos((2 * Math.PI * hz) / sampleRate);
+    let previous = 0;
+    let beforePrevious = 0;
+    for (let index = 0; index < samples.length; index += 1) {
+      const current = (samples[index] ?? 0) + coefficient * previous - beforePrevious;
+      beforePrevious = previous;
+      previous = current;
+    }
+    const power =
+      previous * previous +
+      beforePrevious * beforePrevious -
+      coefficient * previous * beforePrevious;
+    if (power > bestPower) {
+      bestPower = power;
+      bestHz = hz;
+    }
+  }
+  return bestHz;
+}

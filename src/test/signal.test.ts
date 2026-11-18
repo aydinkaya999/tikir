@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { seededRandom, sine, zeroCrossingHz } from './signal';
+import { peakFrequency, seededRandom, sine, zeroCrossingHz } from './signal';
 
 // The frequency checks of the resampler and the e2e recording rest on these helpers, so they are
 // checked against hand-derived values rather than against each other.
@@ -49,5 +49,21 @@ describe('seededRandom', () => {
 
   it('gives different sequences for different seeds', () => {
     expect(seededRandom(1)()).not.toBe(seededRandom(2)());
+  });
+});
+
+describe('peakFrequency', () => {
+  it('finds a tone on its own', () => {
+    const tone = sine({ hz: 437, sampleRate: 16_000, seconds: 2 });
+
+    expect(peakFrequency(tone, 16_000, { from: 380, to: 500, step: 0.25 })).toBeCloseTo(437, 1);
+  });
+
+  it('picks the louder of two tones', () => {
+    const loud = sine({ hz: 440, sampleRate: 16_000, seconds: 1, amplitude: 0.5 });
+    const quiet = sine({ hz: 470, sampleRate: 16_000, seconds: 1, amplitude: 0.1 });
+    const mixed = loud.map((value, index) => value + (quiet[index] ?? 0));
+
+    expect(peakFrequency(mixed, 16_000, { from: 400, to: 500, step: 1 })).toBe(440);
   });
 });

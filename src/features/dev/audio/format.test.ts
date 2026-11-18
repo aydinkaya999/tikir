@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDbfs, formatMs, formatSeconds, meterValue } from './format';
+import { formatDbfs, formatMs, formatSeconds, meterValue, trialFileName } from './format';
 
 describe('meterValue', () => {
   it.each([
@@ -31,5 +31,16 @@ describe('formatSeconds and formatMs', () => {
     expect(formatSeconds(10)).toBe('10,0');
     expect(formatSeconds(4.2)).toBe('4,2');
     expect(formatMs(12.345)).toBe('12,3');
+  });
+});
+
+describe('trialFileName', () => {
+  it('names downloads by local date and time', () => {
+    expect(trialFileName(new Date(2026, 10, 19, 14, 32), 'wav')).toBe(
+      'ses-denemesi-20261119-1432.wav',
+    );
+    expect(trialFileName(new Date(2026, 0, 5, 7, 3), 'json')).toBe(
+      'ses-denemesi-20260105-0703.json',
+    );
   });
 });
