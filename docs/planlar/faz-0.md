@@ -13,8 +13,8 @@
 ## Görev listesi
 
 - [x] Task 0: Plan dosyası
-- [ ] Task 1: Ortam: Node 26 ve pnpm (commit yok)
-- [ ] Task 2: Proje iskeleti
+- [x] Task 1: Ortam: Node 26 ve pnpm (commit yok)
+- [x] Task 2: Proje iskeleti
 - [ ] Task 3: Lint ve biçim
 - [ ] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
 - [ ] Task 5: `domain/text.ts`
@@ -83,39 +83,39 @@
 
 ### Task 1: Ortam: Node 26 ve pnpm (commit yok)
 
-- [ ] `.nvmrc` = `26` (dosya Task 2'de commit'e girer). `mise install` ile Node 26'yı kur.
-- [ ] Node 26 altına güncel pnpm'i kur (`npm install -g pnpm@<güncel>`), çünkü Node 26 corepack getirmez.
-- [ ] Doğrulama: bu klasörde `node -v` → `v26.x`, `pnpm -v` → `12.x`.
+- [x] `.nvmrc` = `26` (dosya Task 2'de commit'e girer). `mise install` ile Node 26'yı kur.
+- [x] Node 26 altına güncel pnpm'i kur (`npm install -g pnpm@<güncel>`), çünkü Node 26 corepack getirmez.
+- [x] Doğrulama: bu klasörde `node -v` → `v26.x`, `pnpm -v` → `12.x`.
 
 ### Task 2: Proje iskeleti
 
 **Dosyalar:** `package.json`, `pnpm-lock.yaml`, `.nvmrc`, `.gitignore`, `index.html`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `vite.config.ts`, `src/main.tsx`, `src/app/App.tsx`, `src/app/App.test.tsx`, `src/test/setup.ts`, `docs/kararlar.md`.
 
-- [ ] `package.json`:
+- [x] `package.json`:
   - `"private": true`, `"type": "module"`;
   - `packageManager` kurulu pnpm sürümü, `engines.node` `>=26`;
   - betikler: `dev`, `build` (`tsc -b && vite build`), `preview`, `typecheck` (`tsc -b`), `test` (`vitest run`), `check` (şimdilik typecheck + test).
-- [ ] Paketler (kurulum anındaki güncel sürüm): `react`, `react-dom`; geliştirme için `vite`, `@vitejs/plugin-react`, `typescript@6.0`, `@types/react`, `@types/react-dom`, `@types/node`, `vitest`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`.
-- [ ] `index.html`:
+- [x] Paketler (kurulum anındaki güncel sürüm): `react`, `react-dom`; geliştirme için `vite`, `@vitejs/plugin-react`, `typescript@6.0`, `@types/react`, `@types/react-dom`, `@types/node`, `vitest`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`.
+- [x] `index.html`:
   - `<html lang="tr">`, `charset=utf-8`;
   - viewport `width=device-width, initial-scale=1, viewport-fit=cover`;
   - `<link rel="icon" href="data:,">` (favicon isteği gitmez);
   - `<title>Tıkır</title>`.
-- [ ] TypeScript ayarları:
+- [x] TypeScript ayarları:
   - `strict`, `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`, `verbatimModuleSyntax`, `erasableSyntaxOnly`;
   - `moduleResolution: bundler`, `jsx: react-jsx`, `resolveJsonModule`;
   - uygulama `src/`; Node tarafı ayar dosyaları, `scripts/` ve `e2e/`.
-- [ ] Vitest iki proje:
+- [x] Vitest iki proje:
   - `*.test.ts` dosyaları `node` ortamında (domain saf kalsın);
   - `*.test.tsx` dosyaları `jsdom` ortamında, `src/test/setup.ts` ile (jest-dom).
-- [ ] Önce test: `src/app/App.test.tsx` → `App` bir `main` alanı çizer. Kırmızı gör, sonra `App` ve `main.tsx` (StrictMode) yazılır.
-- [ ] `.gitignore`: `node_modules`, `dist`, `dist-e2e`, `shots/`, `test-results/`, `playwright-report/`, `blob-report/`, `coverage/`, `.superpowers/`, `.DS_Store`.
-- [ ] `docs/kararlar.md`:
+- [x] Önce test: `src/app/App.test.tsx` → `App` bir `main` alanı çizer. Kırmızı gör, sonra `App` ve `main.tsx` (StrictMode) yazılır.
+- [x] `.gitignore`: `node_modules`, `dist`, `dist-e2e`, `shots/`, `test-results/`, `playwright-report/`, `blob-report/`, `coverage/`, `.superpowers/`, `.DS_Store`.
+- [x] `docs/kararlar.md`:
   - Bağımlılıklar tablosuna bu görevin paketleri;
   - T11 (Node 26) ve TypeScript 6 kararı;
   - değişiklik günlüğüne bir satır.
-- [ ] Doğrulama: `pnpm check` ve `pnpm build` geçer; `pnpm dev` açılır, sayfada `lang="tr"` görünür.
-- [ ] Commit: `chore: scaffold Vite React TypeScript app`
+- [x] Doğrulama: `pnpm check` ve `pnpm build` geçer; `pnpm dev` açılır, sayfada `lang="tr"` görünür.
+- [x] Commit: `chore: scaffold Vite React TypeScript app`
 
 ### Task 3: Lint ve biçim
 

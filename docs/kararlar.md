@@ -51,7 +51,8 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T8 | Model okuma sesi | Tıkır'ın sesi nereden gelecek | açık | Tarayıcının konuşma sentezi; cihazda Türkçe ses yoksa sessiz, zamanlı vurgu |
 | T9 | Ses biçimi | 16 kHz, tek kanal, 16 bit PCM, 20 ms çerçeve | varsayım | Faz 6'da seçilen tanıma yoluna göre gözden geçirilir |
 | T10 | Dil | Kod, yorum ve commit İngilizce; arayüz Türkçe ve tek dilli | varsayım | Çeviri kütüphanesi yok; metinler `src/i18n/tr.ts` |
-| T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | |
+| T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | Faz 0'da Node 26 LTS (`.nvmrc`, `engines`) ve pnpm 12 (`packageManager`) seçildi. Güncel `react-router`, `jsdom` ve `stylelint` en az Node 22.22 istiyor. |
+| T14 | TypeScript sürümü | 6.0.x | varsayım | Güncel kararlı sürüm 7.0, ama `typescript-eslint` yalnız 6.1'den eskisini destekliyor. Destek gelince 7'ye geçilir. |
 | T12 | Üçüncü taraf | Çalışma anında dış adrese istek yok; analitik ve reklam yok | kesin | Yazı tipleri depoda barındırılır |
 | T13 | Depo düzeni | Kök web uygulaması; `server/` sonra; `ios/` ve `android/` Capacitor ile | varsayım | |
 
@@ -100,7 +101,15 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 
 | Paket | Ne için | Eklendiği faz |
 |---|---|---|
+| `react`, `react-dom` | Arayüz (T2) | 0 |
+| `vite`, `@vitejs/plugin-react` | Derleme ve geliştirme sunucusu (T2) | 0 |
+| `typescript` (6.0.x) | Strict tip denetimi; neden 7 değil: T14 | 0 |
+| `@types/react`, `@types/react-dom`, `@types/node` | Tipler. Node tipleri yalnız testlerde, ayar dosyalarında ve betiklerde | 0 |
+| `vitest` | Birim ve bileşen testleri (T11) | 0 |
+| `jsdom` | Bileşen testleri için DOM ortamı | 0 |
+| `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` | Bileşen testleri: rol ve erişilebilir adla sorgu, klavye ve işaretçi etkileşimi, DOM eşleyicileri | 0 |
 
 ## Değişiklik günlüğü
 
 - 2026-11-18: İlk sürüm (başlangıç paketi).
+- 2026-11-18: Faz 0: Node 26 LTS ve pnpm 12 (T11), TypeScript 6.0 (T14), ilk bağımlılıklar.

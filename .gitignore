@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-e2e/
+coverage/
+shots/
+test-results/
+playwright-report/
+blob-report/
+.superpowers/
+*.log
+.DS_Store
