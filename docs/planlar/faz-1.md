@@ -16,7 +16,7 @@
 - [x] Task 1: PCM ve WAV
 - [x] Task 2: Örnekleme hızı dönüştürücü
 - [x] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
-- [ ] Task 4: `AudioCapture` ve `WebAudioCapture`
+- [x] Task 4: `AudioCapture` ve `WebAudioCapture`
 - [ ] Task 5: AudioWorklet ve mikrofon bölümü
 - [ ] Task 6: Kayıt ve geri çalma
 - [ ] Task 7: Yankı sunucusu ve yankı testi
@@ -293,7 +293,7 @@ export class WebAudioCapture implements AudioCapture { constructor(settings: Cap
 - `supported` false ise durum `unavailable` olur, hata adı `MediaDevicesMissing` kaydedilir ve `open` hiç çağrılmaz.
 - Hata sınıflaması: `NotAllowedError` ve `SecurityError` → `denied`; `NotFoundError`, `OverconstrainedError` ve `NotSupportedError` → `unavailable`; geri kalan her şey → `error`.
 - Sayaçlar her başarılı açılışta sıfırlanır.
-- [ ] Önce testler (sahte ortamla, `node` ortamında):
+- [x] Önce testler (sahte ortamla, `node` ortamında):
   - açılış: `starting` ve `capturing` durumları bu sırayla yayınlanır; `diagnostics()` giriş hızını, uygulanan ayarları ve aygıt adını verir;
   - `supported` false: durum `unavailable`, hata adı `MediaDevicesMissing`, `open` çağrılmadı;
   - sınıflama tablosu: yukarıdaki adlar, `TypeError`, düz `Error` ve dizgi;
@@ -307,9 +307,9 @@ export class WebAudioCapture implements AudioCapture { constructor(settings: Cap
   - `onInterrupted` gelince durum `error` olur, hata kaydedilir, grafik kapatılır;
   - `denied` durumundan sonra `start()` yeniden dener ve mikrofon açılabilir;
   - yeni açılışta sayaçlar sıfırlanır; aboneliği bırakan dinleyici bir daha çağrılmaz.
-- [ ] Kırmızı, sonra yeşil (`pnpm test src/services/audio/WebAudioCapture.test.ts`).
-- [ ] `docs/mimari.md`: `AudioCapture` arayüzüne `diagnostics()` eklenir, servis klasörünün yeni dosyaları yazılır.
-- [ ] Commit: `feat(audio): add the AudioCapture interface and WebAudioCapture`
+- [x] Kırmızı, sonra yeşil (`pnpm test src/services/audio/WebAudioCapture.test.ts`).
+- [x] `docs/mimari.md`: `AudioCapture` arayüzüne `diagnostics()` eklenir, servis klasörünün yeni dosyaları yazılır.
+- [x] Commit: `feat(audio): add the AudioCapture interface and WebAudioCapture`
 
 ### Task 5: AudioWorklet ve mikrofon bölümü
 

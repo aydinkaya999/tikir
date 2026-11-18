@@ -155,11 +155,13 @@ type Unsubscribe = () => void;
 // Mikrofon. Ayrıntı: docs/dinleme-hatti.md
 interface AudioCapture {
   readonly state: 'idle' | 'starting' | 'capturing' | 'denied' | 'unavailable' | 'error';
-  start(): Promise<void>;                         // kullanıcı hareketiyle çağrılır
-  stop(): Promise<void>;
+  start(): Promise<void>;                         // kullanıcı hareketiyle çağrılır; hiç reddetmez, hata bir duruma dönüşür
+  stop(): Promise<void>;                          // her durumda güvenli
   onFrame(cb: (pcm16: Int16Array) => void): Unsubscribe;   // 16 kHz, tek kanal, 20 ms
   onLevel(cb: (rms: number) => void): Unsubscribe;
   onStateChange(cb: (s: AudioCapture['state']) => void): Unsubscribe;
+  diagnostics(): CaptureDiagnostics;              // istenen ve uygulanan ayarlar, giriş hızı, aygıt adı,
+                                                  // gelen / kaçan / sessiz çerçeve, son hata (Faz 1)
 }
 
 // Okumayı izleyen dinleyici. Ayrıntı: docs/dinleme-hatti.md
@@ -219,6 +221,12 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 | `Repository` | `IndexedDbRepository`, ilk açılışta `seed/` ile dolar | `HttpRepository` |
 | `BookGenerator` | `MockBookGenerator` (aşağıda) | Arka uç |
 | `Telemetry` | `NoopTelemetry` | Kendi sunucumuza |
+
+**Ses yakalama (`src/services/audio`, Faz 1):**
+
+- `AudioCapture.ts`: arayüz ve tipler (`CaptureSettings`, `CaptureDiagnostics`, …). `types.ts` ortak `Unsubscribe` tipini tutar.
+- `WebAudioCapture.ts`: durumlar, sayaçlar, gizlenen sayfada ve geç gelen izinde mikrofonu kapatma kuralı. Tarayıcıya `captureEnvironment.ts` arayüzünden dokunur; testlerde sahtesi verilir.
+- Saf yardımcılar, birim testli: `resampler.ts` (pencereli sinc, her giriş hızı → 16 kHz), `framer.ts` (320 örneklik çerçeve), `levelMeter.ts` (saniyede 20 RMS), `captureChain.ts` (dördünü işleyici sırasıyla bağlar), `pcm.ts`, `wav.ts`. Ürün kuralı değil, yakalamanın parçası oldukları için `domain` içinde değiller (Faz 1 planı, karar 3).
 
 **`MockBookGenerator`:**
 
