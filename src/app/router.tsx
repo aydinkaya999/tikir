@@ -1,5 +1,16 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
-import { BookFromTextPage, LibraryPage } from '../features/library/pages';
+import {
+  BookFromCardsPage,
+  BookFromTextPage,
+  BookReadyPage,
+  LibraryPage,
+} from '../features/library/pages';
+import {
+  ChildProfilePage,
+  LevelAssessmentPage,
+  MeetCompanionPage,
+  ParentAccountPage,
+} from '../features/onboarding/pages';
 import {
   AssessmentPage,
   ReadingStylePage,
@@ -17,8 +28,11 @@ import {
   WarmupPage,
   WrapUpPage,
 } from '../features/session/pages';
+import { tr } from '../i18n/tr';
 import { devPaths, extraPaths, screenPaths } from './routes';
 import { ChildShell } from './shells/ChildShell';
+import { FocusShell } from './shells/FocusShell';
+import { OnboardingShell } from './shells/OnboardingShell';
 import { ParentShell } from './shells/ParentShell';
 import { SessionShell } from './shells/SessionShell';
 
@@ -63,6 +77,35 @@ export const appRoutes: RouteObject[] = [
       { path: screenPaths.G5, element: <RecordPage /> },
       { path: screenPaths.G6, element: <WrapUpPage /> },
       { path: screenPaths.G7, element: <DonePage /> },
+    ],
+  },
+  {
+    element: (
+      <FocusShell
+        title={tr.focus.bookFromCards.title}
+        subtitle={tr.focus.bookFromCards.subtitle}
+        backTo={screenPaths.U1}
+      />
+    ),
+    children: [{ path: screenPaths.U3, element: <BookFromCardsPage /> }],
+  },
+  {
+    element: (
+      <FocusShell
+        title={tr.focus.bookReady.title}
+        subtitle={tr.focus.bookReady.subtitle}
+        backTo={screenPaths.U3}
+      />
+    ),
+    children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
+  },
+  {
+    element: <OnboardingShell />,
+    children: [
+      { path: screenPaths.K1, element: <ParentAccountPage /> },
+      { path: screenPaths.K2, element: <ChildProfilePage /> },
+      { path: screenPaths.K3, element: <LevelAssessmentPage /> },
+      { path: screenPaths.K4, element: <MeetCompanionPage /> },
     ],
   },
   {

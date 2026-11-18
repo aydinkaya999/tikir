@@ -6,6 +6,16 @@ export function LibraryPage() {
   return null;
 }
 
+/** U3 Kartlarla kitap. */
+export function BookFromCardsPage() {
+  return null;
+}
+
+/** U4 Kitap hazır. */
+export function BookReadyPage() {
+  return null;
+}
+
 /** U2 Metinden kitap (parent area). */
 export function BookFromTextPage() {
   return null;

@@ -140,6 +140,81 @@ for (const step of sessionSteps) {
   });
 }
 
+const focusRoutes = [
+  {
+    path: '/kitaplik/kur',
+    title: 'Kitabını kur',
+    subtitle: 'Her sıradan bir kart seç.',
+    back: '/kitaplik',
+  },
+  {
+    path: '/kitaplik/ornek/hazir',
+    title: 'Kitabın hazır',
+    subtitle: 'Denetimden geçti, okunmaya hazır.',
+    back: '/kitaplik/kur',
+  },
+];
+
+for (const route of focusRoutes) {
+  test(`${route.path} opens in the focus shell with its title`, async ({ page }) => {
+    for (const viewport of ['telefon', 'tablet', 'web'] as const) {
+      await open(page, route.path, viewport);
+      await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'focus');
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(route.title);
+      await expect(page.getByRole('link', { name: 'Geri dön' })).toHaveAttribute(
+        'href',
+        route.back,
+      );
+
+      const subtitle = page.getByText(route.subtitle, { exact: true });
+      const libraryLink = page.getByRole('link', { name: 'Kitaplık' });
+      if (viewport === 'telefon') {
+        await expect(subtitle).toBeHidden();
+      } else {
+        await expect(subtitle).toBeVisible();
+      }
+      if (viewport === 'web') {
+        await expect(libraryLink).toHaveAttribute('href', '/kitaplik');
+      } else {
+        await expect(libraryLink).toBeHidden();
+      }
+    }
+  });
+}
+
+const onboardingSteps = [
+  { path: '/kurulum/hesap', step: 1 },
+  { path: '/kurulum/okuyucu', step: 2 },
+  { path: '/kurulum/seviye', step: 3 },
+  { path: '/kurulum/tanisma', step: 4 },
+];
+
+for (const route of onboardingSteps) {
+  test(`${route.path} opens in the onboarding shell at step ${String(route.step)}`, async ({
+    page,
+  }) => {
+    for (const viewport of ['telefon', 'tablet', 'web'] as const) {
+      await open(page, route.path, viewport);
+      await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'onboarding');
+      await expect(page.getByRole('main')).toHaveCount(1);
+
+      const progress = page.getByRole('list', {
+        name: `Kurulum adımı ${String(route.step)} / 4`,
+      });
+      await expect(progress.getByRole('listitem')).toHaveCount(4);
+      await expect(page.getByText(`${String(route.step)} / 4`, { exact: true })).toBeVisible();
+
+      // The cobalt panel with Tıkır shows from 700 px only.
+      const companion = page.getByRole('img', { name: 'Tıkır' });
+      if (viewport === 'telefon') {
+        await expect(companion).toBeHidden();
+      } else {
+        await expect(companion).toBeVisible();
+      }
+    }
+  });
+}
+
 test('the way between the child and parent areas is a web-only link', async ({ page }) => {
   await open(page, '/', 'web');
   await expect(page.getByRole('link', { name: 'Veli alanı' })).toHaveAttribute('href', '/veli');

@@ -64,6 +64,10 @@
   --size-nav-label: 13px;
   --size-nav-item: 16px;
   --size-link: 15px;
+  /* Line under a page title (U3, U4 from 700 px). */
+  --size-subtitle: 16px;
+  /* Onboarding progress: corner of the dots and the current pill (K1–K4). */
+  --radius-progress: 6px;
   /* The "Tıkır" wordmark: rail (tablet), top bar (web), sidebar (web), onboarding panel. */
   --size-wordmark-rail: 22px;
   --size-wordmark-bar: 26px;

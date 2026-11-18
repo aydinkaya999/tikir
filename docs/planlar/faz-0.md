@@ -31,7 +31,7 @@
 - [x] Task 16: Vitrin testi
 - [x] Task 17: Çocuk ve veli kabukları
 - [x] Task 18: Seans kabuğu
-- [ ] Task 19: Odak ve kurulum kabukları
+- [x] Task 19: Odak ve kurulum kabukları
 - [ ] Task 20: Dış istek yok ve CSP
 - [ ] Task 21: Kabuk karşılaştırması
 - [ ] Task 22: Belgeler
@@ -426,18 +426,18 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 19: Odak ve kurulum kabukları
 
-- [ ] `FocusShell`: `{ title: string; subtitle?: string; backTo: string; aside?: ReactNode; action?: ReactNode }`.
+- [x] `FocusShell`: `{ title: string; subtitle?: string; backTo: string; aside?: ReactNode; action?: ReactNode }`.
   - Webde beyaz üst şerit ("Tıkır" ve sağda "Kitaplık" bağlantısı).
   - Geri düğmesi 44 ya da 48 px.
   - Telefonda eylem altta beyaz çubukta.
   - U3: "Kitabını kur" / "Her sıradan bir kart seç.", geri `/kitaplik`. U4: "Kitabın hazır", geri `/kitaplik/kur`.
-- [ ] `OnboardingShell`: `{ step: 1|2|3|4; bubble?: ReactNode; action?: ReactNode }`.
+- [x] `OnboardingShell`: `{ step: 1|2|3|4; bubble?: ReactNode; action?: ReactNode }`.
   - İlerleme göstergesinin adı "Kurulum adımı N / 4"; yanında "N / 4".
   - Tablet ve webde solda kobalt pano: "Tıkır" yazısı, Tıkır ve balon, altta çini şeridi. Panonun genişliği tablette 420 px, webde 380–520 px.
   - Telefonda eylem altta beyaz çubukta.
-- [ ] Rotalar: U3, U4 (`/kitaplik/:bookId/hazir`), K1–K4. e2e rota testine eklenir.
-- [ ] Doğrulama: `pnpm check`, `pnpm e2e`, `pnpm shots /kitaplik/kur /kurulum/hesap`.
-- [ ] Commit: `feat(shell): add focus and onboarding shells with routes`
+- [x] Rotalar: U3, U4 (`/kitaplik/:bookId/hazir`), K1–K4. e2e rota testine eklenir.
+- [x] Doğrulama: `pnpm check`, `pnpm e2e`, `pnpm shots /kitaplik/kur /kurulum/hesap`.
+- [x] Commit: `feat(shell): add focus and onboarding shells with routes`
 
 ### Task 20: Dış istek yok ve CSP
 

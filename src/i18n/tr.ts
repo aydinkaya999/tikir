@@ -32,6 +32,20 @@ export const tr = {
     },
   },
 
+  focus: {
+    /** U3, U4: back button name. */
+    back: 'Geri dön',
+    bookFromCards: { title: 'Kitabını kur', subtitle: 'Her sıradan bir kart seç.' },
+    bookReady: { title: 'Kitabın hazır', subtitle: 'Denetimden geçti, okunmaya hazır.' },
+  },
+
+  onboarding: {
+    /** K1–K4: name of the progress dots and the counter beside them. */
+    progressLabel: (step: number, total: number) =>
+      `Kurulum adımı ${String(step)} / ${String(total)}`,
+    progressCounter: (step: number, total: number) => `${String(step)} / ${String(total)}`,
+  },
+
   session: {
     /** G2–G7: close button name (phone, tablet) and link text (web). */
     exit: 'Seanstan çık',
