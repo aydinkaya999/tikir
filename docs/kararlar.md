@@ -105,6 +105,7 @@ Faz 0'da tasarımla belgeler karşılaştırılırken çıkanlar:
 11. Telefon ve tablette çocuk ekranından veli alanına giden yol yok; "Veli alanı" bağlantısı yalnız webde. (Faz 3'ten önce)
 12. G4 tasarımında 4. bölümün "1 / 2" sayfası, içerikteki 1. ve 2. sayfanın birleşimi. İçerikte bu bölüm 6 sayfa. Faz 2'deki `design` senaryosu hangisini izlesin? (Faz 2'den önce)
 13. İki bölmeli kabukların alt alta dizilmiş hâli çizilmedi (içerik 720 px altında: seans ve odak kabuğunda 700–783 px, kurulum kabuğunda 700–719 px). Şimdilik bölmeler sırasını koruyarak alt alta dizilir; kurulumda kobalt pano sayfanın başına geçer (`TODO(design)`). Ayrıca kurulum kabuğunda pano tablette 420 px sabit: 768 px'lik dikey tablette form sütununa 260 px kalır. Pano bu genişliklerde daralsın mı, yoksa kurulum telefon düzenine mi geçsin? (Faz 1'den önce)
+14. Okuma metninde rakamlar kelime sayılmıyor: "Deniz 3 elma aldı." metninde "3" önceki kelimeye yapışık görünür, kelime sayısına ve dinleme beklentisine girmez; "100’ü" yalnız "ü" olarak okunur. Rakamlar okuma metinlerinde hiç olmamalı mı (içerik kuralı), yoksa okunuşlarıyla ("üç") mı eşlensin? (Faz 2'den önce)
 
 ## Bağımlılıklar
 
@@ -134,4 +135,4 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-18: İlk sürüm (başlangıç paketi).
 - 2026-11-18: Faz 0: Node 26 LTS ve pnpm 12 (T11), TypeScript 6.0 (T14), ilk bağımlılıklar.
 - 2026-11-18: Faz 0: CSP (T15); `tokens-extra.css` (D10); MicButton'ın çizilmemiş durumları (D11); Albüm ve Stüdyo rotaları (D7); yanıt bekleyen sorulara 9–12. maddeler eklendi.
-- 2026-11-18: Faz 0 son incelemesi: 13. soru (iki bölmeli kabukların alt alta dizilmiş hâli, kurulum panosunun dikey tablette genişliği) eklendi.
+- 2026-11-18: Faz 0 son incelemesi: 13. soru (iki bölmeli kabukların alt alta dizilmiş hâli, kurulum panosunun dikey tablette genişliği) ve 14. soru (okuma metninde rakamlar) eklendi.

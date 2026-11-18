@@ -35,7 +35,7 @@
 - [x] Task 20: Dış istek yok ve CSP
 - [x] Task 21: Kabuk karşılaştırması
 - [x] Task 22: Belgeler
-- [ ] Task 23: Kabul ölçütleri yürüyüşü (commit yok)
+- [x] Task 23: Kabul ölçütleri yürüyüşü (commit yok)
 
 ## Onaylanan kararlar
 
@@ -467,7 +467,7 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 23: Kabul ölçütleri yürüyüşü (commit yok)
 
-- [ ] Yedi ölçüt tek tek yürünür. Her biri için çalıştırılan komut ve çıktısı ya da ekran görüntüsünün yolu gösterilir. Tutmayan ya da doğrulanamayan ölçüt "tuttu" diye yazılmaz.
+- [x] Yedi ölçüt tek tek yürünür. Her biri için çalıştırılan komut ve çıktısı ya da ekran görüntüsünün yolu gösterilir. Tutmayan ya da doğrulanamayan ölçüt "tuttu" diye yazılmaz.
 
 ## Kanıtlar
 
@@ -513,3 +513,89 @@ Task 7, 21 ve 23'te dolar.
 | G4 | Tıkır `normal` yüzde (tasarımda `listen`); balon, sayaç çipleri ve denetimler yok; telefonda Tıkır en altta (tasarımda denetim çubuğunun üstünde) | Faz 2 (karar 16) |
 | U3 | Kartlar, Tıkır ve "Kitabımı yap" yok | Faz 5 |
 | K1 | Form ve "Hesabı oluştur" yok. Balon olmadığı için Tıkır panoda tablette 46 px, webde 34 px aşağıda | Faz 3 |
+
+### Kabul ölçütleri (Task 23)
+
+Son inceleme düzeltmelerinden sonra, `5f49224` üzerinde, hepsi yeniden çalıştırıldı.
+
+| # | Ölçüt | Durum | Kanıt |
+|---|---|---|---|
+| 1 | `pnpm check`, `pnpm build`, `pnpm e2e` hatasız | Tuttu | `pnpm check`: tip denetimi, ESLint, Stylelint ve Prettier temiz; "Test Files 27 passed (27)", "Tests 200 passed (200)". `pnpm build`: "✓ built in 150ms", çıkış 0. `pnpm e2e`: "Running 124 tests using 5 workers", "124 passed (27.8s)". |
+| 2 | Vitrin her bileşeni gösterir; üç genişlikte taşma yok | Tuttu | `e2e/showcase.spec.ts`, Chromium ve WebKit: "the showcase has a section for every inventory component" (`docs/tasarim-sistemi.md` envanterindeki 22 bileşen, ayrıca ReadingText, PhraseText, Icon); "nothing overflows at 390 / 1180 / 1440 px". Görüntüler: `shots/gelistirme-vitrin-{telefon,tablet,web}.png`. |
+| 3 | Kabuklar üç genişlikte tasarımla aynı düzende | Tuttu | Yukarıdaki "Kabuk karşılaştırması (Task 21)": G1, G4, U3, K1, V1 üç genişlikte karşılaştırıldı, farklar listelendi. Son incelemeden sonra `pnpm shots / /seans/oku /kitaplik/kur /kurulum/hesap /veli` ile üretilen 15 görüntü, Task 21'de karşılaştırılanlarla bayt bayt aynı (`cmp`). |
+| 4 | Vurgu ilerlerken hiçbir kelime yer değiştirmez | Tuttu | `e2e/reading-text.spec.ts`, iki tarayıcıda 18/18: ReadingText (varsayılan ve "okul + en büyük", üç genişlik) ve PhraseText (üç genişlik). Testin yakaladığı kanıtlı: `.reserve` gizlenince "highlight on word 1"de kırmızı (Task 16); PhraseText düzeltmesinden önce 6/6 kırmızıydı ("highlight on unit 1"). |
+| 5 | `docs/mimari.md` sınama örnekleri birim testi olarak geçer | Tuttu | `pnpm exec vitest run src/domain --reporter=verbose`: 59/59. Heceleme tablosunun 13 örneğinin 13'ü ("kıvrılıyordu → kıv-rı-lı-yor-du" … "İstanbul → İs-tan-bul"); Ateşman örneği ("reproduces the Ateşman example from docs/mimari.md": 11 kelime, 2 cümle, x1 = 2,55, x2 = 5,5, puan 82,2); `seed/` içindeki 12 metnin `stats` değerleri ("matches the reference stats of …", 12/12). |
+| 6 | Yüklenirken ve gezinirken başka kökene istek yok | Tuttu | `e2e/no-external-requests.spec.ts`, iki tarayıcıda 8/8: her rota yüklenirken ve telefon ile web genişliğinde bütün kabuklarda gezinirken başka kökene istek ve CSP ihlali yok; derlemede CSP meta etiketi (`default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'`). Testin yakaladığı kanıtlı: `index.html`'e Google Fonts bağlantısı eklenince kırmızı; veli kabuğuna `data:` stil sayfası eklenince ihlali sayfasıyla bildirdi. |
+| 7 | `CLAUDE.md` komutları güncel | Tuttu | Hepsi bu oturumda yeniden çalıştırıldı: node v26.13.1, pnpm 12.21.0; `pnpm install` "Already up to date"; `pnpm exec playwright install chromium webkit` çıkış 0; `pnpm dev` "Local: http://localhost:5173/", `GET /` 200, `<html lang="tr">`; `pnpm test src/domain/text.test.ts` 1 dosya; `pnpm test -- …` 27 dosya (belgedeki uyarı doğru); `pnpm e2e e2e/smoke.spec.ts` "4 passed"; `pnpm shots /` `shots/index-{telefon,tablet,web}.png`; `pnpm shots /gelistirme/ses` dev sunucusunda açıldı; `pnpm build` çıktısında geliştirme sayfası yok (`grep -rlE "gelistirme\|ShowcasePage\|AudioLabPage\|Vitrin" dist/` boş); `pnpm format` hiçbir dosyayı değiştirmedi. |
+
+### Son inceleme
+
+Bütün dal (`c07fe21..c1092ba`) bağımsız bir incelemeciye verildi: kritik 0, önemli 5, küçük 10 bulgu. Önemlilerin beşi ve önemliye yükseltilen bir küçük bulgu düzeltildi; her düzeltme önce kırmızı görülen bir testle doğrulandı:
+
+- `561d811`: Ayrık (NFD) yazılmış harfler kelimeleri bölüyordu; konuşma çizgisiyle ya da rakamla başlayan cümle ayrılmıyordu; harfsiz parça cümle sayılıyordu.
+- `141bca0`: PhraseText'te vurgu satırları kaydırıyordu (390 px'te 8 → 9 satır). Kelimeler artık kalın genişliğini ayırıyor (`ReservedText`).
+- `d5cb60c`: İki bölmeli kabuklar 720 px'ten dar içerikte alt alta dizilmiyordu (Task 18 bunu listeliyordu). Soru 13 eklendi.
+- `220f185`: Tarayıcı API yasağı yalnız `domain` ve `components` katmanlarındaydı; artık `features` ve `app` de kapsamda ve `globalThis` gibi kaçış yolları kapalı.
+- `5f49224`: Gezinme testi yalnız son sayfanın CSP ihlallerini görüyordu.
+
+**Ertelenen küçük bulgular**
+
+1. Sonunda eğik çizgi olan adres (`/seans/oku/`, `/kurulum/seviye/`) adım bilgisini kaybediyor (`sessionSteps.ts`, `OnboardingShell.tsx`).
+2. Lint kaçakları: JSX içinde `{'Metin'}` ve şablon dizgisi, `.ts` dosyalarındaki dizgiler, yerel ayarsız `toLocaleUpperCase()`, TSX'te `style={{ color }}`, `border-*-radius` uzun yazımları, `text-shadow` ve `drop-shadow()`, modül içinde `--x: 13px` tanımlayıp kullanmak. Bugün hiçbiri kullanılmıyor.
+3. Güvenli alan: tablette seans ve odak kabuklarının yan boşluklarında, 1200 px üstündeki düzenlerin üst boşluğunda `env(safe-area-inset-*)` yok. `viewport-fit=cover` ile yatay iPhone'da ve Capacitor'da önemli (Faz 7).
+4. Üretim derlemesinde geliştirme sayfası olmadığını denetleyen otomatik test yok; elle doğrulandı.
+5. Seans kabuğundaki canlı bölge metniyle birlikte ekleniyor; Faz 2'de bölge sürekli takılı kalmalı, yalnız içeriği değişmeli.
+6. Rakamlar kelime sayılmıyor ("Deniz 3 elma aldı" → "3" önceki kelimeye yapışıyor; "100’ü" → "ü"). Ürün kararı gerekli: soru 14.
+7. Uzun bir kelime en büyük boyutta ve en geniş aralıkta dar telefonda karttan taşabilir; kelime hücreleri bölünmüyor (`hyphens` kapalı, belgeye uygun).
+8. Web kenar çubuğu 248–272 px aralığında hep ~248 px kalıyor (1440 px'te tasarımla aynı).
+9. RaceBar işareti %0 ve %100'de çubuktan 12 px taşıyor; MicButton'da gömülü `margin: 0 10px` var; Switch'in pasif görünümü yok; atlama bağlantısı yok; VoiceOver her kelimede ayrı durabilir (Faz 2'de cihazda bakılmalı).
+
+### Uygulamada verilen kararlar
+
+Planın açık bıraktığı ya da planla çelişen yerlerde verilen kararlar, verildikleri sırayla. Parantez içinde yanlışsa bedeli.
+
+1. Ayrı bir worktree yerine bu klasörde `faz-0` dalında çalışıldı; `pnpm dev` bu klasörde inceleniyor (yok; dal taşınabilir).
+2. Görev başlıkları "Task N" diye yazıldı; görev özeti betiği bunu arıyor (başlık başına bir İngilizce kelime).
+3. Ön denetim: `CompanionExpression` tipi Task 11'de dışa aktarıldı, Task 18 onu kullanıyor (yok).
+4. mise, Node 26'nın imza anahtarı eksik olduğu için doğrulamada takıldı. Doğrulamayı kapatmak yerine Node'un resmî yayın anahtarı (`5BE8A3F6C8A5C01D106C0AD820B1A390B168D356`, nodejs/release-keys) kullanıcının GPG anahtarlığına eklendi (anahtarlıkta fazladan bir açık anahtar; `gpg --delete-keys` siler).
+5. Araç kabukları Node 22.14 ile açılıyor; her komut `eval "$(mise env -s zsh)"` ile başlatıldı. `mise activate` olan terminaller `.nvmrc` ile 26'ya kendiliğinden geçer (yok).
+6. Harfler NFC grafem kümeleri olarak okunuyor (`Intl.Segmenter`), dizgi yayma yerine (ayrık girdi birleşik hecelerle döner; görünüş aynı).
+7. `fonts.css` Stylelint değer denetiminin dışında; yalnız `@font-face` tanımları var (bu dosyaya yanlışlıkla yazılan bir değer denetimden kaçar).
+8. `src/styles/tokens.css` Prettier dışında; `design/tokens.css` ile bayt bayt aynı kalıyor (yok).
+9. `src/app/env.ts` kaldırıldı: başka modülden alınan geliştirme bayrağı derlemede sabitlenmiyor, üretim çıktısında vitrin parçaları kalıyordu. Geliştirme kodu `import.meta.env.MODE !== 'production'` denetimini satır içinde yapar (`docs/mimari.md`) (yok).
+10. Icon, `dangerouslySetInnerHTML` yerine küçük bir ayrıştırıcıyla React öğesi çiziyor (`path`, `rect`, `circle`); her ikonun çıktısı tasarımla karşılaştırılıyor (başka öğe kullanan yeni bir ikonda ikon testi kırmızı olur).
+11. IconButton'a tasarımdaki 46 px boyutu, `saffron` tonu ve ikon boyutu ayarı eklendi; plan 44/48/52 diyordu (yok).
+12. Pasif Button ve IconButton görünümü çizilmemiş; `TODO(design)` (tasarım gelince yeniden biçimlenir).
+13. Chip tonları tasarımda kullanılanlar: white, saffron, saffronLight, turquoiseLight; plandaki cobaltLight çıkarıldı (bir sınıf eklenir).
+14. Çizimler `<img>`; Vite küçük SVG'leri `data:` adresine gömüyor. Testler dosya adı yerine çizim eşlemesiyle karşılaştırıyor; CSP `img-src 'self' data:` (yok).
+15. BookCover'ın `tile` (U1, 88 / 64 px) ve `card` (U4, telefonda 132 px, 700 px'ten 230 px) biçimleri var (Faz 5'te yeni boyut gerekebilir).
+16. SegmentedControl gerçek radyo girdileri, Switch `role="switch"` ve `aria-checked` kullanıyor; tasarım HTML'i ikisinde de `aria-pressed` kullanıyor (kullanıcıya etkisi yok; erişilebilir adlar tasarımla aynı).
+17. Icon'a isteğe bağlı çizgi kalınlığı eklendi: U3 rozetinde 3,4, seçenek kartlarında 2 (yok).
+18. MicButton boyutları 64 / 72 / 76 / 84 px (K3 telefon, K3 tablet, G4 telefon, G4 tablet ve web), planın iki boyutu yerine (yok).
+19. StepTiles'ta `current: null` bütün adımların bittiği anlamına geliyor (G7) (yok).
+20. ProgressBar `value` ve `max` alıyor (U1: 12'de 3), planın 0–1 değeri yerine (yok).
+21. LineChart iki tasarım çizimini de üretiyor, CSS birini gösteriyor; bileşenler ekran genişliğini okuyamıyor (DOM'da gizli ikinci bir SVG).
+22. `tokenizePage(page)` `domain/text.ts` içine testiyle eklendi; ReadingText'in ihtiyacı (yok).
+23. Okuma ayarı adımları `tokens-extra.css` içinde `--reading-size-0..3` ve aralık adımları olarak duruyor; varsayılan boyut 1, aralık 0. Faz 3 bunlara bağlanacak (Faz 3'te ad değişebilir).
+24. Kelime, kalın genişliğindeki hücresinde ortalanıyor; ayrılan pay iki yana bölünüyor (satır başındaki kelime ~1 px içeride).
+25. Boş sayfalar ekran başına dosya yerine özellik başına bir modülde (`pages.tsx`) (ekranlar büyüyünce dosyalar bölünür).
+26. SpeechBubble'a `arrow="adaptive"` eklendi: 700 px altında sol, üstünde üst (yok).
+27. Denetim çubuğu yalnız sayfa denetim verirse çiziliyor; Faz 0'da telefonda Tıkır en altta (yok; Task 21 farklarında listelendi).
+28. Her odak rotası kendi FocusShell öğesini alıyor; başlık ve geri hedefi farklı (yok).
+29. `CLAUDE.md` içinde `pnpm test -- <dosya>` yerine `pnpm test <dosya>`; `--` ile bütün takım koşuyor (yok).
+30. `CLAUDE.md` stil kuralı `tokens-extra.css` dosyasını anıyor (bir cümle geri alınır).
+31. 720 px kuralındaki "içerik genişliği", iki bölmeli düzenin kendi içerik kutusu: seans ve odak kabuğunda ekran − 2 × 32 px (784 px altı), kurulum kabuğunda ekranın kendisi (720 px altı). Ana sütun okuması seans kabuğunu 1180 px tasarım boyutunda bile alt alta dizerdi (kırılma noktaları kayar; yalnız CSS).
+32. Alt alta dizilen bölmeler sıralarını koruyor; kurulumda pano sayfanın başına geçiyor; `TODO(design)` ve soru 13. Dikey tablette 420 px'lik pano formu daraltıyor (768 px'te 260 px); tasarımcıya bırakıldı (yanıt gelene dek dikey tablette dar form).
+33. `/veli/*` veli kapısı olmadan açılıyor: kapı Faz 3'te, Faz 0'da veli sayfaları boş (çocuk Faz 3'e dek boş veli sayfalarını açabilir).
+34. Telefon ve tablette veli alanına yol yok: onaylanan karar 12, soru 11 (Faz 3'e dek yok).
+35. Seanstan çıkış onaysız `/` adresine gidiyor; onay Faz 2'de (boş seansta onaysız bir çıkış).
+36. Rota değişince odak taşınmıyor ve duyurulmuyor; sayfalar boş, belge sessiz; ekranlar gelince karar verilecek (ekran okuyucu iskelette sayfa değişimini duyurmaz).
+37. Didact Gothic'in yalnız 400 ağırlığı var; o anki kelimenin kalını yapay. Okul yazı tipi açık karar D3; yerleşim sabit (okul yazı tipinde biraz bulanık kalın).
+38. `consent.voiceProcessing` denetimi Faz 0'da yok, çünkü mikrofon kodu yok; genişleyen lint kuralı `getUserMedia` çağrısını ekranlardan uzak tutuyor (şimdilik yok).
+39. Mutlak `/assets/` adresleri ve özel şemada `createBrowserRouter`: paketleme Faz 7'de doğrulanıyor (paketlemede taban yol ya da yönlendirici değişir).
+40. Sonraki fazların CSP yönergeleri (`connect-src`, `media-src`, `worker-src`) yok, çünkü kullanan yok; CSP testi ihlali sayfasıyla bildiriyor (sonra bir CSP düzenlemesi).
+41. Cümle bölmede kısaltma ve sıra sayısı listesi yok; belge istemiyor, yalnız velinin yapıştırdığı metin bölünüyor ("Dr. Ali" iki cümle sayılır, düzey denetimi biraz kolaylaşır).
+42. Pasif düğme ve duraklatılmış ya da reddedilmiş MicButton görünümü çizilmemiş; `TODO(design)` (karar 5, D11) (tasarım gelene dek geçici görünüm).
+43. mise, GPG anahtarı ve PATH kararları depo dışında; kullanıcıya bildirildi (koda etkisi yok).
+44. Task 23, son inceleme anında işaretsizdi; planda incelemeden sonra geliyor (yok).
+45. Task 23 "commit yok" diyor, ama bu "Kanıtlar" bölümü Task 23'te doluyor. Kanıtlar ve işaret, çalışma ağacı temiz kalsın diye tek bir `docs` commit'iyle kaydedildi (gereksizse commit atılabilir).
