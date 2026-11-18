@@ -18,7 +18,7 @@
 - [x] Task 3: Lint ve biçim
 - [x] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
 - [x] Task 5: `domain/text.ts`
-- [ ] Task 6: `domain/readability.ts` ve sınıf eşikleri
+- [x] Task 6: `domain/readability.ts` ve sınıf eşikleri
 - [ ] Task 7: Stiller, yazı tipleri ve `tr.ts`
 - [ ] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
 - [ ] Task 9: Button ve IconButton
@@ -226,7 +226,7 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 - `textStats`: ` | ` ünite ayraçlarını yok sayar. Hiç kelime yoksa bütün sayılar 0 olur; bu durumda `ok` false.
 - Sınır dahildir (`≤`).
 
-- [ ] Önce testler:
+- [x] Önce testler:
   - Ateşman sınaması: 11 kelime, 2 cümle; iki ondalığa yuvarlanınca x1 2,55, x2 5,5; bir ondalığa yuvarlanınca puan 82,2;
   - `atesman(28/11, 5.5)` yaklaşık 82,21 (erken yuvarlama yok);
   - `seed/` içindeki 12 metnin `stats` alanları birebir: 5 bölüm, 5 ölçüm metni, 2 örnek kitap;
@@ -234,8 +234,8 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
   - eşikler: `olcum-4a` 1. sınıfta iki tavanı da aşar, 4. sınıfta geçer; `olcum-3b` 2. sınıfta hece tavanını aşar ama cümle tavanında kalır;
   - sınır değerinde geçer;
   - boş metin `ok` false döner.
-- [ ] Kırmızı, sonra yeşil.
-- [ ] Commit: `feat(domain): add Atesman score and levelCheck`
+- [x] Kırmızı, sonra yeşil.
+- [x] Commit: `feat(domain): add Atesman score and levelCheck`
 
 ### Task 7: Stiller, yazı tipleri ve `tr.ts`
 
