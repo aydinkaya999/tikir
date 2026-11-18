@@ -34,7 +34,7 @@ Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulu
 
 ## Kod kuralları
 
-- Kod, tanımlayıcılar, yorumlar ve commit mesajları İngilizce. Arayüz metinleri Türkçe ve yalnız `src/i18n/tr.ts` içinde durur.
+- Kod, tanımlayıcılar, yorumlar ve commit mesajları İngilizce. Arayüz metinleri Türkçe ve yalnız `src/i18n/tr.ts` içinde durur; geliştirme sayfalarının metni `src/features/dev/` içinde (`docs/kararlar.md` T17).
 - Arayüz metinlerini tasarım dosyalarından birebir al. Kendin yazma, çevirme, kısaltma.
 - Alan terimlerinin kod adları `docs/urun.md` sonundaki sözlükte. Yeni ad uydurma.
 - TypeScript `strict`; `any` yok.
@@ -53,7 +53,7 @@ Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulu
 
 ## Çocuk ve mahremiyet kuralları
 
-- IMPORTANT: Ses kaydı ve mikrofon dinlemesi yalnız veli onayı kayıtlıyken başlar (`consent.voiceProcessing`).
+- IMPORTANT: Ses kaydı ve mikrofon dinlemesi yalnız veli onayı kayıtlıyken başlar (`consent.voiceProcessing`) (geliştirme sayfası istisnası: `docs/kararlar.md` T16).
 - Çalışma anında üçüncü taraf adrese istek yok: yazı tipleri depoda barındırılır, analitik ve izleme kütüphanesi eklenmez.
 - Çocuk ekranlarında puan, rozet, sıralama, başka çocukla kıyas ve olumsuz kıyas yok. Ayrıntı `docs/urun.md` bölüm 4.
 - Veli alanı (`/veli/*`) veli kapısının arkasındadır.

@@ -33,6 +33,9 @@ function contentSecurityPolicyMeta(): Plugin {
 
 export default defineConfig({
   plugins: [react(), contentSecurityPolicyMeta()],
+  // audioWorklet.addModule loads an ES module; `?worker&url` imports (the capture worklet) are
+  // built as modules in development and in builds alike.
+  worker: { format: 'es' },
   test: {
     projects: [
       {

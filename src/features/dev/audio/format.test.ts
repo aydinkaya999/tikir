@@ -1,0 +1,35 @@
+import { describe, expect, it } from 'vitest';
+import { formatDbfs, formatMs, formatSeconds, meterValue } from './format';
+
+describe('meterValue', () => {
+  it.each([
+    [0, 0],
+    [1, 1],
+    [0.001, 0], // -60 dBFS, the bottom of the scale
+    [2, 1], // above full scale stays full
+  ])('puts RMS %f at %f', (rms, expected) => {
+    expect(meterValue(rms)).toBeCloseTo(expected, 6);
+  });
+
+  it('is linear in decibels: -30 dBFS is half way', () => {
+    expect(Math.abs(meterValue(0.0316) - 0.5)).toBeLessThanOrEqual(0.01);
+  });
+});
+
+describe('formatDbfs', () => {
+  it('rounds to whole decibels, Turkish style', () => {
+    expect(formatDbfs(0.5)).toBe('-6 dBFS');
+  });
+
+  it('calls a zero level silence', () => {
+    expect(formatDbfs(0)).toBe('Sessiz');
+  });
+});
+
+describe('formatSeconds and formatMs', () => {
+  it('keep one decimal with a comma', () => {
+    expect(formatSeconds(10)).toBe('10,0');
+    expect(formatSeconds(4.2)).toBe('4,2');
+    expect(formatMs(12.345)).toBe('12,3');
+  });
+});

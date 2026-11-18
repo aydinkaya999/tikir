@@ -17,7 +17,7 @@
 - [x] Task 2: Örnekleme hızı dönüştürücü
 - [x] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
 - [x] Task 4: `AudioCapture` ve `WebAudioCapture`
-- [ ] Task 5: AudioWorklet ve mikrofon bölümü
+- [x] Task 5: AudioWorklet ve mikrofon bölümü
 - [ ] Task 6: Kayıt ve geri çalma
 - [ ] Task 7: Yankı sunucusu ve yankı testi
 - [ ] Task 8: Cihaz raporu
@@ -351,7 +351,7 @@ export const audioLabServices: AudioLabServices
   - durum satırı;
   - düzey göstergesi: `role="meter"`, adı "Ses düzeyi", `aria-valuenow` = `meterValue`, `aria-valuetext` = dBFS.
   Sayfa kaldırılınca `stop()` çağrılır. Yalnız var olan bileşenler ve token'lar kullanılır.
-- [ ] Önce birim testleri:
+- [x] Önce birim testleri:
   - `describeCaptureProblem`:
     - `denied` → izin cümlesi, ayrıntı yok;
     - `unavailable` + `MediaDevicesMissing` → güvenli bağlantı cümlesi;
@@ -361,7 +361,7 @@ export const audioLabServices: AudioLabServices
   - `meterValue`: 0 → 0, 1 → 1, 0,001 → 0, 0,0316 → 0,5 ± 0,01, 2 → 1;
   - `formatDbfs`: 0,5 → "-6 dBFS", 0 → "Sessiz";
   - `formatSeconds`: 10 → "10,0"; `formatMs`: 12,345 → "12,3".
-- [ ] Önce e2e testleri (`e2e/audio-lab.spec.ts`, iki tarayıcıda, `test.use({ permissions: ['microphone'] })`):
+- [x] Önce e2e testleri (`e2e/audio-lab.spec.ts`, iki tarayıcıda, `test.use({ permissions: ['microphone'] })`):
   - "the microphone opens and the level meter follows the sound": varsayılan ayarlarla "Mikrofonu aç" → durum "Açık" → 3 sn içinde `aria-valuenow` > 0,2. Varsayılan işleme tonu bastırsa da bu eşik geçilir: ölçülen en düşük değer 0,53;
   - "a refused permission is explained and can be retried": `getUserMedia` `NotAllowedError` ile reddeder → durum "İzin yok" ve izin cümlesi görünür; "Yeniden dene" `getUserMedia`'yı ikinci kez çağırır; sayfada `pageerror` olmaz;
   - "a missing microphone is explained": `NotFoundError` → mikrofon yok cümlesi;
@@ -378,17 +378,17 @@ export const audioLabServices: AudioLabServices
   - `globalSetup` eklenir;
   - Chromium projesine `--use-fake-ui-for-media-stream`, `--use-fake-device-for-media-stream` ve `--use-file-for-fake-audio-capture=<ton>` bayrakları eklenir;
   - `E2E_CHROME=1` iken aynı ayarlarla `channel: 'chrome'` kullanan bir `chrome` projesi eklenir.
-- [ ] Uygula; yeşili gör.
-- [ ] `tr.test.ts` içindeki emoji denetimi `copy` nesnesini de tarar.
-- [ ] Belgeler:
+- [x] Uygula; yeşili gör.
+- [x] `tr.test.ts` içindeki emoji denetimi `copy` nesnesini de tarar.
+- [x] Belgeler:
   - `docs/kararlar.md`: T16 (onay istisnası), T17 (geliştirme sayfası metinleri), T18 (yakalama varsayılanları ve açılış sırası); değişiklik günlüğüne bir satır.
   - `CLAUDE.md` "Kod kuralları": metin kuralına "geliştirme sayfalarının metni `src/features/dev/` içinde" yan cümlesi eklenir. Onay kuralına "(geliştirme sayfası istisnası: `docs/kararlar.md` T16)" eklenir.
-- [ ] Doğrulama:
+- [x] Doğrulama:
   - `pnpm check`; `pnpm e2e e2e/audio-lab.spec.ts` iki tarayıcıda; ardından bütün `pnpm e2e`;
   - `pnpm build`, ardından `grep -rlE "gelistirme|AudioLab|tikir-capture" dist/` boş döner;
   - `pnpm dev` açıkken geçici bir Playwright betiğiyle Chromium ve WebKit'te mikrofon açılır ve düzey kıpırdar. Böylece işleyicinin geliştirme sunucusunda da modül olarak yüklendiği görülür;
   - `pnpm shots /gelistirme/ses`.
-- [ ] Commit: `feat(dev): open the microphone on the audio lab page`
+- [x] Commit: `feat(dev): open the microphone on the audio lab page`
 
 ### Task 6: Kayıt ve geri çalma
 
