@@ -8,8 +8,12 @@ const APOSTROPHES = new Set(["'", '’']);
 const WORD = /\p{L}+(?:['’]\p{L}+)*/gu;
 /** Sentence-closing marks, optionally followed by closing quotes or brackets. */
 const SENTENCE_END = /[.!?…]+[”"’»)]*/gu;
-/** Whitespace, optional opening quotes or brackets, then a capital letter. */
-const NEXT_SENTENCE_START = /^\s+[“"‘«(]*\p{Lu}/u;
+/**
+ * Whitespace, then optional opening quotes, brackets or a dialogue dash, then a capital letter
+ * or a number.
+ */
+const NEXT_SENTENCE_START = /^\s+[“"‘«(—–-]*\s*[\p{Lu}\p{N}]/u;
+const LETTER = /\p{L}/u;
 const graphemeSegmenter = new Intl.Segmenter(LOCALE, { granularity: 'grapheme' });
 
 export interface Token {
@@ -40,11 +44,12 @@ function letters(word: string): string[] {
   return Array.from(graphemeSegmenter.segment(word.normalize('NFC')), (part) => part.segment);
 }
 
+/** Text is read in NFC: pasted text often spells ğ, ş, ö, ü, ç and İ with combining marks. */
 export function tokenize(text: string): Token[] {
   const tokens: Token[] = [];
   let pendingLeading = '';
 
-  for (const chunk of text.matchAll(/(\S+)(\s*)/gu)) {
+  for (const chunk of text.normalize('NFC').matchAll(/(\S+)(\s*)/gu)) {
     const body = chunk[1] ?? '';
     const chunkSpaceAfter = (chunk[2] ?? '').length > 0;
     const words = [...body.matchAll(WORD)];
@@ -92,20 +97,36 @@ export function tokenizePage(page: Page): Token[] {
 }
 
 export function splitSentences(text: string): string[] {
-  const sentences: string[] = [];
+  const composed = text.normalize('NFC');
+  const pieces: string[] = [];
   let start = 0;
 
-  for (const mark of text.matchAll(SENTENCE_END)) {
+  for (const mark of composed.matchAll(SENTENCE_END)) {
     const end = mark.index + mark[0].length;
-    const rest = text.slice(end);
+    const rest = composed.slice(end);
     if (rest.trim() === '' || NEXT_SENTENCE_START.test(rest)) {
-      sentences.push(text.slice(start, end));
+      pieces.push(composed.slice(start, end));
       start = end;
     }
   }
-  sentences.push(text.slice(start));
+  pieces.push(composed.slice(start));
 
-  return sentences.map((sentence) => sentence.trim()).filter((sentence) => sentence !== '');
+  // A piece without a single letter ("...") is not a sentence: it joins the next one.
+  const sentences: string[] = [];
+  let carried = '';
+  for (const piece of pieces.map((part) => part.trim()).filter((part) => part !== '')) {
+    if (LETTER.test(piece)) {
+      sentences.push(carried === '' ? piece : `${carried} ${piece}`);
+      carried = '';
+    } else {
+      carried = carried === '' ? piece : `${carried} ${piece}`;
+    }
+  }
+  if (carried !== '') {
+    const last = sentences.pop();
+    sentences.push(last === undefined ? carried : `${last} ${carried}`);
+  }
+  return sentences;
 }
 
 /** Seed sentences mark phrase-unit boundaries with " | " (docs/mimari.md). */

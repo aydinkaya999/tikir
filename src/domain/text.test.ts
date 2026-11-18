@@ -88,6 +88,13 @@ describe('tokenize', () => {
     ]);
   });
 
+  it('reads decomposed (NFD) letters as whole words, returned composed', () => {
+    expect(tokenize('Göz ağacı'.normalize('NFD')).map((token) => token.word)).toEqual([
+      'Göz',
+      'ağacı',
+    ]);
+  });
+
   it('splits two words joined by punctuation without a space', () => {
     expect(tokenize('ve/veya')).toEqual([
       { word: 've', leading: '', trailing: '/', spaceAfter: false },
@@ -146,6 +153,30 @@ describe('splitSentences', () => {
     expect(
       splitSentences('Nereye gidiyorsun? Eve gidiyorum! Kapı açıldı… İçeride kimse yoktu.'),
     ).toEqual(['Nereye gidiyorsun?', 'Eve gidiyorum!', 'Kapı açıldı…', 'İçeride kimse yoktu.']);
+  });
+
+  it('starts a sentence at a dialogue dash', () => {
+    expect(splitSentences('Ali geldi.\n— Nereye gidiyorsun? dedi Veli.\n– Eve, dedi Ali.')).toEqual(
+      ['Ali geldi.', '— Nereye gidiyorsun? dedi Veli.', '– Eve, dedi Ali.'],
+    );
+  });
+
+  it('starts a sentence at a number', () => {
+    expect(splitSentences('Herkes gitti. 5 kişi kaldı.')).toEqual([
+      'Herkes gitti.',
+      '5 kişi kaldı.',
+    ]);
+  });
+
+  it('never returns a fragment without words', () => {
+    expect(splitSentences('... Ali geldi. Veli gitti.')).toEqual(['... Ali geldi.', 'Veli gitti.']);
+  });
+
+  it('reads decomposed (NFD) text and returns it composed', () => {
+    expect(splitSentences('Göz açtı. Şiir okudu.'.normalize('NFD'))).toEqual([
+      'Göz açtı.',
+      'Şiir okudu.',
+    ]);
   });
 
   it('does not split when a full stop is followed by a lower-case word', () => {

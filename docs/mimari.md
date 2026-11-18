@@ -111,7 +111,9 @@ interface Assessment { id: Id; childId: Id; date: string; passageId: Id; result:
 
 **Kelimeye ayırma:** kelime, harf dizisidir; kesme işaretiyle gelen ek kelimeye dahildir (`Tıkır’ın` tek kelime; hece sayarken kesme işareti yok sayılır). Tırnak ve noktalama kelimeye dahil değildir ama ekranda kelimeye yapışık gösterilir.
 
-**Cümleye ayırma** (yalnız velinin yapıştırdığı serbest metinde gerekir; örnek içerikte cümleler hazır ayrılmıştır): cümle `.`, `!`, `?` ya da `…` ile biter ve ardından metin biter ya da büyük harfle yeni cümle başlar. Tırnak kapandıktan sonra küçük harfle süren söz bölünmez: `“Işığım geri geliyor!” diye bağırdı.` tek cümledir.
+**Cümleye ayırma** (yalnız velinin yapıştırdığı serbest metinde gerekir; örnek içerikte cümleler hazır ayrılmıştır): cümle `.`, `!`, `?` ya da `…` ile biter. Ardından metin biter ya da yeni cümle başlar. Yeni cümle büyük harfle ya da rakamla başlar; önünde açılış tırnağı, ayraç ya da konuşma çizgisi (`—`, `–`, `-`) olabilir. Tırnak kapandıktan sonra küçük harfle süren söz bölünmez: `“Işığım geri geliyor!” diye bağırdı.` tek cümledir. İçinde harf olmayan parça (`...`) cümle sayılmaz, sonraki cümleye katılır.
+
+Metin NFC biçiminde okunur: yapıştırılan metinlerde ğ, ş, ö, ü, ç ve İ sık sık birleşen işaretlerle (NFD) gelir.
 
 **Heceleme:** her hecede tam bir ünlü vardır (`a e ı i o ö u ü â î û`). İki ünlü arasındaki ünsüzlerin yalnız sonuncusu sağdaki heceye geçer; arada ünsüz yoksa ünlüler ayrılır. Kelime başındaki ünsüzler ilk hecede kalır.
 

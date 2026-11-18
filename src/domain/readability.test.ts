@@ -110,6 +110,12 @@ describe('levelCheck', () => {
     },
   );
 
+  it('measures pasted decomposed (NFD) text exactly like composed text', () => {
+    const text = 'Göz ağacı gördü. Şiir çok güzeldi.';
+
+    expect(levelCheck(text.normalize('NFD'), 3).stats).toEqual(levelCheck(text, 3).stats);
+  });
+
   it('counts each array item as one sentence', () => {
     expect(levelCheck(['Bir. İki.'], 3).stats.sentences).toBe(1);
   });
