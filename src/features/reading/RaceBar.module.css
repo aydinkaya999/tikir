@@ -1,0 +1,78 @@
+.race {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 46px;
+}
+
+.rail {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  left: 0;
+  height: 12px;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+}
+
+.fill {
+  height: 100%;
+  background: var(--color-saffron);
+}
+
+.marker {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 44px;
+  margin-left: -22px;
+}
+
+.ghostDot,
+.youDot {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.ghostDot {
+  border: 2.5px dashed var(--color-cobalt);
+  background: var(--color-white);
+}
+
+.youDot {
+  border: var(--border);
+  background: var(--color-saffron);
+}
+
+.ghostLabel,
+.youLabel {
+  font-size: var(--size-race-label);
+  line-height: var(--leading-ui);
+}
+
+.ghostLabel {
+  color: var(--color-cobalt);
+  font-weight: var(--weight-bold);
+}
+
+.youLabel {
+  color: var(--color-ink);
+  font-weight: var(--weight-extrabold);
+}
+
+.flag {
+  padding-top: 1px;
+  color: var(--color-ink);
+}

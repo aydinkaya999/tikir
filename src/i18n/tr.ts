@@ -19,6 +19,12 @@ export const tr = {
     },
   },
 
+  race: {
+    /** G4: the child's marker and yesterday's ghost. */
+    you: 'sen',
+    ghost: 'dün',
+  },
+
   mic: {
     /** G2, G4, K3. */
     listening: 'Dinliyor. Duraklatmak için dokun',

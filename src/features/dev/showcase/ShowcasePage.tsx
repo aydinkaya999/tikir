@@ -10,6 +10,7 @@ import {
 } from './FormDemo';
 import { IconDemo } from './IconDemo';
 import { BookCoverDemo, CompanionDemo, MonsterDemo, TileDemo } from './IllustrationDemo';
+import { PhraseTextDemo, RaceBarDemo, ReadingTextDemo } from './ReadingDemo';
 import { MicButtonDemo, StepTilesDemo } from './SessionDemo';
 import styles from './Showcase.module.css';
 import { CardDemo, ChipDemo, PageCardDemo, SpeechBubbleDemo } from './SurfaceDemo';
@@ -22,6 +23,9 @@ export function ShowcasePage() {
   return (
     <main className={styles.page}>
       <h1 className={styles.title}>Vitrin</h1>
+      <ReadingTextDemo />
+      <PhraseTextDemo />
+      <RaceBarDemo />
       <ButtonDemo />
       <IconButtonDemo />
       <ChipDemo />

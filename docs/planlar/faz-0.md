@@ -27,7 +27,7 @@
 - [x] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
 - [x] Task 13: StepTiles ve MicButton
 - [x] Task 14: StatCard, LineChart ve ProgressBar
-- [ ] Task 15: ReadingText, PhraseText ve RaceBar
+- [x] Task 15: ReadingText, PhraseText ve RaceBar
 - [ ] Task 16: Vitrin testi
 - [ ] Task 17: Çocuk ve veli kabukları
 - [ ] Task 18: Seans kabuğu
@@ -368,11 +368,11 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 - `PhraseText`: `{ page: Page; currentUnit?: number | null; readUnits?: number }`. Üniteler arasında 2 px × 0,85 em ayraç, yatay boşluk 9 px. O anki ünite safran zeminli, `--ring-phrase`.
 - `RaceBar`: `{ progress: number; ghost?: number | null; youLabel: string; ghostLabel: string }`. Hayalet yoksa yalnız "sen" imleci görünür. Ölçüler G4'ten.
 
-- [ ] Önce bileşen testleri: her durumun özniteliği; metnin noktalamasıyla korunması; kalın kopyanın `aria-hidden` olması; hayaletsiz RaceBar; ünite sayısı ve o anki ünite.
-- [ ] Vitrinde örnek metin: `seed/kayip-fenerin-izinde.json` 4. bölüm 1. sayfa (G4'teki an). Kelime ve hayalet konumu bir aralık denetimiyle oynatılır.
-- [ ] Önce e2e testi: vurgu bütün kelimelerde ilerlerken her kelimenin kutusu (x, y, genişlik, yükseklik) değişmez. Üç genişlikte, varsayılan ayarla ve "okul harfi + en büyük boyut" ayarıyla, Chromium ve WebKit'te.
-- [ ] Doğrulama: `pnpm check`, `pnpm e2e`. Görüntü G3 ve G4 ile karşılaştırılır.
-- [ ] Commit: `feat(reading): add ReadingText, PhraseText and RaceBar`
+- [x] Önce bileşen testleri: her durumun özniteliği; metnin noktalamasıyla korunması; kalın kopyanın `aria-hidden` olması; hayaletsiz RaceBar; ünite sayısı ve o anki ünite.
+- [x] Vitrinde örnek metin: `seed/kayip-fenerin-izinde.json` 4. bölüm 1. sayfa (G4'teki an). Kelime ve hayalet konumu bir aralık denetimiyle oynatılır.
+- [x] Önce e2e testi: vurgu bütün kelimelerde ilerlerken her kelimenin kutusu (x, y, genişlik, yükseklik) değişmez. Üç genişlikte, varsayılan ayarla ve "okul harfi + en büyük boyut" ayarıyla, Chromium ve WebKit'te.
+- [x] Doğrulama: `pnpm check`, `pnpm e2e`. Görüntü G3 ve G4 ile karşılaştırılır.
+- [x] Commit: `feat(reading): add ReadingText, PhraseText and RaceBar`
 
 ### Task 16: Vitrin testi
 

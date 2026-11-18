@@ -75,6 +75,24 @@
   font-family: var(--font-school);
 }
 
+/* Reading style at its far end: school letters, size step 3, spacing step 2. */
+.schoolLargest {
+  --reading-font: var(--font-school);
+  --reading-size: var(--reading-size-3);
+  --reading-letter-spacing: var(--reading-letter-spacing-2);
+  --reading-word-spacing: var(--reading-word-spacing-2);
+}
+
+.slider {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin-bottom: 12px;
+  font-size: var(--size-small);
+}
+
 .figure {
   display: flex;
   flex-direction: column;

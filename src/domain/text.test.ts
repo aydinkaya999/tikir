@@ -5,6 +5,7 @@ import {
   splitSentences,
   syllabify,
   tokenize,
+  tokenizePage,
   toLowerTr,
   toUpperTr,
 } from './text';
@@ -92,6 +93,33 @@ describe('tokenize', () => {
       { word: 've', leading: '', trailing: '/', spaceAfter: false },
       { word: 'veya', leading: '', trailing: '', spaceAfter: false },
     ]);
+  });
+});
+
+describe('tokenizePage', () => {
+  it('reads a page of phrase-unit sentences as one run of words, spaced between sentences', () => {
+    const tokens = tokenizePage([
+      ['Deniz sırt çantasını', 'omzuna aldı.'],
+      ['“Fener', 'bu tepenin ardında olmalı,”', 'dedi Deniz.'],
+    ]);
+
+    expect(tokens.map((token) => token.word)).toEqual([
+      'Deniz',
+      'sırt',
+      'çantasını',
+      'omzuna',
+      'aldı',
+      'Fener',
+      'bu',
+      'tepenin',
+      'ardında',
+      'olmalı',
+      'dedi',
+      'Deniz',
+    ]);
+    expect(tokens[4]).toEqual({ word: 'aldı', leading: '', trailing: '.', spaceAfter: true });
+    expect(tokens[5]?.leading).toBe('“');
+    expect(tokens.at(-1)?.spaceAfter).toBe(false);
   });
 });
 

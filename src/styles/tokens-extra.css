@@ -37,6 +37,29 @@
   --size-stat: 24px;
   --size-stat-hero: 52px;
   --size-stat-hero-label: 15px;
+  /* Reading text states (docs/tasarim-sistemi.md, "Okuma metni"; G3, G4). */
+  --radius-word: 3px;
+  --radius-ghost: 4px;
+  --ring-word: 0 0 0 4px var(--color-saffron);
+  --ring-phrase: 0 0 0 5px var(--color-saffron);
+  /* Race bar marker labels "sen" and "dün" (G4). */
+  --size-race-label: 13px;
+  /* Reading style steps (design/tokens.json readingSettings); sizes change per device below. */
+  --reading-size-0: 20px;
+  --reading-size-1: 22px;
+  --reading-size-2: 25px;
+  --reading-size-3: 28px;
+  --reading-letter-spacing-0: 0;
+  --reading-letter-spacing-1: 0.05em;
+  --reading-letter-spacing-2: 0.1em;
+  --reading-word-spacing-0: 0;
+  --reading-word-spacing-1: 0.12em;
+  --reading-word-spacing-2: 0.24em;
+  /* The child's reading style; a container overrides these (default: size 1, spacing 0). */
+  --reading-font: var(--font-text);
+  --reading-size: var(--reading-size-1);
+  --reading-letter-spacing: var(--reading-letter-spacing-0);
+  --reading-word-spacing: var(--reading-word-spacing-0);
   /* Line chart text in SVG units (V1): compact 12/17, wide 13/18 (axis labels / last value). */
   --size-chart-compact: 12px;
   --size-chart-compact-value: 17px;
@@ -52,5 +75,18 @@
     --size-option-label: 17px;
     --size-stat: 34px;
     --size-stat-hero: 64px;
+    --reading-size-0: 24px;
+    --reading-size-1: 27px;
+    --reading-size-2: 31px;
+    --reading-size-3: 35px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --reading-size-0: 22px;
+    --reading-size-1: 25px;
+    --reading-size-2: 29px;
+    --reading-size-3: 33px;
   }
 }

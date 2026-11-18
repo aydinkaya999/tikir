@@ -1,4 +1,5 @@
 // Turkish text rules: docs/mimari.md, "Türkçe metin kuralları ve sınama örnekleri".
+import type { Page } from './types';
 
 const LOCALE = 'tr-TR';
 const VOWELS = new Set(['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü', 'â', 'î', 'û']);
@@ -76,6 +77,18 @@ export function tokenize(text: string): Token[] {
   }
 
   return tokens;
+}
+
+/** The words of a page in reading order; sentences are separated by a space. */
+export function tokenizePage(page: Page): Token[] {
+  return page.flatMap((sentence, sentenceIndex) => {
+    const tokens = tokenize(sentence.join(' '));
+    const last = tokens.at(-1);
+    if (last && sentenceIndex < page.length - 1) {
+      last.spaceAfter = true;
+    }
+    return tokens;
+  });
 }
 
 export function splitSentences(text: string): string[] {
