@@ -13,7 +13,7 @@
 ## Görev listesi
 
 - [x] Task 0: Plan dosyası ve dal
-- [ ] Task 1: PCM ve WAV
+- [x] Task 1: PCM ve WAV
 - [ ] Task 2: Örnekleme hızı dönüştürücü
 - [ ] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
 - [ ] Task 4: `AudioCapture` ve `WebAudioCapture`
@@ -181,7 +181,7 @@ export function zeroCrossingHz(samples: ArrayLike<number>, sampleRate: number): 
 export function seededRandom(seed: number): () => number
 ```
 
-- [ ] Önce testler:
+- [x] Önce testler:
   - `floatToInt16`: 1 → 32767, −1 → −32768, 0 → 0, 0,5 → 16384, 1,5 → 32767, −1,5 → −32768, NaN → 0;
   - `toFloat32(toInt16(x))`, x'ten en çok 1/32768 sapar;
   - `rms`: sabit 0,5 → 0,5; genliği 0,5 olan sinüs → 0,3536 ± 0,001; boş dizi → 0;
@@ -189,8 +189,8 @@ export function seededRandom(seed: number): () => number
   - `isSilent`: sıfır dizi true, tek örneği 1 olan dizi false;
   - `encodeWav`, 160 örnek ve 16000 Hz ile 44 + 320 bayt üretir. Başlıkta "RIFF", "WAVE", "fmt " (boyut 16, biçim 1, kanal 1, hız 16000, bayt hızı 32000, blok 2, 16 bit) ve "data" (320) bulunur; örnekler küçük sonludur;
   - `parseWav(encodeWav(x, 16000))` x'i ve başlık değerlerini aynen verir; RIFF olmayan tampon hata fırlatır.
-- [ ] Kırmızıyı gör (`pnpm test src/services/audio/pcm.test.ts`, `pnpm test src/services/audio/wav.test.ts`), sonra yaz, yeşili gör.
-- [ ] Commit: `feat(audio): add PCM conversion and WAV encoding`
+- [x] Kırmızıyı gör (`pnpm test src/services/audio/pcm.test.ts`, `pnpm test src/services/audio/wav.test.ts`), sonra yaz, yeşili gör.
+- [x] Commit: `feat(audio): add PCM conversion and WAV encoding`
 
 ### Task 2: Örnekleme hızı dönüştürücü
 
