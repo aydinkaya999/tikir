@@ -23,7 +23,7 @@
 - [x] Task 8: Cihaz raporu
 - [x] Task 9: Cihaz denemesi sunucusu
 - [x] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
-- [ ] Task 11: Capacitor kurulumu
+- [x] Task 11: Capacitor kurulumu
 - [ ] Task 12: Kabukta derleme ve açılış
 - [ ] Task 13: Kabul ölçütleri yürüyüşü
 
@@ -635,20 +635,20 @@ readMicrophonePermission(): Promise<PermissionReading>
 
 **Dosyalar:** `package.json`, `pnpm-lock.yaml`, `capacitor.config.ts`, `ios/**`, `android/**`, `tsconfig.node.json`, `eslint.config.js`, `.prettierignore`, `.gitignore`, `docs/kararlar.md`.
 
-- [ ] `docs/kararlar.md`: Bağımlılıklar tablosuna dört Capacitor paketi; T19 (karar 16). Sonra kurulum: `@capacitor/core`, `@capacitor/ios` ve `@capacitor/android` bağımlılık; `@capacitor/cli` geliştirme bağımlılığı.
-- [ ] `pnpm exec cap telemetry off`.
-- [ ] `capacitor.config.ts`: `{ appId: 'com.tikir.app', appName: 'Tıkır', webDir: 'dist-cap', server: { appStartPath: '/gelistirme/ses' } }`; `appStartPath`'in yalnız deneme için olduğu ve Faz 7'de kalkacağı yorumla yazılır.
-- [ ] Betik: `"cap:sync": "vite build --mode cap --outDir dist-cap && cap sync"`.
-- [ ] Önce `pnpm exec vite build --mode cap --outDir dist-cap`, sonra `pnpm exec cap add ios` ve `pnpm exec cap add android`. Capacitor'ın varsayılan iOS paket yöneticisi kullanılır; hangisi olduğu "Uygulamada verilen kararlar"a yazılır.
-- [ ] `ios/App/App/Info.plist`: `NSMicrophoneUsageDescription` (karar 16'daki metin). `android/app/src/main/AndroidManifest.xml`: `RECORD_AUDIO` ve `MODIFY_AUDIO_SETTINGS`.
-- [ ] `ios/`, `android/`, `dist-cap/` ESLint ve Prettier dışında tutulur; `.gitignore`'a `dist-cap/` eklenir; `capacitor.config.ts`, `tsconfig.node.json` kapsamına alınır.
-- [ ] Doğrulama:
+- [x] `docs/kararlar.md`: Bağımlılıklar tablosuna dört Capacitor paketi; T19 (karar 16). Sonra kurulum: `@capacitor/core`, `@capacitor/ios` ve `@capacitor/android` bağımlılık; `@capacitor/cli` geliştirme bağımlılığı.
+- [x] `pnpm exec cap telemetry off`.
+- [x] `capacitor.config.ts`: `{ appId: 'com.tikir.app', appName: 'Tıkır', webDir: 'dist-cap', server: { appStartPath: '/gelistirme/ses' } }`; `appStartPath`'in yalnız deneme için olduğu ve Faz 7'de kalkacağı yorumla yazılır.
+- [x] Betik: `"cap:sync": "vite build --mode cap --outDir dist-cap && cap sync"`.
+- [x] Önce `pnpm exec vite build --mode cap --outDir dist-cap`, sonra `pnpm exec cap add ios` ve `pnpm exec cap add android`. Capacitor'ın varsayılan iOS paket yöneticisi kullanılır; hangisi olduğu "Uygulamada verilen kararlar"a yazılır.
+- [x] `ios/App/App/Info.plist`: `NSMicrophoneUsageDescription` (karar 16'daki metin). `android/app/src/main/AndroidManifest.xml`: `RECORD_AUDIO` ve `MODIFY_AUDIO_SETTINGS`.
+- [x] `ios/`, `android/`, `dist-cap/` ESLint ve Prettier dışında tutulur; `.gitignore`'a `dist-cap/` eklenir; `capacitor.config.ts`, `tsconfig.node.json` kapsamına alınır.
+- [x] Doğrulama:
   - `pnpm check`;
   - `pnpm cap:sync` çıkış 0 verir ve iki platform eşitlenir;
   - `dist-cap/index.html` içinde CSP meta etiketi var;
   - `dist-cap` içinde geliştirme sayfası var, `dist/` (`pnpm build`) içinde yok;
   - `git status` derleme çıktısı göstermez.
-- [ ] Commit: `build(capacitor): add iOS and Android shells for the audio trial`
+- [x] Commit: `build(capacitor): add iOS and Android shells for the audio trial`
 
 ### Task 12: Kabukta derleme ve açılış
 
