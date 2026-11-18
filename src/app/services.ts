@@ -5,6 +5,7 @@ import type { AudioLabServices } from '../features/dev/audio/AudioLabPage';
 import { browserCaptureEnvironment } from '../services/audio/browserCaptureEnvironment';
 import { type WavPlayer, WebAudioWavPlayer } from '../services/audio/WavPlayer';
 import { WebAudioCapture } from '../services/audio/WebAudioCapture';
+import { readEnvironment, readMicrophonePermission } from '../services/device/environment';
 import { pageWebSocketUrl, WebSocketEchoProbe } from '../services/echo/WebSocketEchoProbe';
 import { saveFile } from '../services/files';
 import { devEndpoints } from './routes';
@@ -17,4 +18,6 @@ export const audioLabServices: AudioLabServices = {
   saveFile,
   createEchoProbe: () => new WebSocketEchoProbe(),
   defaultEchoUrl: () => pageWebSocketUrl(devEndpoints.echo),
+  readEnvironment,
+  readMicrophonePermission,
 };

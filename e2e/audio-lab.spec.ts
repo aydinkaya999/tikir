@@ -197,3 +197,70 @@ test('an unreachable echo server is explained', async ({ page, baseURL }) => {
   });
   await expect(fact(page, 'Durum')).toHaveText('Açık'); // the page carries on
 });
+
+test('the device report is shown and downloads as JSON', async ({ page }) => {
+  await openMicrophone(page);
+  const shownReport = page.getByLabel('Rapor (JSON)');
+  await expect
+    .poll(async () => {
+      const report = JSON.parse((await shownReport.textContent()) ?? '{}') as {
+        capture?: { state?: string; framesDelivered?: number };
+      };
+      return report.capture?.state === 'capturing' && (report.capture.framesDelivered ?? 0) > 0;
+    })
+    .toBe(true);
+
+  // Read the shown report and press the button in one go, so a refresh cannot come in between.
+  const [download, shown] = await Promise.all([
+    page.waitForEvent('download'),
+    page.evaluate(() => {
+      const text = document.querySelector('pre')?.textContent ?? '';
+      const button = [...document.querySelectorAll('button')].find(
+        (candidate) => candidate.textContent === 'Raporu indir (JSON)',
+      );
+      button?.click();
+      return text;
+    }),
+  ]);
+
+  expect(download.suggestedFilename()).toMatch(/^ses-denemesi-\d{8}-\d{4}\.json$/);
+  const report: unknown = JSON.parse(await readFile(await download.path(), 'utf8'));
+  expect(report).toEqual(JSON.parse(shown));
+  expect(report).toMatchObject({
+    version: 1,
+    capture: {
+      state: 'capturing',
+      inputSampleRate: 48_000,
+      requested: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+    },
+    environment: {
+      secureContext: true,
+      shell: 'browser',
+      browser: expect.stringMatching(/^(Chrome|Safari) \d+/) as unknown,
+    },
+    permission: expect.stringMatching(/^(granted|denied|prompt|unknown)$/),
+  });
+  expect(
+    (report as { capture: { framesDelivered: number } }).capture.framesDelivered,
+  ).toBeGreaterThan(0);
+});
+
+test('the page fits 390, 1180 and 1440 px with 44 px targets', async ({ page }) => {
+  for (const width of [390, 1180, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(devPaths.audio);
+    await expect(page.getByRole('heading', { name: 'Cihaz raporu' })).toBeVisible();
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    expect(overflow, `horizontal overflow at ${String(width)} px`).toBeLessThanOrEqual(0);
+    const tooSmall = await page.evaluate(() =>
+      [...document.querySelectorAll('button, input, a')]
+        .map((element) => {
+          const box = element.getBoundingClientRect();
+          return { name: element.textContent, width: box.width, height: box.height };
+        })
+        .filter((target) => target.width < 44 || target.height < 44),
+    );
+    expect(tooSmall, `touch targets at ${String(width)} px`).toEqual([]);
+  }
+});

@@ -2,6 +2,7 @@ import { Button } from '../../../components/Button/Button';
 import { Card } from '../../../components/Card/Card';
 import { Switch } from '../../../components/Switch/Switch';
 import type { CaptureSettings } from '../../../services/audio/AudioCapture';
+import type { PermissionReading } from '../../../services/device/environment';
 import styles from './AudioLabPage.module.css';
 import { describeCaptureProblem } from './captureProblem';
 import { copy } from './copy';
@@ -11,7 +12,13 @@ import type { CaptureHandle } from './useCapture';
 const settingNames = ['echoCancellation', 'noiseSuppression', 'autoGainControl'] as const;
 
 /** Permission, state, processing switches and the live level meter. */
-export function MicSection({ handle }: { handle: CaptureHandle }) {
+export function MicSection({
+  handle,
+  permission,
+}: {
+  handle: CaptureHandle;
+  permission: PermissionReading;
+}) {
   const { capture, state, level, settings, changeSettings } = handle;
   const open = state === 'starting' || state === 'capturing';
   const problem = describeCaptureProblem(state, capture.diagnostics().failure);
@@ -71,6 +78,10 @@ export function MicSection({ handle }: { handle: CaptureHandle }) {
         <div>
           <dt>{copy.mic.stateLabel}</dt>
           <dd>{copy.mic.states[state]}</dd>
+        </div>
+        <div>
+          <dt>{copy.mic.permissionLabel}</dt>
+          <dd>{copy.mic.permission[permission]}</dd>
         </div>
         <div>
           <dt>{copy.mic.level}</dt>

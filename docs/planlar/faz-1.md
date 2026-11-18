@@ -20,7 +20,7 @@
 - [x] Task 5: AudioWorklet ve mikrofon bölümü
 - [x] Task 6: Kayıt ve geri çalma
 - [x] Task 7: Yankı sunucusu ve yankı testi
-- [ ] Task 8: Cihaz raporu
+- [x] Task 8: Cihaz raporu
 - [ ] Task 9: Cihaz denemesi sunucusu
 - [ ] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
 - [ ] Task 11: Capacitor kurulumu
@@ -554,7 +554,7 @@ readMicrophonePermission(): Promise<PermissionReading>
   - "Raporu indir (JSON)" düğmesi.
 - Rapor, mikrofon durumu değiştikçe ve mikrofon açıkken saniyede bir yenilenir. İzin satırı Mikrofon kartına eklenir.
 - Uygulama kabuğunda indirme çalışmayabilir; JSON ekranda okunur ya da ekran görüntüsü alınır (şablonda yazılır).
-- [ ] Önce testler:
+- [x] Önce testler:
   - `describeUserAgent`:
     - masaüstü Chrome (`HeadlessChrome` dahil) → `Chrome <ana sürüm>`, `macOS`;
     - iPhone Safari → `Safari <sürüm>`, `iOS`;
@@ -564,12 +564,12 @@ readMicrophonePermission(): Promise<PermissionReading>
     - tanınmayan dizgi → `bilinmiyor`.
     Not: Safari 26 UA dizgisinde iOS sürümünü sabit gösteriyor; gerçek sürüm şablona elle yazılır.
   - `buildTrialReport`, verilen parçalardan beklenen nesneyi birebir kurar: sürüm 1, ISO tarih, yuvarlama.
-- [ ] Önce e2e testleri (iki tarayıcıda):
+- [x] Önce e2e testleri (iki tarayıcıda):
   - "the device report is shown and downloads as JSON": mikrofon açılır, 1 sn beklenir, rapor indirilir. JSON'da sürüm 1, `capture.state` `capturing`, `capture.inputSampleRate` 48000, `capture.requested` varsayılan ayarlar, `capture.framesDelivered` > 0, `environment.secureContext` true, `environment.shell` `browser`, `environment.browser` `/^(Chrome|Safari) \d+/` kalıbına uyar, `permission` geçerli bir değer. Ekrandaki JSON indirilenle aynıdır;
   - "the page fits 390, 1180 and 1440 px": yatay taşma yok; düğmeler, anahtarlar ve alanlar en az 44 × 44 px.
-- [ ] Uygula; yeşili gör.
-- [ ] Doğrulama: `pnpm check`; `pnpm e2e e2e/audio-lab.spec.ts`; `pnpm shots /gelistirme/ses`.
-- [ ] Commit: `feat(dev): show and download the device report`
+- [x] Uygula; yeşili gör.
+- [x] Doğrulama: `pnpm check`; `pnpm e2e e2e/audio-lab.spec.ts`; `pnpm shots /gelistirme/ses`.
+- [x] Commit: `feat(dev): show and download the device report`
 
 ### Task 9: Cihaz denemesi sunucusu
 

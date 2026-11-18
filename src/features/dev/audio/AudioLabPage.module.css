@@ -99,6 +99,17 @@
   overflow-wrap: anywhere;
 }
 
+.json {
+  margin: 0;
+  padding: 12px;
+  border: var(--border);
+  border-radius: var(--radius-tile);
+  background: var(--color-ground);
+  font-size: var(--size-small);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .meter {
   height: 14px;
   overflow: hidden;

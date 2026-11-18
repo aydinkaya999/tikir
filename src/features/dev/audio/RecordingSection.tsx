@@ -7,7 +7,12 @@ import type { WavPlayer } from '../../../services/audio/WavPlayer';
 import styles from './AudioLabPage.module.css';
 import { copy } from './copy';
 import { formatSeconds, trialFileName } from './format';
-import { PcmRecording, recordingFrames } from './pcmRecording';
+import {
+  PcmRecording,
+  recordingFrames,
+  type RecordingSummary,
+  summarizeRecording,
+} from './pcmRecording';
 import type { CaptureHandle } from './useCapture';
 
 type Phase = 'empty' | 'recording' | 'ready' | 'partial';
@@ -16,10 +21,12 @@ interface RecordingSectionProps {
   handle: CaptureHandle;
   player: WavPlayer;
   saveFile: (fileName: string, data: Blob) => void;
+  /** Called when a take ends, full or cut short; the device report shows it. */
+  onRecorded: (summary: RecordingSummary) => void;
 }
 
 /** Ten seconds from the microphone's frames, played back and downloadable as 16 kHz WAV. */
-export function RecordingSection({ handle, player, saveFile }: RecordingSectionProps) {
+export function RecordingSection({ handle, player, saveFile, onRecorded }: RecordingSectionProps) {
   const { capture, state } = handle;
   const [phase, setPhase] = useState<Phase>('empty');
   const [seconds, setSeconds] = useState(0);
@@ -47,6 +54,7 @@ export function RecordingSection({ handle, player, saveFile }: RecordingSectionP
       setSeconds(take.seconds);
       setRecording(take);
       setPhase(result);
+      onRecorded(summarizeRecording(take));
     };
     const offFrame = capture.onFrame((frame) => {
       const full = take.append(frame);

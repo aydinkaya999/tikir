@@ -6,12 +6,15 @@ import { echoFrames, type EchoProbe, type EchoResult } from '../../../services/e
 import styles from './AudioLabPage.module.css';
 import { copy } from './copy';
 import { formatMs } from './format';
+import type { EchoReport } from './report';
 import type { CaptureHandle } from './useCapture';
 
 interface EchoSectionProps {
   handle: CaptureHandle;
   createProbe: () => EchoProbe;
   defaultUrl: string;
+  /** Called when a run ends, however it ends; the device report shows it. */
+  onResult: (report: EchoReport) => void;
 }
 
 function milliseconds(value: number | null): string | null {
@@ -19,7 +22,7 @@ function milliseconds(value: number | null): string | null {
 }
 
 /** Sends the next 500 microphone frames to the echo server and times their way back. */
-export function EchoSection({ handle, createProbe, defaultUrl }: EchoSectionProps) {
+export function EchoSection({ handle, createProbe, defaultUrl, onResult }: EchoSectionProps) {
   const { capture, state } = handle;
   const [url, setUrl] = useState(defaultUrl);
   const [sent, setSent] = useState(0);
@@ -46,6 +49,7 @@ export function EchoSection({ handle, createProbe, defaultUrl }: EchoSectionProp
       activeProbe.current = null;
       setResult(outcome);
       setRunning(false);
+      onResult({ url, outcome: outcome.outcome, ...outcome.summary });
     }
   };
 
