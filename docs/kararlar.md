@@ -115,6 +115,7 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `prettier` | Biçim | 0 |
 | `@playwright/test` | Uçtan uca testler (Chromium ve WebKit) ve `pnpm shots` ekran görüntüleri (T11) | 0 |
 | `@fontsource-variable/atkinson-hyperlegible-next` | Tek yazı ailesi, depodan sunulur (D2, T12). `src/styles/fonts.css` paketin dosyalarını token'daki aile adıyla bağlar | 0 |
+| `react-router` | Yönlendirme (T4); rotalar `docs/ekranlar.md`, geliştirme sayfaları tembel yüklenir ve üretim derlemesine girmez | 0 |
 | `@fontsource/didact-gothic` | Okul harfleri yer tutucusu (D3). Türkçe harflerin hepsi bu yazı tipinden çiziliyor (Faz 0'da denetlendi) | 0 |
 
 ## Değişiklik günlüğü

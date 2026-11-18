@@ -9,7 +9,10 @@ function read(relativePath: string): Buffer {
 
 // design/ is a read-only reference the app must not link to (design/README.md), so the files
 // the app needs are copied into src/. Each copy must stay byte-identical to its source.
-const copies: [copy: string, source: string][] = [['src/styles/tokens.css', 'design/tokens.css']];
+const copies: [copy: string, source: string][] = [
+  ['src/styles/tokens.css', 'design/tokens.css'],
+  ['src/components/Icon/icons.json', 'design/svg/ikonlar.json'],
+];
 
 describe('copies of design files', () => {
   it.each(copies)('%s is identical to %s', (copy, source) => {

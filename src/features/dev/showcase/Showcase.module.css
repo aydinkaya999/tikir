@@ -1,0 +1,65 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-page);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap);
+  min-width: 0;
+  padding: var(--space-page);
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+/* A labelled row of examples inside a section. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-gap);
+}
+
+.label {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-bold);
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--space-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--size-small);
+}

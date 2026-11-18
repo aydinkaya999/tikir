@@ -20,7 +20,7 @@
 - [x] Task 5: `domain/text.ts`
 - [x] Task 6: `domain/readability.ts` ve sınıf eşikleri
 - [x] Task 7: Stiller, yazı tipleri ve `tr.ts`
-- [ ] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
+- [x] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
 - [ ] Task 9: Button ve IconButton
 - [ ] Task 10: Chip, Card, PageCard ve SpeechBubble
 - [ ] Task 11: Companion, Monster, Tile ve BookCover
@@ -265,23 +265,23 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 **Dosyalar:** `src/app/routes.ts`, `src/app/router.tsx`, `src/app/App.tsx`, `src/components/Icon/Icon.tsx`, `src/components/Icon/icons.json`, `src/components/Icon/Icon.test.tsx`, `src/features/dev/ShowcasePage.tsx`, `ShowcasePage.module.css`, `src/features/dev/AudioLabPage.tsx`, `src/design-copies.test.ts`, `package.json`, `docs/kararlar.md`.
 
-- [ ] Paket: `react-router`.
-- [ ] `routes.ts`:
+- [x] Paket: `react-router`.
+- [x] `routes.ts`:
   - `screenPaths`: ekran kodu → yol (G1–G7, K1–K4, U1–U4, V1–V4; `ekranlar.md` tablosu);
   - `extraPaths`: `album`, `studio`;
   - `devPaths`: `showcase` = `/gelistirme/vitrin`, `audio` = `/gelistirme/ses`.
   Testler de yolları buradan okur.
-- [ ] `router.tsx`:
+- [x] `router.tsx`:
   - geliştirme rotaları yalnız `devToolsEnabled` iken eklenir ve tembel yüklenir;
   - `*` rotası `/` adresine yönlendirir;
   - `/` şimdilik boş sayfa.
-- [ ] `Icon`, önce test: `aria-hidden`, 24 px `viewBox`, `currentColor` çizgi. `{ name: IconName; size?: number; className?: string }`; `IconName` = `icons.json` anahtarları; `icons.json`, `design/svg/ikonlar.json` kopyasıdır (kopya testine eklenir).
-- [ ] Vitrin iskeleti: her bileşen bir `section[data-component="<Ad>"]` içinde, başlığı bileşenin kod adı. İlk bölüm 40 ikonlu `Icon` tablosu. Ses denemesi sayfası boş.
-- [ ] Doğrulama:
+- [x] `Icon`, önce test: `aria-hidden`, 24 px `viewBox`, `currentColor` çizgi. `{ name: IconName; size?: number; className?: string }`; `IconName` = `icons.json` anahtarları; `icons.json`, `design/svg/ikonlar.json` kopyasıdır (kopya testine eklenir).
+- [x] Vitrin iskeleti: her bileşen bir `section[data-component="<Ad>"]` içinde, başlığı bileşenin kod adı. İlk bölüm 40 ikonlu `Icon` tablosu. Ses denemesi sayfası boş.
+- [x] Doğrulama:
   - `pnpm check`;
   - `pnpm build` sonrası `grep -rE "gelistirme|ShowcasePage" dist/` boş;
   - `pnpm shots /gelistirme/vitrin`.
-- [ ] Commit: `feat(app): add router, icons and showcase skeleton`
+- [x] Commit: `feat(app): add router, icons and showcase skeleton`
 
 ### Task 9: Button ve IconButton
 

@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 const port = 4317;
 
 // The suite runs against a production-like build in the `e2e` mode, which keeps the
-// developer routes (src/app/env.ts) and serves it with `vite preview`.
+// developer routes (they exist whenever import.meta.env.MODE is not 'production').
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
