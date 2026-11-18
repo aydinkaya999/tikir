@@ -64,7 +64,7 @@
   --size-nav-label: 13px;
   --size-nav-item: 16px;
   --size-link: 15px;
-  /* Line under a page title (U3, U4 from 700 px). */
+  /* Line under a page title: 16 px on tablets, 15 px on the web (U3, U4). */
   --size-subtitle: 16px;
   /* Onboarding progress: corner of the dots and the current pill (K1–K4). */
   --radius-progress: 6px;
@@ -97,6 +97,7 @@
 
 @media (min-width: 1200px) {
   :root {
+    --size-subtitle: 15px;
     --reading-size-0: 22px;
     --reading-size-1: 25px;
     --reading-size-2: 29px;
