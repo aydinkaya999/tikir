@@ -33,7 +33,7 @@
 - [x] Task 18: Seans kabuğu
 - [x] Task 19: Odak ve kurulum kabukları
 - [x] Task 20: Dış istek yok ve CSP
-- [ ] Task 21: Kabuk karşılaştırması
+- [x] Task 21: Kabuk karşılaştırması
 - [ ] Task 22: Belgeler
 - [ ] Task 23: Kabul ölçütleri yürüyüşü (commit yok)
 
@@ -451,11 +451,11 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 21: Kabuk karşılaştırması
 
-- [ ] `pnpm shots / /seans/oku /kitaplik/kur /kurulum/hesap /veli`.
-- [ ] Her görüntü `design/png/<kod>-*.png` ile yan yana karşılaştırılır.
-- [ ] Kabuk farkları düzeltilir; düzeltme başına bir commit (`fix(shell): …`).
-- [ ] İçerikten gelen farklar (içerik Faz 2–5'te gelecek) "Kanıtlar" bölümüne yazılır.
-- [ ] Commit: `docs: record shell comparison`
+- [x] `pnpm shots / /seans/oku /kitaplik/kur /kurulum/hesap /veli`.
+- [x] Her görüntü `design/png/<kod>-*.png` ile yan yana karşılaştırılır.
+- [x] Kabuk farkları düzeltilir; düzeltme başına bir commit (`fix(shell): …`).
+- [x] İçerikten gelen farklar (içerik Faz 2–5'te gelecek) "Kanıtlar" bölümüne yazılır.
+- [x] Commit: `docs: record shell comparison`
 
 ### Task 22: Belgeler
 
@@ -477,3 +477,38 @@ Task 7, 21 ve 23'te dolar.
 - `pnpm exec vite build` yalnız dört yazı tipi dosyası üretir: Atkinson Hyperlegible Next değişken (latin, latin-ext) ve Didact Gothic 400 (latin, latin-ext). İtalik ve başka alt küme yok.
 - `e2e/smoke.spec.ts` → "the interface font is loaded from our own origin": `fonts.css` kaldırılınca kırmızı (0 yüz yüklendi), geri gelince yeşil.
 - Didact Gothic Türkçe harf denetimi (Chromium, tek seferlik; iki ayrı yedek aileyle ölçülen genişlik aynı çıktı): `ğ ş ı İ Ğ Ş ç ö ü Ç Ö Ü â î û` harflerinin hepsi Didact Gothic'ten çiziliyor, yedek yazı tipine düşen harf yok.
+
+### Kabuk karşılaştırması (Task 21)
+
+**Nasıl yapıldı**
+
+- Görüntüler `shots/{index,seans-oku,kitaplik-kur,kurulum-hesap,veli}-{telefon,tablet,web}.png` dosyalarında (git dışı). Yeniden üretmek için: `pnpm shots / /seans/oku /kitaplik/kur /kurulum/hesap /veli`.
+- Her görüntü `design/png` içindeki karşılığıyla yan yana incelendi.
+- Ayrıca aynı genişlikte tasarım HTML'i ve uygulama açılıp kabuk öğelerinin kutuları (konum ve boyut) erişilebilir adlarıyla ölçüldü: gezinme ve öğeleri, wordmark, çıkış ve geri bağlantıları, adım karoları, sayaçlar, başlık, Tıkır.
+- Düzeltmeden önce 26 ölçümde fark vardı; düzeltmeden sonra kalan 13 farkın hepsi içerikten geliyor.
+
+**Düzeltilen kabuk farkları**
+
+1. Tablet rayında wordmark'ın altındaki 14 px boşluk eksikti; öğeler 14 px yukarıdaydı (`1a9fa38`).
+2. Telefon ve tablet gezinme öğeleri 1 px kısaydı. Etiketin satır yüksekliği 1,35 idi; tasarımdaki bağlantılar gövdeden 1,45 alıyor (`1a9fa38`).
+3. Veli şeridi telefonda 13 px, tablette 9 px alçaktı, çünkü yüksekliğini çocuk etiketi veriyor. Şerit etiketli hâlinin yüksekliğine sabitlendi (`9ec285a`).
+4. Odak kabuğunun alt başlığı webde 16 px idi; tasarımda tablette 16, webde 15 px (`364b929`).
+
+**Ölçümle tasarımla aynı çıkan kabuk parçaları** (üç genişlikte)
+
+- Çocuk ve veli kabukları: web kenar çubuğu (genişlik, wordmark, öğeler, "Veli alanı" alt başlığı, alttaki bağlantı), tablet rayı, telefon alt çubuğu, veli şeridi.
+- Seans kabuğu: kapat ve çıkış, adım karoları, telefon sayacı, web üst şeridi ve wordmark, tablette ve webde Tıkır'ın yeri.
+- Odak kabuğu: geri düğmesi, başlık, alt başlık, webde wordmark ve "Kitaplık" bağlantısı.
+- Kurulum kabuğu: panonun wordmark'ı, ilerleme göstergesi, "1 / 4" sayacı.
+
+**Kalan farklar.** Hepsi içerikten geliyor; içerik ilgili fazda gelecek.
+
+| Ekran | Fark | Neden |
+|---|---|---|
+| G1, V1 | Sayfa içeriği yok (selamlama, bölüm kartı ve harita; haftalık özet ve grafik) | Faz 2 ve 4 |
+| G1 | Albüm ve Stüdyo'nun yazı kutusu 1–2 px farklı | Tasarımda hedefsiz `button`, bizde rota bağlantısı (karar 4) |
+| V1 | Telefon ve tablette çocuk etiketi ("Deniz, 3. sınıf") yok; şeridin yeri ayrılmış | Profil verisi Faz 3'te |
+| G4 | "Bölüm 4: Dar Patika" yok; bu yüzden adım karoları tablette 70 px, webde 79 px sola kayıyor | Seans verisi Faz 2'de; aralar tasarımdaki gibi eşit dağılıyor |
+| G4 | Tıkır `normal` yüzde (tasarımda `listen`); balon, sayaç çipleri ve denetimler yok; telefonda Tıkır en altta (tasarımda denetim çubuğunun üstünde) | Faz 2 (karar 16) |
+| U3 | Kartlar, Tıkır ve "Kitabımı yap" yok | Faz 5 |
+| K1 | Form ve "Hesabı oluştur" yok. Balon olmadığı için Tıkır panoda tablette 46 px, webde 34 px aşağıda | Faz 3 |
