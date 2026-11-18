@@ -6,10 +6,21 @@ import {
   StuckWordsPage,
   WeeklySummaryPage,
 } from '../features/parent/pages';
-import { AlbumPage, RoadPage, StudioPage } from '../features/session/pages';
+import {
+  AlbumPage,
+  DonePage,
+  ListenPage,
+  ReadPage,
+  RecordPage,
+  RoadPage,
+  StudioPage,
+  WarmupPage,
+  WrapUpPage,
+} from '../features/session/pages';
 import { devPaths, extraPaths, screenPaths } from './routes';
 import { ChildShell } from './shells/ChildShell';
 import { ParentShell } from './shells/ParentShell';
+import { SessionShell } from './shells/SessionShell';
 
 // Developer pages are lazy chunks that must not reach the production build. Dev-only code tests
 // import.meta.env.MODE inline: Vite replaces it in each module at build time, so the bundler can
@@ -41,6 +52,17 @@ export const appRoutes: RouteObject[] = [
       { path: screenPaths.U1, element: <LibraryPage /> },
       { path: extraPaths.album, element: <AlbumPage /> },
       { path: extraPaths.studio, element: <StudioPage /> },
+    ],
+  },
+  {
+    element: <SessionShell />,
+    children: [
+      { path: screenPaths.G2, element: <WarmupPage /> },
+      { path: screenPaths.G3, element: <ListenPage /> },
+      { path: screenPaths.G4, element: <ReadPage /> },
+      { path: screenPaths.G5, element: <RecordPage /> },
+      { path: screenPaths.G6, element: <WrapUpPage /> },
+      { path: screenPaths.G7, element: <DonePage /> },
     ],
   },
   {

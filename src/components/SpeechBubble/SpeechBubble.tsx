@@ -2,8 +2,11 @@ import type { ReactNode } from 'react';
 import styles from './SpeechBubble.module.css';
 
 interface SpeechBubbleProps {
-  /** Where the bubble points: left of the bubble (G1, phones) or above it (tablet, web). */
-  arrow?: 'left' | 'top';
+  /**
+   * Where the bubble points: left of the bubble (G1, phones), above it (tablet, web), or
+   * adaptive — left below 700 px, above from 700 px (session and onboarding shells).
+   */
+  arrow?: 'left' | 'top' | 'adaptive';
   /** Tıkır's help is a polite live region (docs/tasarim-sistemi.md, "Erişilebilirlik"). */
   live?: boolean;
   className?: string;
@@ -21,7 +24,7 @@ export function SpeechBubble({
       className={[styles.bubble, className ?? ''].filter(Boolean).join(' ')}
       aria-live={live ? 'polite' : undefined}
     >
-      <span aria-hidden="true" className={arrow === 'top' ? styles.arrowTop : styles.arrowLeft} />
+      <span aria-hidden="true" className={styles[`arrow-${arrow}`]} />
       <div className={styles.text}>{children}</div>
     </div>
   );

@@ -97,6 +97,49 @@ for (const viewport of Object.keys(viewports) as (keyof typeof viewports)[]) {
   });
 }
 
+const sessionSteps = [
+  { path: '/seans/isinma', current: 'Isınma', counter: '1 / 5' },
+  { path: '/seans/dinle', current: 'Dinle', counter: '2 / 5' },
+  { path: '/seans/oku', current: 'Oku', counter: '3 / 5' },
+  { path: '/seans/kayit', current: 'Kayıt', counter: '4 / 5' },
+  { path: '/seans/kapanis', current: 'Kapanış', counter: '5 / 5' },
+  { path: '/seans/bitti', current: null, counter: '5 / 5' },
+];
+
+for (const step of sessionSteps) {
+  test(`${step.path} opens in the session shell at its step`, async ({ page }) => {
+    for (const viewport of ['telefon', 'tablet', 'web'] as const) {
+      await open(page, step.path, viewport);
+      await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'session');
+      await expect(page.getByRole('main')).toHaveCount(1);
+      await expect(page.getByRole('navigation')).toHaveCount(0);
+
+      const steps = page.getByRole('list', { name: 'Seans adımları' });
+      await expect(steps.getByRole('listitem')).toHaveCount(5);
+      const current = steps.locator('[aria-current="step"]');
+      if (step.current === null) {
+        await expect(current).toHaveCount(0);
+      } else {
+        await expect(current).toHaveText(step.current);
+      }
+
+      // Phones count the steps; wider screens name them instead.
+      const counter = page.getByText(step.counter, { exact: true });
+      if (viewport === 'telefon') {
+        await expect(counter).toBeVisible();
+      } else {
+        await expect(counter).toBeHidden();
+      }
+
+      // TODO(design): the exit asks for confirmation from phase 2 on.
+      const exit = page.getByRole('link', { name: 'Seanstan çık' });
+      await expect(exit).toHaveCount(1);
+      await expect(exit).toHaveAttribute('href', '/');
+      await expect(page.getByRole('img', { name: 'Tıkır' })).toBeVisible();
+    }
+  });
+}
+
 test('the way between the child and parent areas is a web-only link', async ({ page }) => {
   await open(page, '/', 'web');
   await expect(page.getByRole('link', { name: 'Veli alanı' })).toHaveAttribute('href', '/veli');

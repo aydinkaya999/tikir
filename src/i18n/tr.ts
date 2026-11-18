@@ -33,6 +33,10 @@ export const tr = {
   },
 
   session: {
+    /** G2–G7: close button name (phone, tablet) and link text (web). */
+    exit: 'Seanstan çık',
+    /** G2–G7 phones: step counter, e.g. "3 / 5". */
+    stepCounter: (step: number, total: number) => `${String(step)} / ${String(total)}`,
     /** G4: list name of the five step tiles. */
     stepsLabel: 'Seans adımları',
     steps: {

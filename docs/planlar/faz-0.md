@@ -30,7 +30,7 @@
 - [x] Task 15: ReadingText, PhraseText ve RaceBar
 - [x] Task 16: Vitrin testi
 - [x] Task 17: Çocuk ve veli kabukları
-- [ ] Task 18: Seans kabuğu
+- [x] Task 18: Seans kabuğu
 - [ ] Task 19: Odak ve kurulum kabukları
 - [ ] Task 20: Dış istek yok ve CSP
 - [ ] Task 21: Kabuk karşılaştırması
@@ -414,15 +414,15 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 18: Seans kabuğu
 
-- [ ] `SessionShell`: `{ chapterLabel?: string; companion?: { expression?: CompanionExpression; bubble?: ReactNode }; controls?: ReactNode }`. Adım rotadan gelir. Tıkır her zaman çizilir (varsayılan `normal`).
+- [x] `SessionShell`: `{ chapterLabel?: string; companion?: { expression?: CompanionExpression; bubble?: ReactNode }; controls?: ReactNode }`. Adım rotadan gelir. Tıkır her zaman çizilir (varsayılan `normal`).
   - Telefon: kapat ikon düğmesi (44 px), adı olmayan küçük adım karoları, "N / 5" sayacı; Tıkır içeriğin sonunda; denetimler altta beyaz çubukta.
   - Tablet: kapat (48 px), adlı adım karoları, sağda bölüm etiketi; iki sütun (1,75 / 1), sağda Tıkır (190 px), balon ve denetimler.
   - Web: beyaz üst şerit ("Tıkır", bölüm etiketi, adlı adımlar, "Seanstan çık" bağlantısı); içerik en çok 1280 px; iki sütun.
   - İçerik genişliği 720 px altına inerse sütunlar alt alta dizilir.
-- [ ] Kapat şimdilik `/` adresine gider (onay penceresi Faz 2'de; `TODO(design)`).
-- [ ] Rotalar: G2–G7. e2e rota testine eklenir.
-- [ ] Doğrulama: `pnpm check`, `pnpm e2e`, `pnpm shots /seans/oku`.
-- [ ] Commit: `feat(shell): add session shell with routes`
+- [x] Kapat şimdilik `/` adresine gider (onay penceresi Faz 2'de; `TODO(design)`).
+- [x] Rotalar: G2–G7. e2e rota testine eklenir.
+- [x] Doğrulama: `pnpm check`, `pnpm e2e`, `pnpm shots /seans/oku`.
+- [x] Commit: `feat(shell): add session shell with routes`
 
 ### Task 19: Odak ve kurulum kabukları
 
