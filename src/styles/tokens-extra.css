@@ -60,6 +60,15 @@
   --reading-size: var(--reading-size-1);
   --reading-letter-spacing: var(--reading-letter-spacing-0);
   --reading-word-spacing: var(--reading-word-spacing-0);
+  /* Shell chrome (G1, V1, G4, U3): bar and rail labels, sidebar items, links and strip titles. */
+  --size-nav-label: 13px;
+  --size-nav-item: 16px;
+  --size-link: 15px;
+  /* The "Tıkır" wordmark: rail (tablet), top bar (web), sidebar (web), onboarding panel. */
+  --size-wordmark-rail: 22px;
+  --size-wordmark-bar: 26px;
+  --size-wordmark-sidebar: 30px;
+  --size-wordmark-panel: 40px;
   /* Line chart text in SVG units (V1): compact 12/17, wide 13/18 (axis labels / last value). */
   --size-chart-compact: 12px;
   --size-chart-compact-value: 17px;

@@ -1,6 +1,15 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
-import { EmptyPage } from './EmptyPage';
-import { devPaths, screenPaths } from './routes';
+import { BookFromTextPage, LibraryPage } from '../features/library/pages';
+import {
+  AssessmentPage,
+  ReadingStylePage,
+  StuckWordsPage,
+  WeeklySummaryPage,
+} from '../features/parent/pages';
+import { AlbumPage, RoadPage, StudioPage } from '../features/session/pages';
+import { devPaths, extraPaths, screenPaths } from './routes';
+import { ChildShell } from './shells/ChildShell';
+import { ParentShell } from './shells/ParentShell';
 
 // Developer pages are lazy chunks that must not reach the production build. Dev-only code tests
 // import.meta.env.MODE inline: Vite replaces it in each module at build time, so the bundler can
@@ -25,7 +34,25 @@ const devRoutes: RouteObject[] =
     : [];
 
 export const appRoutes: RouteObject[] = [
-  { path: screenPaths.G1, element: <EmptyPage /> },
+  {
+    element: <ChildShell />,
+    children: [
+      { path: screenPaths.G1, element: <RoadPage /> },
+      { path: screenPaths.U1, element: <LibraryPage /> },
+      { path: extraPaths.album, element: <AlbumPage /> },
+      { path: extraPaths.studio, element: <StudioPage /> },
+    ],
+  },
+  {
+    element: <ParentShell />,
+    children: [
+      { path: screenPaths.V1, element: <WeeklySummaryPage /> },
+      { path: screenPaths.V2, element: <StuckWordsPage /> },
+      { path: screenPaths.V3, element: <AssessmentPage /> },
+      { path: screenPaths.V4, element: <ReadingStylePage /> },
+      { path: screenPaths.U2, element: <BookFromTextPage /> },
+    ],
+  },
   ...devRoutes,
   // No design or copy exists for "not found"; unknown addresses go to the road.
   { path: '*', element: <Navigate to={screenPaths.G1} replace /> },

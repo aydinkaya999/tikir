@@ -7,6 +7,31 @@ const appName = 'Tıkır';
 export const tr = {
   appName,
 
+  nav: {
+    /** G1: child navigation (bottom bar, rail, sidebar). */
+    child: {
+      label: 'Ana gezinme',
+      road: 'Yol',
+      library: 'Kitaplık',
+      album: 'Albüm',
+      studio: 'Stüdyo',
+      /** Web sidebar only. */
+      parentArea: 'Veli alanı',
+    },
+    /** V1: parent navigation; phones and tablets use the short labels. */
+    parent: {
+      label: 'Veli gezinmesi',
+      area: 'Veli alanı',
+      summary: 'Özet',
+      stuckWords: { short: 'Takılınan', long: 'Takılınan yerler' },
+      assessment: 'Ölçüm',
+      readingStyle: { short: 'Yazı', long: 'Yazı ayarı' },
+      books: 'Kitaplar',
+      /** Web sidebar only. */
+      childScreen: 'Çocuk ekranı',
+    },
+  },
+
   session: {
     /** G4: list name of the five step tiles. */
     stepsLabel: 'Seans adımları',

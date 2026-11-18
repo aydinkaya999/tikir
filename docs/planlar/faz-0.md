@@ -29,7 +29,7 @@
 - [x] Task 14: StatCard, LineChart ve ProgressBar
 - [x] Task 15: ReadingText, PhraseText ve RaceBar
 - [x] Task 16: Vitrin testi
-- [ ] Task 17: Çocuk ve veli kabukları
+- [x] Task 17: Çocuk ve veli kabukları
 - [ ] Task 18: Seans kabuğu
 - [ ] Task 19: Odak ve kurulum kabukları
 - [ ] Task 20: Dış istek yok ve CSP
@@ -388,29 +388,29 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 **Dosyalar:** `src/app/shells/ShellNav.tsx`, `ChildShell.tsx`, `ParentShell.tsx` (+ `.module.css`), sayfa dosyaları, `router.tsx`, `routes.ts`, `tr.ts`, `e2e/routes.spec.ts`, `docs/ekranlar.md`.
 
-- [ ] `ShellNav`: tek `nav`, düzen CSS ile değişir:
+- [x] `ShellNav`: tek `nav`, düzen CSS ile değişir:
   - 700 px altında altta çubuk;
   - 700–1199 px'te 104 px ray ve "Tıkır" yazısı;
   - 1200 px ve üstünde 248–272 px kenar çubuğu.
   Etkin öğe `aria-current="page"` alır. Telefon ve web adları farklıysa iki ad da çizilir, biri gizlenir. Güvenli alan boşlukları kullanılır. Telefonda içerik çubuğun altında kalmaz.
-- [ ] `ChildShell`:
+- [x] `ChildShell`:
   - öğeler: Yol, Kitaplık, Albüm, Stüdyo;
   - webde altta kilitli "Veli alanı" → `/veli`;
   - zemin `--color-ground`;
   - telefon ve tablette veli girişi yok (`TODO(design)`).
-- [ ] `ParentShell`:
+- [x] `ParentShell`:
   - öğeler: Özet, Takılınan yerler, Ölçüm, Yazı ayarı, Kitaplar (`/veli/kitap`);
   - telefon ve tablette lacivert şerit ("Veli alanı" ve çocuk etiketi; veri yoksa etiket yok);
   - webde "Veli alanı" alt başlığı ve "Çocuk ekranı" → `/`;
   - zemin beyaz.
-- [ ] Rotalar: `/`, `/kitaplik`, `/album`, `/studyo`, `/veli`, `/veli/takilinan`, `/veli/olcum`, `/veli/yazi`, `/veli/kitap`. Boş sayfalar.
-- [ ] Önce e2e (`routes.spec.ts`):
+- [x] Rotalar: `/`, `/kitaplik`, `/album`, `/studyo`, `/veli`, `/veli/takilinan`, `/veli/olcum`, `/veli/yazi`, `/veli/kitap`. Boş sayfalar.
+- [x] Önce e2e (`routes.spec.ts`):
   - her rota doğru kabuğu (`data-shell`) ve etkin gezinme öğesini verir;
   - 390 px'te `main`, alt çubuğun altında kalmaz;
   - dokunma hedefleri en az 44 px.
-- [ ] `docs/ekranlar.md` rota tablosuna Albüm ve Stüdyo eklenir.
-- [ ] Doğrulama: `pnpm check`, `pnpm e2e`, `pnpm shots / /veli`.
-- [ ] Commit: `feat(shell): add child and parent shells with routes`
+- [x] `docs/ekranlar.md` rota tablosuna Albüm ve Stüdyo eklenir.
+- [x] Doğrulama: `pnpm check`, `pnpm e2e`, `pnpm shots / /veli`.
+- [x] Commit: `feat(shell): add child and parent shells with routes`
 
 ### Task 18: Seans kabuğu
 

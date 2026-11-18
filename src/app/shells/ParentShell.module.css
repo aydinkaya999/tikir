@@ -1,0 +1,67 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--color-white);
+}
+
+.column {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* V1: ink strip with "Veli alanı" and the child chip; phones and tablets only. */
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 48px;
+  padding: calc(14px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 14px
+    max(20px, env(safe-area-inset-left));
+  background: var(--color-ink);
+}
+
+.stripTitle {
+  color: var(--color-white);
+  font-size: var(--size-link);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+/* V1 content padding: 18/20/14 on phones, 26/32/28 on tablets, 36/44/44 on the web. */
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 18px max(20px, env(safe-area-inset-right)) 14px max(20px, env(safe-area-inset-left));
+}
+
+@media (min-width: 700px) {
+  .shell {
+    flex-direction: row;
+  }
+
+  .strip {
+    padding: calc(12px + env(safe-area-inset-top)) 32px 12px;
+  }
+
+  .main {
+    padding: 26px max(32px, env(safe-area-inset-right)) 28px 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .column {
+    flex: 999 1 560px;
+  }
+
+  .strip {
+    display: none;
+  }
+
+  .main {
+    padding: 36px 44px 44px;
+  }
+}

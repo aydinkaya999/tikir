@@ -1,0 +1,195 @@
+/* Phone (below 700 px): a bar at the bottom of the screen (G1, V1). */
+.nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  order: 2;
+  padding: 6px max(10px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom))
+    max(10px, env(safe-area-inset-left));
+  border-top: var(--border);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.wordmark,
+.subtitle,
+.footer,
+.longLabel {
+  display: none;
+}
+
+.items {
+  display: flex;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slot {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.item {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 58px;
+  padding: 4px 2px;
+  color: var(--color-ink);
+  font-size: var(--size-nav-label);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+  text-decoration: none;
+}
+
+.item[aria-current='page'] {
+  font-weight: var(--weight-extrabold);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 30px;
+  border: 2.5px solid transparent;
+  border-radius: var(--radius-pill);
+}
+
+.item[aria-current='page'] .pill {
+  border-color: var(--color-ink);
+  background: var(--color-saffron);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Tablet (700–1199 px): a 104 px rail on the left. */
+@media (min-width: 700px) {
+  .nav {
+    top: 0;
+    bottom: auto;
+    flex: 0 0 104px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    order: 0;
+    width: 104px;
+    height: 100dvh;
+    overflow-y: auto;
+    padding: calc(24px + env(safe-area-inset-top)) 10px 24px max(10px, env(safe-area-inset-left));
+    border-top: 0;
+    border-right: var(--border);
+  }
+
+  .wordmark {
+    display: block;
+    font-size: var(--size-wordmark-rail);
+    font-weight: var(--weight-extrabold);
+    line-height: 1;
+  }
+
+  .items {
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .item {
+    min-height: 76px;
+  }
+}
+
+/* Web (from 1200 px): a 248–272 px sidebar with the wordmark and a footer link. */
+@media (min-width: 1200px) {
+  .nav {
+    flex: 1 1 248px;
+    align-items: stretch;
+    gap: 8px;
+    width: auto;
+    max-width: 272px;
+    padding: 28px 16px;
+  }
+
+  .wordmark {
+    margin: 0 0 18px 12px;
+    font-size: var(--size-wordmark-sidebar);
+  }
+
+  .nav[data-has-subtitle] .wordmark {
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    display: block;
+    margin: 0 0 16px 12px;
+    color: var(--color-muted);
+    font-size: var(--size-label);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-ui);
+  }
+
+  .items {
+    gap: 8px;
+  }
+
+  .item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 2.5px solid transparent;
+    border-radius: var(--radius-segment);
+    font-size: var(--size-nav-item);
+  }
+
+  .item[aria-current='page'] {
+    border-color: var(--color-ink);
+    background: var(--color-saffron);
+  }
+
+  .pill,
+  .item[aria-current='page'] .pill {
+    width: auto;
+    height: auto;
+    border: 0;
+    background: transparent;
+  }
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .shortLabel {
+    display: none;
+  }
+
+  .longLabel {
+    display: inline;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    margin-top: auto;
+    padding: 0 14px;
+    color: var(--color-ink);
+    font-size: var(--size-link);
+    font-weight: var(--weight-bold);
+    text-decoration: none;
+  }
+}
