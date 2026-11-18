@@ -14,7 +14,7 @@
 
 - [x] Task 0: Plan dosyası ve dal
 - [x] Task 1: PCM ve WAV
-- [ ] Task 2: Örnekleme hızı dönüştürücü
+- [x] Task 2: Örnekleme hızı dönüştürücü
 - [ ] Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
 - [ ] Task 4: `AudioCapture` ve `WebAudioCapture`
 - [ ] Task 5: AudioWorklet ve mikrofon bölümü
@@ -207,7 +207,7 @@ export class Resampler {
 ```
 
 - Yaklaşım (karar 7): n. çıkış örneği girişte `n × inputRate / outputRate` konumuna düşer. Değeri, o konumun çevresindeki girişlerin Blackman pencereli sinc çekirdeğiyle ağırlıklı toplamıdır. Ağırlıklar her çıkış için kendi toplamına bölünür, böylece DC kazancı 1 olur. Akışta yalnız çekirdeğin ihtiyaç duyduğu geçmiş tutulur.
-- [ ] Önce testler:
+- [x] Önce testler:
   - uzunluk: `push` ve `flush` çıkışlarının toplamı `ceil(N × out / in)` eder. Örnekler: 48000 → 16000 hızında N 48000 ise 16000; 44100 → 16000 hızında N 44100 ise 16000; 44100 hızında N 1000 ise 363; 48000 hızında N 1 ise 1; 24000 hızında N 2400 ise 1600; 8000 → 16000 hızında N 800 ise 1600;
   - gecikme: `flush` öncesinde eksik çıkış en çok 40 örnektir (2,5 ms), ölçülen bütün hızlarda;
   - parçalamadan bağımsızlık: 48 000 örneği tek seferde vermekle 1–300 arası rastgele parçalarla (tohumlu) vermek aynı çıkışı verir (fark < 1e-6); aynısı 44,1 kHz için;
@@ -215,8 +215,8 @@ export class Resampler {
   - geçirme bandı: 3 kHz sinüsün RMS oranı ±0,5 dB içinde kalır;
   - örtüşme bastırılır: 48 kHz'te 12 kHz ve 44,1 kHz'te 11 kHz sinüs, çıkışta giriş RMS'inin %1'inin altına iner (−40 dB);
   - eşit hız (16000 → 16000) örnekleri aynen geçirir.
-- [ ] Kırmızı, sonra yeşil (`pnpm test src/services/audio/resampler.test.ts`).
-- [ ] Commit: `feat(audio): add a streaming windowed-sinc resampler`
+- [x] Kırmızı, sonra yeşil (`pnpm test src/services/audio/resampler.test.ts`).
+- [x] Commit: `feat(audio): add a streaming windowed-sinc resampler`
 
 ### Task 3: Çerçeveleyici, düzey ölçer ve yakalama zinciri
 
