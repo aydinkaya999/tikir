@@ -1,0 +1,572 @@
+[
+ {
+  "kod": "G1",
+  "ad": "Yol",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G1-yol-telefon.html",
+  "png": "design/png/G1-yol-telefon.png"
+ },
+ {
+  "kod": "G1",
+  "ad": "Yol",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G1-yol-tablet.html",
+  "png": "design/png/G1-yol-tablet.png"
+ },
+ {
+  "kod": "G1",
+  "ad": "Yol",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G1-yol-web.html",
+  "png": "design/png/G1-yol-web.png"
+ },
+ {
+  "kod": "G2",
+  "ad": "Isınma",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G2-isinma-telefon.html",
+  "png": "design/png/G2-isinma-telefon.png"
+ },
+ {
+  "kod": "G2",
+  "ad": "Isınma",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G2-isinma-tablet.html",
+  "png": "design/png/G2-isinma-tablet.png"
+ },
+ {
+  "kod": "G2",
+  "ad": "Isınma",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G2-isinma-web.html",
+  "png": "design/png/G2-isinma-web.png"
+ },
+ {
+  "kod": "G3",
+  "ad": "Dinle",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G3-dinle-telefon.html",
+  "png": "design/png/G3-dinle-telefon.png"
+ },
+ {
+  "kod": "G3",
+  "ad": "Dinle",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G3-dinle-tablet.html",
+  "png": "design/png/G3-dinle-tablet.png"
+ },
+ {
+  "kod": "G3",
+  "ad": "Dinle",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G3-dinle-web.html",
+  "png": "design/png/G3-dinle-web.png"
+ },
+ {
+  "kod": "G4",
+  "ad": "Oku",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G4-oku-telefon.html",
+  "png": "design/png/G4-oku-telefon.png"
+ },
+ {
+  "kod": "G4",
+  "ad": "Oku",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G4-oku-tablet.html",
+  "png": "design/png/G4-oku-tablet.png"
+ },
+ {
+  "kod": "G4",
+  "ad": "Oku",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G4-oku-web.html",
+  "png": "design/png/G4-oku-web.png"
+ },
+ {
+  "kod": "G5",
+  "ad": "Kayıt",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G5-kayit-telefon.html",
+  "png": "design/png/G5-kayit-telefon.png"
+ },
+ {
+  "kod": "G5",
+  "ad": "Kayıt",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G5-kayit-tablet.html",
+  "png": "design/png/G5-kayit-tablet.png"
+ },
+ {
+  "kod": "G5",
+  "ad": "Kayıt",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G5-kayit-web.html",
+  "png": "design/png/G5-kayit-web.png"
+ },
+ {
+  "kod": "G6",
+  "ad": "Kapanış sorusu",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G6-soru-telefon.html",
+  "png": "design/png/G6-soru-telefon.png"
+ },
+ {
+  "kod": "G6",
+  "ad": "Kapanış sorusu",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G6-soru-tablet.html",
+  "png": "design/png/G6-soru-tablet.png"
+ },
+ {
+  "kod": "G6",
+  "ad": "Kapanış sorusu",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G6-soru-web.html",
+  "png": "design/png/G6-soru-web.png"
+ },
+ {
+  "kod": "G7",
+  "ad": "Bugünlük bitti",
+  "sayfa": "seans",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/G7-bitti-telefon.html",
+  "png": "design/png/G7-bitti-telefon.png"
+ },
+ {
+  "kod": "G7",
+  "ad": "Bugünlük bitti",
+  "sayfa": "seans",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/G7-bitti-tablet.html",
+  "png": "design/png/G7-bitti-tablet.png"
+ },
+ {
+  "kod": "G7",
+  "ad": "Bugünlük bitti",
+  "sayfa": "seans",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/G7-bitti-web.html",
+  "png": "design/png/G7-bitti-web.png"
+ },
+ {
+  "kod": "K1",
+  "ad": "Veli hesabı",
+  "sayfa": "kurulum",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/K1-veli-hesabi-telefon.html",
+  "png": "design/png/K1-veli-hesabi-telefon.png"
+ },
+ {
+  "kod": "K1",
+  "ad": "Veli hesabı",
+  "sayfa": "kurulum",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/K1-veli-hesabi-tablet.html",
+  "png": "design/png/K1-veli-hesabi-tablet.png"
+ },
+ {
+  "kod": "K1",
+  "ad": "Veli hesabı",
+  "sayfa": "kurulum",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/K1-veli-hesabi-web.html",
+  "png": "design/png/K1-veli-hesabi-web.png"
+ },
+ {
+  "kod": "K2",
+  "ad": "Okuyucu profili",
+  "sayfa": "kurulum",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/K2-okuyucu-telefon.html",
+  "png": "design/png/K2-okuyucu-telefon.png"
+ },
+ {
+  "kod": "K2",
+  "ad": "Okuyucu profili",
+  "sayfa": "kurulum",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/K2-okuyucu-tablet.html",
+  "png": "design/png/K2-okuyucu-tablet.png"
+ },
+ {
+  "kod": "K2",
+  "ad": "Okuyucu profili",
+  "sayfa": "kurulum",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/K2-okuyucu-web.html",
+  "png": "design/png/K2-okuyucu-web.png"
+ },
+ {
+  "kod": "K3",
+  "ad": "Seviye tespiti",
+  "sayfa": "kurulum",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/K3-seviye-telefon.html",
+  "png": "design/png/K3-seviye-telefon.png"
+ },
+ {
+  "kod": "K3",
+  "ad": "Seviye tespiti",
+  "sayfa": "kurulum",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/K3-seviye-tablet.html",
+  "png": "design/png/K3-seviye-tablet.png"
+ },
+ {
+  "kod": "K3",
+  "ad": "Seviye tespiti",
+  "sayfa": "kurulum",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/K3-seviye-web.html",
+  "png": "design/png/K3-seviye-web.png"
+ },
+ {
+  "kod": "K4",
+  "ad": "Tıkır ile tanışma",
+  "sayfa": "kurulum",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/K4-tanisma-telefon.html",
+  "png": "design/png/K4-tanisma-telefon.png"
+ },
+ {
+  "kod": "K4",
+  "ad": "Tıkır ile tanışma",
+  "sayfa": "kurulum",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/K4-tanisma-tablet.html",
+  "png": "design/png/K4-tanisma-tablet.png"
+ },
+ {
+  "kod": "K4",
+  "ad": "Tıkır ile tanışma",
+  "sayfa": "kurulum",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/K4-tanisma-web.html",
+  "png": "design/png/K4-tanisma-web.png"
+ },
+ {
+  "kod": "U1",
+  "ad": "Kitaplık",
+  "sayfa": "kitap",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/U1-kitaplik-telefon.html",
+  "png": "design/png/U1-kitaplik-telefon.png"
+ },
+ {
+  "kod": "U1",
+  "ad": "Kitaplık",
+  "sayfa": "kitap",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/U1-kitaplik-tablet.html",
+  "png": "design/png/U1-kitaplik-tablet.png"
+ },
+ {
+  "kod": "U1",
+  "ad": "Kitaplık",
+  "sayfa": "kitap",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/U1-kitaplik-web.html",
+  "png": "design/png/U1-kitaplik-web.png"
+ },
+ {
+  "kod": "U2",
+  "ad": "Metinden kitap",
+  "sayfa": "kitap",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/U2-metinden-kitap-telefon.html",
+  "png": "design/png/U2-metinden-kitap-telefon.png"
+ },
+ {
+  "kod": "U2",
+  "ad": "Metinden kitap",
+  "sayfa": "kitap",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/U2-metinden-kitap-tablet.html",
+  "png": "design/png/U2-metinden-kitap-tablet.png"
+ },
+ {
+  "kod": "U2",
+  "ad": "Metinden kitap",
+  "sayfa": "kitap",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/U2-metinden-kitap-web.html",
+  "png": "design/png/U2-metinden-kitap-web.png"
+ },
+ {
+  "kod": "U3",
+  "ad": "Kartlarla kitap",
+  "sayfa": "kitap",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/U3-kartlarla-kitap-telefon.html",
+  "png": "design/png/U3-kartlarla-kitap-telefon.png"
+ },
+ {
+  "kod": "U3",
+  "ad": "Kartlarla kitap",
+  "sayfa": "kitap",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/U3-kartlarla-kitap-tablet.html",
+  "png": "design/png/U3-kartlarla-kitap-tablet.png"
+ },
+ {
+  "kod": "U3",
+  "ad": "Kartlarla kitap",
+  "sayfa": "kitap",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/U3-kartlarla-kitap-web.html",
+  "png": "design/png/U3-kartlarla-kitap-web.png"
+ },
+ {
+  "kod": "U4",
+  "ad": "Kitap hazır",
+  "sayfa": "kitap",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/U4-kitap-hazir-telefon.html",
+  "png": "design/png/U4-kitap-hazir-telefon.png"
+ },
+ {
+  "kod": "U4",
+  "ad": "Kitap hazır",
+  "sayfa": "kitap",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/U4-kitap-hazir-tablet.html",
+  "png": "design/png/U4-kitap-hazir-tablet.png"
+ },
+ {
+  "kod": "U4",
+  "ad": "Kitap hazır",
+  "sayfa": "kitap",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/U4-kitap-hazir-web.html",
+  "png": "design/png/U4-kitap-hazir-web.png"
+ },
+ {
+  "kod": "V1",
+  "ad": "Haftalık özet",
+  "sayfa": "karne",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/V1-ozet-telefon.html",
+  "png": "design/png/V1-ozet-telefon.png"
+ },
+ {
+  "kod": "V1",
+  "ad": "Haftalık özet",
+  "sayfa": "karne",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/V1-ozet-tablet.html",
+  "png": "design/png/V1-ozet-tablet.png"
+ },
+ {
+  "kod": "V1",
+  "ad": "Haftalık özet",
+  "sayfa": "karne",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/V1-ozet-web.html",
+  "png": "design/png/V1-ozet-web.png"
+ },
+ {
+  "kod": "V2",
+  "ad": "Takılınan yerler",
+  "sayfa": "karne",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/V2-takilinan-telefon.html",
+  "png": "design/png/V2-takilinan-telefon.png"
+ },
+ {
+  "kod": "V2",
+  "ad": "Takılınan yerler",
+  "sayfa": "karne",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/V2-takilinan-tablet.html",
+  "png": "design/png/V2-takilinan-tablet.png"
+ },
+ {
+  "kod": "V2",
+  "ad": "Takılınan yerler",
+  "sayfa": "karne",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/V2-takilinan-web.html",
+  "png": "design/png/V2-takilinan-web.png"
+ },
+ {
+  "kod": "V3",
+  "ad": "Ölçüm sonucu",
+  "sayfa": "karne",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 844,
+  "html": "design/ekranlar/V3-olcum-telefon.html",
+  "png": "design/png/V3-olcum-telefon.png"
+ },
+ {
+  "kod": "V3",
+  "ad": "Ölçüm sonucu",
+  "sayfa": "karne",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/V3-olcum-tablet.html",
+  "png": "design/png/V3-olcum-tablet.png"
+ },
+ {
+  "kod": "V3",
+  "ad": "Ölçüm sonucu",
+  "sayfa": "karne",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/V3-olcum-web.html",
+  "png": "design/png/V3-olcum-web.png"
+ },
+ {
+  "kod": "V4",
+  "ad": "Yazı ayarı",
+  "sayfa": "karne",
+  "cihaz": "telefon",
+  "genislik": 390,
+  "yukseklik": 1248,
+  "html": "design/ekranlar/V4-yazi-ayari-telefon.html",
+  "png": "design/png/V4-yazi-ayari-telefon.png"
+ },
+ {
+  "kod": "V4",
+  "ad": "Yazı ayarı",
+  "sayfa": "karne",
+  "cihaz": "tablet",
+  "genislik": 1180,
+  "yukseklik": 820,
+  "html": "design/ekranlar/V4-yazi-ayari-tablet.html",
+  "png": "design/png/V4-yazi-ayari-tablet.png"
+ },
+ {
+  "kod": "V4",
+  "ad": "Yazı ayarı",
+  "sayfa": "karne",
+  "cihaz": "web",
+  "genislik": 1440,
+  "yukseklik": 900,
+  "html": "design/ekranlar/V4-yazi-ayari-web.html",
+  "png": "design/png/V4-yazi-ayari-web.png"
+ }
+]

@@ -1,0 +1,75 @@
+# Tıkır
+
+Türkçe okuyan 7–10 yaş çocuklar için dinleyen okuma koçu. Çocuk kısa bir metni sesli okur; uygulama dinler, takıldığı yerde yardım eder, takıldığı kelimeleri sonraki günlere taşır. Veli haftalık karne görür.
+
+Bu depo web uygulamasıdır: React + TypeScript + Vite. Aynı kod ileride Capacitor ile iOS ve Android'e paketlenecek; o yüzden tarayıcıya özgü her şey bir servis arayüzünün arkasında durur.
+
+## Önce ilgili belgeyi oku
+
+Hepsini her seferinde okuma; yaptığın işe karşılık geleni oku.
+
+| Ne yapıyorsan | Oku |
+|---|---|
+| Bir faza başlıyorsan | `docs/yol-haritasi.md` içindeki o faz, `docs/kararlar.md` |
+| Bir ekran yapıyorsan | `docs/ekranlar.md` içindeki o ekran, `design/ekranlar/<kod>-*.html`, `design/png/<kod>-*.png` (klasörün kullanımı: `design/README.md`) |
+| Bileşen ya da stil yazıyorsan | `docs/tasarim-sistemi.md`, `design/tokens.css` |
+| Veri, servis, klasör yapısı | `docs/mimari.md` |
+| Mikrofon, dinleme, okuma takibi | `docs/dinleme-hatti.md` |
+| Bir ürün kuralından emin değilsen | `docs/urun.md` |
+| Örnek içerik ya da demo verisiyle çalışıyorsan | `seed/README.md` |
+
+`design/` ve `seed/` başvuru klasörleridir; içlerindeki dosyaları değiştirme.
+
+## Komutlar
+
+Faz 0 bu komutları kurar. Kurduktan sonra bu bölümü gerçek haliyle güncelle.
+
+- `pnpm dev`: geliştirme sunucusu
+- `pnpm check`: tip denetimi + lint + birim testleri (her görevden sonra çalıştır)
+- `pnpm test -- <dosya>`: tek test dosyası (bütün takım yerine bunu tercih et)
+- `pnpm e2e`: Playwright uçtan uca testleri
+- `pnpm shots <rota>`: o rotanın üç boyutta ekran görüntüsü (`shots/` klasörüne)
+- `pnpm build`: üretim derlemesi
+
+## Kod kuralları
+
+- Kod, tanımlayıcılar, yorumlar ve commit mesajları İngilizce. Arayüz metinleri Türkçe ve yalnız `src/i18n/tr.ts` içinde durur.
+- Arayüz metinlerini tasarım dosyalarından birebir al. Kendin yazma, çevirme, kısaltma.
+- Alan terimlerinin kod adları `docs/urun.md` sonundaki sözlükte. Yeni ad uydurma.
+- TypeScript `strict`; `any` yok.
+- Stil: CSS Modules ve `src/styles/tokens.css` değişkenleri. Renk, yazı boyutu, yarıçap ve gölge için sabit değer yazma. Tailwind, hazır bileşen kiti, CSS-in-JS yok.
+- Arayüzde emoji yok. İkonlar `design/svg/ikonlar.json` içindeki çizimlerden gelir.
+- Bileşenler mikrofona, ağa ve depolamaya doğrudan dokunmaz; `src/services` altındaki arayüzleri kullanır.
+- `src/domain` saf mantıktır: React ve tarayıcı API'si içermez, tamamı birim testlidir.
+- Yeni bağımlılık eklemeden önce gerekçesini `docs/kararlar.md` dosyasına yaz. Sürümleri hafızadan yazma; kurulum anındaki güncel kararlı sürümü kullan.
+
+## Türkçe metin
+
+- `<html lang="tr">`.
+- Büyük-küçük harf çevirisi yalnız `toLocaleUpperCase('tr-TR')` ve `toLocaleLowerCase('tr-TR')` ile. CSS `text-transform: uppercase` kullanma.
+- Okuma metinlerinde `font-variant-ligatures: no-common-ligatures` (fi bitişimi i'nin noktasını yutar).
+- Heceleme ve okunabilirlik hesapları `docs/mimari.md` içindeki kurallara ve sınama örneklerine uyar.
+
+## Çocuk ve mahremiyet kuralları
+
+- IMPORTANT: Ses kaydı ve mikrofon dinlemesi yalnız veli onayı kayıtlıyken başlar (`consent.voiceProcessing`).
+- Çalışma anında üçüncü taraf adrese istek yok: yazı tipleri depoda barındırılır, analitik ve izleme kütüphanesi eklenmez.
+- Çocuk ekranlarında puan, rozet, sıralama, başka çocukla kıyas ve olumsuz kıyas yok. Ayrıntı `docs/urun.md` bölüm 4.
+- Veli alanı (`/veli/*`) veli kapısının arkasındadır.
+
+## Erişilebilirlik
+
+- Dokunma hedefi en az 44 px. Odak halkası görünür. `prefers-reduced-motion` desteklenir.
+- Gerçek `button`, `a`, `input` ve `label` kullan; `div` üzerine tıklama bağlama.
+- Metin karşıtlığı en az 4,5:1. `design/tokens.css` renk çiftleri buna göre seçildi; yeni çift uydurma.
+
+## Çalışma biçimi
+
+- Bir faz, bir oturum. Faza başlarken plan çıkar ve onay bekle; onaylanan plan `docs/planlar/faz-<n>.md` içinde durur.
+- Tasarımı olmayan bir ekran ya da durumla karşılaşırsan `docs/ekranlar.md` sonundaki varsayılanı uygula ve `// TODO(design)` bırak. Tasarımda olmayan özellik ekleme.
+- Çocuğun okuyacağı içeriği (metin, soru, kelime listesi) uydurma. `seed/` içinde yoksa dur ve sor.
+- Bir ekranı bitirmeden önce 390, 1180 ve 1440 px genişlikte ekran görüntüsü al, `design/png` içindeki karşılığıyla karşılaştır, farkları listele ve düzelt.
+- Bir işi "bitti" diye bildirirken kanıt göster: çalıştırdığın komut ve çıktısı, ekran görüntüsü.
+- Küçük, tek amaçlı commit'ler (Conventional Commits). Push ve PR yalnız istenince.
+- Bir karar değiştiyse `docs/kararlar.md` dosyasını, bir komut değiştiyse bu dosyayı güncelle.
+- When compacting, preserve: the current phase number, the remaining tasks of that phase, the list of modified files and the last failing check.

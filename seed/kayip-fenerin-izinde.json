@@ -1,0 +1,413 @@
+{
+ "id": "kayip-fenerin-izinde",
+ "title": "Kayıp Fenerin İzinde",
+ "grade": 3,
+ "totalChapters": 12,
+ "note": "Örnek içerik. Cümlelerdeki ' | ' işareti anlam ünitesi sınırıdır; ekranda gösterilmez. 6-12. bölümler yazılmadı.",
+ "chapters": [
+  {
+   "number": 1,
+   "title": "Sönen Fener",
+   "pages": [
+    [
+     "O gece | tepedeki fener yanmadı.",
+     "Oysa o fener | her akşam yanardı.",
+     "Deniz pencereden | uzun uzun baktı.",
+     "Köyün yolları | ilk kez | karanlıkta kalmıştı."
+    ],
+    [
+     "Tam o sırada | bahçe kapısı tıkırdadı.",
+     "Deniz merakla | aşağı indi.",
+     "Kapının önünde | küçük, turkuaz bir yaratık | duruyordu."
+    ],
+    [
+     "Yaratığın kuyruğunda | minik bir fener vardı.",
+     "Ama fenerin ışığı | zar zor parlıyordu.",
+     "Deniz | böyle bir şeyi | ilk kez görüyordu."
+    ],
+    [
+     "“Ben Tıkır,” | dedi yaratık.",
+     "“Tepedeki feneri arıyorum.",
+     "O kaybolunca | benim ışığım da sönüyor.”"
+    ],
+    [
+     "Deniz | bir an düşündü.",
+     "Sonra odasına koşup | sırt çantasını hazırladı.",
+     "İçine bir harita, | bir de su şişesi | koydu."
+    ],
+    [
+     "“Sabah olunca | birlikte ararız,” | dedi.",
+     "Tıkır sevinçle | kulaklarını oynattı.",
+     "Önlerinde | uzun bir yol vardı."
+    ]
+   ],
+   "questions": [
+    {
+     "prompt": "O gece köyde ne oldu?",
+     "options": [
+      "Tepedeki fener yanmadı",
+      "Köye yağmur yağdı",
+      "Deniz haritasını kaybetti"
+     ],
+     "correctIndex": 0
+    },
+    {
+     "prompt": "Tıkır’ın ışığı neden sönüyor?",
+     "options": [
+      "Fener kaybolduğu için",
+      "Çok yorulduğu için",
+      "Sabah olduğu için"
+     ],
+     "correctIndex": 0
+    }
+   ],
+   "chains": {
+    "kaybolunca": [
+     "kaybol",
+     "kaybolun",
+     "kaybolunca"
+    ],
+    "kulaklarını": [
+     "kulak",
+     "kulaklar",
+     "kulakları",
+     "kulaklarını"
+    ]
+   },
+   "stats": {
+    "words": 103,
+    "sentences": 19,
+    "syllablesPerWord": 2.35,
+    "wordsPerSentence": 5.42,
+    "atesman": 90.3
+   }
+  },
+  {
+   "number": 2,
+   "title": "Parlayan İzler",
+   "pages": [
+    [
+     "Sabah olunca | yola çıktılar.",
+     "Hava serin | ve tertemizdi.",
+     "Tıkır burnunu | yere yaklaştırıp kokladı."
+    ],
+    [
+     "Toprakta | küçük, sarı tozlar | parlıyordu.",
+     "“Bunlar | fenerin ışık tozları,” | dedi Tıkır.",
+     "“İzleri takip edersek | onu buluruz.”"
+    ],
+    [
+     "İzler | köyün dışına doğru | gidiyordu.",
+     "Deniz haritasını açtı | ve geçtikleri yolu | işaretledi."
+    ],
+    [
+     "Bir süre sonra | çam ormanına vardılar.",
+     "Çam kokusu | her yeri sarmıştı.",
+     "Ormanın girişinde | yaşlı bir kaplumbağa | güneşleniyordu."
+    ],
+    [
+     "“Günaydın,” | dedi Deniz.",
+     "“Buradan | parlak bir şey geçti mi?”",
+     "Kaplumbağa | başını yavaşça kaldırdı."
+    ],
+    [
+     "“Dün gece | bir ışık | süzülerek geçti,” | dedi.",
+     "“Derenin öbür yanına doğru | gitti.”"
+    ],
+    [
+     "Deniz ile Tıkır | teşekkür ettiler.",
+     "Sonra | ağaçların gölgesinde | yürümeye devam ettiler.",
+     "Kuşlar onlara | yukarıdan eşlik ediyordu."
+    ]
+   ],
+   "questions": [
+    {
+     "prompt": "Deniz ile Tıkır neyi takip etti?",
+     "options": [
+      "Işık tozlarını",
+      "Ayak izlerini",
+      "Kuşları"
+     ],
+     "correctIndex": 0
+    },
+    {
+     "prompt": "Kaplumbağaya göre ışık nereye gitti?",
+     "options": [
+      "Derenin öbür yanına",
+      "Köyün meydanına",
+      "Ormanın girişine"
+     ],
+     "correctIndex": 0
+    }
+   ],
+   "chains": {
+    "güneşleniyordu": [
+     "güneş",
+     "güneşlen",
+     "güneşleniyor",
+     "güneşleniyordu"
+    ],
+    "geçtikleri": [
+     "geç",
+     "geçti",
+     "geçtik",
+     "geçtikleri"
+    ]
+   },
+   "stats": {
+    "words": 99,
+    "sentences": 19,
+    "syllablesPerWord": 2.55,
+    "wordsPerSentence": 5.21,
+    "atesman": 83.0
+   }
+  },
+  {
+   "number": 3,
+   "title": "Dere Kenarı",
+   "pages": [
+    [
+     "Az sonra | bir dereye vardılar.",
+     "Dere, | ormanı ikiye bölüyordu.",
+     "Su hızlı akıyordu | ve görünürde | köprü yoktu."
+    ],
+    [
+     "Tıkır suya bakıp | bir adım geriledi.",
+     "“Ben yüzme bilmiyorum,” | dedi | üzgün bir sesle."
+    ],
+    [
+     "Deniz | çevresine bakındı.",
+     "Önce karşı kıyıya, | sonra suya baktı.",
+     "Suyun içinde | sıra sıra dizilmiş | yassı taşlar gördü."
+    ],
+    [
+     "“Taşlara basarak | geçebiliriz,” | dedi.",
+     "“Elimi tut, | yavaş yavaş gideriz.”"
+    ],
+    [
+     "Birinci taşa bastılar, | sonra ikinciye.",
+     "Üçüncü taşta | Tıkır’ın ayağı kaydı.",
+     "Deniz | onu hemen yakaladı."
+    ],
+    [
+     "“Korkma, | buradayım,” | dedi.",
+     "Tıkır | derin bir nefes aldı | ve son taşa atladı."
+    ],
+    [
+     "Karşıya geçince | ikisi de güldü.",
+     "Işık tozları | burada daha da parlaktı.",
+     "Tıkır’ın kuyruğundaki ışık da | biraz güçlenmişti."
+    ]
+   ],
+   "questions": [
+    {
+     "prompt": "Dereyi nasıl geçtiler?",
+     "options": [
+      "Taşlara basarak",
+      "Köprüden yürüyerek",
+      "Yüzerek"
+     ],
+     "correctIndex": 0
+    },
+    {
+     "prompt": "Tıkır’ın ayağı kayınca ne oldu?",
+     "options": [
+      "Deniz onu yakaladı",
+      "Suya düştü",
+      "Geri döndü"
+     ],
+     "correctIndex": 0
+    }
+   ],
+   "chains": {
+    "geçebiliriz": [
+     "geç",
+     "geçebil",
+     "geçebilir",
+     "geçebiliriz"
+    ],
+    "kuyruğundaki": [
+     "kuyruk",
+     "kuyruğu",
+     "kuyruğunda",
+     "kuyruğundaki"
+    ]
+   },
+   "stats": {
+    "words": 98,
+    "sentences": 18,
+    "syllablesPerWord": 2.38,
+    "wordsPerSentence": 5.44,
+    "atesman": 89.1
+   }
+  },
+  {
+   "number": 4,
+   "title": "Dar Patika",
+   "pages": [
+    [
+     "Deniz sırt çantasını | omzuna aldı.",
+     "Tıkır kulaklarını dikti | ve rüzgârı dinledi.",
+     "Dar patika, | çam ağaçlarının arasından | yukarıya kıvrılıyordu.",
+     "“Fener | bu tepenin ardında olmalı,” | dedi Deniz."
+    ],
+    [
+     "Tıkır başını salladı.",
+     "İkisi birlikte, | taşlara basa basa | tırmanmaya başladılar.",
+     "Gökyüzünde | ilk yıldız belirdiğinde, | uzaktan soluk bir ışık | göz kırptı."
+    ],
+    [
+     "Tıkır’ın kuyruğu | birden parladı.",
+     "“Işığım geri geliyor!” | diye bağırdı.",
+     "Demek ki | fener çok yakındaydı."
+    ],
+    [
+     "Deniz | adımlarını hızlandırdı.",
+     "Patika gittikçe daralıyor, | taşlar büyüyordu.",
+     "Bir yerde | elleriyle tutunmak | zorunda kaldılar."
+    ],
+    [
+     "Sonunda | düzlüğe çıktılar.",
+     "Karşılarında | büyük, gri bir kaya vardı.",
+     "Kayanın ardından | ince bir ses geliyordu."
+    ],
+    [
+     "Deniz | parmağını dudaklarına götürdü.",
+     "“Sessiz ol,” | diye fısıldadı.",
+     "“Orada | biri var.”"
+    ]
+   ],
+   "questions": [
+    {
+     "prompt": "Deniz, fenerin nerede olduğunu düşünüyor?",
+     "options": [
+      "Tepenin ardında",
+      "Çam ağaçlarının altında",
+      "Patikanın başında"
+     ],
+     "correctIndex": 0
+    },
+    {
+     "prompt": "Tıkır’ın kuyruğu neden parladı?",
+     "options": [
+      "Fener yakın olduğu için",
+      "Yıldız çıktığı için",
+      "Rüzgâr estiği için"
+     ],
+     "correctIndex": 0
+    }
+   ],
+   "chains": {
+    "kıvrılıyordu": [
+     "kıvrıl",
+     "kıvrılıyor",
+     "kıvrılıyordu"
+    ],
+    "ağaçlarının": [
+     "ağaç",
+     "ağaçlar",
+     "ağaçları",
+     "ağaçlarının"
+    ],
+    "belirdiğinde": [
+     "belir",
+     "belirdi",
+     "belirdiğinde"
+    ]
+   },
+   "stats": {
+    "words": 99,
+    "sentences": 19,
+    "syllablesPerWord": 2.64,
+    "wordsPerSentence": 5.21,
+    "atesman": 79.3
+   }
+  },
+  {
+   "number": 5,
+   "title": "Yıldız Tepesi",
+   "pages": [
+    [
+     "Kayanın ardında | küçük bir düzlük vardı.",
+     "Burası | Yıldız Tepesi’ydi.",
+     "Rüzgâr burada | daha sert esiyordu.",
+     "Gökyüzü | yıldızlarla doluydu."
+    ],
+    [
+     "Düzlüğün ortasında | kayıp fener duruyordu.",
+     "Işığı | her zamankinden daha parlaktı.",
+     "Çevresinde | yüzlerce ateş böceği | uçuşuyordu."
+    ],
+    [
+     "En küçük ateş böceği | yanlarına geldi.",
+     "“Kızmayın,” | dedi ince sesiyle.",
+     "“Feneri | biz aldık.”"
+    ],
+    [
+     "“Neden aldınız?” | diye sordu Deniz.",
+     "Böcek | utanarak başını eğdi."
+    ],
+    [
+     "“Yavrularımız | karanlıkta yolunu bulamıyordu.",
+     "Biz de | ışığı buraya taşıdık.”"
+    ],
+    [
+     "Tıkır ile Deniz | birbirine baktı.",
+     "Kimse | kötü bir şey yapmak | istememişti.",
+     "Ama köy de | karanlıkta kalmıştı."
+    ],
+    [
+     "Deniz gülümsedi.",
+     "“Belki | ikimize de yetecek | bir yol buluruz,” | dedi.",
+     "Tıkır’ın aklına | hemen bir fikir geldi."
+    ]
+   ],
+   "questions": [
+    {
+     "prompt": "Feneri kim almış?",
+     "options": [
+      "Ateş böcekleri",
+      "Kaplumbağa",
+      "Rüzgâr"
+     ],
+     "correctIndex": 0
+    },
+    {
+     "prompt": "Ateş böcekleri feneri neden aldı?",
+     "options": [
+      "Yavruları karanlıkta yolunu bulamadığı için",
+      "Köylülere kızdıkları için",
+      "Fenerle oynamak istedikleri için"
+     ],
+     "correctIndex": 0
+    }
+   ],
+   "chains": {
+    "yavrularımız": [
+     "yavru",
+     "yavrular",
+     "yavrularımız"
+    ],
+    "bulamıyordu": [
+     "bul",
+     "bulamı",
+     "bulamıyor",
+     "bulamıyordu"
+    ],
+    "istememişti": [
+     "iste",
+     "isteme",
+     "istememiş",
+     "istememişti"
+    ]
+   },
+   "stats": {
+    "words": 95,
+    "sentences": 20,
+    "syllablesPerWord": 2.54,
+    "wordsPerSentence": 4.75,
+    "atesman": 84.5
+   }
+  }
+ ]
+}

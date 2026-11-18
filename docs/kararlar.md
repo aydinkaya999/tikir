@@ -1,0 +1,106 @@
+# Kararlar
+
+Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğunu tutar. Her faza başlarken oku.
+
+- **kesin:** Ürün sahibinin kararı. Değiştirmeden önce sor.
+- **varsayım:** Başlamak için seçildi; itiraz gelmedikçe geçerli. Değişirse bu dosyayı ve etkilenen belgeyi birlikte güncelle.
+- **açık:** Karar bekliyor. "Şimdilik" sütunundaki yer tutucuyla ilerle; kararı kendin verme.
+
+## Ürün
+
+| # | Konu | Karar | Durum | Şimdilik / not |
+|---|---|---|---|---|
+| P1 | Ad | "Tıkır": ürünün çalışma adı ve yoldaş karakterin adı | varsayım | Ad kodda tek yerde durur (`src/i18n/tr.ts`). Marka ve alan adı araştırması yapılmadı. |
+| P2 | Kitle ve ton | 7–10 yaş, ilkokul 1–4. sınıf; macera tonu | kesin | |
+| P3 | Ölçü | Bir dakikada doğru okunan kelime ve anlama. Hız ödüllendirilmez. | kesin | `docs/urun.md` bölüm 2 |
+| P4 | Değişmez kurallar | `docs/urun.md` bölüm 4'teki 11 kural | kesin | |
+| P5 | Günde tek seans | Kitaplıktan okunan kitap da günün seansı sayılır; ikinci seans açılmaz | varsayım | 9. kuralın yorumu |
+| P6 | Puanlama | Yanlış okuma, ek hatası, atlama ve yardım alınan kelime düşülür; tekrar, ekleme ve kendini düzeltme düşülmez | varsayım | Bir okuma uzmanı ya da sınıf öğretmeniyle gözden geçirilecek |
+| P7 | Başlangıç değerleri | Hedef kazancı (haftada 2), yeni hedef (+8), evcilleşme aralıkları (1, 2, 4 gün), sınıf eşikleri, duraksama eşikleri | varsayım | Hepsi `src/domain/config.ts` içinde parametre |
+| P8 | Sınıf ortalaması çizgisi | 3. sınıf 90, 4. sınıf 98 | açık | Kaynakla doğrulanacak. Şimdilik bu değerler; doğrulanmazsa yayında çizgi gizlenir. |
+| P9 | Okuyucu sayısı | Hesap başına tek okuyucu | varsayım | Kayıtlarda `childId` var; çoklu profil gelirse depo arayüzü genişler ve profil seçici tasarımı gerekir |
+| P10 | Yazı ayarının yeri | Veli alanında; çocuk kendisi değiştiremez | varsayım | |
+| P11 | Veli kapısı | İki basamaklı toplama sorusu | varsayım | Faz 7'de mağaza kurallarıyla karşılaştırılacak |
+| P12 | Gelir modeli | Karar yok | açık | Ödeme ve abonelik için kodda yer açma |
+
+## Tasarım
+
+| # | Konu | Karar | Durum | Şimdilik / not |
+|---|---|---|---|---|
+| D1 | Yön | Çini macera (`docs/tasarim-sistemi.md`) | kesin | |
+| D2 | Yazı | Tek aile: Atkinson Hyperlegible Next. Besley kullanılmaz. | kesin | |
+| D3 | Okul harfleri | Hangi yazı tipi olacağı | açık | Adaylar: TTKB Dik Temel Abece (lisansı ve webde kullanım koşulları öğrenilecek), Andika. Yer tutucu: Didact Gothic. Tek değişken: `--font-school`. |
+| D4 | Boyutlar | Telefon, tablet ve web eşit öncelikli | kesin | |
+| D5 | Hazır malzeme | Emoji, hazır ikon kütüphanesi ve hazır bileşen kiti yok | kesin | |
+| D6 | Tasarımı olmayan durumlar | `docs/ekranlar.md` sonundaki varsayılanlar | varsayım | Kodda `// TODO(design)`; tasarım gelince değişir |
+| D7 | Albüm ve Stüdyo | Tasarım bekliyor | açık | Asgari liste ekranları |
+| D8 | Tıkır'ın çizimi | Son hali onaylanmadı | açık | `design/svg` içindeki çizimler |
+| D9 | Hareket | Tasarımda tanımlanmadı | varsayım | `docs/tasarim-sistemi.md` → "Hareket" |
+
+## Teknik
+
+| # | Konu | Karar | Durum | Şimdilik / not |
+|---|---|---|---|---|
+| T1 | Platform | Önce web. Aynı kod sonra Capacitor ile iOS ve Android'e paketlenir. | kesin | Asıl risk uygulama kabuğunda mikrofon; Faz 1'in ikinci yarısında denenir |
+| T2 | Ön yüz | React + TypeScript + Vite | varsayım | Ekipte React ve TypeScript deneyimi olup olmadığı yanıtlanmadı. Değişecekse Faz 0'dan önce değişmeli. |
+| T3 | Stil | CSS Modules + CSS değişkenleri | varsayım | Tasarım kendine özgü; hazır kit görünümü bozar |
+| T4 | Durum ve yönlendirme | Zustand, React Router | varsayım | |
+| T5 | Arka uç zamanı | Faz 0–5 arka uçsuz; veri cihazda (IndexedDB) | varsayım | Hesap o cihazda kalır. Parola saklanmaz ve gönderilmez. |
+| T6 | Arka uç yığını | Python + FastAPI + PostgreSQL | varsayım | Faz 6 ayrı tasarım belgesiyle başlar |
+| T7 | Konuşma tanıma | Sağlayıcı ve yaklaşım | açık | `FakeListener`. Karar, değerlendirme düzeneğinin ölçümüyle verilir (`docs/dinleme-hatti.md` bölüm 4). |
+| T8 | Model okuma sesi | Tıkır'ın sesi nereden gelecek | açık | Tarayıcının konuşma sentezi; cihazda Türkçe ses yoksa sessiz, zamanlı vurgu |
+| T9 | Ses biçimi | 16 kHz, tek kanal, 16 bit PCM, 20 ms çerçeve | varsayım | Faz 6'da seçilen tanıma yoluna göre gözden geçirilir |
+| T10 | Dil | Kod, yorum ve commit İngilizce; arayüz Türkçe ve tek dilli | varsayım | Çeviri kütüphanesi yok; metinler `src/i18n/tr.ts` |
+| T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | |
+| T12 | Üçüncü taraf | Çalışma anında dış adrese istek yok; analitik ve reklam yok | kesin | Yazı tipleri depoda barındırılır |
+| T13 | Depo düzeni | Kök web uygulaması; `server/` sonra; `ios/` ve `android/` Capacitor ile | varsayım | |
+
+## İçerik
+
+| # | Konu | Karar | Durum | Şimdilik / not |
+|---|---|---|---|---|
+| C1 | Seri kitap | "Kayıp Fenerin İzinde", 12 bölüm | açık | 1–5. bölüm örnek olarak yazıldı; 6–12 yazılacak. Hepsi bir editörün ve bir sınıf öğretmeninin elinden geçmeli. |
+| C2 | Ölçüm metinleri | Her sınıf için eş güçlükte en az 6 metin | açık | 5 örnek metin var (3. sınıf için 2, diğerleri için 1) |
+| C3 | Örnek kitaplar | Sahte üreticinin döndürdüğü kitap ve velinin eklediği örnek | varsayım | `seed/ornek-kitaplar.json` |
+| C4 | İçerik sorumlusu | Metinleri kimin yazacağı ve denetleyeceği | açık | Kod içerik uydurmaz; eksik içerik için dur ve sor |
+
+## Hukuk ve mağaza
+
+| # | Konu | Karar | Durum | Şimdilik / not |
+|---|---|---|---|---|
+| L1 | Ses verisi | Onay metni, saklama süresi, silme yolu | açık | Metinler taslak. Yayından önce hukuki inceleme (KVKK) gerekir. |
+| L2 | Mağaza kuralları | Çocuk kategorisi, veli kapısı, ödeme | açık | Faz 7'de güncel kurallar okunup denetlenir |
+
+## Tasarımdaki örnek veri tutarsızlıkları
+
+Tuvaldeki ekranlar tek bir andan değil, ayrı ayrı örnek anlardan çizildi. Aşağıdaki farklar bilinir; kodda **kural** geçerlidir, sayıyı tasarıma uydurmak için kuralı bozma.
+
+1. V1 ve V3'te doğruluk %94 yazar; 76 kelime ve 5 hata formülle %93 eder.
+2. G2'de "kıvrılıyordu" için 2 doğru okuma kalmıştır, G7'de aynı gün evcilleşmiş görünür. Kurala göre aynı gün olamaz.
+3. G1 "4 gün üst üste" der; V1'deki hafta şeridinde çarşamba boştur. Demo profilinde seri 2 gündür.
+4. G4'teki an (19. saniyede 15. kelime, hayalet 2 kelime geride) gerçek tempolardan türemez. `design` senaryosu hayaleti sabitler.
+5. Tarihler ("16 Kasım Pazar") 2025 takvimine göredir. Demo profilinde günler görelidir.
+6. U4 "180 kelime, 2,6 hece, 7 kelime" der; örnek kitabın gerçek değerleri 176 kelime, 2,5 hece ve 5,9 kelimedir. Ekranda gerçek hesap görünür.
+7. V3'teki bant etiketi "%90–98"dir; sınıflama yuvarlanmamış değerle yapılır (%99'un altı öğretim düzeyi).
+
+## Ürün sahibinin yanıtlaması gerekenler
+
+1. Ekipte React ve TypeScript bilen var mı? (T2)
+2. Bir hesapta birden çok çocuk olacak mı? (P9)
+3. Okul harfleri için hangi yazı tipi kullanılacak? (D3)
+4. Bölümleri ve ölçüm metinlerini kim yazacak, kim denetleyecek? (C1, C2, C4)
+5. Puanlama kuralını ve eşikleri gözden geçirecek bir okuma uzmanı ya da sınıf öğretmeni var mı? (P6, P7, P8)
+6. Arka uç için Python + FastAPI uygun mu? (T6)
+7. Capacitor denemesi için bir Mac ve bir iPhone var mı? (T1)
+8. Gelir modeli ne olacak? (P12)
+
+## Bağımlılıklar
+
+Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
+
+| Paket | Ne için | Eklendiği faz |
+|---|---|---|
+
+## Değişiklik günlüğü
+
+- 2026-11-18: İlk sürüm (başlangıç paketi).

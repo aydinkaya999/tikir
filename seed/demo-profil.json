@@ -1,0 +1,885 @@
+{
+ "note": "Tasarımlardaki örnek kullanıcı. Günler 'day' ile verilir: day 0 = çocuk ekranlarının günü (cumartesi, 4. bölüm okunacak), pazartesi = -5, haftalık ölçüm pazar = +1. Yükleyici iki kipten birini alır (modes) ve kipin 'anchor' gününü takvime oturtur: 'today' gerçek bugün, 'lastSunday' bugünden önceki en yakın pazar (bugün pazarsa bugün) demektir; öteki günler ona göre kayar. Okumalar ve ölçümler sahte dinleyici senaryosu biçimindedir (docs/dinleme-hatti.md bölüm 3); yükleyici bunları aynı benzetimle ReadingResult kayıtlarına çevirir. 'word' alanları yalnız okuyana yardım içindir.",
+ "parent": {
+  "email": "veli@example.com",
+  "consent": {
+   "voiceProcessing": true,
+   "weeklyEmail": true
+  }
+ },
+ "child": {
+  "name": "Deniz",
+  "grade": 3,
+  "interests": [
+   "Uzay",
+   "Futbol",
+   "Dinozorlar"
+  ],
+  "readingStyle": {
+   "font": "clear",
+   "sizeStep": 1,
+   "spacingStep": 0,
+   "trialEnabled": true
+  }
+ },
+ "goal": {
+  "baselineWcpm": 58,
+  "targetWcpm": 70,
+  "weeks": 6,
+  "nextTargetWcpm": 78
+ },
+ "gradeAverageWcpm": {
+  "3": 90,
+  "4": 98
+ },
+ "library": [
+  "kayip-fenerin-izinde",
+  "uzay-istasyonunda-gizemli-ses",
+  "dinozorlar-neden-buyuktu"
+ ],
+ "timeline": {
+  "sessions": [
+   {
+    "day": -5,
+    "bookId": "uzay-istasyonunda-gizemli-ses",
+    "chapter": 1,
+    "minutes": 12,
+    "answers": [
+     0,
+     0
+    ],
+    "readings": [
+     {
+      "attempt": 1,
+      "wcpm": 56,
+      "miscues": [
+       {
+        "index": 7,
+        "type": "repeated",
+        "word": "uyandı"
+       },
+       {
+        "index": 16,
+        "type": "misread",
+        "word": "gezegen"
+       },
+       {
+        "index": 50,
+        "type": "misread",
+        "word": "gelmiyor"
+       },
+       {
+        "index": 88,
+        "type": "suffix",
+        "word": "istasyonun"
+       },
+       {
+        "index": 138,
+        "type": "skipped",
+        "word": "buymuş"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 2,
+      "wcpm": 59,
+      "miscues": [
+       {
+        "index": 10,
+        "type": "misread",
+        "word": "çevresinde"
+       },
+       {
+        "index": 18,
+        "type": "inserted",
+        "word": "top"
+       },
+       {
+        "index": 131,
+        "type": "suffix",
+        "word": "düşüyordu"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 3,
+      "wcpm": 62,
+      "miscues": [
+       {
+        "index": 54,
+        "type": "suffix",
+        "word": "birlikte"
+       }
+      ],
+      "hesitations": []
+     }
+    ]
+   },
+   {
+    "day": -4,
+    "bookId": "kayip-fenerin-izinde",
+    "chapter": 1,
+    "minutes": 12,
+    "answers": [
+     0,
+     0
+    ],
+    "readings": [
+     {
+      "attempt": 1,
+      "wcpm": 58,
+      "miscues": [
+       {
+        "index": 12,
+        "type": "suffix",
+        "word": "pencereden"
+       },
+       {
+        "index": 33,
+        "type": "repeated",
+        "word": "önünde"
+       },
+       {
+        "index": 70,
+        "type": "skipped",
+        "word": "sönüyor"
+       },
+       {
+        "index": 90,
+        "type": "misread",
+        "word": "olunca"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 2,
+      "wcpm": 61,
+      "miscues": [
+       {
+        "index": 10,
+        "type": "misread",
+        "word": "yanardı"
+       },
+       {
+        "index": 17,
+        "type": "skipped",
+        "word": "yolları"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 3,
+      "wcpm": 63,
+      "miscues": [
+       {
+        "index": 56,
+        "type": "inserted",
+        "word": "kez"
+       }
+      ],
+      "hesitations": []
+     }
+    ]
+   },
+   {
+    "day": -2,
+    "bookId": "kayip-fenerin-izinde",
+    "chapter": 2,
+    "minutes": 12,
+    "answers": [
+     0,
+     0
+    ],
+    "readings": [
+     {
+      "attempt": 1,
+      "wcpm": 60,
+      "miscues": [
+       {
+        "index": 11,
+        "type": "suffix",
+        "word": "yaklaştırıp"
+       },
+       {
+        "index": 36,
+        "type": "skipped",
+        "word": "açtı"
+       },
+       {
+        "index": 58,
+        "type": "misread",
+        "word": "Günaydın"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 2,
+      "wcpm": 63,
+      "miscues": [
+       {
+        "index": 12,
+        "type": "misread",
+        "word": "kokladı"
+       },
+       {
+        "index": 76,
+        "type": "repeated",
+        "word": "geçti"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 3,
+      "wcpm": 65,
+      "miscues": [],
+      "hesitations": []
+     }
+    ]
+   },
+   {
+    "day": -1,
+    "bookId": "kayip-fenerin-izinde",
+    "chapter": 3,
+    "minutes": 12,
+    "answers": [
+     0,
+     0
+    ],
+    "readings": [
+     {
+      "attempt": 1,
+      "wcpm": 61,
+      "miscues": [
+       {
+        "index": 8,
+        "type": "skipped",
+        "word": "bölüyordu"
+       },
+       {
+        "index": 80,
+        "type": "misread",
+        "word": "atladı"
+       },
+       {
+        "index": 83,
+        "type": "repeated",
+        "word": "ikisi"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 2,
+      "wcpm": 64,
+      "miscues": [
+       {
+        "index": 21,
+        "type": "suffix",
+        "word": "geriledi"
+       },
+       {
+        "index": 34,
+        "type": "inserted",
+        "word": "kıyıya"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 3,
+      "wcpm": 67,
+      "miscues": [],
+      "hesitations": []
+     }
+    ]
+   },
+   {
+    "day": 0,
+    "bookId": "kayip-fenerin-izinde",
+    "chapter": 4,
+    "minutes": 12,
+    "answers": [
+     0,
+     0
+    ],
+    "readings": [
+     {
+      "attempt": 1,
+      "wcpm": 64,
+      "miscues": [
+       {
+        "index": 15,
+        "type": "suffix",
+        "word": "arasından"
+       },
+       {
+        "index": 35,
+        "type": "repeated",
+        "word": "Gökyüzünde"
+       },
+       {
+        "index": 40,
+        "type": "skipped",
+        "word": "soluk"
+       }
+      ],
+      "hesitations": []
+     },
+     {
+      "attempt": 2,
+      "wcpm": 68,
+      "miscues": [
+       {
+        "index": 9,
+        "type": "misread",
+        "word": "rüzgârı"
+       }
+      ],
+      "hesitations": [
+       {
+        "index": 6,
+        "ms": 1800,
+        "word": "kulaklarını"
+       }
+      ]
+     },
+     {
+      "attempt": 3,
+      "wcpm": 71,
+      "miscues": [],
+      "hesitations": []
+     }
+    ]
+   }
+  ],
+  "assessments": [
+   {
+    "day": -34,
+    "passageId": "olcum-3a",
+    "seconds": 60,
+    "wordsRead": 64,
+    "countedErrors": 6,
+    "correctWords": 58,
+    "wcpm": 58,
+    "accuracyPercent": 91,
+    "prosodyScore": 2,
+    "miscues": [
+     {
+      "index": 4,
+      "type": "misread",
+      "word": "açınca"
+     },
+     {
+      "index": 8,
+      "type": "suffix",
+      "word": "yüzüme"
+     },
+     {
+      "index": 24,
+      "type": "skipped",
+      "word": "salladı"
+     },
+     {
+      "index": 31,
+      "type": "suffix",
+      "word": "istedim"
+     },
+     {
+      "index": 43,
+      "type": "misread",
+      "word": "Yanına"
+     },
+     {
+      "index": 49,
+      "type": "misread",
+      "word": "olmalıydı"
+     }
+    ],
+    "hesitations": []
+   },
+   {
+    "day": -27,
+    "passageId": "olcum-3b",
+    "seconds": 60,
+    "wordsRead": 66,
+    "countedErrors": 6,
+    "correctWords": 60,
+    "wcpm": 60,
+    "accuracyPercent": 91,
+    "prosodyScore": 2,
+    "miscues": [
+     {
+      "index": 5,
+      "type": "misread",
+      "word": "feneri"
+     },
+     {
+      "index": 17,
+      "type": "misread",
+      "word": "vadiyi"
+     },
+     {
+      "index": 20,
+      "type": "skipped",
+      "word": "sevinçle"
+     },
+     {
+      "index": 28,
+      "type": "suffix",
+      "word": "görünmeye"
+     },
+     {
+      "index": 39,
+      "type": "misread",
+      "word": "çevreyi"
+     },
+     {
+      "index": 44,
+      "type": "suffix",
+      "word": "çıkardı"
+     }
+    ],
+    "hesitations": []
+   },
+   {
+    "day": -20,
+    "passageId": "olcum-3a",
+    "seconds": 60,
+    "wordsRead": 69,
+    "countedErrors": 6,
+    "correctWords": 63,
+    "wcpm": 63,
+    "accuracyPercent": 91,
+    "prosodyScore": 3,
+    "miscues": [
+     {
+      "index": 7,
+      "type": "skipped",
+      "word": "rüzgâr"
+     },
+     {
+      "index": 10,
+      "type": "suffix",
+      "word": "Bahçedeki"
+     },
+     {
+      "index": 14,
+      "type": "misread",
+      "word": "güneşleniyordu"
+     },
+     {
+      "index": 27,
+      "type": "misread",
+      "word": "aşağı"
+     },
+     {
+      "index": 43,
+      "type": "misread",
+      "word": "Yanına"
+     },
+     {
+      "index": 57,
+      "type": "suffix",
+      "word": "getirdim"
+     }
+    ],
+    "hesitations": []
+   },
+   {
+    "day": -13,
+    "passageId": "olcum-3b",
+    "seconds": 60,
+    "wordsRead": 71,
+    "countedErrors": 6,
+    "correctWords": 65,
+    "wcpm": 65,
+    "accuracyPercent": 92,
+    "prosodyScore": 3,
+    "miscues": [
+     {
+      "index": 6,
+      "type": "misread",
+      "word": "eline"
+     },
+     {
+      "index": 10,
+      "type": "skipped",
+      "word": "sildi"
+     },
+     {
+      "index": 23,
+      "type": "misread",
+      "word": "Aşağıda"
+     },
+     {
+      "index": 29,
+      "type": "misread",
+      "word": "başladı"
+     },
+     {
+      "index": 47,
+      "type": "suffix",
+      "word": "parmağıyla"
+     },
+     {
+      "index": 66,
+      "type": "suffix",
+      "word": "sokuldu"
+     }
+    ],
+    "hesitations": []
+   },
+   {
+    "day": -6,
+    "passageId": "olcum-3a",
+    "seconds": 60,
+    "wordsRead": 73,
+    "countedErrors": 6,
+    "correctWords": 67,
+    "wcpm": 67,
+    "accuracyPercent": 92,
+    "prosodyScore": 3,
+    "miscues": [
+     {
+      "index": 4,
+      "type": "misread",
+      "word": "açınca"
+     },
+     {
+      "index": 32,
+      "type": "misread",
+      "word": "Terliklerimi"
+     },
+     {
+      "index": 38,
+      "type": "skipped",
+      "word": "ağacının"
+     },
+     {
+      "index": 43,
+      "type": "misread",
+      "word": "Yanına"
+     },
+     {
+      "index": 57,
+      "type": "suffix",
+      "word": "getirdim"
+     },
+     {
+      "index": 61,
+      "type": "suffix",
+      "word": "başladı"
+     }
+    ],
+    "hesitations": []
+   },
+   {
+    "day": -6,
+    "passageId": "olcum-3b",
+    "seconds": 60,
+    "wordsRead": 75,
+    "countedErrors": 5,
+    "correctWords": 70,
+    "wcpm": 70,
+    "accuracyPercent": 93,
+    "prosodyScore": 3,
+    "miscues": [
+     {
+      "index": 24,
+      "type": "skipped",
+      "word": "köyün"
+     },
+     {
+      "index": 28,
+      "type": "suffix",
+      "word": "görünmeye"
+     },
+     {
+      "index": 33,
+      "type": "suffix",
+      "word": "yükseliyordu"
+     },
+     {
+      "index": 39,
+      "type": "misread",
+      "word": "çevreyi"
+     },
+     {
+      "index": 65,
+      "type": "misread",
+      "word": "yanına"
+     }
+    ],
+    "hesitations": [],
+    "trial": true,
+    "readingStyle": {
+     "font": "clear",
+     "sizeStep": 1,
+     "spacingStep": 1
+    }
+   },
+   {
+    "day": 1,
+    "passageId": "olcum-3b",
+    "seconds": 60,
+    "wordsRead": 76,
+    "countedErrors": 5,
+    "correctWords": 71,
+    "wcpm": 71,
+    "accuracyPercent": 93,
+    "prosodyScore": 3,
+    "miscues": [
+     {
+      "index": 1,
+      "type": "misread",
+      "word": "vardıklarında"
+     },
+     {
+      "index": 18,
+      "type": "misread",
+      "word": "aydınlattı"
+     },
+     {
+      "index": 38,
+      "type": "misread",
+      "word": "konuşmadan"
+     },
+     {
+      "index": 43,
+      "type": "suffix",
+      "word": "haritayı"
+     },
+     {
+      "index": 48,
+      "type": "skipped",
+      "word": "takip"
+     }
+    ],
+    "hesitations": [
+     {
+      "index": 21,
+      "ms": 1800,
+      "word": "kulaklarını"
+     }
+    ]
+   },
+   {
+    "day": 1,
+    "passageId": "olcum-3a",
+    "seconds": 60,
+    "wordsRead": 79,
+    "countedErrors": 5,
+    "correctWords": 74,
+    "wcpm": 74,
+    "accuracyPercent": 94,
+    "prosodyScore": 3,
+    "miscues": [
+     {
+      "index": 10,
+      "type": "misread",
+      "word": "Bahçedeki"
+     },
+     {
+      "index": 31,
+      "type": "misread",
+      "word": "istedim"
+     },
+     {
+      "index": 43,
+      "type": "suffix",
+      "word": "Yanına"
+     },
+     {
+      "index": 46,
+      "type": "suffix",
+      "word": "sürtündü"
+     },
+     {
+      "index": 50,
+      "type": "skipped",
+      "word": "Mutfaktan"
+     }
+    ],
+    "hesitations": [],
+    "trial": true,
+    "readingStyle": {
+     "font": "clear",
+     "sizeStep": 1,
+     "spacingStep": 1
+    }
+   }
+  ]
+ },
+ "modes": {
+  "cocuk-sabahi": {
+   "note": "G1–G7 tasarımlarının başlangıç durumu: cumartesi sabahı, 4. bölüm (Dar Patika) okunacak.",
+   "anchor": {
+    "day": 0,
+    "to": "today"
+   },
+   "load": "day < 0",
+   "stuckWords": [
+    {
+     "word": "kıvrılıyordu",
+     "misses": 4,
+     "status": "practicing",
+     "correctStreak": 1,
+     "dueDay": 0
+    },
+    {
+     "word": "belirdiğinde",
+     "misses": 3,
+     "status": "practicing",
+     "correctStreak": 0,
+     "dueDay": 0
+    },
+    {
+     "word": "ağaçlarının",
+     "misses": 3,
+     "status": "practicing",
+     "correctStreak": 2,
+     "dueDay": 0
+    },
+    {
+     "word": "tırmanmaya",
+     "misses": 2,
+     "status": "wild",
+     "correctStreak": 0,
+     "dueDay": 1
+    }
+   ]
+  },
+  "veli-haftasonu": {
+   "note": "V1–V4 tasarımlarının durumu: pazar, haftalık ölçüm yapıldı; cumartesi seansı dahil her şey yüklü.",
+   "anchor": {
+    "day": 1,
+    "to": "lastSunday"
+   },
+   "load": "day <= 1",
+   "stuckWords": [
+    {
+     "word": "kıvrılıyordu",
+     "misses": 4,
+     "status": "tamed",
+     "correctStreak": 3,
+     "dueDay": null
+    },
+    {
+     "word": "belirdiğinde",
+     "misses": 3,
+     "status": "practicing",
+     "correctStreak": 1,
+     "dueDay": 2
+    },
+    {
+     "word": "ağaçlarının",
+     "misses": 3,
+     "status": "tamed",
+     "correctStreak": 3,
+     "dueDay": null
+    },
+    {
+     "word": "tırmanmaya",
+     "misses": 2,
+     "status": "practicing",
+     "correctStreak": 1,
+     "dueDay": 3
+    }
+   ],
+   "suggestedDrill": {
+    "suffixes": [
+     "‑yordu",
+     "‑diğinde"
+    ],
+    "words": [
+     "kıvrılıyordu",
+     "güneşleniyordu",
+     "bulamıyordu",
+     "parlıyordu",
+     "belirdiğinde",
+     "geldiğinde"
+    ],
+    "days": 3
+   }
+  }
+ },
+ "expected": {
+  "cocuk-sabahi": {
+   "G1": {
+    "todayChapter": 4,
+    "completedChapters": 3,
+    "streakDays": 2
+   },
+   "G2": {
+    "cards": [
+     "kıvrılıyordu",
+     "ağaçlarının",
+     "belirdiğinde"
+    ],
+    "firstCardRemaining": 2
+   },
+   "G7": {
+    "scenario": "typical",
+    "wcpm": 71,
+    "deltaFromYesterday": 4
+   }
+  },
+  "veli-haftasonu": {
+   "V1": {
+    "wcpm": 71,
+    "deltaFromLastWeek": 4,
+    "accuracyPercent": 93,
+    "prosodyScore": 3,
+    "sessionDays": 5,
+    "sessionWeekdays": [
+     "Pt",
+     "Sa",
+     "Pe",
+     "Cu",
+     "Ct"
+    ],
+    "chart": [
+     58,
+     60,
+     63,
+     65,
+     67,
+     71
+    ],
+    "goalLine": 70,
+    "gradeAverage": 90,
+    "comment": "Deniz bu hafta hedef çizgisini geçti. Sıradaki hedef 78."
+   },
+   "V2": {
+    "totalErrors": 30,
+    "byType": {
+     "misread": 9,
+     "suffix": 7,
+     "skipped": 6,
+     "repeated": 5,
+     "inserted": 3
+    }
+   },
+   "V3": {
+    "wordsRead": 76,
+    "countedErrors": 5,
+    "correctWords": 71,
+    "accuracyPercent": 93,
+    "level": "instructional",
+    "nextAssessmentInDays": 7
+   },
+   "V4": {
+    "currentAverage": 69,
+    "trialAverage": 72,
+    "measurementsEach": 2,
+    "recommendation": null
+   }
+  }
+ }
+}

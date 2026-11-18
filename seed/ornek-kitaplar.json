@@ -1,0 +1,276 @@
+{
+ "note": "Örnek içerik. 'cards' kaynağındaki kitap sahte üreticinin (MockBookGenerator.fromCards) döndürdüğü içeriktir: hangi kart seçilirse seçilsin metin aynıdır, yalnız başlık ve özet seçime göre kurulur. 'parentText' kaynağındaki kitap demo profiliyle kitaplığa eklenir (U1 tasarımındaki ikinci kitap).",
+ "cards": {
+  "note": "U3 kartları. Başlık ve Tıkır’ın özeti bu parçalardan kurulur; Türkçe ek çözümlemesi kodda yapılmaz.",
+  "titleTemplate": "{place.titleLocative} {event.title}",
+  "summaryTemplate": "{hero.subject}, {place.locative} {event.clause}.",
+  "hero": [
+   {
+    "id": "cocuk-ve-tikir",
+    "label": "{childName} ve Tıkır",
+    "subject": "{childName} ve Tıkır"
+   },
+   {
+    "id": "kasif-kedi",
+    "label": "Kâşif kedi",
+    "subject": "Kâşif kedi"
+   },
+   {
+    "id": "robot-bip",
+    "label": "Robot Bip",
+    "subject": "Robot Bip"
+   }
+  ],
+  "place": [
+   {
+    "id": "orman",
+    "label": "Orman",
+    "locative": "ormanda",
+    "titleLocative": "Ormanda"
+   },
+   {
+    "id": "deniz-alti",
+    "label": "Deniz altı",
+    "locative": "deniz altında",
+    "titleLocative": "Deniz Altında"
+   },
+   {
+    "id": "uzay-istasyonu",
+    "label": "Uzay istasyonu",
+    "locative": "uzay istasyonunda",
+    "titleLocative": "Uzay İstasyonunda"
+   }
+  ],
+  "event": [
+   {
+    "id": "kayip-harita",
+    "label": "Kayıp harita",
+    "clause": "kayıp bir haritanın peşine düşüyor",
+    "title": "Kayıp Harita"
+   },
+   {
+    "id": "gizemli-ses",
+    "label": "Gizemli ses",
+    "clause": "gizemli bir sesin peşine düşüyor",
+    "title": "Gizemli Ses"
+   },
+   {
+    "id": "buyuk-yaris",
+    "label": "Büyük yarış",
+    "clause": "büyük bir yarışa katılıyor",
+    "title": "Büyük Yarış"
+   }
+  ]
+ },
+ "books": [
+  {
+   "id": "uzay-istasyonunda-gizemli-ses",
+   "title": "Uzay İstasyonunda Gizemli Ses",
+   "grade": 3,
+   "source": "cards",
+   "totalChapters": 1,
+   "cards": {
+    "hero": "cocuk-ve-tikir",
+    "place": "uzay-istasyonu",
+    "event": "gizemli-ses"
+   },
+   "insertedWords": [
+    "kıvrılıyordu",
+    "belirdiğinde",
+    "ağaçlarının"
+   ],
+   "chapters": [
+    {
+     "number": 1,
+     "title": "Uzay İstasyonunda Gizemli Ses",
+     "pages": [
+      [
+       "Deniz ile Tıkır | o sabah uzay istasyonunda uyandı.",
+       "İstasyon, | Dünya’nın çevresinde | sessizce dönüyordu.",
+       "Pencereden bakınca | mavi gezegen | bir top gibi görünüyordu.",
+       "Uzun koridor | ileride sağa doğru kıvrılıyordu."
+      ],
+      [
+       "Tam o sırada | garip bir ses duydular.",
+       "Tık, tık, tık!",
+       "Ses, | koridorun öbür ucundan geliyordu.",
+       "Tıkır kulaklarını dikti | ve dinledi.",
+       "“Bu ses | benden gelmiyor,” | dedi gülerek."
+      ],
+      [
+       "İkisi birlikte | sesin peşine düştü.",
+       "Dar bir merdivenden | yukarı tırmanmaya başladılar.",
+       "Merdiven | bir yılan gibi kıvrılıyordu.",
+       "Duvardaki ekranda | yeşil bir ışık belirdiğinde | durdular.",
+       "Ekranda | “Sera” yazıyordu."
+      ],
+      [
+       "Kapı açıldı | ve içeriden | ılık bir hava geldi.",
+       "Burası | istasyonun bahçesiydi.",
+       "Küçük elma ağaçlarının arasında | dar bir yol vardı.",
+       "Ses, | limon ağaçlarının arkasından geliyordu."
+      ],
+      [
+       "Yaprakların arasında | bir gölge belirdiğinde | Tıkır geri çekildi.",
+       "Gölge yaklaştı | ve ortaya | küçük bir robot çıktı.",
+       "Robotun elindeki su hortumu | yerde kıvrılıyordu.",
+       "Hortumdan damlayan su | boş bir kovaya düşüyordu.",
+       "Tık, tık, tık!"
+      ],
+      [
+       "“Demek gizemli ses buymuş,” | dedi Deniz.",
+       "Robot her sabah | seradaki fidanları suluyordu.",
+       "Deniz musluğu sıkıca kapattı | ve ses kesildi.",
+       "Pencerede Güneş belirdiğinde | bütün sera aydınlandı.",
+       "Portakal ağaçlarının dalları | meyve doluydu.",
+       "Robot | onlara birer portakal uzattı.",
+       "Uzayda yedikleri | en tatlı portakal buydu."
+      ]
+     ],
+     "questions": [
+      {
+       "prompt": "Gizemli ses nereden geliyordu?",
+       "options": [
+        "Kovaya damlayan sudan",
+        "Tıkır’ın kuyruğundan",
+        "Duvardaki ekrandan"
+       ],
+       "correctIndex": 0
+      },
+      {
+       "prompt": "Seradaki fidanları kim suluyordu?",
+       "options": [
+        "Küçük robot",
+        "Deniz",
+        "Tıkır"
+       ],
+       "correctIndex": 0
+      }
+     ],
+     "chains": {
+      "kıvrılıyordu": [
+       "kıvrıl",
+       "kıvrılıyor",
+       "kıvrılıyordu"
+      ],
+      "ağaçlarının": [
+       "ağaç",
+       "ağaçlar",
+       "ağaçları",
+       "ağaçlarının"
+      ],
+      "belirdiğinde": [
+       "belir",
+       "belirdi",
+       "belirdiğinde"
+      ],
+      "tırmanmaya": [
+       "tırman",
+       "tırmanma",
+       "tırmanmaya"
+      ]
+     },
+     "stats": {
+      "words": 176,
+      "sentences": 30,
+      "syllablesPerWord": 2.54,
+      "wordsPerSentence": 5.87,
+      "atesman": 81.5
+     }
+    }
+   ]
+  },
+  {
+   "id": "dinozorlar-neden-buyuktu",
+   "title": "Dinozorlar Neden Büyüktü?",
+   "grade": 3,
+   "source": "parentText",
+   "totalChapters": 1,
+   "chapters": [
+    {
+     "number": 1,
+     "title": "Dinozorlar Neden Büyüktü?",
+     "pages": [
+      [
+       "Dinozorlar | çok eski zamanlarda yaşadı.",
+       "Bazıları | bir tavuk kadar küçüktü.",
+       "Bazıları ise | bir otobüsten uzundu.",
+       "En uzun dinozorun boyu | otuz metreyi geçerdi.",
+       "Bu, | uç uca dizilmiş | üç otobüs demektir."
+      ],
+      [
+       "En büyükleri | ot yerdi.",
+       "Bu dev hayvanların | boynu çok uzundu.",
+       "Uzun boyunları ile | yüksek dallara uzanırlardı.",
+       "Böylece | çok az yürür, | çok yaprak yerlerdi."
+      ],
+      [
+       "Boyun kemiklerinin içinde | hava dolu boşluklar vardı.",
+       "Bu sayede | uzun boyunları | sanıldığı kadar ağır değildi."
+      ],
+      [
+       "İri olmak | onları korurdu.",
+       "Et yiyen dinozorlar | böyle dev bir hayvana | kolay kolay saldıramazdı."
+      ],
+      [
+       "Yavrular | yumurtadan çıkınca | çok küçüktü.",
+       "Ama | çok hızlı büyürlerdi."
+      ],
+      [
+       "Bilim insanları | bunları kemiklerden öğreniyor.",
+       "Toprağın altından çıkan kemiklere | tek tek bakıyorlar.",
+       "Her yeni kemik | bize yeni bir şey anlatıyor."
+      ]
+     ],
+     "questions": [
+      {
+       "prompt": "Uzun boyun, dinozorların ne işine yarardı?",
+       "options": [
+        "Yüksek dallara uzanmaya",
+        "Hızlı koşmaya",
+        "Suda yüzmeye"
+       ],
+       "correctIndex": 0
+      },
+      {
+       "prompt": "Bilim insanları dinozorları nasıl tanıyor?",
+       "options": [
+        "Kemiklerine bakarak",
+        "Onları doğada izleyerek",
+        "Fotoğraflarına bakarak"
+       ],
+       "correctIndex": 0
+      }
+     ],
+     "chains": {
+      "uzanırlardı": [
+       "uzan",
+       "uzanır",
+       "uzanırlar",
+       "uzanırlardı"
+      ],
+      "büyürlerdi": [
+       "büyü",
+       "büyür",
+       "büyürler",
+       "büyürlerdi"
+      ],
+      "saldıramazdı": [
+       "saldır",
+       "saldıra",
+       "saldıramaz",
+       "saldıramazdı"
+      ]
+     },
+     "stats": {
+      "words": 110,
+      "sentences": 18,
+      "syllablesPerWord": 2.44,
+      "wordsPerSentence": 6.11,
+      "atesman": 85.0
+     }
+    }
+   ]
+  }
+ ]
+}
