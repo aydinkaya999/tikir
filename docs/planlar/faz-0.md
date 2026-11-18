@@ -16,7 +16,7 @@
 - [x] Task 1: Ortam: Node 26 ve pnpm (commit yok)
 - [x] Task 2: Proje iskeleti
 - [x] Task 3: Lint ve biçim
-- [ ] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
+- [x] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
 - [ ] Task 5: `domain/text.ts`
 - [ ] Task 6: `domain/readability.ts` ve sınıf eşikleri
 - [ ] Task 7: Stiller, yazı tipleri ve `tr.ts`
@@ -147,21 +147,21 @@
 
 **Dosyalar:** `playwright.config.ts`, `e2e/smoke.spec.ts`, `scripts/shots.ts`, `src/app/env.ts`, `package.json`, `docs/kararlar.md`.
 
-- [ ] Paket: `@playwright/test`. Tarayıcılar: `pnpm exec playwright install chromium webkit`.
-- [ ] `src/app/env.ts`: `export const devToolsEnabled: boolean = import.meta.env.MODE !== 'production'`.
-- [ ] `playwright.config.ts`:
+- [x] Paket: `@playwright/test`. Tarayıcılar: `pnpm exec playwright install chromium webkit`.
+- [x] `src/app/env.ts`: `export const devToolsEnabled: boolean = import.meta.env.MODE !== 'production'`.
+- [x] `playwright.config.ts`:
   - `testDir: 'e2e'`, projeler `chromium` (Desktop Chrome) ve `webkit` (Desktop Safari);
   - `baseURL` `http://localhost:4317`;
   - `webServer`: `vite build --mode e2e --outDir dist-e2e` ve ardından `vite preview --outDir dist-e2e --port 4317 --strictPort`, `reuseExistingServer: false`.
-- [ ] `e2e/smoke.spec.ts`: `/` açılır; `html` öğesinin `lang` değeri `tr`; `main` görünür.
-- [ ] `scripts/shots.ts` (Node 26 doğrudan çalıştırır):
+- [x] `e2e/smoke.spec.ts`: `/` açılır; `html` öğesinin `lang` değeri `tr`; `main` görünür.
+- [x] `scripts/shots.ts` (Node 26 doğrudan çalıştırır):
   - Vite geliştirme sunucusunu JS API ile boş bir kapıda açar;
   - her rota için telefon 390×844, tablet 1180×820 ve web 1440×900 tam sayfa görüntü alır (`deviceScaleFactor: 1`, `document.fonts.ready` beklenir);
   - dosya adı `shots/<ad>-telefon.png` (tablet, web aynı biçimde); `/` için ad `index`, diğer rotalarda `/` → `-`, sorgu karakterleri `-` olur;
   - birden çok rota alır, rota `/` ile başlamazsa hata verir.
-- [ ] Betikler: `e2e` = `playwright test`, `shots` = `node scripts/shots.ts`.
-- [ ] Doğrulama: `pnpm e2e` iki tarayıcıda geçer. `pnpm shots /` üç dosya üretir; `sips` boyutları 390, 1180 ve 1440 gösterir.
-- [ ] Commit: `test: add Playwright e2e and shots script`
+- [x] Betikler: `e2e` = `playwright test`, `shots` = `node scripts/shots.ts`.
+- [x] Doğrulama: `pnpm e2e` iki tarayıcıda geçer. `pnpm shots /` üç dosya üretir; `sips` boyutları 390, 1180 ve 1440 gösterir.
+- [x] Commit: `test: add Playwright e2e and shots script`
 
 ### Task 5: `domain/text.ts`
 

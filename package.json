@@ -15,7 +15,9 @@
     "test": "vitest run",
     "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\" --allow-empty-input && prettier --check .",
     "format": "prettier --write .",
-    "check": "pnpm typecheck && pnpm lint && pnpm test"
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "e2e": "playwright test",
+    "shots": "node scripts/shots.ts"
   },
   "dependencies": {
     "react": "^19.3.1",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.12",

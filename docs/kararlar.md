@@ -113,6 +113,7 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `eslint-plugin-jsx-a11y` | Erişilebilirlik: div'e tıklama, etiket ve rol kuralları. Eş-bağımlılık aralığı ESLint 9'da bitiyor; ESLint 10 ile denendi ve çalışıyor. Uyarı `pnpm-workspace.yaml` içinde susturuldu | 0 |
 | `stylelint` | CSS'te sabit renk, yazı boyutu, köşe ve gölge yasağı; `text-transform: uppercase` yasağı (CLAUDE.md "Stil") | 0 |
 | `prettier` | Biçim | 0 |
+| `@playwright/test` | Uçtan uca testler (Chromium ve WebKit) ve `pnpm shots` ekran görüntüleri (T11) | 0 |
 
 ## Değişiklik günlüğü
 
