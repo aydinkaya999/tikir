@@ -35,6 +35,8 @@ for (const viewport of viewports) {
       });
       const demo = page.locator(`[data-reading-demo="${variant}"]`);
       const slider = demo.getByRole('slider');
+      // The showcase is a lazy route: wait until its words are on screen before counting.
+      await expect(demo.locator('[data-word-index]').first()).toBeVisible();
       const wordCount = await demo.locator('[data-word-index]').count();
       expect(wordCount).toBeGreaterThan(20);
 
