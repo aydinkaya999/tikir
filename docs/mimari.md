@@ -9,7 +9,7 @@
 | Durum | Zustand (seans ve ayarlar), yerel bileşen durumu | Sunucu durumu arka uç gelince eklenir |
 | Stil | CSS Modules + CSS değişkenleri | |
 | Depolama | IndexedDB (`idb`), bir depo (repository) arayüzünün arkasında | Arka uç gelince aynı arayüzün HTTP uygulaması yazılır |
-| Yazı tipleri | Fontsource paketleri, depoda barındırılır | |
+| Yazı tipleri | Fontsource paketleri, depoda barındırılır | `src/styles/fonts.css` paket dosyalarını token'daki aile adlarıyla bağlar (değişken paket aileyi "… Variable" adıyla tanımlıyor) |
 | Test | Vitest + Testing Library, Playwright | |
 | Paket yöneticisi | pnpm, Node LTS | |
 | Sonra | `vite-plugin-pwa` (Faz 7), Capacitor (Faz 7), Python + FastAPI + PostgreSQL arka uç (Faz 6) | |
@@ -25,10 +25,12 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 ├── design/               tasarım başvurusu (değiştirilmez)
 ├── seed/                 örnek içerik (değiştirilmez)
 ├── src/
-│   ├── app/              yönlendirme, korumalar, sağlayıcılar, kabuklar
+│   ├── app/              yönlendirme (routes.ts, router.tsx), korumalar, sağlayıcılar
+│   │   └── shells/       beş kabuk ve ortak gezinme (ShellNav)
+│   ├── assets/           design/svg çizimlerinin birebir kopyaları
 │   ├── components/       tasarım sistemi bileşenleri
 │   ├── features/
-│   │   ├── session/      günlük seans (G1–G7) ve durum makinesi
+│   │   ├── session/      günlük seans (G1–G7), Albüm, Stüdyo ve durum makinesi
 │   │   ├── reading/      okuma metni, takip, hayalet, yarış çubuğu
 │   │   ├── onboarding/   K1–K4
 │   │   ├── library/      U1–U4
@@ -37,10 +39,14 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 │   ├── domain/           saf mantık (aşağıda)
 │   ├── services/         arayüzler ve uygulamaları (aşağıda)
 │   ├── i18n/tr.ts        bütün arayüz metinleri
-│   └── styles/           tokens.css, fonts.css, global.css
+│   └── styles/           tokens.css (design/tokens.css kopyası), tokens-extra.css, fonts.css, global.css
 ├── e2e/                  Playwright testleri
-└── scripts/              yardımcı betikler (yankı sunucusu vb.)
+└── scripts/              yardımcı betikler (shots.ts; yankı sunucusu vb.)
 ```
+
+`design/` kopyaları (`tokens.css`, ikonlar, çizimler) `src/design-copies.test.ts` ile birebir aynı tutulur.
+
+Geliştirmeye özgü kod (geliştirme sayfaları, Faz 2'den sonra `?demo=` parametreleri) `import.meta.env.MODE !== 'production'` koşulunu **kullanıldığı modülde, satır içinde** sınar. Vite bu ifadeyi her modülde derleme anında yerine koyduğu için kod üretim derlemesinden atılır. Başka bir modülden içe aktarılan bir bayrak katlanmaz ve `dist/` içinde sahipsiz parçalar bırakır (Faz 0'da görüldü). `e2e` kipi (`vite build --mode e2e`) geliştirme araçlarını içerir.
 
 Bağımlılık yönü tek: `features` → `services` (arayüzler) → `domain`. `domain` hiçbir şeyi içe aktarmaz; `components` yalnız `styles` ve `domain` tiplerini bilir.
 
@@ -251,8 +257,8 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
 |---|---|
 | Birim | `src/domain` tamamı; yukarıdaki sınama örnekleri birebir test olur |
 | Bileşen | Okuma metni durumları, bölmeli denetim, anahtar, mikrofon düğmesi durumları |
-| Uçtan uca | `FakeListener` ile baştan sona bir seans; kurulum akışı; yazı ayarının okuma ekranına yansıması |
-| Görsel | Her ekran 390, 1180 ve 1440 px genişlikte; `design/png` ile yan yana karşılaştırma ve fark listesi |
+| Uçtan uca | `FakeListener` ile baştan sona bir seans; kurulum akışı; yazı ayarının okuma ekranına yansıması. Chromium ve WebKit'te, `e2e` kipi derlemesine karşı (`vite preview`). Faz 0'dan beri: rotalar ve kabuklar, dış istek ve CSP, vitrin envanteri ve taşma, okuma metninde kayma |
+| Görsel | Her ekran 390, 1180 ve 1440 px genişlikte (`pnpm shots`); `design/png` ile yan yana karşılaştırma ve fark listesi |
 
 Piksel piksel eşitlik beklenmez (yazı tipi işleme farkları olur). Beklenen: aynı düzen, aynı metin, aynı renkler, taşma ve kırpılma yok.
 

@@ -34,7 +34,7 @@
 - [x] Task 19: Odak ve kurulum kabukları
 - [x] Task 20: Dış istek yok ve CSP
 - [x] Task 21: Kabuk karşılaştırması
-- [ ] Task 22: Belgeler
+- [x] Task 22: Belgeler
 - [ ] Task 23: Kabul ölçütleri yürüyüşü (commit yok)
 
 ## Onaylanan kararlar
@@ -459,10 +459,10 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 22: Belgeler
 
-- [ ] `CLAUDE.md` "Komutlar" bölümü gerçek komutlarla güncellenir; her komut çalıştırılarak doğrulanır.
-- [ ] `docs/kararlar.md`: bağımlılık tablosu tam; değişen kararlar; değişiklik günlüğü.
-- [ ] `docs/mimari.md`: `styles` klasörü (`tokens-extra.css`) ve e2e kipi.
-- [ ] Commit: `docs: update commands and decisions for phase 0`
+- [x] `CLAUDE.md` "Komutlar" bölümü gerçek komutlarla güncellenir; her komut çalıştırılarak doğrulanır.
+- [x] `docs/kararlar.md`: bağımlılık tablosu tam; değişen kararlar; değişiklik günlüğü.
+- [x] `docs/mimari.md`: `styles` klasörü (`tokens-extra.css`) ve e2e kipi.
+- [x] Commit: `docs: update commands and decisions for phase 0`
 
 ### Task 23: Kabul ölçütleri yürüyüşü (commit yok)
 

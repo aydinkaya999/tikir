@@ -33,9 +33,11 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | D4 | Boyutlar | Telefon, tablet ve web eşit öncelikli | kesin | |
 | D5 | Hazır malzeme | Emoji, hazır ikon kütüphanesi ve hazır bileşen kiti yok | kesin | |
 | D6 | Tasarımı olmayan durumlar | `docs/ekranlar.md` sonundaki varsayılanlar | varsayım | Kodda `// TODO(design)`; tasarım gelince değişir |
-| D7 | Albüm ve Stüdyo | Tasarım bekliyor | açık | Asgari liste ekranları |
+| D7 | Albüm ve Stüdyo | Tasarım bekliyor | açık | Asgari liste ekranları. Rotalar Faz 0'da açıldı: `/album`, `/studyo` (çocuk kabuğu). |
 | D8 | Tıkır'ın çizimi | Son hali onaylanmadı | açık | `design/svg` içindeki çizimler |
 | D9 | Hareket | Tasarımda tanımlanmadı | varsayım | `docs/tasarim-sistemi.md` → "Hareket" |
+| D10 | Token'da olmayan tasarım değerleri | `src/styles/tokens-extra.css`, rol adıyla ve tasarımdaki kaynağıyla | varsayım | Tasarım HTML'i `tokens.css` dosyasının tanımlamadığı yazı boyutları, köşeler ve halka gölgeleri kullanıyor. Sabit değer yalnız `tokens.css` (birebir kopya), `tokens-extra.css` ve `fonts.css` içinde; Stylelint denetler. |
+| D11 | MicButton'ın çizilmemiş durumları | Duraklatıldı: beyaz zemin, halka yok, ad "Duraklatıldı. Sürdürmek için dokun". İzin yok: soluk ikon, kesik kenarlık, ad "Mikrofon izni yok". | varsayım | Faz 0 planıyla onaylandı; kodda `TODO(design)`. |
 
 ## Teknik
 
@@ -96,6 +98,13 @@ Tuvaldeki ekranlar tek bir andan değil, ayrı ayrı örnek anlardan çizildi. A
 7. Capacitor denemesi için bir Mac ve bir iPhone var mı? (T1)
 8. Gelir modeli ne olacak? (P12)
 
+Faz 0'da tasarımla belgeler karşılaştırılırken çıkanlar:
+
+9. K2 (sınıf, ilgi alanları) ve U2'deki ("Sınıf düzeyi", "Uzunluk") 48 px yuvarlak seçim düğmeleri bileşen envanterinde yok. Envanter K2 için OptionCard diyor, ama K2'de seçim kartı yok. Envantere bir bileşen olarak eklensin mi? (Faz 3'ten önce)
+10. U1 ve U4 kapaklarında `design/svg` içinde olmayan bir çini deseni var (açık kobalt zeminde safran yıldız). Şimdilik kapaklar mevcut altı desenle kuruluyor. (Faz 5'ten önce)
+11. Telefon ve tablette çocuk ekranından veli alanına giden yol yok; "Veli alanı" bağlantısı yalnız webde. (Faz 3'ten önce)
+12. G4 tasarımında 4. bölümün "1 / 2" sayfası, içerikteki 1. ve 2. sayfanın birleşimi. İçerikte bu bölüm 6 sayfa. Faz 2'deki `design` senaryosu hangisini izlesin? (Faz 2'den önce)
+
 ## Bağımlılıklar
 
 Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
@@ -123,3 +132,4 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 
 - 2026-11-18: İlk sürüm (başlangıç paketi).
 - 2026-11-18: Faz 0: Node 26 LTS ve pnpm 12 (T11), TypeScript 6.0 (T14), ilk bağımlılıklar.
+- 2026-11-18: Faz 0: CSP (T15); `tokens-extra.css` (D10); MicButton'ın çizilmemiş durumları (D11); Albüm ve Stüdyo rotaları (D7); yanıt bekleyen sorulara 9–12. maddeler eklendi.
