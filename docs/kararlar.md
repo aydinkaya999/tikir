@@ -53,6 +53,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T10 | Dil | Kod, yorum ve commit İngilizce; arayüz Türkçe ve tek dilli | varsayım | Çeviri kütüphanesi yok; metinler `src/i18n/tr.ts` |
 | T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | Faz 0'da Node 26 LTS (`.nvmrc`, `engines`) ve pnpm 12 (`packageManager`) seçildi. Güncel `react-router`, `jsdom` ve `stylelint` en az Node 22.22 istiyor. |
 | T14 | TypeScript sürümü | 6.0.x | varsayım | Güncel kararlı sürüm 7.0, ama `typescript-eslint` yalnız 6.1'den eskisini destekliyor. Destek gelince 7'ye geçilir. |
+| T15 | İçerik güvenlik politikası | Derlenen sayfada meta etiketi: `default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'` | varsayım | Geliştirme sunucusunda yok (Vite'in satır içi yenileme betiğini engellerdi). `e2e/no-external-requests.spec.ts` dış istekleri ve CSP ihlallerini yakalar. Faz 7'de mağaza denetimiyle gözden geçirilir. |
 | T12 | Üçüncü taraf | Çalışma anında dış adrese istek yok; analitik ve reklam yok | kesin | Yazı tipleri depoda barındırılır |
 | T13 | Depo düzeni | Kök web uygulaması; `server/` sonra; `ios/` ve `android/` Capacitor ile | varsayım | |
 

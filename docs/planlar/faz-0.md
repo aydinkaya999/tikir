@@ -32,7 +32,7 @@
 - [x] Task 17: Çocuk ve veli kabukları
 - [x] Task 18: Seans kabuğu
 - [x] Task 19: Odak ve kurulum kabukları
-- [ ] Task 20: Dış istek yok ve CSP
+- [x] Task 20: Dış istek yok ve CSP
 - [ ] Task 21: Kabuk karşılaştırması
 - [ ] Task 22: Belgeler
 - [ ] Task 23: Kabul ölçütleri yürüyüşü (commit yok)
@@ -441,13 +441,13 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 20: Dış istek yok ve CSP
 
-- [ ] Önce e2e (`no-external-requests.spec.ts`):
+- [x] Önce e2e (`no-external-requests.spec.ts`):
   - bütün rotalar yüklenir; her kabukta gezinme bağlantılarına tıklanarak dolaşılır (telefon ve web genişliği);
   - kendi kökeni dışına giden istek listesi boş (`data:` ve `blob:` hariç);
   - CSP ihlali iletisi yok.
-- [ ] `vite.config.ts`: yalnız derlemede çalışan küçük bir eklentiyle CSP meta etiketi (karar 6).
-- [ ] Doğrulama: `pnpm e2e`; `dist/index.html` içinde CSP etiketi.
-- [ ] Commit: `test(e2e): assert no cross-origin requests and add CSP`
+- [x] `vite.config.ts`: yalnız derlemede çalışan küçük bir eklentiyle CSP meta etiketi (karar 6).
+- [x] Doğrulama: `pnpm e2e`; `dist/index.html` içinde CSP etiketi.
+- [x] Commit: `test(e2e): assert no cross-origin requests and add CSP`
 
 ### Task 21: Kabuk karşılaştırması
 
