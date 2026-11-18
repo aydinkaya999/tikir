@@ -28,7 +28,7 @@
 - [x] Task 13: StepTiles ve MicButton
 - [x] Task 14: StatCard, LineChart ve ProgressBar
 - [x] Task 15: ReadingText, PhraseText ve RaceBar
-- [ ] Task 16: Vitrin testi
+- [x] Task 16: Vitrin testi
 - [ ] Task 17: Çocuk ve veli kabukları
 - [ ] Task 18: Seans kabuğu
 - [ ] Task 19: Odak ve kurulum kabukları
@@ -376,13 +376,13 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 ### Task 16: Vitrin testi
 
-- [ ] `e2e/showcase.spec.ts`:
+- [x] `e2e/showcase.spec.ts`:
   - envanterdeki her bileşenin bölümü vardır (20 satırdaki 22 bileşen, ReadingText, PhraseText, Icon);
   - 390, 1180 ve 1440 genişlikte sayfada ve her bölümde yatay taşma yok;
   - `reducedMotion: 'reduce'` iken düğmenin geçiş süresi 0;
   - düğme ve bağlantıların dokunma hedefi en az 44×44 px.
-- [ ] Doğrulama: `pnpm e2e`; `pnpm shots /gelistirme/vitrin`.
-- [ ] Commit: `test(e2e): check showcase inventory and overflow`
+- [x] Doğrulama: `pnpm e2e`; `pnpm shots /gelistirme/vitrin`.
+- [x] Commit: `test(e2e): check showcase inventory and overflow`
 
 ### Task 17: Çocuk ve veli kabukları
 
