@@ -9,6 +9,7 @@ import {
 } from './FormDemo';
 import { IconDemo } from './IconDemo';
 import { BookCoverDemo, CompanionDemo, MonsterDemo, TileDemo } from './IllustrationDemo';
+import { MicButtonDemo, StepTilesDemo } from './SessionDemo';
 import styles from './Showcase.module.css';
 import { CardDemo, ChipDemo, PageCardDemo, SpeechBubbleDemo } from './SurfaceDemo';
 
@@ -30,6 +31,8 @@ export function ShowcasePage() {
       <MonsterDemo />
       <TileDemo />
       <BookCoverDemo />
+      <StepTilesDemo />
+      <MicButtonDemo />
       <SegmentedControlDemo />
       <OptionCardDemo />
       <SwitchDemo />

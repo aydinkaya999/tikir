@@ -1,0 +1,82 @@
+.list {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tile {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: var(--border);
+  border-radius: var(--radius-step);
+  background: var(--color-white);
+}
+
+.done .tile {
+  background: var(--color-turquoise);
+}
+
+.current .tile {
+  background: var(--color-saffron);
+  box-shadow: var(--lift-tile);
+}
+
+.next .tile {
+  border-color: var(--color-line);
+}
+
+/* On phones the names are read by screen readers only. */
+.name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 700px) {
+  .list {
+    gap: 18px;
+  }
+
+  .tile {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tick {
+    width: 16px;
+    height: 16px;
+  }
+
+  .name {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    color: var(--color-muted);
+    font-size: var(--size-step-label);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-ui);
+  }
+
+  .current .name {
+    color: var(--color-ink);
+    font-weight: var(--weight-extrabold);
+  }
+}

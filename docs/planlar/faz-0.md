@@ -25,7 +25,7 @@
 - [x] Task 10: Chip, Card, PageCard ve SpeechBubble
 - [x] Task 11: Companion, Monster, Tile ve BookCover
 - [x] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
-- [ ] Task 13: StepTiles ve MicButton
+- [x] Task 13: StepTiles ve MicButton
 - [ ] Task 14: StatCard, LineChart ve ProgressBar
 - [ ] Task 15: ReadingText, PhraseText ve RaceBar
 - [ ] Task 16: Vitrin testi
@@ -341,9 +341,9 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
   - Adlar 700 px ve üstünde görünür.
 - `MicButton`: `{ state: 'listening'|'paused'|'denied'; labels: Record<state, string>; size?: 'regular'|'large' }` (76 ve 84 px). Halka yalnız dinlerken (`--ring-mic`). Durum görünümleri karar 5'e göre.
 
-- [ ] Önce testler: `aria-current`; MicButton'ın adı duruma göre değişir.
-- [ ] Vitrine eklenir. Görüntü G4 ile karşılaştırılır.
-- [ ] Commit: `feat(components): add StepTiles and MicButton`
+- [x] Önce testler: `aria-current`; MicButton'ın adı duruma göre değişir.
+- [x] Vitrine eklenir. Görüntü G4 ile karşılaştırılır.
+- [x] Commit: `feat(components): add StepTiles and MicButton`
 
 ### Task 14: StatCard, LineChart ve ProgressBar
 

@@ -28,6 +28,11 @@
   --size-option-title: 16px;
   --size-option-description: 13.5px;
   --size-option-sample: 32px;
+  /* Session step tiles (G2–G7): corner, and the step names shown from 700 px. */
+  --radius-step: 7px;
+  --size-step-label: 15px;
+  /* Microphone button while listening: light turquoise ring inside an ink ring (G2, G4, K3). */
+  --ring-mic: 0 0 0 7px var(--color-turquoise-light), 0 0 0 9.5px var(--color-ink);
 }
 
 @media (min-width: 700px) {
