@@ -16,12 +16,13 @@
   color: var(--color-ink);
 }
 
+/* The words of the current unit turn bold inside their reserved boxes (ReservedText), so the
+   highlight moving on never moves a line; the spaces keep their regular width. */
 .unit[data-current] {
   border-radius: var(--radius-word);
   background: var(--color-saffron);
   box-shadow: var(--ring-phrase);
   color: var(--color-ink);
-  font-weight: var(--weight-semibold);
 }
 
 /* G3: a 2 px bar, 0.85 em tall, 9 px of space on each side. */

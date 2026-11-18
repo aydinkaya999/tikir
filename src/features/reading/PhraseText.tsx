@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import type { Page } from '../../domain/types';
 import styles from './PhraseText.module.css';
+import { ReservedText } from './ReservedText';
 
 interface PhraseTextProps {
   page: Page;
@@ -42,7 +43,15 @@ export function PhraseText({
                   data-read={index < readUnits ? '' : undefined}
                   data-current={index === currentUnit ? '' : undefined}
                 >
-                  {unit}
+                  {unit
+                    .split(/(\s+)/u)
+                    .map((part, partIndex) =>
+                      part.trim() === '' ? (
+                        part
+                      ) : (
+                        <ReservedText key={partIndex} text={part} bold={index === currentUnit} />
+                      ),
+                    )}
                 </span>
               </Fragment>
             );

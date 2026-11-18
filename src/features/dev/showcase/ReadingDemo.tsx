@@ -80,6 +80,32 @@ export function ReadingTextDemo() {
   );
 }
 
+const unitCount = samplePage.reduce((count, sentence) => count + sentence.length, 0);
+
+/** Moves the narration highlight unit by unit; e2e/reading-text.spec.ts checks nothing moves. */
+function PhraseWalkthrough() {
+  const [current, setCurrent] = useState(0);
+  return (
+    <div className={styles.wide} data-phrase-demo="default">
+      <label className={styles.slider}>
+        <code>currentUnit = {current}</code>
+        <input
+          type="range"
+          min={0}
+          max={unitCount - 1}
+          value={current}
+          onChange={(event) => {
+            setCurrent(Number(event.target.value));
+          }}
+        />
+      </label>
+      <PageCard title={pageTitle} counter={pageCounter}>
+        <PhraseText page={samplePage} currentUnit={current} readUnits={current} />
+      </PageCard>
+    </div>
+  );
+}
+
 export function PhraseTextDemo() {
   return (
     <Section name="PhraseText">
@@ -89,6 +115,9 @@ export function PhraseTextDemo() {
             <PhraseText page={samplePage} currentUnit={6} readUnits={6} />
           </PageCard>
         </div>
+      </Row>
+      <Row label="walkthrough: the narration highlight moves unit by unit">
+        <PhraseWalkthrough />
       </Row>
     </Section>
   );

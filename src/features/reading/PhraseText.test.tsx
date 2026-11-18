@@ -10,6 +10,15 @@ const page: Page = [
   ['“Fener', 'bu tepenin ardında olmalı,”', 'dedi Deniz.'],
 ];
 
+/** A unit's text as shown on screen, without the hidden bold copies. */
+function visibleText(unit: Element | undefined): string | null | undefined {
+  const copy = unit?.cloneNode(true) as Element | undefined;
+  copy?.querySelectorAll('[data-part="reserve"]').forEach((reserve) => {
+    reserve.remove();
+  });
+  return copy?.textContent;
+}
+
 describe('PhraseText', () => {
   it('separates the units of a sentence with decorative bars, sentences with a space', () => {
     const { container } = render(<PhraseText page={page} />);
@@ -28,6 +37,23 @@ describe('PhraseText', () => {
 
     expect(units.filter((unit) => unit.hasAttribute('data-read'))).toHaveLength(6);
     expect(units.filter((unit) => unit.hasAttribute('data-current'))).toEqual([units[6]]);
-    expect(units[6]).toHaveTextContent('yukarıya kıvrılıyordu.');
+    expect(visibleText(units[6])).toBe('yukarıya kıvrılıyordu.');
+  });
+
+  it('reserves the bold width word by word, so a unit can still wrap between its words', () => {
+    const { container } = render(<PhraseText page={page} />);
+    const unit = container.querySelector('[data-unit-index="5"]');
+    const shown = Array.from(
+      unit?.querySelectorAll('[data-part="text"]') ?? [],
+      (part) => part.textContent,
+    );
+    const reserves = Array.from(unit?.querySelectorAll('[data-part="reserve"]') ?? []);
+
+    expect(shown).toEqual(['çam', 'ağaçlarının', 'arasından']);
+    expect(reserves.map((reserve) => reserve.textContent)).toEqual(shown);
+    for (const reserve of reserves) {
+      expect(reserve).toHaveAttribute('aria-hidden', 'true');
+    }
+    expect(visibleText(unit ?? undefined)).toBe('çam ağaçlarının arasından');
   });
 });
