@@ -41,7 +41,7 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 │   ├── i18n/tr.ts        bütün arayüz metinleri
 │   └── styles/           tokens.css (design/tokens.css kopyası), tokens-extra.css, fonts.css, global.css
 ├── e2e/                  Playwright testleri
-└── scripts/              yardımcı betikler (shots.ts; yankı sunucusu vb.)
+└── scripts/              yardımcı betikler: shots.ts, echo-server.ts (yankı sunucusu), audio-trial.ts (cihaz denemesi için HTTPS)
 ```
 
 `design/` kopyaları (`tokens.css`, ikonlar, çizimler) `src/design-copies.test.ts` ile birebir aynı tutulur.
@@ -227,6 +227,10 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 - `AudioCapture.ts`: arayüz ve tipler (`CaptureSettings`, `CaptureDiagnostics`, …). `types.ts` ortak `Unsubscribe` tipini tutar.
 - `WebAudioCapture.ts`: durumlar, sayaçlar, gizlenen sayfada ve geç gelen izinde mikrofonu kapatma kuralı. Tarayıcıya `captureEnvironment.ts` arayüzünden dokunur; testlerde sahtesi verilir.
 - Saf yardımcılar, birim testli: `resampler.ts` (pencereli sinc, her giriş hızı → 16 kHz), `framer.ts` (320 örneklik çerçeve), `levelMeter.ts` (saniyede 20 RMS), `captureChain.ts` (dördünü işleyici sırasıyla bağlar), `pcm.ts`, `wav.ts`. Ürün kuralı değil, yakalamanın parçası oldukları için `domain` içinde değiller (Faz 1 planı, karar 3).
+- `capture.worklet.ts`: `tikir-capture` AudioWorklet işleyicisi; `?worker&url` ile yüklenir (`vite.config.ts` → `worker.format: 'es'`). `browserCaptureEnvironment.ts`: `getUserMedia`, `AudioContext` ve işleyici düğümü; sekme gizlenince ve sayfa kapanınca haber verir.
+- `WavPlayer.ts`: WAV'ı Web Audio ile çalar; böylece CSP'ye `media-src` gerekmez.
+
+**Ses denemesinin öteki servisleri (Faz 1):** `echo/` (yankı ölçümü: `EchoProbe`, `WebSocketEchoProbe`, `roundTrip`), `device/environment.ts` (tarayıcı, işletim sistemi, kabuk, mikrofon izni), `files.ts` (indirme). Ses denemesi sayfası bunları `src/app/services.ts` içindeki `audioLabServices` nesnesinden prop olarak alır; rota bu dosyayı tembel yükler, üretim derlemesine girmez.
 
 **`MockBookGenerator`:**
 

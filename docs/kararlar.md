@@ -142,3 +142,4 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-18: Faz 0: CSP (T15); `tokens-extra.css` (D10); MicButton'ın çizilmemiş durumları (D11); Albüm ve Stüdyo rotaları (D7); yanıt bekleyen sorulara 9–12. maddeler eklendi.
 - 2026-11-18: Faz 0 son incelemesi: 13. soru (iki bölmeli kabukların alt alta dizilmiş hâli, kurulum panosunun dikey tablette genişliği) ve 14. soru (okuma metninde rakamlar) eklendi.
 - 2026-11-19: Faz 1: ses denemesi sayfasında onay istisnası (T16), geliştirme sayfası metinleri (T17), ses yakalama ayarları ve açılış sırası (T18).
+- 2026-11-19: Faz 1: yankı ölçümü ve cihaz denemesi yolu (T20), `ws` bağımlılığı, sonuç şablonu (`docs/ses-denemesi-sonuclari.md`).

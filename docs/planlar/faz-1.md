@@ -22,7 +22,7 @@
 - [x] Task 7: Yankı sunucusu ve yankı testi
 - [x] Task 8: Cihaz raporu
 - [x] Task 9: Cihaz denemesi sunucusu
-- [ ] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
+- [x] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
 - [ ] Task 11: Capacitor kurulumu
 - [ ] Task 12: Kabukta derleme ve açılış
 - [ ] Task 13: Kabul ölçütleri yürüyüşü
@@ -596,7 +596,7 @@ readMicrophonePermission(): Promise<PermissionReading>
 
 **Dosyalar:** `docs/ses-denemesi-sonuclari.md`, `CLAUDE.md`, `docs/mimari.md`, `docs/dinleme-hatti.md`, `docs/kararlar.md`, bu plan ("Kanıtlar").
 
-- [ ] `docs/ses-denemesi-sonuclari.md` aşağıdaki bölümlerle yazılır:
+- [x] `docs/ses-denemesi-sonuclari.md` aşağıdaki bölümlerle yazılır:
   - **Amaç ve kural.** Denemeleri insan yapar; yapılmayan deneme için "tuttu" denmez. Denemeyi yetişkin yapar (T16).
   - **Hazırlık.**
     - Mac: `pnpm install`, `pnpm audio-trial`, aynı Wi-Fi ağı.
@@ -620,16 +620,16 @@ readMicrophonePermission(): Promise<PermissionReading>
     - "Yol ve davranış" tablosu: yankı ortancası ve 95. yüzdeliği, kaçan ve sessiz çerçeve, arka planda mikrofonun bırakılması, izin reddi açıklaması, notlar.
   - **Gözlemler ve karar önerisi.** Hangi ayar seti daha temiz duyuldu; Faz 6 için not.
   - **Uygulama kabuğu.** Başlık burada açılır; adımları Task 12'de yazılır.
-- [ ] `CLAUDE.md` "Komutlar": `pnpm echo-server` ve `pnpm audio-trial` eklenir; `pnpm e2e` yankı sunucusunu kendisi açar; `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome` yazılır. Her komut çalıştırılarak doğrulanır.
-- [ ] `docs/mimari.md`: `scripts/` (yankı sunucusu ve deneme sunucusu), `src/services/{audio,echo,device}` ve `files.ts`, `src/app/services.ts`. `docs/dinleme-hatti.md` bölüm 1 ve 5: açılış sırası, sayaçların anlamı, yankı iletisinin biçimi, komutlar, şablonun adı.
-- [ ] `docs/kararlar.md`: değişiklik günlüğüne bir satır; T18'in notuna "ayar setlerinin deneme sonucuyla gözden geçirilecek" yazılır.
-- [ ] Web yarısının denetimi. Çıktılar "Kanıtlar" bölümüne yazılır:
+- [x] `CLAUDE.md` "Komutlar": `pnpm echo-server` ve `pnpm audio-trial` eklenir; `pnpm e2e` yankı sunucusunu kendisi açar; `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome` yazılır. Her komut çalıştırılarak doğrulanır.
+- [x] `docs/mimari.md`: `scripts/` (yankı sunucusu ve deneme sunucusu), `src/services/{audio,echo,device}` ve `files.ts`, `src/app/services.ts`. `docs/dinleme-hatti.md` bölüm 1 ve 5: açılış sırası, sayaçların anlamı, yankı iletisinin biçimi, komutlar, şablonun adı.
+- [x] `docs/kararlar.md`: değişiklik günlüğüne bir satır; T18'in notuna "ayar setlerinin deneme sonucuyla gözden geçirilecek" yazılır.
+- [x] Web yarısının denetimi. Çıktılar "Kanıtlar" bölümüne yazılır:
   - `pnpm check`;
   - `pnpm build` ve dist'te geliştirme sayfası araması (Task 5'teki `grep` boş);
   - bütün `pnpm e2e`;
   - `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome`;
   - `pnpm shots /gelistirme/ses` ile üç görüntü (tasarım karşılığı yok; taşma e2e'de denetlendi).
-- [ ] Commit: `docs: add the audio trial template and phase 1 commands`
+- [x] Commit: `docs: add the audio trial template and phase 1 commands`
 
 ### Task 11: Capacitor kurulumu
 
@@ -690,6 +690,30 @@ readMicrophonePermission(): Promise<PermissionReading>
 ## Kanıtlar
 
 Task 10, 12 ve 13'te dolar.
+
+### Web yarısı (Task 10)
+
+`f6fc81b` üzerinde (belge değişiklikleriyle), `faz-1` dalında, ekran uyanıkken (aşağıdaki ortam notu) çalıştırıldı.
+
+| Denetim | Sonuç |
+|---|---|
+| `pnpm check` | Tip denetimi, ESLint, Stylelint ve Prettier temiz; "Test Files 45 passed (45)", "Tests 335 passed (335)". |
+| `pnpm build` | "✓ built in 139ms"; `grep -rlE 'gelistirme\|AudioLab\|tikir-capture\|yanki' dist/` boş; `dist/assets` içinde tek JS dosyası (işleyici parçası da girmiyor). |
+| `pnpm e2e` | "Running 148 tests using 5 workers", "148 passed (45.1s)". Ses sayfasının 12 testi Chromium ve WebKit'te. |
+| `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome` | Kurulu Google Chrome 157.0.8103.79: "12 passed (30.4s)". |
+| `pnpm shots /gelistirme/ses` | `shots/gelistirme-ses-{telefon,tablet,web}.png`. Tasarım karşılığı yok; taşma ve 44 px kuralı e2e'de ("the page fits 390, 1180 and 1440 px with 44 px targets"). |
+
+**Ölçümler (Task 5–9)**
+
+- Geliştirme sunucusunda işleyici modül olarak yükleniyor; mikrofon açılınca düzey Chromium'da −26, WebKit'te −23 dBFS.
+- Chromium'un sahte mikrofonundaki 440 Hz ton kayıttan sonra tayfta 440,5 Hz'te (0,25 Hz adım). Sıfır geçişi sayımı aynı kayıtta 449,2 Hz diyor: dosyalı sahte aygıt ~%2 hızlı çalışıp örnek atıyor; e2e tayfsal tepeyi ölçüyor.
+- Yankı, geliştirme sunucusunun yönlendirmesiyle: 500 / 500, kayıp 0, ortanca 2,1 ms, 95. yüzdelik 6,3 ms.
+- Yankı, `pnpm audio-trial`'ın HTTPS sunucusunda, sertifika hatası yoksayılmadan, `wss://localhost:4443`: Chromium ortanca 1,2 ms ve 95. yüzdelik 4,9 ms; WebKit 2,0 ms ve 10,0 ms; ikisinde de 500 / 500 ve CSP ihlali yok. Görüntü `shots/audio-trial-https.png`.
+
+**Ortam notları**
+
+- macOS'ta iki ekran da uykudayken WebKit'in fare olayları hedefini şaşırıyor ("`<html>` intercepts pointer events"). Faz 0'ın gezinme testi de aynı biçimde düşüyor. Ekran `caffeinate -u` ile uyandırılınca hepsi geçiyor. Komut `CLAUDE.md`'de.
+- Bu Mac'in güvenlik duvarı bütün gelen bağlantıları engelliyor (`socketfilterfw` State = 2). Yerel ağ adresi Mac'in kendisinden bile açılmıyor; `localhost` açılıyor. Gerçek cihaz denemesi için şablonda adım var; ayara dokunulmadı.
 
 ## Uygulamada verilen kararlar
 
