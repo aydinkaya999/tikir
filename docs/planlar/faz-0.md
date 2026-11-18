@@ -19,7 +19,7 @@
 - [x] Task 4: Playwright, `pnpm e2e` ve `pnpm shots`
 - [x] Task 5: `domain/text.ts`
 - [x] Task 6: `domain/readability.ts` ve sınıf eşikleri
-- [ ] Task 7: Stiller, yazı tipleri ve `tr.ts`
+- [x] Task 7: Stiller, yazı tipleri ve `tr.ts`
 - [ ] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
 - [ ] Task 9: Button ve IconButton
 - [ ] Task 10: Chip, Card, PageCard ve SpeechBubble
@@ -241,25 +241,25 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 
 **Dosyalar:** `src/styles/tokens.css`, `src/styles/tokens-extra.css`, `src/styles/fonts.css`, `src/styles/global.css`, `src/main.tsx`, `src/i18n/tr.ts`, `src/i18n/tr.test.ts`, `src/design-copies.test.ts`, `e2e/smoke.spec.ts`, `package.json`, `docs/kararlar.md`.
 
-- [ ] Paketler: `@fontsource-variable/atkinson-hyperlegible-next`, `@fontsource/didact-gothic`.
-- [ ] Önce testler:
+- [x] Paketler: `@fontsource-variable/atkinson-hyperlegible-next`, `@fontsource/didact-gothic`.
+- [x] Önce testler:
   - `design-copies.test.ts`: `src/styles/tokens.css` ile `design/tokens.css` bayt bayt aynı. Kopya listesi sonraki görevlerde ikonlar ve SVG'lerle büyür.
   - `tr.test.ts`: `tr` içindeki hiçbir dizgide emoji (`\p{Extended_Pictographic}`) yok.
-- [ ] `tokens.css` kopyalanır. `tokens-extra.css` bir açıklama başlığıyla açılır; değerleri, onları kullanan görev ekler.
-- [ ] `fonts.css` (karar 10):
+- [x] `tokens.css` kopyalanır. `tokens-extra.css` bir açıklama başlığıyla açılır; değerleri, onları kullanan görev ekler.
+- [x] `fonts.css` (karar 10):
   - Atkinson: 200–800 değişken, `woff2-variations`;
   - Didact Gothic: 400;
   - ikisi de latin ve latin-ext, `font-display: swap`, paketteki `unicode-range` değerleri.
-- [ ] `global.css`:
+- [x] `global.css`:
   - `box-sizing`;
   - `body`: zemin `--color-ground`, metin `--color-ink`, yazı `--font-text`, `--size-body`, `--weight-medium`, `--leading-body`;
   - `:focus-visible` için `outline: 3px solid var(--color-cobalt)` ve `outline-offset: 2px`;
   - `prefers-reduced-motion: reduce` iken geçiş ve canlandırma yok;
   - form öğeleri `font: inherit`.
-- [ ] `tr.ts`: `const appName = 'Tıkır'`; `export const tr = { appName, … } as const`. Diğer metinler, onları kullanan görevde eklenir.
-- [ ] e2e duman testine eklenir: `Atkinson Hyperlegible Next` yüklendi (`document.fonts.check`) ve kendi kökeninden bir `.woff2` isteği gitti.
-- [ ] Bir kerelik denetim: Didact Gothic ğ, ş, ı, İ, Ğ ve Ş harflerini içeriyor mu? Sonuç "Kanıtlar" bölümüne yazılır.
-- [ ] Commit: `feat(styles): add tokens, fonts, global styles and tr skeleton`
+- [x] `tr.ts`: `const appName = 'Tıkır'`; `export const tr = { appName, … } as const`. Diğer metinler, onları kullanan görevde eklenir.
+- [x] e2e duman testine eklenir: `Atkinson Hyperlegible Next` yüklendi (`document.fonts.check`) ve kendi kökeninden bir `.woff2` isteği gitti.
+- [x] Bir kerelik denetim: Didact Gothic ğ, ş, ı, İ, Ğ ve Ş harflerini içeriyor mu? Sonuç "Kanıtlar" bölümüne yazılır.
+- [x] Commit: `feat(styles): add tokens, fonts, global styles and tr skeleton`
 
 ### Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
 
@@ -471,3 +471,9 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 ## Kanıtlar
 
 Task 7, 21 ve 23'te dolar.
+
+### Yazı tipleri (Task 7)
+
+- `pnpm exec vite build` yalnız dört yazı tipi dosyası üretir: Atkinson Hyperlegible Next değişken (latin, latin-ext) ve Didact Gothic 400 (latin, latin-ext). İtalik ve başka alt küme yok.
+- `e2e/smoke.spec.ts` → "the interface font is loaded from our own origin": `fonts.css` kaldırılınca kırmızı (0 yüz yüklendi), geri gelince yeşil.
+- Didact Gothic Türkçe harf denetimi (Chromium, tek seferlik; iki ayrı yedek aileyle ölçülen genişlik aynı çıktı): `ğ ş ı İ Ğ Ş ç ö ü Ç Ö Ü â î û` harflerinin hepsi Didact Gothic'ten çiziliyor, yedek yazı tipine düşen harf yok.

@@ -1,0 +1,8 @@
+/*
+ * Values the design uses that src/styles/tokens.css (an exact copy of design/tokens.css) does
+ * not define. Fixed colour, font, radius and shadow values may only appear in these two files
+ * (docs/planlar/faz-0.md, decision 3; enforced by Stylelint). Each value names its source in
+ * design/ekranlar/*.html. Components add what they need; nothing here is invented.
+ */
+:root {
+}

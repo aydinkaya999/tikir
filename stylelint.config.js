@@ -40,7 +40,8 @@ export default {
   },
   overrides: [
     {
-      files: ['src/styles/tokens.css', 'src/styles/tokens-extra.css'],
+      // Token files define the values; fonts.css holds only @font-face descriptors.
+      files: ['src/styles/tokens.css', 'src/styles/tokens-extra.css', 'src/styles/fonts.css'],
       rules: {
         'color-no-hex': null,
         'function-disallowed-list': null,

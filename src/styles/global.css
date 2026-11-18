@@ -1,0 +1,45 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-body);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Focus ring (docs/tasarim-sistemi.md, "Biçim değerleri"; not drawn in the design). */
+:focus-visible {
+  outline: 3px solid var(--color-cobalt);
+  outline-offset: 2px;
+}
+
+/* With reduced motion no transition or animation runs (docs/tasarim-sistemi.md, "Hareket"). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
