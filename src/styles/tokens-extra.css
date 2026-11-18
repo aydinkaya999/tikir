@@ -10,4 +10,14 @@
   --size-button-large: 18px;
   /* Pressed state, not drawn: 2 px down, shadow 2 px shorter (docs/tasarim-sistemi.md). */
   --lift-button-pressed: 0 2px 0 var(--color-ink);
+  /* Small bold labels, 14 px on every device: chips, page-card header (G1, G4, V1). */
+  --size-label: 14px;
+  /* Tıkır's speech bubble text: 15 px on phones (G2, G4), 17 px from 700 px (G1, G2, K1). */
+  --size-bubble: 15px;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --size-bubble: 17px;
+  }
 }

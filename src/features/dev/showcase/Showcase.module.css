@@ -54,6 +54,20 @@
   font-weight: var(--weight-bold);
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-gap);
+}
+
+.sample {
+  margin: 0;
+}
+
+.wide {
+  flex: 1 1 100%;
+}
+
 .iconGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));

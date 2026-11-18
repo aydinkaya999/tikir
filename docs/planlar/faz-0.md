@@ -22,7 +22,7 @@
 - [x] Task 7: Stiller, yazı tipleri ve `tr.ts`
 - [x] Task 8: Yönlendirme, ikonlar ve vitrin iskeleti
 - [x] Task 9: Button ve IconButton
-- [ ] Task 10: Chip, Card, PageCard ve SpeechBubble
+- [x] Task 10: Chip, Card, PageCard ve SpeechBubble
 - [ ] Task 11: Companion, Monster, Tile ve BookCover
 - [ ] Task 12: Checkbox, TextField, TextArea, Switch, SegmentedControl ve OptionCard
 - [ ] Task 13: StepTiles ve MicButton
@@ -305,9 +305,9 @@ export function levelCheck(input: string | readonly string[], grade: Grade): Lev
 - `PageCard`: `{ title: string; counter?: string }`. Köşe 22, gölge `--lift-page`.
 - `SpeechBubble`: `{ arrow?: 'left'|'top'; live?: boolean }`. `live` ise `aria-live="polite"`.
 
-- [ ] Önce testler: içerik, başlık ve sayaç; `aria-live`.
-- [ ] Vitrine eklenir. Görüntü G1, G4, K1 ve V1 ile karşılaştırılır.
-- [ ] Commit: `feat(components): add Chip, Card, PageCard and SpeechBubble`
+- [x] Önce testler: içerik, başlık ve sayaç; `aria-live`.
+- [x] Vitrine eklenir. Görüntü G1, G4, K1 ve V1 ile karşılaştırılır.
+- [x] Commit: `feat(components): add Chip, Card, PageCard and SpeechBubble`
 
 ### Task 11: Companion, Monster, Tile ve BookCover
 

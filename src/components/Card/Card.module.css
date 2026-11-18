@@ -1,0 +1,29 @@
+.card {
+  min-width: 0;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+}
+
+@media (min-width: 700px) {
+  .card {
+    padding: 22px;
+  }
+}
+
+.white {
+  background: var(--color-white);
+}
+
+.cobaltLight {
+  background: var(--color-cobalt-light);
+}
+
+.turquoiseLight {
+  background: var(--color-turquoise-light);
+}
+
+.lifted {
+  box-shadow: var(--lift-card);
+}
