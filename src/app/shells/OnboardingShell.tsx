@@ -52,7 +52,7 @@ export function OnboardingShell({ companion, action, children }: OnboardingShell
           ))}
         </div>
       </div>
-      <div className={styles.column}>
+      <div className={styles.column} data-pane="main">
         <main className={styles.main}>
           <div className={styles.progressRow}>
             <ol

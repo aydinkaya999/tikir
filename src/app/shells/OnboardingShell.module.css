@@ -142,6 +142,24 @@
   }
 }
 
+/*
+ * Two panes stack when the content is narrower than 720 px (docs/tasarim-sistemi.md); these panes
+ * start at the screen edges. TODO(design): the stacked panel is not drawn; it heads the page.
+ */
+@media (min-width: 700px) and (max-width: 719.98px) {
+  .shell {
+    flex-direction: column;
+  }
+
+  .panel {
+    position: static;
+    flex: none;
+    height: auto;
+    border-right: 0;
+    border-bottom: var(--border);
+  }
+}
+
 /* Web (from 1200 px): K1 web — 380–520 px panel, content up to 640 px wide. */
 @media (min-width: 1200px) {
   .panel {

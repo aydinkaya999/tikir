@@ -170,6 +170,22 @@
   }
 }
 
+/*
+ * Two panes stack when the content is narrower than 720 px (docs/tasarim-sistemi.md): with 32 px
+ * of padding on each side, below 784 px. TODO(design): the stacked tablet layout is not drawn;
+ * Tıkır and the controls follow the content.
+ */
+@media (min-width: 700px) and (max-width: 783.98px) {
+  .body {
+    grid-template-areas:
+      'content'
+      'companion'
+      'controls';
+    grid-template-rows: 1fr auto auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Web (from 1200 px): G4 web — white top bar with wordmark, steps and the exit link. */
 @media (min-width: 1200px) {
   .header {

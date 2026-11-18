@@ -227,3 +227,48 @@ test('the way between the child and parent areas is a web-only link', async ({ p
   await open(page, '/veli', 'tablet');
   await expect(page.getByRole('link', { name: 'Çocuk ekranı' })).toBeHidden();
 });
+
+// docs/tasarim-sistemi.md, "Ek kurallar": a two-pane layout stacks when its content is narrower
+// than 720 px. The widths between the design sizes are where this shows (700 px is the smallest
+// two-pane width, 768 and 820 px are portrait tablets).
+const twoPaneShells = [
+  { path: '/seans/oku', shell: 'session' },
+  { path: '/kitaplik/kur', shell: 'focus' },
+  { path: '/kurulum/hesap', shell: 'onboarding' },
+] as const;
+
+for (const route of twoPaneShells) {
+  for (const width of [700, 768, 820, 1180]) {
+    test(`${route.path} stacks its panes only below 720 px of content (${String(width)} px)`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route.path);
+      const pane = page.locator(`[data-shell="${route.shell}"] [data-pane="main"]`);
+      await expect(pane).toBeAttached();
+
+      const { paneWidth, contentWidth, overflow } = await pane.evaluate((element) => {
+        const layout = element.parentElement ?? element;
+        const style = getComputedStyle(layout);
+        return {
+          paneWidth: element.getBoundingClientRect().width,
+          contentWidth:
+            layout.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        };
+      });
+
+      expect(overflow).toBe(0);
+      if (contentWidth < 720) {
+        expect(
+          Math.abs(paneWidth - contentWidth),
+          'stacked: the main pane is full width',
+        ).toBeLessThan(1);
+      } else {
+        expect(paneWidth, 'side by side: the main pane shares the width').toBeLessThan(
+          contentWidth - 1,
+        );
+      }
+    });
+  }
+}

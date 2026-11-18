@@ -41,7 +41,9 @@ export function FocusShell({ title, subtitle, backTo, aside, action, children }:
             {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
           </div>
         </div>
-        <div className={styles.content}>{children ?? <Outlet />}</div>
+        <div className={styles.content} data-pane="main">
+          {children ?? <Outlet />}
+        </div>
         {aside !== undefined && <div className={styles.aside}>{aside}</div>}
         {action !== undefined && <div className={styles.action}>{action}</div>}
       </main>

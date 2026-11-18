@@ -119,6 +119,23 @@
   }
 }
 
+/*
+ * Two panes stack when the content is narrower than 720 px (docs/tasarim-sistemi.md): with 32 px
+ * of padding on each side, below 784 px. TODO(design): the stacked tablet layout is not drawn;
+ * the aside and the action follow the content.
+ */
+@media (min-width: 700px) and (max-width: 783.98px) {
+  .body {
+    grid-template-areas:
+      'header'
+      'content'
+      'aside'
+      'action';
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Web (from 1200 px): U3 web — white top bar, content up to 1280 px. */
 @media (min-width: 1200px) {
   .topBar {

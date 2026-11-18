@@ -49,7 +49,9 @@ export function SessionShell({ chapterLabel, companion, controls, children }: Se
         </Link>
       </header>
       <main className={styles.body}>
-        <div className={styles.content}>{children ?? <Outlet />}</div>
+        <div className={styles.content} data-pane="main">
+          {children ?? <Outlet />}
+        </div>
         <div className={styles.companion}>
           <Companion
             className={styles.face}
