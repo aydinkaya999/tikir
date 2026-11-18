@@ -128,6 +128,7 @@
     - `src/domain/**`: yalnız `./` ile başlayan içe aktarma; `Date.now()` ve argümansız `new Date()` yok (test dosyaları hariç).
     - `src/components/**`: `features`, `app`, `services` ve `i18n` içe aktarılamaz.
     - `src/domain/**` ve `src/components/**`: `window`, `document`, `navigator`, `localStorage`, `sessionStorage`, `indexedDB`, `fetch`, `XMLHttpRequest`, `WebSocket` yok.
+      Son incelemede kapsam `src/features/**` ve `src/app/**` ile, liste `self`, `globalThis`, `caches`, `EventSource`, `AudioContext`, `MediaRecorder`, `Audio`, `Image`, `Worker` ile genişledi; yalnız `src/services` serbest (`src/lint-boundaries.test.ts`).
     - `src/**/*.tsx` (vitrin ve testler hariç): boş olmayan JSX metni yok; `aria-label`, `alt`, `title` ve `placeholder` içinde boş olmayan düz dizgi yok.
     - Her yerde `toUpperCase()` ve `toLowerCase()` yok; `text.ts` içindeki Türkçe yardımcılar kullanılır.
 - [x] Stylelint:

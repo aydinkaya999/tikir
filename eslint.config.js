@@ -8,16 +8,27 @@ import tseslint from 'typescript-eslint';
 
 // Layers that must not touch the browser directly (CLAUDE.md: services own the microphone,
 // network and storage; docs/mimari.md: domain is pure).
+// The microphone, the network and storage, and the global objects that reach them
+// (`globalThis.fetch` would otherwise slip through). Only src/services may use them.
 const browserApis = [
   'window',
+  'self',
+  'globalThis',
   'document',
   'navigator',
   'localStorage',
   'sessionStorage',
   'indexedDB',
+  'caches',
   'fetch',
   'XMLHttpRequest',
   'WebSocket',
+  'EventSource',
+  'AudioContext',
+  'MediaRecorder',
+  'Audio',
+  'Image',
+  'Worker',
 ].map((name) => ({
   name,
   message: 'This layer does not touch browser APIs; go through an interface in src/services.',
@@ -144,7 +155,12 @@ export default defineConfig([
   },
 
   {
-    files: ['src/domain/**/*.ts', 'src/components/**/*.{ts,tsx}'],
+    files: [
+      'src/domain/**/*.ts',
+      'src/components/**/*.{ts,tsx}',
+      'src/features/**/*.{ts,tsx}',
+      'src/app/**/*.{ts,tsx}',
+    ],
     ignores: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
     rules: {
       'no-restricted-globals': ['error', ...browserApis],
