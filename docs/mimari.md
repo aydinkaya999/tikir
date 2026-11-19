@@ -247,7 +247,7 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 **Seansın servisleri (Faz 2a):**
 
 - `listener/`: `ReadingListener` ve olay tipleri (`types.ts`), saf benzetim (`simulateReading.ts`), hazır senaryolar (`scenarios.ts`), `FakeListener` (senaryo ve elle kip). Ayrıntı: `docs/dinleme-hatti.md` bölüm 2–3.
-- `narrator/`: `Narrator`, `narrationTiming` ve `unitDurationMs` (`Narrator.ts`), `SilentNarrator`, `SpeechSynthesisNarrator` (`SpeechPort` dikişi, `browserSpeechPort`), `createNarrator` (Türkçe ses varsa konuşan, yoksa sessiz). Her anlam ünitesi ayrı bir konuşmadır; 1,5 sn içinde başlamayan ya da hata veren ünite sessiz zamanlanır (`docs/kararlar.md` T8).
+- `narrator/`: `Narrator`, `narrationTiming` ve `unitDurationMs` (`Narrator.ts`), `SilentNarrator`, `SpeechSynthesisNarrator` (`SpeechPort` dikişi, `browserSpeechPort`), `createNarrator` (cihazda Türkçe ses varsa konuşan, yoksa sessiz; çevrimiçi sesler metni üçüncü tarafa gönderdiği için kullanılmaz). Her anlam ünitesi ayrı bir konuşmadır; 1,5 sn içinde başlamayan ya da hata veren ünite sessiz zamanlanır, başlayıp bitmeyen ünite bir süre sonra bitmiş sayılır (`docs/kararlar.md` T8).
 - `recorder/`: `Recorder`, `RecordingStore` ve `IndexedDbRecordingStore`, `PcmRecorder` (T21).
 - `repository/`: `Repository` ve `RepositoryUnavailableError`, şema (`db.ts`), paketlenen içerik (`seedContent.ts`), `IndexedDbRepository`. `src/app/services.ts` → `appRepository()` sayfa başına tek depo verir.
 - `id.ts`: `createId()`, `crypto.getRandomValues` ile RFC 4122 v4 (güvenli olmayan bağlamda `randomUUID` yok). `notify.ts`: `notifyAll()`, dinleyicileri sırayla çağırır; fırlatan dinleyiciyi `reportError` ile bildirir, ötekiler yine çağrılır.

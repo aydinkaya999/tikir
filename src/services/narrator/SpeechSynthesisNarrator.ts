@@ -6,9 +6,19 @@ import type { Unsubscribe } from '../types';
 import { narrationTiming, unitDurationMs } from './Narrator';
 import { type NarrationJob, SilentNarrator } from './SilentNarrator';
 
+/**
+ * A voice of the device. localService is false for a voice served online: it would send the text
+ * to a third party (docs/kararlar.md T12), so it is never used.
+ */
+export interface SpeechVoice {
+  name: string;
+  lang: string;
+  localService: boolean;
+}
+
 /** The seam over window.speechSynthesis. */
 export interface SpeechPort {
-  voices(): { name: string; lang: string }[];
+  voices(): SpeechVoice[];
   onVoicesChanged(callback: () => void): Unsubscribe;
   speak(
     text: string,
@@ -26,7 +36,12 @@ export function browserSpeechPort(): SpeechPort | null {
   // Kept until it ends: some engines drop the events of an utterance nothing refers to.
   const speaking = new Set<SpeechSynthesisUtterance>();
   return {
-    voices: () => synthesis.getVoices().map((voice) => ({ name: voice.name, lang: voice.lang })),
+    voices: () =>
+      synthesis.getVoices().map((voice) => ({
+        name: voice.name,
+        lang: voice.lang,
+        localService: voice.localService,
+      })),
     onVoicesChanged(callback) {
       synthesis.addEventListener('voiceschanged', callback);
       return () => {

@@ -1,5 +1,5 @@
 // A SpeechPort for tests: every utterance is kept, and the test plays its events.
-import type { SpeechPort } from '../services/narrator/SpeechSynthesisNarrator';
+import type { SpeechPort, SpeechVoice } from '../services/narrator/SpeechSynthesisNarrator';
 import { notifyAll } from '../services/notify';
 import type { Unsubscribe } from '../services/types';
 
@@ -12,14 +12,14 @@ export interface SpokenUnit {
 export class FakeSpeechPort implements SpeechPort {
   readonly spoken: SpokenUnit[] = [];
   cancels = 0;
-  private voiceList: { name: string; lang: string }[];
+  private voiceList: SpeechVoice[];
   private readonly voiceListeners = new Set<() => void>();
 
-  constructor(voices: { name: string; lang: string }[] = []) {
+  constructor(voices: SpeechVoice[] = []) {
     this.voiceList = voices;
   }
 
-  voices(): { name: string; lang: string }[] {
+  voices(): SpeechVoice[] {
     return this.voiceList;
   }
 
@@ -30,7 +30,7 @@ export class FakeSpeechPort implements SpeechPort {
     };
   }
 
-  setVoices(voices: { name: string; lang: string }[]): void {
+  setVoices(voices: SpeechVoice[]): void {
     this.voiceList = voices;
     notifyAll<undefined>(this.voiceListeners, undefined);
   }

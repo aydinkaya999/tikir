@@ -1,5 +1,6 @@
-// Picks the narrator (docs/kararlar.md T8): the speaking one with a Turkish voice, otherwise the
-// silent one. The voice list can arrive late, so an empty list is given a moment to load.
+// Picks the narrator (docs/kararlar.md T8): the speaking one with a Turkish voice of the device,
+// otherwise the silent one. An online voice would send the text to a third party (T12), so it is
+// never used. The voice list can arrive late, so an empty list is given a moment to load.
 import type { Narrator } from './Narrator';
 import { narrationTiming } from './Narrator';
 import { SilentNarrator } from './SilentNarrator';
@@ -7,16 +8,15 @@ import {
   browserSpeechPort,
   type SpeechPort,
   SpeechSynthesisNarrator,
+  type SpeechVoice,
 } from './SpeechSynthesisNarrator';
 
-type Voice = { name: string; lang: string };
-
-/** 'tr-TR', 'tr_TR' (Android) or 'tr'. */
-function turkish(voices: readonly Voice[]): Voice | null {
-  return voices.find((voice) => /^tr(?:[-_]|$)/i.test(voice.lang)) ?? null;
+/** A Turkish voice on the device: 'tr-TR', 'tr_TR' (Android) or 'tr'; never an online voice (T12). */
+function turkish(voices: readonly SpeechVoice[]): SpeechVoice | null {
+  return voices.find((voice) => voice.localService && /^tr(?:[-_]|$)/i.test(voice.lang)) ?? null;
 }
 
-function turkishVoice(port: SpeechPort): Promise<Voice | null> {
+function turkishVoice(port: SpeechPort): Promise<SpeechVoice | null> {
   const voices = port.voices();
   if (voices.length > 0) {
     return Promise.resolve(turkish(voices));

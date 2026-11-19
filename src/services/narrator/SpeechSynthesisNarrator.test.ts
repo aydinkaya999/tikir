@@ -4,7 +4,7 @@ import { FakeSpeechPort } from '../../test/fakeSpeech';
 import { unitDurationMs } from './Narrator';
 import { SpeechSynthesisNarrator } from './SpeechSynthesisNarrator';
 
-const voice = { name: 'Yelda', lang: 'tr-TR' };
+const voice = { name: 'Yelda', lang: 'tr-TR', localService: true };
 const page: Page = [
   ['Deniz sırt çantasını', 'omzuna aldı.'],
   ['Tıkır kulaklarını dikti', 've rüzgârı dinledi.'],
