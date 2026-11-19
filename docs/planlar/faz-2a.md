@@ -43,7 +43,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 ## Görev listesi
 
 - [x] Task 0: Plan dosyası, dal ve yanıtlanan sorular
-- [ ] Task 1: Alan tipleri, ürün parametreleri ve takvim günü
+- [x] Task 1: Alan tipleri, ürün parametreleri ve takvim günü
 - [ ] Task 2: Rakamların okunuşu ve bölümün kelimeleri
 - [ ] Task 3: Puanlama
 - [ ] Task 4: Canavar kelimeler
@@ -338,7 +338,7 @@ export function weekdayOf(date: LocalDate): number;                     // 0 = S
 export function localDateOf(moment: Date): LocalDate;                   // the moment's local calendar day
 ```
 
-- [ ] **Kırmızı:** `date.test.ts`:
+- [x] **Kırmızı:** `date.test.ts`:
   - `addDays('2026-11-21', -5)` → `'2026-11-16'`;
   - `addDays('2026-12-31', 1)` → `'2027-01-01'`;
   - `addDays('2028-02-28', 1)` → `'2028-02-29'`;
@@ -346,10 +346,10 @@ export function localDateOf(moment: Date): LocalDate;                   // the m
   - `daysBetween('2026-11-16', '2026-11-21')` → `5`, ters yönde `-5`;
   - `weekdayOf('2026-11-22')` → `0`, `weekdayOf('2026-11-19')` → `4`;
   - `localDateOf(new Date(2026, 10, 19, 23, 59))` → `'2026-11-19'`, `localDateOf(new Date(2026, 0, 5, 0, 0))` → `'2026-01-05'`.
-- [ ] `pnpm test src/domain/date.test.ts` → FAIL (modül yok).
-- [ ] Tipleri, parametreleri ve `date.ts`'i yaz. Gün aritmetiği `Date.UTC` ile, `localDateOf` yerel `getFullYear/getMonth/getDate` ile.
-- [ ] Aynı komut → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(domain): add session types, product parameters and calendar days`.
+- [x] `pnpm test src/domain/date.test.ts` → FAIL (modül yok).
+- [x] Tipleri, parametreleri ve `date.ts`'i yaz. Gün aritmetiği `Date.UTC` ile, `localDateOf` yerel `getFullYear/getMonth/getDate` ile.
+- [x] Aynı komut → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(domain): add session types, product parameters and calendar days`.
 
 ### Task 2: Rakamların okunuşu ve bölümün kelimeleri
 
