@@ -739,6 +739,81 @@ Task 10, 12 ve 13'te dolar.
   - Emülatörün sanal mikrofonu ses vermiyor. `adb emu avd hostmicon` "OK" dedi, ama macOS emülatöre mikrofon izni vermemiş görünüyor. Sessiz çerçeve sayacı bunu gösterdi.
   - WebView'da tarayıcı izni, yerel izin verilmiş olsa da "prompt" okunuyor.
 
+### Son inceleme
+
+Bütün dal (`b4ec061..49359c0`) bağımsız bir incelemeciye verildi. Kritik bulgu yok, 3 önemli ve 12 küçük bulgu var; hüküm "düzeltmelerle". İncelemeci dönüştürücüyü 8–192 kHz arasında ayrıca denedi: uzunluk birebir, perde 440,0 Hz. Bu Mac'in varsayılan çıkışı Bluetooth eller serbest kipindeki bir kulaklık olduğu için gerçek bir 16 kHz bağlamda da denedi.
+
+Etkisine göre yeniden derecelenen bulgularla birlikte tek turda düzeltilenler; her biri önce kırmızı görülen bir testle doğrulandı, belgeler hariç:
+
+- `ea43b77`: rapor e2e'si 48 kHz'i sabit bekliyordu. Bluetooth kulaklıkla bağlam 16 kHz oluyor. Artık sayfanın kendi bağlamının hızıyla karşılaştırıyor.
+- `56235f8`: iPhone'da "Kaydı çal", mikrofonun kapanması beklenirken kullanıcı hareketinin dışına düşüyordu ve reddi yakalanmıyordu. Çalar artık tıklamanın içinde hazırlanıyor (`prepare()`), hata nedeniyle ekranda görünüyor. Yeni test ayrıca `DOMException`'ın her motorda `Error` olmadığını gösterdi; ortak `toFailure` yazıldı.
+- `fdebe45`: aynı dakikadaki indirmeler aynı adı alıyordu; ad artık saniyeli.
+- `a9851d0`: yankı sunucusu bozuk ya da çok büyük bir iletiyle çöküyordu. Sunucu `audio-trial` ile yerel ağa açık olduğu için ileti sınırı ve hata dinleyicisi eklendi.
+- `b344d21`: yankı giderme kipi ('remote-only') `true` diye raporlanıyordu; artık geldiği gibi raporlanıyor. İncelemecinin karar 15'e itirazı kabul edildi.
+- Belgeler: kararlar bu bölüme taşındı (önceden yalnız git dışındaki defterdeydi). Şablona şunlar eklendi:
+  - her ayar setinden sonra rapor indirme;
+  - kök sertifikayı kaldırma;
+  - rapordaki aygıt adında kişi adı uyarısı;
+  - uygulama kabuğunda izin adımı;
+  - ilk izin penceresinden sonra ikinci basış;
+  - giriş hızının anlamı.
+  Belgelerdeki yanlış dosya göstergesi ve eksik günlük satırı düzeltildi.
+- `49359c0` (belge etiketiyle davranış değiştiren commit) tek amaçlı dört commit'e bölündü: `700ed70`, `417b56f`, `ac9b7bc`, `0219912`.
+
+**Ertelenen küçük bulgular** (Faz 2'de seansın mikrofonu kullanmasıyla önem kazanır):
+
+1. Yankı testi durdurulunca ya da bağlantı kopunca yoldaki çerçeveler "kayıp" sayılıyor.
+2. Rapordaki giriş hızı, mikrofonun değil ses bağlamının hızı; şablon farkı açıklıyor.
+3. Susturulan ya da askıya alınan girdi, durum değiştirmeden kaydı veya yankı testini bekletiyor; Faz 2 susturmayı göstermeli.
+4. Hiç sonuçlanmayan bir `open()` `stop()` ile iptal edilemiyor.
+5. Fırlatan bir dinleyici `start()`'ı reddettiriyor; Faz 2 dinleyicileri yalıtmalı.
+6. Boş bir yarım kayıt çalınıp indirilebiliyor; çalma hatası artık yakalanıyor.
+7. Canlı bölgeler saniyede 10–50 kez güncelleniyor.
+8. `AudioCapture.ts`, `denied`, `unavailable` ve `error` durumlarının `stop()`'tan sonra da kaldığını yazmıyor.
+
 ## Uygulamada verilen kararlar
 
-Planın açık bıraktığı ya da planla çeliştiği yerlerde verilen kararlar, verildikleri sırayla yazılır.
+Planın açık bıraktığı ya da planla çeliştiği yerlerde verilen kararlar, verildikleri sırayla. Parantez içinde yanlışsa bedeli.
+
+1. Ayrı bir worktree yerine bu klasörde `faz-1` dalında çalışıldı; `pnpm dev` burada inceleniyor (yok; dal taşınabilir).
+2. `copy.ts` her görevde yalnız o görevin gösterdiği metinleri aldı; sonuç plandaki listeyle aynı (yok).
+3. `floatToInt16` iki yönde de 32768 ile ölçekliyor ve +1'i 32767'ye kırpıyor. Plandaki "artı × 32767" yorumu, planın kendi gidiş-dönüş testini (en çok 1/32768 sapma) bozuyordu (artı tam ölçekte bir adım erken kırpma; duyulmaz).
+4. Ölçüm yardımcıları (`src/test/signal.ts`) elle türetilmiş değerlerle sınandı; bozma denemesi iki testi kırmızıya çevirdi. Sonraki frekans testleri bunlara dayanıyor (yedi küçük test).
+5. `parseWav` hatalarını nedenine göre adlandırıyor; çıplak `toThrow()` iskeletle de geçiyordu (yok).
+6. Plandaki 12 ve 11 kHz örtüşme testlerine 9 kHz durumları eklendi: pencere kaldırılınca planın testleri geçiyordu, 9 kHz yakaladı (iki test).
+7. Dönüştürücü hızları tam hertz'e yuvarlıyor, sıfır ve eksiyi reddediyor (kesirli bir aygıt hızında 0,5 Hz'ten az sapma).
+8. `stop()` yalnız `starting` ve `capturing` durumlarını `idle` yapıyor; `denied`, `unavailable` ve `error` kalıyor, böylece neden ekranda kalıyor (izin reddinden sonra yeniden açmak için yine `start()` gerekir).
+9. Sayfanın gizlendiğini dinleyen kayıt `start()` başlarken kuruluyor; izin sorulurken sekme gizlenirse geç gelen mikrofon da kapanıyor (yok).
+10. E2e'de `getUserMedia` saplaması ve akış izleme `MediaDevices.prototype` üzerinde. WebKit'te derlenmiş sayfa, init betiğinin gördüğünden başka bir `navigator.mediaDevices` nesnesiyle çalışıyor (ölçüldü) (yok).
+11. `AudioLabServices.createCapture` yöntem değil işlev özelliği; kanca onu bağlamından ayrı alıyor (yok).
+12. `useCapture` mikrofonu `useMemo` yerine durumda tutuyor: React bellekteki değeri atabilir, bu değer ise açık bir mikrofonun sahibi (yok).
+13. Mikrofon açılırken "Mikrofonu kapat" etkin; yavaş izin penceresi iptal edilebiliyor, geç gelen mikrofon kapanıyor (yok).
+14. Düzey, göstergenin yanında onaylı metinlerle dBFS olarak da yazıyor (yok).
+15. Yankı giderme kipi dizgisi ('all', 'remote-only') önce `true` sayılıyordu; son incelemede geri alındı, artık geldiği gibi raporlanıyor (kipin adı kaybolurdu).
+16. E2e'de perde sıfır geçişiyle değil tayfsal tepeyle (Goertzel) ölçülüyor. Chromium'un dosyalı sahte mikrofonu ~%2 hızlı çalışıp örnek atıyor: aynı kayıtta sıfır geçişi 449,2 Hz, tepe 440,5 Hz. Yanlış giriş hızı yine 404 ya da 479 Hz olarak görünür (yok).
+17. `WebAudioWavPlayer`, çözme sürerken durdurulan çalmayı iptal ediyor (WebKit e2e buldu) ve testler için bağlam üreticisi alıyor (yok).
+18. macOS'ta e2e ekran uyanıkken koşuyor (`caffeinate -u -t 2; caffeinate -d -i pnpm e2e`). İki ekran uyurken WebKit'in fare olayları hedefini şaşırıyor, Faz 0'ın gezinme testinde de (gözetimsiz bir koşu `caffeinate` olmadan WebKit tıklamalarında düşer).
+19. Kayıt ve yankı özetleri sayfaya Task 8'de, raporun onları kullandığı yerde bağlandı (yok).
+20. `EchoSocket`'te `binaryType` yok; tarayıcı uyarlayıcısı WebSocket'i `arraybuffer` ile kuruyor (yok).
+21. Ortak e2e izleyicisi başka kökene giden WebSocket'leri de bildiriyor; Faz 0 takımı da sıkılaştı ve yeşil (yok).
+22. "Ulaşılamadı" e2e'si aynı kökende bilinmeyen bir yol kullanıyor: önizleme sunucusu yanıtlamıyor, 5 sn'lik bağlantı süresi doluyor. CSP reddi ve kapalı bağlantı birim testli (yok).
+23. `describeUserAgent` tanımadığı değer için `'unknown'` döndürüyor, sayfa "bilinmiyor" yazıyor; Türkçe metin servis katmanına girmiyor (yok).
+24. İşletim sistemi sürümsüz adlanıyor; plan "Android <sürüm>" diyordu. Chrome, Android'i 10'da ve macOS'u 10.15.7'de donduruyor, Safari 26 iOS'u 18.6'da. Ham UA raporda (yok).
+25. Android WebView tanınıyor: "Android WebView <sürüm>" (bir test).
+26. Sessiz bir kaydın düzeyi raporda `null`, çünkü JSON'da eksi sonsuz yok (yok).
+27. Ekrandaki rapor bir değişiklikten hemen sonra, sonra da saniyede bir yenileniyor. E2e, ekrandaki JSON'u okumayı ve indirme tıklamasını tek sayfa görevinde yapıyor (yok).
+28. HTTPS deneme sunucusu `https://localhost:4443` üzerinden doğrulandı. Bu Mac'in güvenlik duvarı bütün gelen bağlantıları engelliyor; yerel ağ adresine Mac'in kendisinden bile ulaşılmıyor. Ayara dokunulmadı (yerel ağdan erişim insan denemesine kadar kanıtsız).
+29. Ekran görüntüsü `shots/audio-trial-https.png` adını aldı (yok).
+30. `vite.config.ts` iki içe aktarmayı `.ts` uzantısıyla yapıyor; Vite gelecekteki yapılandırma yükleyicisi için uyardı (yok).
+31. Şablonun hazırlığına Mac güvenlik duvarı adımı eklendi; masaüstü Chrome `https://localhost:4443` ile açılıyor (yok).
+32. `CLAUDE.md` komutlarına ekranı uyanık tutma notu eklendi (yok).
+33. iOS, Capacitor 8'in varsayılanı Swift Package Manager ile kuruldu, CocoaPods yok. `Package.resolved` commit'li (yok).
+34. `cap telemetry off` makineye kaydediliyor; T19 her makinede bir kez çalıştırılmasını söylüyor (atlayan bir makine CLI kullanım verisi gönderebilir).
+35. `pnpm cap:sync` komutu `CLAUDE.md`'ye yazıldı; Task 11'in dosya listesinde yoktu (yok).
+36. Ürün sahibinin onayıyla `server.appStartPath` kalktı: Capacitor iOS onu dosya yolu sanıp kapanıyordu. `cap` derlemesi `src/appShellStart.ts` ile ses sayfasında açılıyor. Bu modül `main.tsx`'in ilk içe aktarması, çünkü `App.tsx` yönlendiriciyi yüklenirken kurup adresi o an okuyor (yok).
+37. Android JDK 21 ile derleniyor (mise, depo dışı). JDK 17 "invalid source release: 21" verdi; Gradle 8.14.3 JDK 25'te çalışmıyor (yok).
+38. Ses sayfası güvenli alanları boş bırakıyor; iOS kabuğunda başlık durum çubuğunun altındaydı (yok).
+39. Android emülatöründe düğmeye ekran koordinatıyla dokunuldu; WebView içeriği uiautomator dökümüne girmiyor (yok; tek seferlik).
+40. Son inceleme kabul yürüyüşünden önce yapıldı, Faz 0'daki gibi; kanıtlar incelenmiş ve düzeltilmiş kod üzerinde (yok).
+41. Son incelemede bazı küçük bulgular etkisine göre önemliye yükseltildi: şablon eksikleri, ad çakışması, yankı sunucusunun çökmesi, yanlış belge göstergeleri. Gerekçe: denemenin sonuçlarını bozabilir, telefonda güvenilen bir kök sertifika bırakabilir, kişi adı sızdırabilir ya da sonraki oturumu yanıltabilirlerdi (düzeltme turu biraz uzadı).
+42. İncelemecinin yargılamadığı "izin penceresi `visibilitychange` doğurup ilk açılışı iptal edebilir" durumu cihazsız doğrulanamıyor. Şablon, pencereden sonra durum "Kapalı" görünürse bir kez daha basılmasını ve not edilmesini söylüyor (ilk kullanımda bir basış fazla).

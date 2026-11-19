@@ -59,14 +59,24 @@ Sayfadaki üç anahtar: Yankı giderme, Gürültü bastırma, Otomatik kazanç. 
 Her ortamda sırayla:
 
 1. Adresi aç. Sertifika uyarısı çıkarsa dur: kök sertifika kurulmamış ya da güvenilmemiş.
-2. A setiyle "Mikrofonu aç". İzin sorulursa izin ver. "Durum" satırı "Açık" olmalı.
+2. A setiyle "Mikrofonu aç". İzin sorulursa izin ver. "Durum" satırı "Açık" olmalı. İzin penceresinden sonra "Kapalı" görünürse bir kez daha "Mikrofonu aç"a bas ve bunu "Not" sütununa yaz.
 3. Konuş; "Ses düzeyi" çubuğu ve dBFS değeri sesle oynamalı. Konuşurken görülen en yüksek değeri tabloya yaz.
-4. "10 saniye kaydet", metni oku. "Kaydı çal" ile dinle: anlaşılır mı, bozuk mu, boş mu? "Kaydı indir (WAV)" ile dosyayı al.
-5. Mikrofonu kapat, B setine geç, 2–4. adımları yinele.
-6. Mikrofonu yeniden aç ve "Yankı testini başlat". 500 çerçeve gider; ortanca ve 95. yüzdelik ms olarak çıkar.
-7. "Raporu indir (JSON)". İndirme çalışmazsa sayfadaki JSON'un ekran görüntüsünü al.
+4. "10 saniye kaydet", metni oku. "Kaydı çal" ile dinle: anlaşılır mı, bozuk mu, boş mu? Kaydın altında "Ayrıntı: …" diye bir satır çıkarsa çalma başarısız olmuştur; satırı "Not" sütununa aynen yaz. "Kaydı indir (WAV)" ile dosyayı al. Ana ekran uygulamasında indirme çalışmayabilir; çalışmazsa bunu not et.
+5. "Raporu indir (JSON)": bu, A setinin raporudur. İndirme çalışmazsa sayfadaki JSON'un ekran görüntüsünü al.
+6. Mikrofonu kapat, B setine geç, 2–5. adımları yinele.
+7. Mikrofonu yeniden aç ve "Yankı testini başlat". 500 çerçeve gider; ortanca ve 95. yüzdelik ms olarak çıkar. Sonra raporu bir kez daha indir: yankı sonucu bu rapordadır.
 8. Mikrofon açıkken sekmeyi ya da uygulamayı arka plana al. Telefonun mikrofon göstergesi (iPhone'da turuncu nokta) sönmeli; sayfaya dönünce "Durum" "Kapalı" olmalı.
 9. Tarayıcının site ayarlarından mikrofon iznini reddet, sayfayı yenile, "Mikrofonu aç": açıklama cümlesi görünmeli ve sayfa çökmemeli. Sonra izni geri aç.
+
+**Raporu paylaşmadan önce.** Rapor, aygıtın adını taşır ("deviceLabel"). Bu ad kişi adı içerebilir (örneğin "<ad> iPhone mikrofonu"). Raporu depoya eklemeden ya da paylaşmadan önce bu alanı sil.
+
+**Deneme bitince**
+
+- iPhone: Ayarlar → Genel → VPN ve Aygıt Yönetimi → mkcert profili → Profili Sil. Güven ayarı da onunla gider.
+- Android: Ayarlar → Güvenlik → Şifreleme ve kimlik bilgileri → Kullanıcı kimlik bilgileri → mkcert → Kaldır.
+- Mac: güvenlik duvarını eski haline getir.
+
+Güvenilen bir kök sertifikanın telefonda kalması, o sertifikanın anahtarı ele geçerse trafiğin okunabilmesi demektir.
 
 ## Sonuçlar
 
@@ -93,6 +103,10 @@ Her ortamda sırayla:
 | 4 | Android Chrome | | | | | | | | | |
 
 "Kaçan çerçeve": tarayıcının mikrofondan hiç ses vermediği süre ve yolda kaybolan çerçeveler. "Sessiz çerçeve": örneklerinin hepsi sıfır olan çerçeve; sayı büyükse mikrofon ses vermeden çerçeve üretiyor demektir (`docs/dinleme-hatti.md` bölüm 1).
+
+"Giriş hızı": raporun "Giriş örnekleme hızı" satırı, yani ses bağlamının hızı. Dönüştürücü bu hızdan 16 kHz'e çevirir. Bu hız çıkış aygıtına bağlıdır: çoğu cihazda 48000, eller serbest kipindeki Bluetooth kulaklıkla 16000 olabilir. Mikrofonun kendi hızı JSON'da `capture.applied.sampleRate` alanındadır. İkisi farklıysa ikisini de yaz.
+
+Yankı testi yarıda durursa "Kayıp" sayısı yoldaki çerçeveleri de içerir. Kayıp yalnız tamamlanan testte anlamlıdır.
 
 ## Gözlemler ve karar önerisi
 
@@ -124,7 +138,14 @@ Aynı sayfa Capacitor ile iOS ve Android uygulamasında açılır (`docs/kararla
 2. `pnpm exec cap run android --list` ile cihazın kimliğini bul, sonra `JAVA_HOME=$(mise where java@temurin-21) pnpm exec cap run android --target <kimlik>`.
 3. "Mikrofonu aç": Android izin penceresi → İzin ver.
 
-**Adımlar.** Tarayıcıdaki 2–5, 8 ve 9. adımlar; yankı testi ve indirme yok. Raporu ekranda oku, ekran görüntüsünü al. Ölçüt 6 için kabukta alınan ses boş olmamalı:
+**Adımlar.** Tarayıcıdaki 2–6 ve 8. adımlar; yankı testi ve indirme yok. Raporu ekranda oku, ekran görüntüsünü al. 9. adımın yerine uygulamada iznin kendisi denenir:
+
+- iPhone: Ayarlar → Tıkır → Mikrofon kapalı.
+- Android: Ayarlar → Uygulamalar → Tıkır → İzinler → Mikrofon → İzin verme.
+
+Uygulamaya dönüp "Mikrofonu aç"a bas: açıklama cümlesi görünmeli. Sonra izni geri aç.
+
+Ölçüt 6 için kabukta alınan ses boş olmamalı:
 
 - konuşurken düzey çubuğu oynamalı;
 - geri çalmada ses duyulmalı;
