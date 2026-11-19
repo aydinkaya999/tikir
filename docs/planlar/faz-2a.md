@@ -51,7 +51,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 6: Okuma benzetimi ve hazır senaryolar
 - [x] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
 - [x] Task 8: `ReadingListener` ve `FakeListener`
-- [ ] Task 9: Seslendirme
+- [x] Task 9: Seslendirme
 - [ ] Task 10: Depo
 - [ ] Task 11: Kayıt
 - [ ] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
@@ -859,7 +859,7 @@ export function createNarrator(port?: SpeechPort | null): Promise<Narrator>;
 
 **Adımlar:**
 
-- [ ] **Kırmızı** (sahte zaman ve sahte `SpeechPort`):
+- [x] **Kırmızı** (sahte zaman ve sahte `SpeechPort`):
   1. **Süre tahmini:**
      - Girdi: 4. bölümün 1. ve 2. sayfası birleşik (18 ünite, 119 hece).
      - `estimateSeconds` yavaşta 47,0, normalde 38,5.
@@ -881,10 +881,10 @@ export function createNarrator(port?: SpeechPort | null): Promise<Narrator>;
      | sesler boş, 1000 ms içinde `voiceschanged` ile 'tr_TR' gelir | `SpeechSynthesisNarrator` |
      | 1000 ms dolar | `SilentNarrator` |
      | `null` | `SilentNarrator` |
-- [ ] Test dosyaları → FAIL.
-- [ ] Uygula. `docs/kararlar.md` → T8'in "Şimdilik" sütununa karar 11'e gönderme.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(narrator): add speech and silent narrators`.
+- [x] Test dosyaları → FAIL.
+- [x] Uygula. `docs/kararlar.md` → T8'in "Şimdilik" sütununa karar 11'e gönderme.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(narrator): add speech and silent narrators`.
 
 ### Task 10: Depo
 
