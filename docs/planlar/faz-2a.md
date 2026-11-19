@@ -45,7 +45,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 0: Plan dosyası, dal ve yanıtlanan sorular
 - [x] Task 1: Alan tipleri, ürün parametreleri ve takvim günü
 - [x] Task 2: Rakamların okunuşu ve bölümün kelimeleri
-- [ ] Task 3: Puanlama
+- [x] Task 3: Puanlama
 - [ ] Task 4: Canavar kelimeler
 - [ ] Task 5: Hayalet, hedefler ve ilerleme
 - [ ] Task 6: Okuma benzetimi ve hazır senaryolar
@@ -458,7 +458,7 @@ export function toReadingResult(outcome: ReadingOutcome, meta: ReadingMeta): Rea
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `scoring.test.ts`:
+- [x] **Kırmızı:** `scoring.test.ts`:
   - **V3 örneği** (`docs/urun.md` bölüm 2):
     - Girdi: 76 sonuç; 3 yanlış okuma, 1 ek hatası, 1 atlama; 60 sn.
     - Çıktı: `{wordsAttempted: 76, countedErrors: 5, correctWords: 71, wcpm: 71}`; `Math.round(accuracy × 100)` → 93; `readingLevel(accuracy)` → `'instructional'`.
@@ -476,9 +476,9 @@ export function toReadingResult(outcome: ReadingOutcome, meta: ReadingMeta): Rea
     | 1 | `independent` |
   - **`countMiscues`:** her türü ayrı sayar, `correct` saymaz.
   - **`toReadingResult`:** meta alanlarını ve skoru taşır, `prosodyScore`'u geçirir.
-- [ ] `pnpm test src/domain/scoring.test.ts` → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(domain): score readings`.
+- [x] `pnpm test src/domain/scoring.test.ts` → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(domain): score readings`.
 
 ### Task 4: Canavar kelimeler
 
