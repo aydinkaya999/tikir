@@ -53,7 +53,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 8: `ReadingListener` ve `FakeListener`
 - [x] Task 9: Seslendirme
 - [x] Task 10: Depo
-- [ ] Task 11: Kayıt
+- [x] Task 11: Kayıt
 - [ ] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
 - [ ] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
 - [ ] Task 14: `useReading` ve `useNarration`
@@ -975,7 +975,7 @@ export class PcmRecorder implements Recorder { constructor(store: RecordingStore
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `PcmRecorder.test.ts` (sahte depo ve sahte `WavPlayer`; bir test `IndexedDbRecordingStore` ile `fake-indexeddb` üzerinde):
+- [x] **Kırmızı:** `PcmRecorder.test.ts` (sahte depo ve sahte `WavPlayer`; bir test `IndexedDbRecordingStore` ile `fake-indexeddb` üzerinde):
   1. **Kayıt:**
      - Girdi: 440 Hz sinüsün 100 çerçevesi.
      - `stop()` → `seconds` 2, 64 düzey, en yüksek düzey 1.
@@ -988,10 +988,10 @@ export class PcmRecorder implements Recorder { constructor(store: RecordingStore
   5. **Süre sınırı:** `{maxSeconds: 3}` ile 400 çerçeve → `seconds` 3.
   6. **Sıra hataları:** `start` olmadan `stop()` "Not recording" ile reddeder; `stop()` sonrası gelen çerçeve sayılmaz.
   7. **IndexedDB'de:** `IndexedDbRecordingStore` ile kayıt, yeni bir `PcmRecorder` örneğinden `get` edilebilir.
-- [ ] `pnpm test src/services/recorder/PcmRecorder.test.ts` → FAIL.
-- [ ] Uygula. `docs/kararlar.md` → T21 (karar 10).
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(recorder): record readings as WAV on the device`.
+- [x] `pnpm test src/services/recorder/PcmRecorder.test.ts` → FAIL.
+- [x] Uygula. `docs/kararlar.md` → T21 (karar 10).
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(recorder): record readings as WAV on the device`.
 
 ### Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
 
