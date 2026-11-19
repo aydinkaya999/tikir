@@ -1,6 +1,7 @@
 // AudioCapture over getUserMedia and an AudioWorklet (docs/dinleme-hatti.md, section 1). The
 // browser work sits behind a CaptureEnvironment; this class owns the states, the counters and the
 // rule that a microphone is never left open: a stop or a hidden page wins over a late permission.
+import { notifyAll } from '../notify';
 import type { Unsubscribe } from '../types';
 import {
   type AppliedTrackSettings,
@@ -169,15 +170,11 @@ export class WebAudioCapture implements AudioCapture {
         if (isSilent(message.samples)) {
           this.framesSilent += 1;
         }
-        this.frameListeners.forEach((listener) => {
-          listener(message.samples);
-        });
+        notifyAll(this.frameListeners, message.samples);
         break;
       }
       case 'level': {
-        this.levelListeners.forEach((listener) => {
-          listener(message.rms);
-        });
+        notifyAll(this.levelListeners, message.rms);
         break;
       }
       case 'missed': {
@@ -228,9 +225,7 @@ export class WebAudioCapture implements AudioCapture {
       return;
     }
     this.current = state;
-    this.stateListeners.forEach((listener) => {
-      listener(state);
-    });
+    notifyAll(this.stateListeners, state);
   }
 
   private subscribe<T>(listeners: Set<T>, callback: T): Unsubscribe {

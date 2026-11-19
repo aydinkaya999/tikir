@@ -49,7 +49,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 4: Canavar kelimeler
 - [x] Task 5: Hayalet, hedefler ve ilerleme
 - [x] Task 6: Okuma benzetimi ve hazır senaryolar
-- [ ] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
+- [x] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
 - [ ] Task 8: `ReadingListener` ve `FakeListener`
 - [ ] Task 9: Seslendirme
 - [ ] Task 10: Depo
@@ -737,7 +737,7 @@ export function notifyAll<T>(listeners: Iterable<(value: T) => void>, value: T):
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`notify.test.ts`:** üç dinleyiciden ikincisi fırlatır; birinci ve üçüncü çağrılır, `reportError` (`vi.stubGlobal`) o hatayla bir kez çağrılır.
   - **`WebAudioCapture.test.ts`:** fırlatan bir `onStateChange` dinleyicisi varken `await capture.start()` çözülür. Durum `capturing` olur ve ikinci dinleyici `['starting','capturing']` alır.
   - **`e2e/audio-lab.spec.ts`:**
@@ -745,14 +745,14 @@ export function notifyAll<T>(listeners: Iterable<(value: T) => void>, value: T):
     - "a short mute is ignored": `mute` ardından 300 ms sonra `unmute` → 2 sn sonra hâlâ dinliyor.
     - "a suspended audio context is reported": sayfanın bağlamı `suspend()` → hata görünür.
     - `e2e/support/media.ts` akışları zaten kaydediyor (`__tikirStreams`); ses bağlamlarını da aynı biçimde kaydeder.
-- [ ] `pnpm test src/services/notify.test.ts` ve `pnpm test src/services/audio/WebAudioCapture.test.ts` → FAIL.
-- [ ] Uygula.
+- [x] `pnpm test src/services/notify.test.ts` ve `pnpm test src/services/audio/WebAudioCapture.test.ts` → FAIL.
+- [x] Uygula.
   - `WebAudioCapture` bütün dinleyici çağrılarında `notifyAll` kullanır.
   - `AudioCapture.stop()` yorumu: "Keeps a failure state (denied, unavailable, error); from starting or capturing it goes to idle."
-- [ ] Birim testleri → PASS.
-- [ ] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/audio-lab.spec.ts` → Chromium ve WebKit'te geçer.
-- [ ] `pnpm check` → geçer.
-- [ ] Commit: `fix(audio): isolate listeners and report a muted or suspended input`.
+- [x] Birim testleri → PASS.
+- [x] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/audio-lab.spec.ts` → Chromium ve WebKit'te geçer.
+- [x] `pnpm check` → geçer.
+- [x] Commit: `fix(audio): isolate listeners and report a muted or suspended input`.
 
 ### Task 8: `ReadingListener` ve `FakeListener`
 

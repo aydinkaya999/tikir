@@ -5,6 +5,12 @@ import type { AppliedTrackSettings, CaptureFailure, CaptureSettings } from './Au
 import type { CaptureEnvironment, CaptureGraph, WorkletMessage } from './captureEnvironment';
 import workletUrl from './capture.worklet.ts?worker&url';
 
+/**
+ * A track muted this long is reported: a microphone taken by another app or switched off in
+ * hardware delivers silence while looking open (Faz 1 review, finding 3).
+ */
+const mutedTrackGraceMs = 1000;
+
 function appliedSettings(track: MediaStreamTrack | undefined): AppliedTrackSettings {
   if (track === undefined) {
     return {};
@@ -32,6 +38,7 @@ class BrowserCaptureGraph implements CaptureGraph {
   private readonly source: MediaStreamAudioSourceNode;
   private readonly node: AudioWorkletNode;
   private closing = false;
+  private muteTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(
     stream: MediaStream,
@@ -62,14 +69,43 @@ class BrowserCaptureGraph implements CaptureGraph {
           callback({ name: 'TrackEnded', message: 'The microphone track ended' });
         }
       });
+      // Followed by its events, not track.muted: a test can send the events but not set the field.
+      track.addEventListener('mute', () => {
+        this.clearMuteTimer();
+        this.muteTimer = setTimeout(() => {
+          this.muteTimer = undefined;
+          if (!this.closing) {
+            callback({
+              name: 'TrackMuted',
+              message: `The microphone track has been muted for over ${mutedTrackGraceMs} ms`,
+            });
+          }
+        }, mutedTrackGraceMs);
+      });
+      track.addEventListener('unmute', () => {
+        this.clearMuteTimer();
+      });
     }
     this.context.addEventListener('statechange', () => {
+      if (this.closing) {
+        return;
+      }
       // Safari adds 'interrupted' (a phone call, another app taking the audio session).
       const state: string = this.context.state;
-      if (!this.closing && (state === 'interrupted' || state === 'closed')) {
+      if (state === 'interrupted' || state === 'closed') {
         callback({ name: 'ContextInterrupted', message: `The audio context is ${state}` });
+      } else if (state === 'suspended') {
+        // The context was running when capture started; only the system suspends it now.
+        callback({ name: 'ContextSuspended', message: 'The audio context suspended itself' });
       }
     });
+  }
+
+  private clearMuteTimer(): void {
+    if (this.muteTimer !== undefined) {
+      clearTimeout(this.muteTimer);
+      this.muteTimer = undefined;
+    }
   }
 
   async close(): Promise<void> {
@@ -77,6 +113,7 @@ class BrowserCaptureGraph implements CaptureGraph {
       return;
     }
     this.closing = true;
+    this.clearMuteTimer();
     this.node.port.onmessage = null;
     this.source.disconnect();
     this.node.disconnect();
