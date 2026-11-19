@@ -50,7 +50,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 5: Hayalet, hedefler ve ilerleme
 - [x] Task 6: Okuma benzetimi ve hazır senaryolar
 - [x] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
-- [ ] Task 8: `ReadingListener` ve `FakeListener`
+- [x] Task 8: `ReadingListener` ve `FakeListener`
 - [ ] Task 9: Seslendirme
 - [ ] Task 10: Depo
 - [ ] Task 11: Kayıt
@@ -788,7 +788,7 @@ export class FakeAudioCapture implements AudioCapture { /* … */ }
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `FakeListener.test.ts` (`vi.useFakeTimers()`, `now: () => Date.now()`):
+- [x] **Kırmızı:** `FakeListener.test.ts` (`vi.useFakeTimers()`, `now: () => Date.now()`):
   1. **Mikrofon kapalı:** Mikrofon `idle` iken `start()` "The microphone is not capturing" ile reddeder ve olay gelmez.
   2. **Olay sırası ve süre:**
      - Girdi: `['bir','iki','üç']`, `{wcpm: 60}`.
@@ -816,9 +816,9 @@ export class FakeAudioCapture implements AudioCapture { /* … */ }
       - Son kelimede `end completed`.
       - Senaryo kipinde `mark` fırlatır.
   12. **Varsayılan senaryo:** `new FakeListener()` ile `['kıvrılıyordu']` → 1 sn içinde `word correct`.
-- [ ] `pnpm test src/services/listener/FakeListener.test.ts` → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(listener): add the fake reading listener`.
+- [x] `pnpm test src/services/listener/FakeListener.test.ts` → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(listener): add the fake reading listener`.
 
 ### Task 9: Seslendirme
 
