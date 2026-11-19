@@ -1281,3 +1281,72 @@ Hepsi `faz-2a` dalında, Task 15'in sonunda (2026-11-20) çalıştırıldı.
 - Uygulamada verilen kararlar (plan dışı küçük kararlar ve bedelleri) bütün dal incelemesinden sonra son rapora yazılır.
 
 Uygulama sırasında doldurulur.
+
+## Son inceleme (2026-11-20)
+
+Bütün dal (`e82208f..3b0f192`) bağımsız ve salt okunur bir incelemeden geçti. Karar: "düzeltmelerle birleştirilebilir"; kritik bulgu yok. Önemli bulgular tek geçişte düzeltildi, her biri önce düşen bir testle:
+
+| Bulgu | Düzeltme | Commit |
+|---|---|---|
+| I1: Başlayıp hiç bitmeyen konuşma (iOS'ta duraklatılmış kalan ses, düşen `end` olayı) yardımı ve G3'ü sonsuza dek kilitliyordu | Ünite, yavaş hece süresinin iki katı artı 2 sn sonra bitmiş sayılır; yardım, seslendirme nasıl biterse bitsin serbest kalır | `a02737a` |
+| I4: İlk Türkçe ses çevrimiçi bir ses olabilirdi; okunan metin üçüncü tarafa giderdi (T12) | Yalnız cihazdaki ses (`localService`) seçilir; yoksa sessiz zamanlama | `39f35fb` |
+| I3: İlk açılışta içerik yazılamazsa (kota) depo tipsiz hata veriyor, bağlantıyı açık bırakıyordu | Bağlantı kapanır, `RepositoryUnavailableError` döner; işlem yazmalarla birlikte beklenir | `766155c` |
+| I2: `useReading` ve `useNarration` her çizimde yeni bir dizi alınca motoru yeniden kuruyor, okuma sessizce duruyordu | Motor servislere (dinleyici, mikrofon, seslendirici) bağlı; diziler ref üzerinden okunur | `5ee8368` |
+| M2, önemliye çıkarıldı: çift dokunuşta ikinci `start()` reddediliyordu | Süren başlatma paylaşılır; mikrofonsuz reddedilen başlatma yeniden denenebilir | `5ee8368` |
+
+Ertelenen küçük bulgular:
+
+1. **M1:** Hiç başlamayan konuşma her ünitede 1,5 sn kaybettirir; 47 sn'lik sayfa 74 sn sürer. Karar 11 ünite başına geri dönüşü öngörüyor. İlk hatadan sonra sayfanın geri kalanının sessiz zamanlanması ürün sahibine sorulur.
+2. **M3:** `start()` sürerken ekran kapanırsa sayaç ve dinleyici çalışır kalır. Sahte dinleyicide pencere bir mikro görev; Faz 6'nın gerçek dinleyicisinde önem kazanır.
+3. **M4:** Sıfır kelimelik okumada `useReading` `onFinish` çağırmaz.
+4. **M5:** "4’ü" "dörtü", "24’e" "yirmi dörte" okunur; ünlüyle başlayan ekte yumuşama yok. Seed'de rakam yok; öteki sayı biçimleriyle birlikte Faz 5'ten önce.
+5. **M6:** Yardım sırasında durdurulunca yardım alınan kelime sonuca `word` olayı olmadan girer.
+6. **M7:** `applyWarmupResult(evcil kart, yanlış)` kartı evcillikten çıkarır; `warmupDeck` üzerinden bu yola girilemez.
+7. **M8:** `saveStuckWords` başarısız bir yazmada işlenmemiş bir ret bırakır.
+8. **M9:** `LocalDate` denetimi yalnız biçime bakar; '2026-02-31' 3 Mart'a kayar.
+9. **M10:** `src/services/listener/types.ts` gerçek tanımanın Faz 3'te geldiğini söylüyor; yol haritasında Faz 6.
+10. **M11:** Test boşlukları: yardım seslendirmesi sırasında duraklatma çalışıyor ama testi yok; hook'lar StrictMode altında sınanmıyor.
+
+Düzeltmelerden sonra: `pnpm check` 552 test geçti; `pnpm build` temiz, `dist/` taraması 0; `pnpm e2e` 156 passed (Chromium ve WebKit).
+
+## Uygulamada verilen kararlar
+
+Planın açık bıraktığı ya da yanlış olduğu yerlerde verilen kararlar. Bedeli belirtilmeyenlerin yanlış çıkması bir şeye mal olmaz.
+
+1. **Task 1:** Tarih işlevleri biçimi bozuk `LocalDate`'te `RangeError` fırlatır; yalnız biçime bakılır (M9).
+2. **Task 2:** `readCardinal` her yazı sisteminin ondalık rakamını değeriyle okur; rakam olmayan girdide `RangeError`.
+3. **Task 4:** Kartın ısınmadaki söyleyişi kelimeyi yeniden çözümleyerek bulunur ("1923" → "bin dokuz yüz yirmi üç"). Bedeli: sıra sayısı bağlamı kaybolur.
+4. **Task 4:** Kartın gösterimi küçük harfli biçime geçince heceleri o biçimden yeniden hesaplanır.
+5. **Task 5:** Seans test verileri `src/test/sessions.ts` içinde.
+6. **Task 5:** Seans `completedAt` varsa tamamlanmış sayılır; hiç tamamlanan bölüm yoksa bugünün bölümü 1. Bedeli: `completedAt`'siz bırakılan bir `done` seansı sayılmaz.
+7. **Task 6:** Boş kelime listesi boş benzetim verir; hiç süre almayan okumada kalan süre boşta geçer.
+8. **Task 6:** `typical` senaryosu `scenarios.ts` içinde sabit değerlerdir; bir test seed'in 0. günüyle eşit tutar. Böylece demo profili dinleyicinin paketine girmez.
+9. **Task 8:** `help(i)` yalnız kelimenin yardım eşiğinde geçerlidir; eşikte `resume()`, `help(i)` çağrılmamış olsa da kelimeyi `helped` olarak verir, böylece okuma asla takılı kalmaz. Bedeli: balon hiç gösterilmeden bir kelime `helped` sayılabilir.
+10. **Task 8:** Yardım sırasında `stop()`: kelime yalnız `help(i)` çağrıldıysa sonuca girer. Bedeli: bu uç durumda `wordsAttempted` bir eksik.
+11. **Task 8:** Elle kipte işaretler duraklatmada, mikrofon yokken ve "hesitate" sürerken yok sayılır. Bedeli: geliştirme sayfasında bir tuş vuruşu kaybolabilir.
+12. **Task 8:** Sıfır kelimeyle `start()` hemen `end completed` verir (`useReading` tarafı: M4).
+13. **Task 9:** `SpeechSynthesisNarrator`, `SilentNarrator`'dan türer; sessiz zamanlama ünite başına geri dönüşüdür. Başlangıç hızı yavaş, çünkü G3'teki 0:47 yavaş süredir. Bedeli: G3 öteki hızla açılmalıysa değişir.
+14. **Task 9:** `createNarrator` yalnız ses listesi boşsa `voiceschanged` bekler. Bedeli: sesleri parça parça yükleyen bir tarayıcıda geç gelen Türkçe ses kaçar.
+15. **Task 9:** Sessiz ünite süreleri zamanlayıcı için tam milisaniyeye yuvarlanır (ünite başına en çok 0,5 ms kayma).
+16. **Task 10:** `StoredRecording` `repository/db.ts` içinde tanımlı; `RecordingStore` onu yeniden dışa aktarır.
+17. **Task 10:** `listAssessments` tarih sırasıyla döner; `listSessions` `from > to` ise boş liste verir.
+18. **Task 10:** `appRepository` başarısız açılışı saklamaz. `src/app/services.ts`'te `TODO(phase 2b)`: bir ürün ekranı `appRepository`'yi içe aktarınca `audioLabServices` bir geliştirme modülüne taşınmalı. Bedeli: taşınmazsa ses denemesi üretim paketine girer.
+19. **Task 11:** Kayıt sürerken ikinci `start()` da, olmayan bir kaydın `play()`'i de reddedilir.
+20. **Task 12:** Demo seanslarının okumaları seansın 09:00'ında (yerel saat), ölçümler kendi günlerinin 09:00'ında başlar. Velinin onayında `grantedAt` yok, çünkü seed'de yok.
+21. **Task 12:** Yükleyici seans okumalarının `wcpm`'ini de seed'le karşılaştırır.
+22. **Task 12:** Depo açılışta açılamazsa bölüm aynı "Kurulamadı (…)" satırını gösterir. Bölüm vitrinin başında, `data-component` olmadan durur, böylece Faz 0'ın envanter testi değişmez.
+23. **Task 13:** `useMicrophone` onay yokken her zaman `noConsent` bildirir; onay geri alınınca mikrofonu hemen kapatır. Bedeli: ekran ilk dokunuştan önce de onaysız durumu gösterir.
+24. **Task 13:** `end` olayı açık yardımı ve duraksamayı temizler.
+25. **Task 14:** "Tam okuma bir kez biter, `seconds` 3" testi dakikada 60 kelimeyle koşar. Plandaki `smooth` senaryosu dakikada 80 kelimeyle 2,25 sn verir; bu bir plan hatasıydı.
+26. **Task 14:** `useReading` ve `useNarration`, `useSyncExternalStore` ile okunan küçük sınıfların üstünde ince hook'lardır. Motorların girdilere bağlanması inceleme bulgusu I2'ye yol açtı ve düzeltildi.
+27. **Task 14:** Yardım seslendirmesi sırasında mikrofon giderse seslendirme sürer. Bitince dinleyici kelimeyi verir ve mikrofon dönene kadar donuk kalır. Bedeli: sekme gizliyken Tıkır konuşmayı sürdürür.
+28. **Task 14:** Son sayfa okunduktan sonra `play()` baştan başlar; `restart()` `finishedOnce`'ı korur.
+29. **İnceleme, I4:** Yalnız cihazdaki sesler kullanılır, çünkü T12 kesin. Ürün sahibi çevrimiçi seslere izin verirse değişir. Bedeli: yalnız çevrimiçi Türkçe sesi olan cihazlarda (bazı masaüstü tarayıcılar) sessiz zamanlama çalışır.
+30. **İnceleme:** İncelemecinin kapsam dışı bıraktığı konular bu fazda değişmez:
+    - iPhone'da seslendirme sırasında mikrofonun açık kalması (2b ve cihaz denemesi);
+    - gerçek cihazda susturma ve askıya alma algısı (cihaz denemesi);
+    - şema 2'de `blocked` ve `versionchange` (ilk şema değişikliğinde);
+    - aynı günün iki ölçümünün sırası;
+    - tek başına 1–2,9 sn duraksamanın kart olmaması (2b);
+    - mikrofon düşünce eklenmiş kaydın saklanması (2b);
+    - erken durdurmada okunmayan kelimedeki duraksamanın süreye girmesi.
