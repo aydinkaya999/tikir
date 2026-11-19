@@ -226,11 +226,19 @@ test('the device report is shown and downloads as JSON', async ({ page }) => {
   expect(download.suggestedFilename()).toMatch(/^ses-denemesi-\d{8}-\d{4}\.json$/);
   const report: unknown = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(report).toEqual(JSON.parse(shown));
+  // The audio context runs at the output device's rate: 48 kHz on most machines, 16 kHz with a
+  // Bluetooth headset in hands-free mode. The report must say whatever this browser uses.
+  const contextRate = await page.evaluate(async () => {
+    const context = new AudioContext();
+    const rate = context.sampleRate;
+    await context.close();
+    return rate;
+  });
   expect(report).toMatchObject({
     version: 1,
     capture: {
       state: 'capturing',
-      inputSampleRate: 48_000,
+      inputSampleRate: contextRate,
       requested: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
     },
     environment: {
