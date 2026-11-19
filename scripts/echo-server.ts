@@ -6,6 +6,9 @@ import { WebSocketServer } from 'ws';
 
 export const echoServerPort = 4318;
 
+/** Far above an audio frame (648 bytes), far below what could exhaust memory. */
+const maxMessageBytes = 64 * 1024;
+
 export interface EchoServer {
   port: number;
   close(): Promise<void>;
@@ -17,8 +20,13 @@ export async function startEchoServer(port: number = echoServerPort): Promise<Ec
     response.writeHead(200, { 'content-type': 'text/plain; charset=utf-8' });
     response.end('tikir echo server\n');
   });
-  const sockets = new WebSocketServer({ server: http });
+  // An audio frame is 648 bytes. pnpm audio-trial puts the server on the local network, so a
+  // client that sends too much, or a broken frame, closes its own connection, not the server.
+  const sockets = new WebSocketServer({ server: http, maxPayload: maxMessageBytes });
   sockets.on('connection', (socket) => {
+    socket.on('error', (error) => {
+      console.warn(`Echo server closed a connection: ${error.message}`);
+    });
     socket.on('message', (data, isBinary) => {
       socket.send(data, { binary: isBinary });
     });
