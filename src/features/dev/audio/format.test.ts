@@ -35,12 +35,12 @@ describe('formatSeconds and formatMs', () => {
 });
 
 describe('trialFileName', () => {
-  it('names downloads by local date and time', () => {
-    expect(trialFileName(new Date(2026, 10, 19, 14, 32), 'wav')).toBe(
-      'ses-denemesi-20261119-1432.wav',
+  it('names downloads by local date and time to the second, so takes A and B do not collide', () => {
+    expect(trialFileName(new Date(2026, 10, 19, 14, 32, 5), 'wav')).toBe(
+      'ses-denemesi-20261119-143205.wav',
     );
-    expect(trialFileName(new Date(2026, 0, 5, 7, 3), 'json')).toBe(
-      'ses-denemesi-20260105-0703.json',
+    expect(trialFileName(new Date(2026, 0, 5, 7, 3, 9), 'json')).toBe(
+      'ses-denemesi-20260105-070309.json',
     );
   });
 });

@@ -31,9 +31,9 @@ function twoDigits(value: number): string {
   return String(value).padStart(2, '0');
 }
 
-/** ses-denemesi-YYYYMMDD-HHMM.<extension>, in local time, for downloaded takes and reports. */
+/** ses-denemesi-YYYYMMDD-HHMMSS.<extension>, in local time, for downloaded takes and reports. */
 export function trialFileName(createdAt: Date, extension: 'json' | 'wav'): string {
   const date = `${String(createdAt.getFullYear())}${twoDigits(createdAt.getMonth() + 1)}${twoDigits(createdAt.getDate())}`;
-  const time = `${twoDigits(createdAt.getHours())}${twoDigits(createdAt.getMinutes())}`;
+  const time = `${twoDigits(createdAt.getHours())}${twoDigits(createdAt.getMinutes())}${twoDigits(createdAt.getSeconds())}`;
   return `ses-denemesi-${date}-${time}.${extension}`;
 }

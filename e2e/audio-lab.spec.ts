@@ -45,7 +45,7 @@ async function downloadWav(page: Page): Promise<WavData> {
     page.waitForEvent('download'),
     page.getByRole('button', { name: 'Kaydı indir (WAV)' }).click(),
   ]);
-  expect(download.suggestedFilename()).toMatch(/^ses-denemesi-\d{8}-\d{4}\.wav$/);
+  expect(download.suggestedFilename()).toMatch(/^ses-denemesi-\d{8}-\d{6}\.wav$/);
   const bytes = await readFile(await download.path());
   return parseWav(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
 }
@@ -223,7 +223,7 @@ test('the device report is shown and downloads as JSON', async ({ page }) => {
     }),
   ]);
 
-  expect(download.suggestedFilename()).toMatch(/^ses-denemesi-\d{8}-\d{4}\.json$/);
+  expect(download.suggestedFilename()).toMatch(/^ses-denemesi-\d{8}-\d{6}\.json$/);
   const report: unknown = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(report).toEqual(JSON.parse(shown));
   // The audio context runs at the output device's rate: 48 kHz on most machines, 16 kHz with a
