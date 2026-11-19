@@ -25,7 +25,7 @@
 - [x] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
 - [x] Task 11: Capacitor kurulumu
 - [x] Task 12: Kabukta derleme ve açılış
-- [ ] Task 13: Kabul ölçütleri yürüyüşü
+- [x] Task 13: Kabul ölçütleri yürüyüşü
 
 ## Onaylanan kararlar
 
@@ -678,9 +678,9 @@ readMicrophonePermission(): Promise<PermissionReading>
 
 ### Task 13: Kabul ölçütleri yürüyüşü
 
-- [ ] Altı ölçüt tek tek yürünür. Her birinin yanına çalıştırılan komut ve çıktısı ya da ekran görüntüsünün yolu yazılır.
-- [ ] Ölçüt 5 ve 6'nın insan kısmı (gerçek cihaz denemeleri) yapılana kadar "insan denemesi bekliyor" diye yazılır; "tuttu" denmez.
-- [ ] Faz 0'daki gibi, kanıtlar ve işaretler tek bir `docs` commit'iyle kaydedilir: `docs: record phase 1 acceptance evidence`.
+- [x] Altı ölçüt tek tek yürünür. Her birinin yanına çalıştırılan komut ve çıktısı ya da ekran görüntüsünün yolu yazılır.
+- [x] Ölçüt 5 ve 6'nın insan kısmı (gerçek cihaz denemeleri) yapılana kadar "insan denemesi bekliyor" diye yazılır; "tuttu" denmez.
+- [x] Faz 0'daki gibi, kanıtlar ve işaretler tek bir `docs` commit'iyle kaydedilir: `docs: record phase 1 acceptance evidence`.
 
 ## Açık sorular (onayı beklemez)
 
@@ -770,6 +770,19 @@ Etkisine göre yeniden derecelenen bulgularla birlikte tek turda düzeltilenler;
 6. Boş bir yarım kayıt çalınıp indirilebiliyor; çalma hatası artık yakalanıyor.
 7. Canlı bölgeler saniyede 10–50 kez güncelleniyor.
 8. `AudioCapture.ts`, `denied`, `unavailable` ve `error` durumlarının `stop()`'tan sonra da kaldığını yazmıyor.
+
+### Kabul ölçütleri (Task 13)
+
+Son inceleme düzeltmelerinden sonra, `ad7e81f` üzerinde, ekran uyanıkken çalıştırıldı.
+
+| # | Ölçüt | Durum | Kanıt |
+|---|---|---|---|
+| 1 | Örnekleme hızı dönüştürücü ve çerçeveleyici birim testleri geçer | Tuttu | `pnpm exec vitest run src/services/audio/resampler.test.ts src/services/audio/framer.test.ts src/services/audio/captureChain.test.ts --reporter=verbose`: "Tests 27 passed (27)". Kapsam: çıkış uzunluğu (48 ve 44,1 kHz'ten 16000 örnek, 24 ve 8 kHz de); sinüsün korunması (RMS ±%1, 1000 ± 2 Hz); parçalamadan bağımsızlık; 12, 11 ve 9 kHz'te −40 dB örtüşme bastırma; eşit hızda olduğu gibi geçiş; rastgele parçalardan tam 320 örneklik, kopyalanmış çerçeveler. |
+| 2 | Masaüstü Chrome'da sayfa uçtan uca çalışır: izin, düzey, kayıt, geri çalma, yankı ölçümü, rapor indirme | Chrome'un sahte mikrofonuyla tuttu; gerçek mikrofonla insan denemesi bekliyor | `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome`, kurulu Google Chrome 157.0.8103.79: "12 passed (20.3s)". Testler: <ul><li>izin ve düzey: "the microphone opens and the level meter follows the sound";</li><li>kayıt ve geri çalma: "ten seconds are recorded as 16 kHz WAV and played back" (160 000 örnek, 440 ± 4 Hz);</li><li>yankı: "the echo test sends 500 frames and reports the round trip" (500/500, başka kökene istek ya da CSP ihlali yok);</li><li>rapor indirme: "the device report is shown and downloads as JSON".</li></ul>Aynı testler Chromium ve WebKit'te de geçiyor (`pnpm e2e`: "148 passed"). Gerçek mikrofonla masaüstü satırı (`docs/ses-denemesi-sonuclari.md`, ortam 1) insanın. |
+| 3 | İzin reddi ve mikrofonsuz cihaz durumları çökmeden, açıklamasıyla gösterilir | Tuttu | Chromium, WebKit ve Chrome'da: <ul><li>"a refused permission is explained and can be retried": açıklama görünüyor, "Yeniden dene" izni ikinci kez soruyor, `pageerror` yok;</li><li>"a missing microphone is explained";</li><li>"an insecure page is explained".</li></ul> |
+| 4 | Sayfadan çıkınca ve sekme gizlenince mikrofon bırakılır | Tuttu | Chromium, WebKit ve Chrome'da "the microphone is released when the tab is hidden" ve "the microphone is released when leaving the page": `getUserMedia`'dan dönen bütün izler `ended` oluyor. Birim testleri: <ul><li>"closes the microphone when the page is hidden";</li><li>"closes a microphone that arrives after the page was hidden during the prompt";</li><li>"closes a microphone that arrives after a stop and never reports capturing".</li></ul> |
+| 5 | Gerçek cihaz denemeleri için adım adım yönerge sonuç şablonunda yazılı; denemeleri insan yapar | Yönerge tuttu; denemeler insan denemesi bekliyor | `docs/ses-denemesi-sonuclari.md` şunları içeriyor: <ul><li>hazırlık: mkcert, güvenlik duvarı, kök sertifikanın kurulması ve deneme sonunda kaldırılması;</li><li>okunacak metin: `seed/`, 4. bölüm, 1. sayfa;</li><li>A ve B ayar setleri, dört tarayıcı ortamı, dokuz adım ve iki sonuç tablosu.</li></ul>Tablolar boş; doldurmak insanın işi. |
+| 6 | İkinci yarı: uygulama kabuğunda alınan ses boş değil (düzey ve geri çalmayla) ve sonuç şablonda | İnsan denemesi bekliyor | Kurulum yapıldı: iOS simülatöründe ve Android emülatöründe uygulama ses sayfasıyla açılıyor (`shots/cap-ios.png`, `shots/cap-android.png`). Android emülatöründe mikrofon açıldı ve çerçeveler aksamadan geldi (1081 gelen, 0 kaçan), ama 1040'ı sessizdi: emülatörün sanal mikrofonu ses vermiyor. Sesin boş olmadığı yalnız gerçek cihazda, düzey ve geri çalmayla doğrulanabilir. Şablonun "Uygulama kabuğu" bölümü ve 5A–6B satırları hazır. |
 
 ## Uygulamada verilen kararlar
 
