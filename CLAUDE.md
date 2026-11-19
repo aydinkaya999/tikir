@@ -31,7 +31,7 @@ Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulu
 - macOS'ta ekran uykudayken WebKit'in tıklamaları hedefini şaşırır (`<html> intercepts pointer events`). Gözetimsiz koşuda ekranı uyandırıp uyanık tut: `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`.
 - `pnpm echo-server`: ses denemesinin yankı sunucusu (`127.0.0.1:4318`). `pnpm dev` ve `vite preview`, `/gelistirme/yanki` adresini ona aktarır.
 - `pnpm audio-trial`: ses denemesi sayfasını yerel ağda HTTPS ile sunar (`https://<ip>:4443/gelistirme/ses`, mkcert sertifikası) ve yankı sunucusunu açar. Gerçek cihaz adımları: `docs/ses-denemesi-sonuclari.md`.
-- `pnpm cap:sync`: `cap` kipinde derler (`dist-cap/`, geliştirme sayfaları dahil) ve `ios/` ile `android/` projelerine kopyalar. Sonra `pnpm exec cap run ios --target <simülatör>` ya da `pnpm exec cap open ios|android`.
+- `pnpm cap:sync`: `cap` kipinde derler (`dist-cap/`, geliştirme sayfaları dahil, uygulama ses denemesi sayfasıyla açılır) ve `ios/` ile `android/` projelerine kopyalar. Sonra `pnpm exec cap run ios --target <simülatör>` ya da `pnpm exec cap open ios|android`. Android, JDK 21 ister: `JAVA_HOME=$(mise where java@temurin-21) ANDROID_HOME=~/Library/Android/sdk pnpm exec cap run android --target <cihaz>`.
 - `pnpm shots <rota> [<rota> …]`: rotaların 390 × 844, 1180 × 820 ve 1440 × 900 ekran görüntüsü. Dosyalar `shots/<ad>-telefon.png`, `-tablet.png` ve `-web.png` adlarıyla yazılır; `/` için ad `index`.
 - `pnpm build`: üretim derlemesi (tip denetimi + `vite build`). Geliştirme sayfaları derlemeye girmez.
 - `pnpm format`: Prettier ile biçimle.

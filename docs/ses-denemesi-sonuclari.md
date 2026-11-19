@@ -103,4 +103,38 @@ Her ortamda sırayla:
 
 ## Uygulama kabuğu
 
-Capacitor kurulumu (Faz 1'in ikinci yarısı) yapılınca bu bölüm dolar.
+Aynı sayfa Capacitor ile iOS ve Android uygulamasında açılır (`docs/kararlar.md` T19). Uygulama doğrudan ses denemesi sayfasıyla açılır. Uygulamanın içinden yankı testi yapılmaz, çünkü aynı köken yok. İndirme çalışmayabilir; rapor ekranda okunur.
+
+**Hazırlık (Mac)**
+
+1. `pnpm cap:sync`: sayfayı `cap` kipinde derler ve iki projeye kopyalar.
+2. Android için JDK 21 gerekir (Capacitor 8): bir kez `mise install java@temurin-21`. Android komutlarını `JAVA_HOME=$(mise where java@temurin-21)` ile başlat. SDK: `ANDROID_HOME=~/Library/Android/sdk`.
+
+**iPhone (gerçek cihaz)**
+
+1. iPhone'u kabloyla bağla. iPhone'da Ayarlar → Gizlilik ve Güvenlik → Geliştirici Modu açık olmalı.
+2. `pnpm exec cap open ios`. Xcode'da App hedefi → Signing & Capabilities → Team: kendi Apple hesabın. `com.tikir.app` kimliği kabul edilmezse sonuna bir ek koy; bu değişikliği commit'leme.
+3. Üstte cihazı seç → Run.
+4. "Güvenilmeyen Geliştirici" uyarısı çıkarsa: Ayarlar → Genel → VPN ve Aygıt Yönetimi → geliştiriciye güven.
+5. "Mikrofonu aç": iOS izin penceresi "Tıkır, sesli okumayı dinlemek için mikrofonu kullanır." der → İzin Ver.
+
+**Android (gerçek cihaz)**
+
+1. Tablette Geliştirici seçenekleri → USB hata ayıklama açık. Kabloyla bağla ve bilgisayara izin ver.
+2. `pnpm exec cap run android --list` ile cihazın kimliğini bul, sonra `JAVA_HOME=$(mise where java@temurin-21) pnpm exec cap run android --target <kimlik>`.
+3. "Mikrofonu aç": Android izin penceresi → İzin ver.
+
+**Adımlar.** Tarayıcıdaki 2–5, 8 ve 9. adımlar; yankı testi ve indirme yok. Raporu ekranda oku, ekran görüntüsünü al. Ölçüt 6 için kabukta alınan ses boş olmamalı:
+
+- konuşurken düzey çubuğu oynamalı;
+- geri çalmada ses duyulmalı;
+- "Sessiz çerçeve", "Gelen çerçeve"nin küçük bir kısmı olmalı.
+
+| # | Kabuk | Ayar seti | Cihaz ve OS sürümü | Giriş hızı | Düzey (konuşurken, dBFS) | Geri çalma (anlaşılır / bozuk / boş) | Gelen çerçeve | Sessiz çerçeve | Kaçan çerçeve | Arka planda mikrofon bırakıldı mı | Not |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 5A | iOS uygulaması | A | | | | | | | | | |
+| 5B | iOS uygulaması | B | | | | | | | | | |
+| 6A | Android uygulaması | A | | | | | | | | | |
+| 6B | Android uygulaması | B | | | | | | | | | |
+
+Ön deneme (gerçek cihazın yerini tutmaz): Android emülatöründe mikrofon açıldı ve çerçeveler aksamadan geldi (1081 gelen, 0 kaçan). Ama 1040'ı sessizdi, çünkü emülatörün sanal mikrofonu ses vermiyor. Sessiz çerçeve sayacının "boş ses" durumunu gösterdiği orada görüldü. Ayrıntı: `docs/planlar/faz-1.md` → "Kanıtlar".

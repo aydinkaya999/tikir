@@ -24,7 +24,7 @@
 - [x] Task 9: Cihaz denemesi sunucusu
 - [x] Task 10: Sonuç şablonu, belgeler ve web yarısının denetimi
 - [x] Task 11: Capacitor kurulumu
-- [ ] Task 12: Kabukta derleme ve açılış
+- [x] Task 12: Kabukta derleme ve açılış
 - [ ] Task 13: Kabul ölçütleri yürüyüşü
 
 ## Onaylanan kararlar
@@ -654,27 +654,27 @@ readMicrophonePermission(): Promise<PermissionReading>
 
 **Dosyalar:** `docs/ses-denemesi-sonuclari.md` ("Uygulama kabuğu"), bu plan ("Kanıtlar").
 
-- [ ] iOS simülatörü:
+- [x] iOS simülatörü:
   - `pnpm exec cap run ios --target <iPhone 17 Pro, iOS 26.1>`;
   - `xcrun simctl io booted screenshot shots/cap-ios.png`;
   - görüntüde "Ses denemesi" sayfası görünür. `appStartPath` beklendiği gibi çalışmazsa yönlendirme sorunu "Uygulamada verilen kararlar"a yazılır ve onay sorulur.
-- [ ] Android emülatörü:
+- [x] Android emülatörü:
   - `JAVA_HOME` Android Studio'nun JBR'si, `ANDROID_HOME` `~/Library/Android/sdk`. Gradle JDK 25'i desteklemezse JDK 21 yalnız o komut için `mise exec` ile kullanılır; depo ayarı değişmez;
   - emülatör `-allow-host-audio` ile açılır;
   - `pnpm exec cap run android --target Medium_Phone_API_36.1`;
   - `adb exec-out screencap -p > shots/cap-android.png`;
   - CSP denetimi: Capacitor Android köprüsünü sayfaya satır içi betik olarak ekliyor, `default-src 'self'` bunu engelleyebilir. `adb logcat` içinde CSP ihlali aranır. Sonuç "Uygulamada verilen kararlar"a yazılır. CSP değişmesi gerekiyorsa onay sorulur (Faz 7 konusu). Sayfa köprüye muhtaç değildir: mikrofon izni yerel taraftadır, kabuk tespitinin kökene bakan bir yedeği vardır (Task 8).
-- [ ] Android emülatöründe ek deneme (gerçek cihaz denemesinin yerini tutmaz):
+- [x] Android emülatöründe ek deneme (gerçek cihaz denemesinin yerini tutmaz):
   - mikrofon izni `adb shell pm grant com.tikir.app android.permission.RECORD_AUDIO` ile verilir;
   - "Mikrofonu aç" `uiautomator dump` ile bulunan konuma `adb shell input tap` ile dokunularak açılır;
   - rapordaki gelen ve sessiz çerçeve sayıları ekran görüntüsüyle kaydedilir.
   Olmazsa yalnız açılış görüntüsü kalır ve bu durum not edilir.
-- [ ] Şablonun "Uygulama kabuğu" bölümü yazılır:
+- [x] Şablonun "Uygulama kabuğu" bölümü yazılır:
   - iPhone: `pnpm cap:sync` → `pnpm exec cap open ios` → Xcode'da Signing & Capabilities → kişisel takım → cihaz → Run. "Güvenilmeyen geliştirici" uyarısında Ayarlar → Genel → VPN ve Aygıt Yönetimi.
   - Android: USB hata ayıklama açılır → `pnpm exec cap run android --target <cihaz>`.
   - Sonra tarayıcıdaki adımlar yankı testi olmadan yinelenir. Rapor ekranda okunur ya da ekran görüntüsü alınır, çünkü uygulamada indirme çalışmayabilir.
   - Ölçüt 6 için sonuç tablosuna bir satır.
-- [ ] Commit: `docs: add app shell steps to the audio trial template`
+- [x] Commit: `docs: add app shell steps to the audio trial template`
 
 ### Task 13: Kabul ölçütleri yürüyüşü
 
@@ -714,6 +714,30 @@ Task 10, 12 ve 13'te dolar.
 
 - macOS'ta iki ekran da uykudayken WebKit'in fare olayları hedefini şaşırıyor ("`<html>` intercepts pointer events"). Faz 0'ın gezinme testi de aynı biçimde düşüyor. Ekran `caffeinate -u` ile uyandırılınca hepsi geçiyor. Komut `CLAUDE.md`'de.
 - Bu Mac'in güvenlik duvarı bütün gelen bağlantıları engelliyor (`socketfilterfw` State = 2). Yerel ağ adresi Mac'in kendisinden bile açılmıyor; `localhost` açılıyor. Gerçek cihaz denemesi için şablonda adım var; ayara dokunulmadı.
+
+### Uygulama kabuğu (Task 12)
+
+**iOS simülatörü** (iPhone 17 Pro, iOS 26.1, Xcode 27.2)
+
+- `pnpm exec cap run ios --target AC2D4808-…`: "Running xcodebuild in 28.01s", ardından "Deploying App.app".
+- İlk açılışta uygulama kapandı. Konsolda: "ERROR: Unable to load …/App.app/public//gelistirme/ses — This file is the root of your web app". Capacitor iOS, `server.appStartPath` değerini web klasöründe bir dosya sanıyor.
+- Ürün sahibinin onayıyla (2026-11-19) `appStartPath` kalktı; açılış yönlendirmesi yalnız `cap` derlemesine kondu.
+- İkinci sorun: yönlendirme `main.tsx`'in gövdesindeyken sayfa Yol'da kaldı. Nedeni, `App.tsx`'in yönlendiriciyi modül yüklenirken kurması; adresi yönlendirmeden önce okuyor. Yönlendirme `src/appShellStart.ts` modülüne, `main.tsx`'in ilk içe aktarmasına taşındı.
+- Sonuç: uygulama ses sayfasıyla açılıyor (`shots/cap-ios.png`). Sayfaya güvenli alan boşluğu eklenince başlık durum çubuğunun altına iniyor.
+- Simülatörde mikrofon denenmedi, çünkü simülatör penceresine dokunacak araç yok.
+
+**Android emülatörü** (`Medium_Phone_API_36.1`, API 36, emülatör 36.3.10)
+
+- Derleme JDK 17 ile "invalid source release: 21" verdi; Capacitor 8 Java 21 istiyor. Gradle 8.14.3 JDK 25'te çalışmıyor. JDK 21 mise ile depo dışına kuruldu (`mise install java@temurin-21`).
+- Bir derleme ağ kesintisinde düştü ("No route to host", `lint-gradle` bağımlılığı). Ağ dönünce aynı komut geçti: "Running Gradle build in 27.57s", "Deploying app-debug.apk".
+- Uygulama ses sayfasıyla açılıyor (`shots/cap-android.png`); `appStartPath` olmadan, yönlendirme modülüyle de.
+- CSP: logcat'te ihlal yok; Capacitor köprüsü çalışıyor, konsol satırları geliyor. Capacitor'ın kendi betiği "Error injecting safe area CSS" hatası veriyor; Faz 7'nin güvenli alan işine not.
+- Mikrofon (gerçek cihazın yerini tutmaz):
+  - İzin `adb shell pm grant` ile verildi. WebView içeriği `uiautomator` dökümüne girmediği için düğmeye ekran görüntüsünden hesaplanan koordinatla dokunuldu.
+  - Durum "Açık" oldu, Android'in mikrofon göstergesi yandı (`shots/cap-android-mic.png`).
+  - Rapor (`shots/cap-android-report.png`): tarayıcı "Android WebView 134", kabuk `android-app`, giriş 48000 Hz, üç ayar açık; gelen 1081, kaçan 0, sessiz 1040.
+  - Emülatörün sanal mikrofonu ses vermiyor. `adb emu avd hostmicon` "OK" dedi, ama macOS emülatöre mikrofon izni vermemiş görünüyor. Sessiz çerçeve sayacı bunu gösterdi.
+  - WebView'da tarayıcı izni, yerel izin verilmiş olsa da "prompt" okunuyor.
 
 ## Uygulamada verilen kararlar
 
