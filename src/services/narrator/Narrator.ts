@@ -29,6 +29,13 @@ export const narrationTiming = {
   unitGapMs: 250,
   /** A unit whose speech has not started by then is timed silently. */
   startTimeoutMs: 1500,
+  /**
+   * A unit whose speech started but has not ended after this many times its slow syllable time,
+   * plus endGraceMs, is ended by hand: some engines drop the end event, and iOS can leave speech
+   * paused after the app comes back.
+   */
+  endGraceFactor: 2,
+  endGraceMs: 2000,
   speechRate: { slow: 0.85, normal: 1 },
   /** How long createNarrator waits for the voice list to load. */
   voiceWaitMs: 1000,

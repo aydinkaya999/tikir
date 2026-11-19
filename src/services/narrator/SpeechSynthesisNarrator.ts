@@ -3,7 +3,7 @@
 // speechSynthesis.pause() is unreliable on Android. A unit whose speech does not start in time,
 // or fails, is timed silently, so G3 never hangs.
 import type { Unsubscribe } from '../types';
-import { narrationTiming } from './Narrator';
+import { narrationTiming, unitDurationMs } from './Narrator';
 import { type NarrationJob, SilentNarrator } from './SilentNarrator';
 
 /** The seam over window.speechSynthesis. */
@@ -60,13 +60,20 @@ export function browserSpeechPort(): SpeechPort | null {
   };
 }
 
+/** The unit being spoken: its start timeout, and once it started, its end timeout. */
+interface CurrentSpeech {
+  job: NarrationJob;
+  startTimer: ReturnType<typeof setTimeout>;
+  endTimer: ReturnType<typeof setTimeout> | undefined;
+}
+
 export class SpeechSynthesisNarrator extends SilentNarrator {
   private readonly port: SpeechPort;
   private readonly voice: { name: string; lang: string };
   /** Bumped for every utterance and every cancel: events of an older utterance are ignored. */
   private utterance = 0;
   /** The current unit's speech, while it is pending or speaking. */
-  private speech: { job: NarrationJob; startTimer: ReturnType<typeof setTimeout> } | null = null;
+  private speech: CurrentSpeech | null = null;
   /** The held unit was being spoken: resume() speaks it again. */
   private heldSpeech = false;
 
@@ -90,14 +97,27 @@ export class SpeechSynthesisNarrator extends SilentNarrator {
         this.playSilently(job);
       }
     }, narrationTiming.startTimeoutMs);
-    this.speech = { job, startTimer };
+    const speech: CurrentSpeech = { job, startTimer, endTimer: undefined };
+    this.speech = speech;
+    const text = job.units[job.index] ?? '';
     this.port.speak(
-      job.units[job.index] ?? '',
+      text,
       { voiceName: this.voice.name, lang: 'tr-TR', rate: narrationTiming.speechRate[this.rate] },
       {
         onStart: () => {
           if (current()) {
             clearTimeout(startTimer);
+            clearTimeout(speech.endTimer);
+            speech.endTimer = setTimeout(
+              () => {
+                if (current()) {
+                  this.quiet();
+                  this.nextUnit(job);
+                }
+              },
+              unitDurationMs(text, 'slow') * narrationTiming.endGraceFactor +
+                narrationTiming.endGraceMs,
+            );
             this.announce(job);
           }
         },
@@ -148,6 +168,7 @@ export class SpeechSynthesisNarrator extends SilentNarrator {
   private release(): void {
     if (this.speech !== null) {
       clearTimeout(this.speech.startTimer);
+      clearTimeout(this.speech.endTimer);
       this.speech = null;
     }
     this.utterance += 1;

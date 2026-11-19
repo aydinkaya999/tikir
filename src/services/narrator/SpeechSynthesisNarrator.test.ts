@@ -88,6 +88,23 @@ describe('SpeechSynthesisNarrator', () => {
     expect(units).toEqual([0, 1, 2, 3]);
   });
 
+  it('ends a unit whose speech started but never ended, and goes on to the next', async () => {
+    const { port, narrator, units } = setup();
+    const end = narrator.speakPage(page, (unit) => units.push(unit));
+    port.last().handlers.onStart();
+
+    vi.advanceTimersByTime(Math.ceil(unitDurationMs('Deniz sırt çantasını', 'slow') * 2 + 2000));
+
+    expect(port.cancels).toBe(1);
+    expect(port.spoken).toHaveLength(2);
+    for (let unit = 1; unit < 4; unit += 1) {
+      port.last().handlers.onStart();
+      port.last().handlers.onEnd();
+    }
+    await expect(end).resolves.toBe('completed');
+    expect(units).toEqual([0, 1, 2, 3]);
+  });
+
   it('ignores the events of an utterance it cancelled', () => {
     const { port, narrator, units } = setup();
     void narrator.speakPage(page, (unit) => units.push(unit));

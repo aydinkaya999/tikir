@@ -79,6 +79,22 @@ describe('useReading', () => {
     expect(result.current.elapsedMs).toBeGreaterThan(moment.elapsedMs);
   });
 
+  it('lets the reading go on when the help narration is cut short', async () => {
+    const { result, narrator } = setup(scenarioSets.design.readings[1], 40);
+    await act(async () => {
+      await result.current.start();
+    });
+    await advance(19500);
+    expect(result.current.helpIndex).toBe(14);
+
+    narrator.stop();
+    await advance(0);
+
+    expect(result.current.helpIndex).toBeNull();
+    expect(result.current.view.results.get(14)?.status).toBe('helped');
+    expect(result.current.view.position).toBe(15);
+  });
+
   it('freezes the clock, the ghost and the events while paused', async () => {
     const { result } = setup(scenarioSets.typical.readings[0], 40);
     await act(async () => {

@@ -200,14 +200,19 @@ class ReadingRun {
     this.helping = index;
     this.sync();
     this.listener.help(index);
-    void this.narrator.speakWord(this.tokens[index]?.spoken ?? '').then((end) => {
-      if (end !== 'completed' || this.finished || this.helping !== index) {
+    // However the narration ends (read, cut short, failed), the reading must go on.
+    const release = () => {
+      if (this.finished || this.helping !== index) {
         return;
       }
       this.helping = null;
-      this.listener.resume();
+      // A paused child resumes the listener with resume().
+      if (!this.paused) {
+        this.listener.resume();
+      }
       this.sync();
-    });
+    };
+    this.narrator.speakWord(this.tokens[index]?.spoken ?? '').then(release, release);
   }
 
   private elapsed(): number {
