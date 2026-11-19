@@ -146,6 +146,22 @@ describe('IndexedDbRepository', () => {
     expect(await second.getSession('2026-11-21')).not.toBeNull();
   });
 
+  it('fails with the typed error and closes the database when the content cannot be stored', async () => {
+    const quota = new DOMException('The storage quota is used up', 'QuotaExceededError');
+    const put = vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(() => {
+      throw quota;
+    });
+    const close = vi.spyOn(IDBDatabase.prototype, 'close');
+
+    const failure = await IndexedDbRepository.open().catch((error: unknown) => error);
+
+    expect(failure).toBeInstanceOf(RepositoryUnavailableError);
+    expect(failure).toMatchObject({ cause: quota });
+    expect(close).toHaveBeenCalled();
+    put.mockRestore();
+    close.mockRestore();
+  });
+
   it('fails with a typed error where IndexedDB is missing or cannot open', async () => {
     vi.stubGlobal('indexedDB', undefined);
     await expect(IndexedDbRepository.open()).rejects.toBeInstanceOf(RepositoryUnavailableError);

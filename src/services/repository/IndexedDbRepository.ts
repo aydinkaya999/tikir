@@ -39,7 +39,15 @@ export class IndexedDbRepository implements Repository {
       throw new RepositoryUnavailableError('The database could not be opened.', { cause: error });
     }
     const repository = new IndexedDbRepository(db);
-    await repository.loadContent(false);
+    try {
+      await repository.loadContent(false);
+    } catch (error) {
+      // A full disk or quota on the first write is as fatal as a refused open.
+      db.close();
+      throw new RepositoryUnavailableError('The bundled content could not be stored.', {
+        cause: error,
+      });
+    }
     return repository;
   }
 
@@ -136,14 +144,17 @@ export class IndexedDbRepository implements Repository {
   /** The series book and the passages, unless this content version is already loaded. */
   private async loadContent(always: boolean): Promise<void> {
     const transaction = this.db.transaction(['meta', 'books', 'passages'], 'readwrite');
-    const loaded = await transaction.objectStore('meta').get(contentVersionKey);
-    if (always || loaded !== contentVersion) {
-      await transaction.objectStore('books').put(seriesBook());
-      for (const passage of seedPassages()) {
-        await transaction.objectStore('passages').put(passage);
+    const writes = (async () => {
+      const loaded = await transaction.objectStore('meta').get(contentVersionKey);
+      if (always || loaded !== contentVersion) {
+        await Promise.all([
+          transaction.objectStore('books').put(seriesBook()),
+          ...seedPassages().map((passage) => transaction.objectStore('passages').put(passage)),
+          transaction.objectStore('meta').put(contentVersion, contentVersionKey),
+        ]);
       }
-      await transaction.objectStore('meta').put(contentVersion, contentVersionKey);
-    }
-    await transaction.done;
+    })();
+    // Both are awaited, so an aborted transaction never leaves a rejection unhandled.
+    await Promise.all([writes, transaction.done]);
   }
 }
