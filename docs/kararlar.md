@@ -152,3 +152,4 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-19: Faz 1: yankı ölçümü ve cihaz denemesi yolu (T20), `ws` bağımlılığı, sonuç şablonu (`docs/ses-denemesi-sonuclari.md`).
 - 2026-11-19: Faz 1: Capacitor deneme yapılandırması (T19) ve dört Capacitor paketi; `server.appStartPath` yerine `cap` kipinde açılış yönlendirmesi (ürün sahibinin onayıyla).
 - 2026-11-20: Faz 2a planı onaylandı: rakamların okunuşu (C5) ve `design` senaryosunun sayfaları (D12); 12. ve 14. sorular yanıtlandı.
+- 2026-11-20: Faz 2a: `idb` ve `fake-indexeddb` bağımlılıkları; okuma kaydı (T21); seslendirme ayrıntısı (T8 notu); `docs/mimari.md` ve `docs/dinleme-hatti.md` güncellendi (tarih, ilerleme, servis klasörleri, yardım akışı, senaryo tablosu).

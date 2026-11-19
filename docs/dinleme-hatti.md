@@ -39,6 +39,17 @@ Tipler `docs/mimari.md` içinde. Davranış sözleşmesi:
 - `hesitation`: geçerli kelimede sessizlik sürüyor. Her 500 ms'de bir, toplam süreyle gelir. Arayüz 3000 ms'de yardımı açar ve dinleyiciye bildirir (`help(index)`): kelime `helped` olarak sonuçlanır, kelime seslendirilirken dinleme duraklar, seslendirme bitince konum bir sonraki kelimeye geçer.
 - `end`: metin bitti ya da durduruldu.
 - `stop()` her zaman tutarlı bir sonuç döndürür: okunmayan kelimeler listede yer almaz, `wordsAttempted` son okunan kelimeye kadar sayılır.
+- Süreler milisaniyedir: `tStart` ve `tEnd` okumanın başından, duraklamalar hariç. `hesitationMs` yalnız 1000 ms ve üstündeyse yazılır.
+
+**Yardım akışı (Faz 2a planı, karar 5):**
+
+1. Duraksama 3000 ms'ye varınca son `hesitation` olayı (`ms: 3000`) gelir ve dinleyici bekler.
+2. Arayüz `help(i)` çağırır (`useReading`), Tıkır kelimeyi seslendirir (`narrator.speakWord(söyleyiş)`).
+3. Seslendirme bitince arayüz `resume()` çağırır; dinleyici `word {i, helped, hesitationMs: 3000}` ve sonraki `position` olayını gönderir. Yardım alınan kelime bu yüzden seslendirme bitince sayılır (G4'te balon açıkken "Takılma 1").
+4. Seslendirme ve duraklatma süresince okuma saati ve hayalet durur; yardım alınan kelimeye okuma süresi verilmez.
+5. Yardım sırasında `stop()`: `help(i)` çağrıldıysa kelime sonuçta bir kez `helped` olarak yer alır.
+
+Çocuğa gösterilen işaretler: yanlış okuma, ek hatası ve atlama dalgalı mercan çizgi; 1 saniye ve üstü duraksama ile yardım noktalı kehribar çizgi. Tekrar, ekleme ve kendini düzeltme yalnız veli karnesinde görünür. G4'teki "Takılma" sayacı noktalı çizgili kelimeleri sayar (`src/features/reading/readingState.ts`).
 
 Sapma türleri: `misread` (başka kelime ya da bozuk okuma), `suffix` (kök doğru, ek yanlış ya da eksik), `skipped`, `repeated`, `inserted`, `selfCorrected`, `helped`. Hangilerinin puandan düştüğü `docs/urun.md` bölüm 2'de.
 
@@ -66,11 +77,25 @@ interface FakeScenario {
 - Benzetim saf bir işlevdir (`simulateReading(words, scenario)` → zaman damgalı `WordResult` listesi); `FakeListener` onu zamanlayıcıyla oynatır, demo profili yükleyicisi doğrudan sonucunu kullanır.
 - Isınmada (tek kelime) senaryo verilmediyse kelime doğru sayılır.
 - Aynı senaryo ve tohum her zaman aynı olay dizisini üretir (testlerde sahte zamanlayıcıyla).
-- Hazır senaryolar üç okuma için ayrı `wcpm` taşır: `smooth` (hatasız; 80, 84, 88), `typical` (2 hata, 1 duraksama; 64, 68, 71), `struggling` (5 hata, 3 uzun duraksama; 42, 46, 50). `cocuk-sabahi` kipinde `typical` ile biten seans G7'de tasarımdaki sayıları verir: 71 doğru kelime, dünden 4 fazla.
-- `design` (tasarımdaki G4 anını üretir: 2. okuma; "kulaklarını" kısa duraksama, "rüzgârı" yanlış okuma, "ağaçlarının" üzerinde 3 saniyeyi aşan duraksama ve açık yardım balonu; hayalet o anda "patika" üzerinde). Tasarımdaki an gerçek veriden türemediği için bu senaryo hayalet temposunu da sabitler (dakikada 40 kelime). Ekran görüntüsü yardım balonu açıkken alınır.
-- Mikrofon gerçekten açılır ve düzey göstergesi gerçek sesle çalışır; yalnız tanıma sahtedir. Mikrofon izni yoksa sahte dinleyici de çalışmaz, böylece izin akışları gerçek gibi sınanır.
+- Hazır senaryolar (`src/services/listener/scenarios.ts`; konumlar 0'dan sayılır, test verisidir):
 
-**Elle kip** (yalnız geliştirme derlemesinde, `/gelistirme` ayarından açılır): Boşluk = kelime doğru, `E` = yanlış okuma, `S` = atlama, `H` = 3 saniye duraksama. Gerçek bir çocukla tanıtım yaparken dinleyiciyi bir yetişkin oynar.
+  | Ad | Okuma | `wcpm` | Hatalar (konum: tür) | Duraksamalar (konum: ms) |
+  |---|---|---|---|---|
+  | `smooth` | 1, 2, 3 | 80, 84, 88 | — | — |
+  | `typical` | 1 | 64 | 15 `suffix`, 35 `repeated`, 40 `skipped` | — |
+  | | 2 | 68 | 9 `misread` | 6: 1800 |
+  | | 3 | 71 | — | — |
+  | `struggling` | 1, 2, 3 | 42, 46, 50 | 4 `misread`, 12 `suffix`, 20 `skipped`, 31 `misread`, 45 `suffix` | 8, 26, 52: 3500 (3 sn'de yardım) |
+  | `design` | 1 ve 3 | `typical` ile aynı | | |
+  | | 2 | 50 | 9 `misread` | 6: 1800, 14: 3000 (yardım) |
+
+  `typical`, demo profilinin 0. günündeki okumalardır (`seed/demo-profil.json`; bir test ikisini eşit tutar). `cocuk-sabahi` kipinde `typical` ile biten seans G7'de tasarımdaki sayıları verir: 71 doğru kelime, dünden 4 fazla. Senaryo verilmezse `FakeListener` dakikada 60 kelime, hatasız okur.
+- `design` (tasarımdaki G4 anını üretir: 2. okuma; "kulaklarını" kısa duraksama, "rüzgârı" yanlış okuma, "ağaçlarının" üzerinde 3 saniyeyi aşan duraksama ve açık yardım balonu; hayalet o anda "patika" üzerinde). Tasarımdaki an gerçek veriden türemediği için bu senaryo hayalet temposunu da sabitler (dakikada 40 kelime). Ekran görüntüsü yardım balonu açıkken alınır.
+- `design` senaryosunda yardım balonu okumanın 19,19. saniyesinde açılır: "Süre 0:19", "Doğru 13", "Takılma 1"; hayalet "patika"da (12), çocuk 2 kelime önde. G3 ve G4 bu senaryoda 4. bölümün 1. ve 2. sayfasını tek sayfa gösterir (`docs/kararlar.md` D12).
+- Mikrofon gerçekten açılır ve düzey göstergesi gerçek sesle çalışır; yalnız tanıma sahtedir. Mikrofon izni yoksa sahte dinleyici de çalışmaz, böylece izin akışları gerçek gibi sınanır.
+- **Mikrofona bağlılık (Faz 2a planı, karar 14):** `start()` mikrofon dinlemiyorsa hata fırlatır. Mikrofon dinlemeyi bırakırsa (sekme gizlendi, kesinti) okuma donar; yeniden dinleyince kaldığı yerden sürer. Kullanıcı ayrıca duraklattıysa `resume()` beklenir. Veli onayı denetimi `start()`'ı çağıran katmandadır: `useMicrophone(audio, consent)` onay yokken `audio.start()`'ı hiç çağırmaz, onay geri alınınca mikrofonu kapatır.
+
+**Elle kip** (yalnız geliştirme derlemesinde, `/gelistirme` ayarından açılır): Boşluk = kelime doğru, `E` = yanlış okuma, `S` = atlama, `H` = 3 saniye duraksama. Gerçek bir çocukla tanıtım yaparken dinleyiciyi bir yetişkin oynar. Faz 2a'da dinleyici tarafı hazır (`new FakeListener({ kind: 'manual' })`, `mark('correct' | 'misread' | 'skipped' | 'hesitate')`); klavye bağlantısı 2b'de gelir.
 
 ## 4. Gerçek dinleyici (Faz 6 planı)
 

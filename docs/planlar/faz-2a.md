@@ -57,7 +57,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
 - [x] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
 - [x] Task 14: `useReading` ve `useNarration`
-- [ ] Task 15: Belgeler ve 2a'nın denetimi
+- [x] Task 15: Belgeler ve 2a'nın denetimi
 
 ## Onaylanan kararlar
 
@@ -216,18 +216,18 @@ Vitrindeki "Demo profili" bölümü. Metinler `src/features/dev/demo/copy.ts` i�
 
 ## 2a'nın ölçütlere katkısı
 
-| # | Yol haritası ölçütü (Faz 2) | 2a'da kanıt | 2b'de kalan |
-|---|---|---|---|
-| 1 | `typical` ile G1'den G7'ye seans; G1, G2, G7 `expected` değerleri | Task 12: yüklenen `cocuk-sabahi` ile alan işlevleri şunları verir: bugünkü bölüm 4, tamamlanan 3, seri 2; ısınma kartları ve kalan 2; `typical` 3. okuma 71, fark 4 | Uçtan uca seans |
-| 2 | `design` G4 görüntüsü tasarımdaki anı gösterir | Task 6 ve 14: yardım anında süre 19,19 sn, hayalet 12, çocuk 14, fark 2, sayaçlar 13 ve 1, işaretler 6 ve 9 | Ekran ve görüntü |
-| 3 | 3 sn'de yardım balonu, hece, seslendirme, `helped` | Task 14: yardım 3000. ms'de açılır, heceler `a-ğaç-la-rı-nın`, `speakWord('ağaçlarının')`, sonuç `helped` | Balon ve metin |
-| 4 | Üçüncü okuma kaydedilir, G5'te dinlenir, yeniden alınır | Task 11: kayıt, saklama, çalma, silme | Ekran akışı |
-| 5 | Yenilenince seans kaldığı adımdan sürer | Task 10 ve 12: veri yenilemeden sonra depoda (uçtan uca, Chromium ve WebKit) | Durum makinesi |
-| 6 | Bitince sonuçlar depoda, takılınanlar kart, G1 "bugün bitti" | Task 3, 4, 5 kuralları | Akış ve G1 |
-| 7 | Ertesi gün sıradaki bölüm, ısınmada dünün kelimeleri, "dün" imleci | Task 4 ve 5: bir gün sonra bölüm 5, yeni kartların günü gelir, hayaletin kaynağı dünkü seans | Test saatiyle uçtan uca |
-| 8 | Onay yokken mikrofon hiç açılmaz | Task 13: `useMicrophone` onaysız `audio.start()` çağırmaz | Her adımda uçtan uca |
-| 9 | Çocuğa olumsuz fark yok | Task 5: `raceLead` ve `deltaFromPrevious` sıfır ve eksi için `null` | Ekran testleri |
-| 10 | G1–G7 tasarımla karşılaştırıldı | yok | Görüntüler ve fark listesi |
+| # | Yol haritası ölçütü (Faz 2) | 2a'da kanıt | 2b'de kalan | Test |
+|---|---|---|---|---|
+| 1 | `typical` ile G1'den G7'ye seans; G1, G2, G7 `expected` değerleri | Task 12: yüklenen `cocuk-sabahi` ile alan işlevleri şunları verir: bugünkü bölüm 4, tamamlanan 3, seri 2; ısınma kartları ve kalan 2; `typical` 3. okuma 71, fark 4 | Uçtan uca seans | `loadDemoProfile.test.ts` › "sets up the child's morning: the G1, G2 and G7 numbers of the designs" |
+| 2 | `design` G4 görüntüsü tasarımdaki anı gösterir | Task 6 ve 14: yardım anında süre 19,19 sn, hayalet 12, çocuk 14, fark 2, sayaçlar 13 ve 1, işaretler 6 ve 9 | Ekran ve görüntü | `scenarios.test.ts` › "opens the help of the design scenario at the moment the G4 design shows"; `readingState.test.ts` › "reaches the G4 moment of the design scenario"; `useReading.test.tsx` › "reaches the G4 moment of the design scenario and reads the word for the child" |
+| 3 | 3 sn'de yardım balonu, hece, seslendirme, `helped` | Task 14: yardım 3000. ms'de açılır, heceler `a-ğaç-la-rı-nın`, `speakWord('ağaçlarının')`, sonuç `helped` | Balon ve metin | `useReading.test.tsx` › "reaches the G4 moment …"; `FakeListener.test.ts` › "waits at the help until Tıkır has read the word" |
+| 4 | Üçüncü okuma kaydedilir, G5'te dinlenir, yeniden alınır | Task 11: kayıt, saklama, çalma, silme | Ekran akışı | `PcmRecorder.test.ts` › "records the frames as 16 kHz WAV with a 64-bar waveform", "prepares the player inside the gesture and plays the recording to its end", "removes a recording", "keeps recordings in IndexedDB for a later page" |
+| 5 | Yenilenince seans kaldığı adımdan sürer | Task 10 ve 12: veri yenilemeden sonra depoda (uçtan uca, Chromium ve WebKit) | Durum makinesi | `e2e/demo-profile.spec.ts` › "the demo profile is set up from the showcase and kept across a reload" (Chromium, WebKit); `IndexedDbRepository.test.ts` › "does not load the content twice when opened again" |
+| 6 | Bitince sonuçlar depoda, takılınanlar kart, G1 "bugün bitti" | Task 3, 4, 5 kuralları | Akış ve G1 | `scoring.test.ts`; `stuckWords.test.ts` › "turns a new stuck word into a wild card due tomorrow"; `progress.test.ts` |
+| 7 | Ertesi gün sıradaki bölüm, ısınmada dünün kelimeleri, "dün" imleci | Task 4 ve 5: bir gün sonra bölüm 5, yeni kartların günü gelir, hayaletin kaynağı dünkü seans | Test saatiyle uçtan uca | `progress.test.ts` › "makes today's chapter the one after the last completed"; `stuckWords.test.ts` › "deals the demo profile cards due today, most missed first"; `ghost.test.ts` › "takes the latest earlier session that has the same reading" |
+| 8 | Onay yokken mikrofon hiç açılmaz | Task 13: `useMicrophone` onaysız `audio.start()` çağırmaz | Her adımda uçtan uca | `useMicrophone.test.tsx` › "never opens the microphone without the parent consent", "closes the microphone when the consent is withdrawn and when the screen goes" |
+| 9 | Çocuğa olumsuz fark yok | Task 5: `raceLead` ve `deltaFromPrevious` sıfır ve eksi için `null` | Ekran testleri | `ghost.test.ts` › "gives the lead only when the child is ahead"; `progress.test.ts` › "gives the gain over the previous session only when it is positive" |
+| 10 | G1–G7 tasarımla karşılaştırıldı | yok | Görüntüler ve fark listesi | — |
 
 ## Her görevde geçerli kurallar
 
@@ -1241,7 +1241,7 @@ export function useNarration(options: { narrator: Narrator; pages: readonly Scre
 
 **Dosyalar:** `docs/mimari.md`, `docs/dinleme-hatti.md`, `docs/kararlar.md`, bu plan ("Kanıtlar").
 
-- [ ] **`docs/mimari.md`:**
+- [x] **`docs/mimari.md`:**
   - modül tablosuna `date.ts` ve `progress.ts`;
   - tiplere `LocalDate`, `hesitationMs`, `ReadingOutcome`;
   - `Narrator` arayüzündeki değişiklik (karar 11);
@@ -1249,18 +1249,18 @@ export function useNarration(options: { narrator: Narrator; pages: readonly Scre
   - depo şeması ve içerik sürümü;
   - `src/services/listener`, `narrator`, `recorder`, `repository` klasörleri;
   - `notifyAll`.
-- [ ] **`docs/dinleme-hatti.md` bölüm 2–3:**
+- [x] **`docs/dinleme-hatti.md` bölüm 2–3:**
   - yardım akışı (karar 5);
   - dinleyicinin mikrofona bağlılığı (karar 14);
   - senaryo tablosu (karar 4).
-- [ ] **`docs/kararlar.md`:** değişiklik günlüğüne 2a satırı.
-- [ ] **Denetim:**
+- [x] **`docs/kararlar.md`:** değişiklik günlüğüne 2a satırı.
+- [x] **Denetim:**
   - `pnpm check`;
   - `pnpm build`; `dist/` içinde `demo-profil`, `FakeListener` ve `gelistirme` olmamalı;
   - `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`.
 
   Çıktılar "Kanıtlar"a yazılır. "2a'nın ölçütlere katkısı" tablosunun her satırının yanına kanıtın test adı yazılır.
-- [ ] Commit: `docs: record phase 2a decisions and evidence`.
+- [x] Commit: `docs: record phase 2a decisions and evidence`.
 
 Sonra bütün dal bağımsız bir incelemeden geçer (executing-plans → "Final Review"). Düzeltmeler tek geçişte yapılır.
 
@@ -1271,5 +1271,13 @@ Sonra bütün dal bağımsız bir incelemeden geçer (executing-plans → "Final
 3. **`struggling` konumları** test verisidir. Bir öğretmen gerçekçi bir zorlanma profili verirse değiştirilir.
 
 ## Kanıtlar
+
+Hepsi `faz-2a` dalında, Task 15'in sonunda (2026-11-20) çalıştırıldı.
+
+- `pnpm check` → tip denetimi, ESLint, Stylelint, Prettier ve **544 birim testi** geçti (Faz 1 sonunda 344).
+- `pnpm build` → temiz. `dist/` içinde şu dizgilerin hiçbiri yok (`grep -rl`, 0 dosya): `demo-profil`, `veli@example.com`, `Demo profili`, `Kuruluyor`, `FakeListener`, `mark() works only`, `simulateReading`, `mulberry`, `gelistirme`, `fake-indexeddb`. Demo profili, sahte dinleyici ve geliştirme sayfaları üretim derlemesine girmiyor.
+- `caffeinate -u -t 2; caffeinate -d -i pnpm e2e` → **156 passed** (Chromium ve WebKit). Faz 1'deki 148 teste ek: ses denemesinde susturulan iz, kısa susturma ve askıya alınan bağlam (Task 7), vitrinde demo profili ve yenileme (Task 12).
+- Görev başına kırmızı → yeşil: her görevin testi uygulamadan önce koşturulup düştüğü görüldü; görev sonu komutları ve sonuçları yürütme defterinde (`.superpowers/sdd/faz-2a/progress.md`).
+- Uygulamada verilen kararlar (plan dışı küçük kararlar ve bedelleri) bütün dal incelemesinden sonra son rapora yazılır.
 
 Uygulama sırasında doldurulur.

@@ -64,6 +64,8 @@ Hepsi saf işlevdir ve birim testlidir.
 | `goals.ts` | İlk hedef, sıradaki hedef, haftalık yorum seçimi |
 | `stuckWords.ts` | Karta dönüşme, sıradaki gün, evcilleşme, ısınma destesi seçimi |
 | `ghost.ts` | Bir önceki seansın aynı sıradaki okumasının temposundan hayalet konumu |
+| `date.ts` | Takvim günü (`LocalDate`, `YYYY-MM-DD`, cihazın yerel takvimi): gün ekleme, gün farkı, haftanın günü. Gün aritmetiği UTC üzerinden yapılır, yaz saati etkilemez (Faz 2a) |
+| `progress.ts` | G1 ve G7 kuralları: bugünün bölümü, üst üste gün, yol haritası karoları, bir önceki seansla fark (yalnız artıysa) (Faz 2a) |
 | `readingStyle.ts` | Varsayılan ayar, CSS değişkenlerine çevirme, ölçerek seçme kararı |
 
 ### Tipler (taslak; adlar bağlayıcı, alanlar genişleyebilir)
@@ -71,6 +73,7 @@ Hepsi saf işlevdir ve birim testlidir.
 ```ts
 type Grade = 1 | 2 | 3 | 4;
 type Id = string;
+type LocalDate = string;           // 'YYYY-MM-DD', cihazın yerel takvimi (Faz 2a)
 
 interface Parent { id: Id; email: string; consent: { voiceProcessing: boolean; weeklyEmail: boolean; grantedAt?: string } }
 interface Child  { id: Id; name: string; grade: Grade; interests: string[]; readingStyle: ReadingStyle }
@@ -85,7 +88,9 @@ interface Question { prompt: string; options: string[]; correctIndex: number }
 interface Passage  { id: Id; grade: Grade; title: string; sentences: string[] }   // 1 dakikalık ölçüm metni
 
 type MiscueType = 'misread' | 'suffix' | 'skipped' | 'repeated' | 'inserted' | 'selfCorrected' | 'helped';
-interface WordResult { index: number; status: 'correct' | MiscueType; tStart: number; tEnd: number; heard?: string }
+interface WordResult { index: number; status: 'correct' | MiscueType; tStart: number; tEnd: number; heard?: string;
+  hesitationMs?: number }          // süreler ms: okumanın başından, duraklamalar hariç; hesitationMs yalnız 1000 ms ve üstünde
+interface ReadingOutcome { words: WordResult[]; seconds: number; prosodyScore?: 1 | 2 | 3 | 4 }   // dinleyicinin sonucu
 interface ReadingResult {
   chapterRef?: { bookId: Id; chapter: number }; attempt?: 1 | 2 | 3;   // ölçüm okumasında ikisi de yok
   startedAt: string; seconds: number;
@@ -178,16 +183,23 @@ interface ReadingListener {
   on(cb: (e: ListenerEvent) => void): Unsubscribe;
 }
 
-// Model okuma (Dinle adımı, kelime seslendirme)
+// Model okuma (Dinle adımı, kelime seslendirme). Faz 2a: sonuç 'completed' | 'stopped' (G3 seslendirmenin
+// en az bir kez bittiğini bilmeli), estimateSeconds G3'ün süre göstergesi için.
 interface Narrator {
-  speakPage(page: Page, onUnit: (unitIndex: number) => void): Promise<void>;
-  speakWord(word: string): Promise<void>;
-  setRate(rate: 'slow' | 'normal'): void;
+  readonly rate: 'slow' | 'normal';
+  speakPage(page: Page, onUnit: (unitIndex: number) => void): Promise<'completed' | 'stopped'>;
+  speakWord(word: string): Promise<'completed' | 'stopped'>;   // söyleyiş biçimi verilir ('üç', '3' değil)
+  setRate(rate: 'slow' | 'normal'): void;           // sonraki üniteden geçerli
   pause(): void; resume(): void; stop(): void;
+  estimateSeconds(page: Page): number;
 }
 
-// Kayıt (3. okuma)
-interface Recorder { start(audio: AudioCapture): Promise<void>; stop(): Promise<{ id: Id; seconds: number }>; play(id: Id): Promise<void>; remove(id: Id): Promise<void> }
+// Kayıt (3. okuma). Faz 2a: dalga biçimi için levels; play() çalıcıyı ilk await'ten önce hazırlar (iPhone)
+interface Recorder {
+  start(audio: AudioCapture): Promise<void>; stop(): Promise<{ id: Id; seconds: number; levels: number[] }>;
+  play(id: Id): Promise<void>; stopPlayback(): void; remove(id: Id): Promise<void>;
+  get(id: Id): Promise<{ id: Id; seconds: number; levels: number[] } | null>;
+}
 
 // Depo
 interface Repository {
@@ -217,7 +229,7 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 | `AudioCapture` | `WebAudioCapture` (getUserMedia + AudioWorklet) | Gerekirse Capacitor yerel eklentisi |
 | `ReadingListener` | `FakeListener` (senaryolu) | `RemoteListener` (WebSocket) |
 | `Narrator` | `SpeechSynthesisNarrator`; ses yoksa `SilentNarrator` (yalnız zamanlı vurgu) | Hazır ses dosyaları |
-| `Recorder` | `MediaRecorderRecorder`, kayıtlar IndexedDB'de | Sunucuya yükleme |
+| `Recorder` | `PcmRecorder`: `AudioCapture` çerçeveleri WAV olarak IndexedDB'de (`docs/kararlar.md` T21) | Sunucuya yükleme |
 | `Repository` | `IndexedDbRepository`, ilk açılışta `seed/` ile dolar | `HttpRepository` |
 | `BookGenerator` | `MockBookGenerator` (aşağıda) | Arka uç |
 | `Telemetry` | `NoopTelemetry` | Kendi sunucumuza |
@@ -231,6 +243,15 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 - `WavPlayer.ts`: WAV'ı Web Audio ile çalar; böylece CSP'ye `media-src` gerekmez.
 
 **Ses denemesinin öteki servisleri (Faz 1):** `echo/` (yankı ölçümü: `EchoProbe`, `WebSocketEchoProbe`, `roundTrip`), `device/environment.ts` (tarayıcı, işletim sistemi, kabuk, mikrofon izni), `files.ts` (indirme). Ses denemesi sayfası bunları `src/app/services.ts` içindeki `audioLabServices` nesnesinden prop olarak alır; rota bu dosyayı tembel yükler, üretim derlemesine girmez.
+
+**Seansın servisleri (Faz 2a):**
+
+- `listener/`: `ReadingListener` ve olay tipleri (`types.ts`), saf benzetim (`simulateReading.ts`), hazır senaryolar (`scenarios.ts`), `FakeListener` (senaryo ve elle kip). Ayrıntı: `docs/dinleme-hatti.md` bölüm 2–3.
+- `narrator/`: `Narrator`, `narrationTiming` ve `unitDurationMs` (`Narrator.ts`), `SilentNarrator`, `SpeechSynthesisNarrator` (`SpeechPort` dikişi, `browserSpeechPort`), `createNarrator` (Türkçe ses varsa konuşan, yoksa sessiz). Her anlam ünitesi ayrı bir konuşmadır; 1,5 sn içinde başlamayan ya da hata veren ünite sessiz zamanlanır (`docs/kararlar.md` T8).
+- `recorder/`: `Recorder`, `RecordingStore` ve `IndexedDbRecordingStore`, `PcmRecorder` (T21).
+- `repository/`: `Repository` ve `RepositoryUnavailableError`, şema (`db.ts`), paketlenen içerik (`seedContent.ts`), `IndexedDbRepository`. `src/app/services.ts` → `appRepository()` sayfa başına tek depo verir.
+- `id.ts`: `createId()`, `crypto.getRandomValues` ile RFC 4122 v4 (güvenli olmayan bağlamda `randomUUID` yok). `notify.ts`: `notifyAll()`, dinleyicileri sırayla çağırır; fırlatan dinleyiciyi `reportError` ile bildirir, ötekiler yine çağrılır.
+- Süre ölçen servisler ve hook'lar `now?: () => number` seçeneği alır (varsayılan `performance.now`); testler sahte saatle verir.
 
 **`MockBookGenerator`:**
 
@@ -256,9 +277,10 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
 
 ## Depolama ve örnek veri
 
-- Veritabanı adı `tikir`; şema sürümü `src/services/repository` içinde tek yerde.
+- Veritabanı adı `tikir`; şema sürümü `src/services/repository/db.ts` içinde tek yerde (sürüm 1). Depolar: `meta` (içerik sürümü), `parent`, `child` ve `drill` (tek kayıt, anahtar `current`), `books` (`id`), `sessions` (`date`; günde bir seans), `stuckWords` (`word`; küme bütün olarak yazılır), `assessments` (`id`), `passages` (`id`, `grade` dizini), `recordings` (`id`).
+- İçerik sürümü (`contentVersion`) `meta` deposunda durur; paketlenen içerik değişince artırılır ve ilk açılışta yeniden yüklenir. `clearAll()` kullanıcı verisini siler, içeriği yeniden yükler. IndexedDB yoksa ya da açılamazsa `RepositoryUnavailableError`.
 - İlk açılışta seri kitap `seed/kayip-fenerin-izinde.json`, ölçüm metinleri `seed/olcum-metinleri.json` dosyasından yüklenir.
-- **Demo profili** (`seed/demo-profil.json`): tasarımlardaki örnek kullanıcı Deniz. `/gelistirme/vitrin` sayfasındaki iki düğmeyle yüklenir; her biri depoyu temizleyip bir kipi kurar:
+- **Demo profili** (`seed/demo-profil.json`): tasarımlardaki örnek kullanıcı Deniz. `/gelistirme/vitrin` sayfasındaki "Demo profili" bölümünün iki düğmesiyle yüklenir (`src/features/dev/demo/`); her biri depoyu temizleyip bir kipi kurar. Simüle edilen bir okumanın `wcpm` değeri seed'dekine uymazsa yükleme hata verir:
   - `cocuk-sabahi`: 4. bölüm okunmak üzere. G1–G7 tasarımlarının başlangıç durumu.
   - `veli-haftasonu`: hafta bitmiş, ölçüm yapılmış. V1–V4 tasarımlarındaki sayılar.
 - Dosyadaki günler görelidir (`day`); yükleyici kipin `anchor` gününü takvime oturtur: `cocuk-sabahi` kipinde bugüne, `veli-haftasonu` kipinde bugünden önceki en yakın pazara (hafta şeridi tasarımdaki günlere denk gelsin diye). Okumalar ve ölçümler sahte dinleyici senaryosu biçimindedir; yükleyici onları `FakeListener` ile aynı benzetimden geçirip `ReadingResult` üretir. Dosyanın `expected` alanı, ekranlarda görülmesi gereken sayıları verir; testlerde kullan.
