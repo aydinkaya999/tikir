@@ -28,10 +28,9 @@ export function atesman(syllablesPerWord: number, wordsPerSentence: number): num
 
 /** Stats of a text given as sentences; " | " phrase-unit markers are ignored. */
 export function textStats(sentences: readonly string[]): TextStats {
-  const words = sentences.flatMap((sentence) =>
-    tokenize(splitPhraseUnits(sentence).join(' ')).map((token) => token.word),
-  );
-  const syllables = words.reduce((sum, word) => sum + countSyllables(word), 0);
+  // A written number is one word; its syllables are those of its reading (docs/kararlar.md C5).
+  const words = sentences.flatMap((sentence) => tokenize(splitPhraseUnits(sentence).join(' ')));
+  const syllables = words.reduce((sum, token) => sum + countSyllables(token.spoken), 0);
 
   if (words.length === 0) {
     return {

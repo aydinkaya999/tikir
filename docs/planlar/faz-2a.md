@@ -44,7 +44,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 
 - [x] Task 0: Plan dosyası, dal ve yanıtlanan sorular
 - [x] Task 1: Alan tipleri, ürün parametreleri ve takvim günü
-- [ ] Task 2: Rakamların okunuşu ve bölümün kelimeleri
+- [x] Task 2: Rakamların okunuşu ve bölümün kelimeleri
 - [ ] Task 3: Puanlama
 - [ ] Task 4: Canavar kelimeler
 - [ ] Task 5: Hayalet, hedefler ve ilerleme
@@ -383,7 +383,7 @@ export function chapterTokens(chapter: Chapter): ChapterToken[];
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `text.test.ts`:
+- [x] **Kırmızı:** `text.test.ts`:
   - **`readCardinal`** şu tabloyu verir:
 
     | Rakam | Okunuş | Rakam | Okunuş |
@@ -427,10 +427,10 @@ export function chapterTokens(chapter: Chapter): ChapterToken[];
   - **`chapterTokens`:** 4. bölüm 99 kelime; 14. kelime "ağaçlarının", sayfa 0; 40. kelime "soluk", sayfa 1; sayfaların ilk kelimeleri 0, 25, 45, 59, 73, 88.
   - **`readability.test.ts`:** `textStats(['Deniz 3 elma aldı.'])` → 4 kelime, 7 hece. Seed'in bütün `stats` testleri değişmeden geçer.
   - **`ReadingText.test.tsx`:** "Deniz 3 elma aldı." sayfasında "3" kendi `data-word-index` hücresindedir ve "Deniz"e yapışmaz.
-- [ ] `pnpm test src/domain/text.test.ts` → FAIL (`readCardinal` yok).
-- [ ] Uygula. `textStats` heceyi `spoken` biçiminden sayar.
-- [ ] Üç test dosyası → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(domain): read digits as Turkish number words`.
+- [x] `pnpm test src/domain/text.test.ts` → FAIL (`readCardinal` yok).
+- [x] Uygula. `textStats` heceyi `spoken` biçiminden sayar.
+- [x] Üç test dosyası → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(domain): read digits as Turkish number words`.
 
 ### Task 3: Puanlama
 
