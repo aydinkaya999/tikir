@@ -47,7 +47,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 2: Rakamların okunuşu ve bölümün kelimeleri
 - [x] Task 3: Puanlama
 - [x] Task 4: Canavar kelimeler
-- [ ] Task 5: Hayalet, hedefler ve ilerleme
+- [x] Task 5: Hayalet, hedefler ve ilerleme
 - [ ] Task 6: Okuma benzetimi ve hazır senaryolar
 - [ ] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
 - [ ] Task 8: `ReadingListener` ve `FakeListener`
@@ -578,7 +578,7 @@ export function chapterTileState(chapter: number, completed: readonly number[], 
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`ghost.test.ts`:**
     - `ghostIndex(40, 19185, 99)` → 12; 18000 ms'de 12; 17999 ms'de 11; 600000 ms'de 99 (metnin sonunda durur).
     - `raceLead(14, 12)` → 2; `raceLead(12, 12)` → `null`; `raceLead(10, 12)` → `null`; `raceLead(5, null)` → `null`.
@@ -615,9 +615,9 @@ export function chapterTileState(chapter: number, completed: readonly number[], 
       | 60 | 67 | `null` |
       | 71 | `null` | `null` |
     - **Karolar:** `chapterTileState(3, [1,2,3], 4)` → `'done'`, `(4, …, 4)` → `'today'`, `(5, …, 4)` → `'locked'`, `(4, [1,2,3], null)` → `'locked'`.
-- [ ] Üç test dosyası → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(domain): add ghost pace, goals and progress rules`.
+- [x] Üç test dosyası → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(domain): add ghost pace, goals and progress rules`.
 
 ### Task 6: Okuma benzetimi ve hazır senaryolar
 
