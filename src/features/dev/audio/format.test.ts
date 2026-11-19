@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { formatDbfs, formatMs, formatSeconds, meterValue, trialFileName } from './format';
+import {
+  describeAppliedSettings,
+  formatDbfs,
+  formatMs,
+  formatSeconds,
+  meterValue,
+  trialFileName,
+} from './format';
 
 describe('meterValue', () => {
   it.each([
@@ -42,5 +49,24 @@ describe('trialFileName', () => {
     expect(trialFileName(new Date(2026, 0, 5, 7, 3, 9), 'json')).toBe(
       'ses-denemesi-20260105-070309.json',
     );
+  });
+});
+
+describe('describeAppliedSettings', () => {
+  it('names each processing setting as on, off, a reported mode or unknown', () => {
+    expect(
+      describeAppliedSettings({ echoCancellation: 'remote-only', noiseSuppression: false }),
+    ).toBe('Yankı giderme remote-only, Gürültü bastırma kapalı, Otomatik kazanç bilinmiyor');
+    expect(
+      describeAppliedSettings({
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      }),
+    ).toBe('Yankı giderme açık, Gürültü bastırma açık, Otomatik kazanç açık');
+  });
+
+  it('is unknown before the microphone has opened', () => {
+    expect(describeAppliedSettings(null)).toBe('bilinmiyor');
   });
 });

@@ -12,9 +12,9 @@ function appliedSettings(track: MediaStreamTrack | undefined): AppliedTrackSetti
   // `latency` is in the spec and Chrome reports it, but TypeScript's DOM types leave it out.
   const settings: MediaTrackSettings & { latency?: number } = track.getSettings();
   return {
-    // Newer browsers report a mode ('all', 'remote-only'); both mean echo cancellation is on.
-    echoCancellation:
-      typeof settings.echoCancellation === 'string' ? true : settings.echoCancellation,
+    // Kept as reported: 'remote-only' is not full echo cancellation, and the trial is there to
+    // learn what each device applies.
+    echoCancellation: settings.echoCancellation,
     noiseSuppression: settings.noiseSuppression,
     autoGainControl: settings.autoGainControl,
     sampleRate: settings.sampleRate,

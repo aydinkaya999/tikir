@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button } from '../../../components/Button/Button';
 import { Card } from '../../../components/Card/Card';
-import type { AppliedTrackSettings } from '../../../services/audio/AudioCapture';
 import type { EnvironmentInfo, PermissionReading } from '../../../services/device/environment';
 import styles from './AudioLabPage.module.css';
 import { copy } from './copy';
-import { trialFileName } from './format';
+import { describeAppliedSettings, trialFileName } from './format';
 import type { RecordingSummary } from './pcmRecording';
 import { type AudioTrialReport, buildTrialReport, type EchoReport } from './report';
 import type { CaptureHandle } from './useCapture';
@@ -19,28 +18,12 @@ interface ReportSectionProps {
   saveFile: (fileName: string, data: Blob) => void;
 }
 
-const settingNames = ['echoCancellation', 'noiseSuppression', 'autoGainControl'] as const;
-
 function known(value: string): string {
   return value === 'unknown' ? copy.report.unknown : value;
 }
 
 function yesNo(value: boolean): string {
   return value ? copy.report.yes : copy.report.no;
-}
-
-function appliedSettings(applied: AppliedTrackSettings | null): string {
-  if (applied === null) {
-    return copy.report.unknown;
-  }
-  return settingNames
-    .map((name) => {
-      const value = applied[name];
-      const shown =
-        value === undefined ? copy.report.unknown : value ? copy.report.on : copy.report.off;
-      return `${copy.mic[name]} ${shown}`;
-    })
-    .join(', ');
 }
 
 /** The report a tester attaches to the results template; refreshed every second. */
@@ -96,7 +79,7 @@ export function ReportSection({
               ? copy.report.unknown
               : copy.report.hz(String(report.capture.inputSampleRate)),
           ],
-          [copy.report.applied, appliedSettings(report.capture.applied)],
+          [copy.report.applied, describeAppliedSettings(report.capture.applied)],
           [copy.report.delivered, String(report.capture.framesDelivered)],
           [copy.report.dropped, String(report.capture.framesDropped)],
           [copy.report.silent, String(report.capture.framesSilent)],

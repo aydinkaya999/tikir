@@ -1,4 +1,5 @@
 // Numbers on the audio lab page, written the Turkish way ("10,0").
+import type { AppliedTrackSettings } from '../../../services/audio/AudioCapture';
 import { rmsToDbfs } from '../../../services/audio/pcm';
 import { copy } from './copy';
 
@@ -36,4 +37,27 @@ export function trialFileName(createdAt: Date, extension: 'json' | 'wav'): strin
   const date = `${String(createdAt.getFullYear())}${twoDigits(createdAt.getMonth() + 1)}${twoDigits(createdAt.getDate())}`;
   const time = `${twoDigits(createdAt.getHours())}${twoDigits(createdAt.getMinutes())}${twoDigits(createdAt.getSeconds())}`;
   return `ses-denemesi-${date}-${time}.${extension}`;
+}
+
+const settingNames = ['echoCancellation', 'noiseSuppression', 'autoGainControl'] as const;
+
+/** "Yankı giderme açık, Gürültü bastırma kapalı, …"; a reported mode is shown as it came. */
+export function describeAppliedSettings(applied: AppliedTrackSettings | null): string {
+  if (applied === null) {
+    return copy.report.unknown;
+  }
+  return settingNames
+    .map((name) => {
+      const value = applied[name];
+      const shown =
+        value === undefined
+          ? copy.report.unknown
+          : typeof value === 'string'
+            ? value
+            : value
+              ? copy.report.on
+              : copy.report.off;
+      return `${copy.mic[name]} ${shown}`;
+    })
+    .join(', ');
 }

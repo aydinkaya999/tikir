@@ -21,7 +21,8 @@ export const defaultCaptureSettings: Readonly<CaptureSettings> = {
 
 /** What the device actually applied (MediaStreamTrack.getSettings()); fields may be missing. */
 export interface AppliedTrackSettings {
-  echoCancellation?: boolean;
+  /** Newer browsers report a mode instead of true: 'all' or 'remote-only' (kept as reported). */
+  echoCancellation?: boolean | string;
   noiseSuppression?: boolean;
   autoGainControl?: boolean;
   sampleRate?: number;
