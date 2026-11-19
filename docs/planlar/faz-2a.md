@@ -48,7 +48,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 3: Puanlama
 - [x] Task 4: Canavar kelimeler
 - [x] Task 5: Hayalet, hedefler ve ilerleme
-- [ ] Task 6: Okuma benzetimi ve hazır senaryolar
+- [x] Task 6: Okuma benzetimi ve hazır senaryolar
 - [ ] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
 - [ ] Task 8: `ReadingListener` ve `FakeListener`
 - [ ] Task 9: Seslendirme
@@ -694,7 +694,7 @@ export const scenarioSets: Record<ScenarioName, ScenarioSet>;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`simulateReading.test.ts`:**
     1. **Tam `wcpm`:** Bütün senaryoların bütün okumaları 4. ve 5. bölümün söyleyişlerinde çalışır; her biri için `scoreReading(toWordResults(sim), sim.seconds).wcpm` senaryodaki `wcpm`'e eşittir. `typical` 3 için `seconds` = 99 × 60 / 71.
     2. **Hece oranı:** `['ve','kıvrılıyordu']`, `smooth` 1 → ikinci kelimenin süresi birincinin 5 katı.
@@ -715,9 +715,9 @@ export const scenarioSets: Record<ScenarioName, ScenarioSet>;
       - yardımın açıldığı an (14. kelimenin duraksamasının başı + 3000) 19 000 ile 19 500 ms arasındadır;
       - `ghostIndex(40, o an, 99)` → 12;
       - 14'ten önceki 14 sonucun 13'ü düşülmeyen, 1'i (6) 1000 ms ve üstü duraksamalıdır.
-- [ ] İki test dosyası → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(listener): simulate readings and add the ready scenarios`.
+- [x] İki test dosyası → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(listener): simulate readings and add the ready scenarios`.
 
 ### Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
 
