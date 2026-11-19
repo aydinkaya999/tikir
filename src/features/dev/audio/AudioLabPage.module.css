@@ -6,7 +6,12 @@
   gap: var(--space-gap);
   max-width: 760px;
   margin: 0 auto;
-  padding: var(--space-page);
+  /* viewport-fit=cover: in the app shell and the home-screen web app the page starts under
+     the status bar, so the safe areas are kept clear. */
+  padding: max(var(--space-page), env(safe-area-inset-top))
+    max(var(--space-page), env(safe-area-inset-right))
+    max(var(--space-page), env(safe-area-inset-bottom))
+    max(var(--space-page), env(safe-area-inset-left));
 }
 
 .title {
