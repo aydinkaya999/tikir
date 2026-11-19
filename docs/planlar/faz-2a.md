@@ -55,7 +55,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 10: Depo
 - [x] Task 11: Kayıt
 - [x] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
-- [ ] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
+- [x] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
 - [ ] Task 14: `useReading` ve `useNarration`
 - [ ] Task 15: Belgeler ve 2a'nın denetimi
 
@@ -1117,7 +1117,7 @@ export function useMicrophone(audio: AudioCapture, consent: boolean): { state: M
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`pages.test.ts`:**
     - 4. bölüm:
       - içerik düzeni 6 sayfa; `firstIndex` `[0,25,45,59,73,88]`, `wordCount` `[25,20,14,14,15,11]`;
@@ -1143,9 +1143,9 @@ export function useMicrophone(audio: AudioCapture, consent: boolean): { state: M
     - Onay yokken `start()` → durum `'noConsent'`, `audio.start` hiç çağrılmaz.
     - Onay varken `start()` → `audio.start` bir kez; durum mikrofonun durumunu izler.
     - Bileşen kaldırılınca `audio.stop` çağrılır.
-- [ ] Üç test dosyası → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(reading): add screen pages, reading state and the microphone gate`.
+- [x] Üç test dosyası → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(reading): add screen pages, reading state and the microphone gate`.
 
 ### Task 14: `useReading` ve `useNarration`
 
