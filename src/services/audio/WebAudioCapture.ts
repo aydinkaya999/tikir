@@ -2,13 +2,14 @@
 // browser work sits behind a CaptureEnvironment; this class owns the states, the counters and the
 // rule that a microphone is never left open: a stop or a hidden page wins over a late permission.
 import type { Unsubscribe } from '../types';
-import type {
-  AppliedTrackSettings,
-  AudioCapture,
-  CaptureDiagnostics,
-  CaptureFailure,
-  CaptureSettings,
-  CaptureState,
+import {
+  type AppliedTrackSettings,
+  type AudioCapture,
+  type CaptureDiagnostics,
+  type CaptureFailure,
+  type CaptureSettings,
+  type CaptureState,
+  toFailure,
 } from './AudioCapture';
 import { captureFormat } from './captureChain';
 import type { CaptureEnvironment, CaptureGraph, WorkletMessage } from './captureEnvironment';
@@ -31,14 +32,6 @@ export function classifyCaptureError(error: unknown): 'denied' | 'unavailable' |
     return 'denied';
   }
   return unavailableNames.has(name) ? 'unavailable' : 'error';
-}
-
-function toFailure(error: unknown): CaptureFailure {
-  if (error instanceof Error) {
-    return { name: error.name, message: error.message };
-  }
-  const name = errorName(error);
-  return { name: name === '' ? 'Error' : name, message: String(error) };
 }
 
 export class WebAudioCapture implements AudioCapture {

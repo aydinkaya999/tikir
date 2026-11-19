@@ -89,3 +89,24 @@ describe('WebAudioWavPlayer', () => {
     expect(events).toEqual(['start', 'stop']);
   });
 });
+
+describe('WebAudioWavPlayer.prepare', () => {
+  it('creates the context and starts resuming it at once, inside the gesture', () => {
+    const events: string[] = [];
+    let created = 0;
+    const player = new WebAudioWavPlayer(() => {
+      created += 1;
+      return {
+        resume: () => {
+          events.push('resume');
+          return Promise.resolve();
+        },
+      } as unknown as AudioContext;
+    });
+
+    player.prepare();
+
+    expect(created).toBe(1);
+    expect(events).toEqual(['resume']); // synchronously, before anything is awaited
+  });
+});

@@ -60,3 +60,17 @@ export interface AudioCapture {
   onStateChange(callback: (state: CaptureState) => void): Unsubscribe;
   diagnostics(): CaptureDiagnostics;
 }
+
+/**
+ * A thrown value as a name and a message. Read from the fields, because a DOMException is not an
+ * Error in every engine (jsdom, older WebKit).
+ */
+export function toFailure(error: unknown): CaptureFailure {
+  if (typeof error === 'object' && error !== null) {
+    const { name, message } = error as { name?: unknown; message?: unknown };
+    if (typeof name === 'string' && typeof message === 'string') {
+      return { name, message };
+    }
+  }
+  return { name: 'Error', message: String(error) };
+}

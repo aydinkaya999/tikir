@@ -2,6 +2,11 @@
 // needs no `media-src` in the content security policy, unlike an <audio> element on a blob URL.
 
 export interface WavPlayer {
+  /**
+   * Creates and starts the audio context. Call it synchronously in the click handler, before any
+   * await: iPhone lets a page start audio only inside a user gesture.
+   */
+  prepare(): void;
   /** Resolves when playback ends or is stopped, including a stop that comes while decoding. */
   play(wav: ArrayBuffer): Promise<void>;
   stop(): void;
@@ -15,9 +20,15 @@ export class WebAudioWavPlayer implements WavPlayer {
   /** Bumped by every play and stop, so a play still decoding knows it was cancelled. */
   private generation = 0;
 
-  /** The context is created on the first play, inside the user's gesture. */
+  /** The context is created by prepare() (or the first play), inside the user's gesture. */
   constructor(createContext: () => AudioContext = () => new AudioContext()) {
     this.createContext = createContext;
+  }
+
+  prepare(): void {
+    this.context ??= this.createContext();
+    // Started now, inside the gesture; play() awaits it again before it starts the sound.
+    this.context.resume().catch(() => undefined);
   }
 
   async play(wav: ArrayBuffer): Promise<void> {

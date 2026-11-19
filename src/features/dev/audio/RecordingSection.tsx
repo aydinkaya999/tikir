@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../../../components/Button/Button';
 import { Card } from '../../../components/Card/Card';
+import { type CaptureFailure, toFailure } from '../../../services/audio/AudioCapture';
 import { captureFormat } from '../../../services/audio/captureChain';
 import { encodeWav } from '../../../services/audio/wav';
 import type { WavPlayer } from '../../../services/audio/WavPlayer';
@@ -32,6 +33,7 @@ export function RecordingSection({ handle, player, saveFile, onRecorded }: Recor
   const [seconds, setSeconds] = useState(0);
   const [recording, setRecording] = useState<PcmRecording | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [playbackFailure, setPlaybackFailure] = useState<CaptureFailure | null>(null);
   const stopListening = useRef<(() => void) | null>(null);
 
   // Leaving the page ends a take in progress and any playback.
@@ -75,12 +77,18 @@ export function RecordingSection({ handle, player, saveFile, onRecorded }: Recor
     };
   };
 
+  /** Called from the click handler: prepare() must run inside the user's gesture. */
   const play = async (take: PcmRecording) => {
+    player.prepare();
+    setPlaybackFailure(null);
     // iPhone turns the speaker down while the microphone is open (docs/dinleme-hatti.md).
     await capture.stop();
     setPlaying(true);
     try {
       await player.play(encodeWav(take.toSamples(), captureFormat.sampleRate));
+    } catch (error) {
+      // Shown, not swallowed: a silent failure would read as an empty take in the results.
+      setPlaybackFailure(toFailure(error));
     } finally {
       setPlaying(false);
     }
@@ -147,6 +155,11 @@ export function RecordingSection({ handle, player, saveFile, onRecorded }: Recor
       {status !== null && (
         <p className={styles.status} aria-live="polite">
           {status}
+        </p>
+      )}
+      {playbackFailure !== null && (
+        <p className={styles.problem} role="alert">
+          {copy.mic.problems.detail(playbackFailure.name, playbackFailure.message)}
         </p>
       )}
       <p className={styles.hint}>{copy.recording.playHint}</p>
