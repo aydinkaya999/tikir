@@ -41,7 +41,7 @@ const defaultNow = () => performance.now();
 
 class NarrationRun {
   private readonly narrator: Narrator;
-  private readonly pages: readonly ScreenPage[];
+  private readonly pages: { readonly current: readonly ScreenPage[] };
   private readonly now: { readonly current: () => number };
   private readonly subscribers = new Set<() => void>();
   private pageIndex = 0;
@@ -59,7 +59,7 @@ class NarrationRun {
 
   constructor(
     narrator: Narrator,
-    pages: readonly ScreenPage[],
+    pages: { readonly current: readonly ScreenPage[] },
     now: { readonly current: () => number },
   ) {
     this.narrator = narrator;
@@ -90,7 +90,9 @@ class NarrationRun {
       return;
     }
     const finished =
-      this.pageIndex === this.pages.length - 1 && this.currentUnit === null && this.finishedOnce;
+      this.pageIndex === this.pages.current.length - 1 &&
+      this.currentUnit === null &&
+      this.finishedOnce;
     this.playFrom(finished ? 0 : this.pageIndex);
   }
 
@@ -129,7 +131,7 @@ class NarrationRun {
   }
 
   private playFrom(pageIndex: number): void {
-    const screenPage = this.pages[pageIndex];
+    const screenPage = this.pages.current[pageIndex];
     if (screenPage === undefined) {
       return;
     }
@@ -155,7 +157,7 @@ class NarrationRun {
         if (run !== this.run || end !== 'completed') {
           return;
         }
-        if (pageIndex + 1 < this.pages.length) {
+        if (pageIndex + 1 < this.pages.current.length) {
           this.playFrom(pageIndex + 1);
           return;
         }
@@ -194,7 +196,7 @@ class NarrationRun {
   }
 
   private build(): Snapshot {
-    const page = this.pages[this.pageIndex];
+    const page = this.pages.current[this.pageIndex];
     return {
       pageIndex: this.pageIndex,
       currentUnit: this.currentUnit,
@@ -221,13 +223,19 @@ class NarrationRun {
 }
 
 export function useNarration(options: {
+  /** Identifies the narration: keep the same instance. */
   narrator: Narrator;
+  /** May be a fresh array on every render. */
   pages: readonly ScreenPage[];
   now?: () => number;
 }): NarrationController {
   const { narrator, pages } = options;
   const now = useRef(options.now ?? defaultNow);
-  const run = useMemo(() => new NarrationRun(narrator, pages, now), [narrator, pages]);
+  const screens = useRef(pages);
+  useEffect(() => {
+    screens.current = pages;
+  }, [pages]);
+  const run = useMemo(() => new NarrationRun(narrator, screens, now), [narrator]);
   useEffect(
     () => () => {
       run.detach();

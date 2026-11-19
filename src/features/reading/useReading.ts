@@ -28,9 +28,14 @@ import type { WordMark } from './ReadingText';
 export const readingClockTickMs = 250;
 
 export interface UseReadingOptions {
+  /**
+   * The listener, the microphone and the narrator identify the reading: keep the same instances
+   * for the whole reading (a new listener is a new reading).
+   */
   listener: ReadingListener;
   audio: AudioCapture;
   narrator: Narrator;
+  /** May be a fresh array on every render; read when the reading starts and when help opens. */
   tokens: readonly ChapterToken[];
   /** The earlier reading's pace; null on the first day (no ghost). */
   ghostPaceWpm: number | null;
@@ -68,7 +73,9 @@ class ReadingRun {
   private readonly listener: ReadingListener;
   private readonly audio: AudioCapture;
   private readonly narrator: Narrator;
-  private readonly tokens: readonly ChapterToken[];
+  private readonly tokens: { readonly current: readonly ChapterToken[] };
+  /** The start in progress or done; a second start() shares it. */
+  private starting: Promise<void> | null = null;
   private readonly now: { readonly current: () => number };
   private readonly onFinish: { readonly current: (outcome: ListenerOutcome) => void };
   private readonly subscribers = new Set<() => void>();
@@ -85,14 +92,15 @@ class ReadingRun {
   private ticker: ReturnType<typeof setInterval> | undefined;
 
   constructor(
-    options: Pick<UseReadingOptions, 'listener' | 'audio' | 'narrator' | 'tokens'>,
+    options: Pick<UseReadingOptions, 'listener' | 'audio' | 'narrator'>,
+    tokens: { readonly current: readonly ChapterToken[] },
     now: { readonly current: () => number },
     onFinish: { readonly current: (outcome: ListenerOutcome) => void },
   ) {
     this.listener = options.listener;
     this.audio = options.audio;
     this.narrator = options.narrator;
-    this.tokens = options.tokens;
+    this.tokens = tokens;
     this.now = now;
     this.onFinish = onFinish;
   }
@@ -125,12 +133,18 @@ class ReadingRun {
     };
   }
 
-  async start(): Promise<void> {
-    if (this.started) {
-      return;
-    }
+  /** A double tap starts once; a start refused (no microphone) can be tried again. */
+  start(): Promise<void> {
+    this.starting ??= this.begin().catch((error: unknown) => {
+      this.starting = null;
+      throw error;
+    });
+    return this.starting;
+  }
+
+  private async begin(): Promise<void> {
     await this.listener.start(
-      this.tokens.map((token) => token.spoken),
+      this.tokens.current.map((token) => token.spoken),
       this.audio,
     );
     this.started = true;
@@ -212,7 +226,7 @@ class ReadingRun {
       }
       this.sync();
     };
-    this.narrator.speakWord(this.tokens[index]?.spoken ?? '').then(release, release);
+    this.narrator.speakWord(this.tokens.current[index]?.spoken ?? '').then(release, release);
   }
 
   private elapsed(): number {
@@ -272,9 +286,14 @@ export function useReading(options: UseReadingOptions): ReadingController {
     finishCallback.current = onFinish;
   }, [onFinish]);
 
+  const words = useRef(tokens);
+  useEffect(() => {
+    words.current = tokens;
+  }, [tokens]);
+
   const run = useMemo(
-    () => new ReadingRun({ listener, audio, narrator, tokens }, now, finishCallback),
-    [listener, audio, narrator, tokens],
+    () => new ReadingRun({ listener, audio, narrator }, words, now, finishCallback),
+    [listener, audio, narrator],
   );
   useEffect(() => run.attach(), [run]);
   const { view, elapsedMs, paused } = useSyncExternalStore(run.subscribe, run.getSnapshot);

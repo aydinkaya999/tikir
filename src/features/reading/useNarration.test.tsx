@@ -94,6 +94,21 @@ describe('useNarration', () => {
     expect(result.current.totalMs).toBeCloseTo(38500, 0);
   });
 
+  it('keeps narrating when the pages come as a fresh array on every render', async () => {
+    const narrator = new SilentNarrator({ now });
+    const pages = designPages();
+    const { result } = renderHook(() => useNarration({ narrator, pages: [...pages], now }));
+
+    act(() => {
+      result.current.play();
+    });
+    await advance(5000);
+    expect(result.current.playing).toBe(true);
+
+    await advance(120000);
+    expect(result.current.finishedOnce).toBe(true);
+  });
+
   it('stops the narration when the screen goes', () => {
     const { result, stop, unmount } = setup();
     act(() => {

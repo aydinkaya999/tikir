@@ -95,6 +95,54 @@ describe('useReading', () => {
     expect(result.current.view.position).toBe(15);
   });
 
+  it('keeps one reading when the words come as a fresh array on every render', async () => {
+    const audio = new FakeAudioCapture();
+    audio.setState('capturing');
+    const listener = new FakeListener(
+      { kind: 'scenario', scenario: { wcpm: 60, miscues: [], hesitations: [] } },
+      { now },
+    );
+    const narrator = new SilentNarrator({ now });
+    const onFinish = vi.fn();
+    const { result } = renderHook(() =>
+      useReading({
+        listener,
+        audio,
+        narrator,
+        tokens: [...threeWords],
+        ghostPaceWpm: 40,
+        onFinish,
+        now,
+      }),
+    );
+
+    await act(async () => {
+      await result.current.start();
+    });
+    await advance(5000);
+
+    expect(result.current.view.position).toBe(2);
+    expect(onFinish).toHaveBeenCalledTimes(1);
+  });
+
+  it('starts once when start() is called twice, and again after a refused microphone', async () => {
+    const { result, audio, listener } = setup(scenarioSets.typical.readings[0], 40);
+    const start = vi.spyOn(listener, 'start');
+    audio.setState('idle');
+    await act(async () => {
+      await expect(result.current.start()).rejects.toThrow('The microphone is not capturing');
+    });
+
+    audio.setState('capturing');
+    await act(async () => {
+      await Promise.all([result.current.start(), result.current.start()]);
+    });
+    await advance(3000);
+
+    expect(start).toHaveBeenCalledTimes(2);
+    expect(result.current.view.position).toBeGreaterThan(0);
+  });
+
   it('freezes the clock, the ghost and the events while paused', async () => {
     const { result } = setup(scenarioSets.typical.readings[0], 40);
     await act(async () => {
