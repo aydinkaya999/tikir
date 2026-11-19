@@ -1,3 +1,4 @@
+import { DemoProfileSection, type DemoProfileSectionProps } from '../demo/DemoProfileSection';
 import { ButtonDemo, IconButtonDemo } from './ButtonDemo';
 import { LineChartDemo, ProgressBarDemo, StatCardDemo } from './DataDemo';
 import {
@@ -17,12 +18,14 @@ import { CardDemo, ChipDemo, PageCardDemo, SpeechBubbleDemo } from './SurfaceDem
 
 /**
  * /gelistirme/vitrin: every component of docs/tasarim-sistemi.md in every state. Section titles
- * are code names; sample copy comes from the design files, reading samples from seed/.
+ * are code names; sample copy comes from the design files, reading samples from seed/. The demo
+ * profile section on top sets up the designs' sample child (phase 2a).
  */
-export function ShowcasePage() {
+export function ShowcasePage({ repository, today }: DemoProfileSectionProps) {
   return (
     <main className={styles.page}>
       <h1 className={styles.title}>Vitrin</h1>
+      <DemoProfileSection repository={repository} today={today} />
       <ReadingTextDemo />
       <PhraseTextDemo />
       <RaceBarDemo />

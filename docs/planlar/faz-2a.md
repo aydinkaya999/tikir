@@ -54,7 +54,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 9: Seslendirme
 - [x] Task 10: Depo
 - [x] Task 11: Kayıt
-- [ ] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
+- [x] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
 - [ ] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
 - [ ] Task 14: `useReading` ve `useNarration`
 - [ ] Task 15: Belgeler ve 2a'nın denetimi
@@ -1045,7 +1045,7 @@ Vitrin rotası `ShowcasePage`'e `repository` ve `today` (`localDateOf(new Date()
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`loadDemoProfile.test.ts`** (`fake-indexeddb`, bugün `'2026-11-19'`, perşembe):
     1. **Bağlantı tarihi:**
        - `anchorDate('cocuk-sabahi', '2026-11-19')` → `'2026-11-19'`;
@@ -1075,11 +1075,11 @@ Vitrin rotası `ShowcasePage`'e `repository` ve `today` (`localDateOf(new Date()
     - vitrinde "Çocuk sabahı (G1–G7)" → "Depoda 4 seans, 4 kelime kartı, 6 ölçüm var.";
     - sayfa yenilenince aynı metin;
     - "Veli hafta sonu (V1–V4)" → "Depoda 5 seans, 4 kelime kartı, 8 ölçüm var.".
-- [ ] İlgili testler → FAIL.
-- [ ] Uygula. → PASS.
-- [ ] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/demo-profile.spec.ts e2e/no-external-requests.spec.ts` → geçer. Vitrinin Faz 0 envanter ve taşma testleri de geçer.
-- [ ] `pnpm check` → geçer.
-- [ ] Commit: `feat(dev): load the demo profile from the showcase`.
+- [x] İlgili testler → FAIL.
+- [x] Uygula. → PASS.
+- [x] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/demo-profile.spec.ts e2e/no-external-requests.spec.ts` → geçer. Vitrinin Faz 0 envanter ve taşma testleri de geçer.
+- [x] `pnpm check` → geçer.
+- [x] Commit: `feat(dev): load the demo profile from the showcase`.
 
 ### Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
 
