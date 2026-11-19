@@ -46,7 +46,7 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 
 `design/` kopyaları (`tokens.css`, ikonlar, çizimler) `src/design-copies.test.ts` ile birebir aynı tutulur.
 
-Geliştirmeye özgü kod (geliştirme sayfaları, Faz 2'den sonra `?demo=` parametreleri) `import.meta.env.MODE !== 'production'` koşulunu **kullanıldığı modülde, satır içinde** sınar. Vite bu ifadeyi her modülde derleme anında yerine koyduğu için kod üretim derlemesinden atılır. Başka bir modülden içe aktarılan bir bayrak katlanmaz ve `dist/` içinde sahipsiz parçalar bırakır (Faz 0'da görüldü). `e2e` kipi (`vite build --mode e2e`) geliştirme araçlarını içerir.
+Geliştirmeye özgü kod (geliştirme sayfaları, Faz 2'den sonra `?demo=` parametreleri) `import.meta.env.MODE !== 'production'` koşulunu **kullanıldığı modülde, satır içinde** sınar. Vite bu ifadeyi her modülde derleme anında yerine koyduğu için kod üretim derlemesinden atılır. Başka bir modülden içe aktarılan bir bayrak katlanmaz ve `dist/` içinde sahipsiz parçalar bırakır (Faz 0'da görüldü). `e2e` kipi (`vite build --mode e2e`) geliştirme araçlarını içerir. `cap` kipi (`pnpm cap:sync`, `dist-cap/`) uygulama kabuğu içindir: geliştirme araçlarını içerir ve `src/appShellStart.ts` ile ses denemesi sayfasında açılır. Bu modül `main.tsx`'in ilk içe aktarmasıdır, çünkü `src/app/App.tsx` yönlendiriciyi yüklenirken kurar ve adresi o an okur.
 
 Bağımlılık yönü tek: `features` → `services` (arayüzler) → `domain`. `domain` hiçbir şeyi içe aktarmaz; `components` yalnız `styles` ve `domain` tiplerini bilir.
 
