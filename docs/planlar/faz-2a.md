@@ -46,7 +46,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 1: Alan tipleri, ürün parametreleri ve takvim günü
 - [x] Task 2: Rakamların okunuşu ve bölümün kelimeleri
 - [x] Task 3: Puanlama
-- [ ] Task 4: Canavar kelimeler
+- [x] Task 4: Canavar kelimeler
 - [ ] Task 5: Hayalet, hedefler ve ilerleme
 - [ ] Task 6: Okuma benzetimi ve hazır senaryolar
 - [ ] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
@@ -514,7 +514,7 @@ export function warmupDeck(cards: readonly StuckWord[], today: LocalDate, source
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `stuckWords.test.ts`, bugün `'2026-11-21'`:
+- [x] **Kırmızı:** `stuckWords.test.ts`, bugün `'2026-11-21'`:
   1. **Yeni kart:**
      - Girdi: `recordMisses([], [{word:'rüzgârı', spoken:'rüzgârı', chain:[]}], today)`.
      - Çıktı: `{word:'rüzgârı', syllables:['rüz','gâ','rı'], chain:[], misses:1, status:'wild', correctStreak:0, dueOn:'2026-11-22'}`.
@@ -544,9 +544,9 @@ export function warmupDeck(cards: readonly StuckWord[], today: LocalDate, source
       - Kelimeler `['belirdiğinde','Karşılarında','kıvrılıyordu']`, `card` `null`.
       - "belirdiğinde"nin zinciri `['belir','belirdi','belirdiğinde']`, "Karşılarında"nınki `[]`.
   11. **Tek kart:** günü gelen 1 kart → deste 1 kart, metinden tamamlanmaz.
-- [ ] `pnpm test src/domain/stuckWords.test.ts` → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(domain): turn stuck words into cards and pick the warmup deck`.
+- [x] `pnpm test src/domain/stuckWords.test.ts` → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(domain): turn stuck words into cards and pick the warmup deck`.
 
 ### Task 5: Hayalet, hedefler ve ilerleme
 
