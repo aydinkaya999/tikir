@@ -36,3 +36,11 @@ export const devPaths = {
   showcase: '/gelistirme/vitrin',
   audio: '/gelistirme/ses',
 } as const;
+
+/**
+ * Developer endpoints that are not pages: the Vite dev and preview servers forward the echo
+ * WebSocket to scripts/echo-server.ts (vite.config.ts). Kept out of devPaths, which tests visit.
+ */
+export const devEndpoints = {
+  echo: '/gelistirme/yanki',
+} as const;

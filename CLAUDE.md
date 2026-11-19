@@ -24,17 +24,21 @@ Hepsini her seferinde okuma; yaptığın işe karşılık geleni oku.
 
 Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulum: `pnpm install` ve `pnpm exec playwright install chromium webkit`.
 
-- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses`.
+- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses` (ses denemesi).
 - `pnpm check`: tip denetimi + lint (ESLint, Stylelint, Prettier denetimi) + birim testleri. Her görevden sonra çalıştır.
 - `pnpm test <dosya>`: tek test dosyası; bütün takım yerine bunu tercih et. Araya `--` koyma: `pnpm test -- <dosya>` bütün takımı koşar.
-- `pnpm e2e`: Playwright uçtan uca testleri, Chromium ve WebKit'te. `e2e` kipinde derleyip (`dist-e2e/`) `vite preview` ile sınar. Tek dosya için: `pnpm e2e e2e/<ad>.spec.ts`.
+- `pnpm e2e`: Playwright uçtan uca testleri, Chromium ve WebKit'te. `e2e` kipinde derleyip (`dist-e2e/`) `vite preview` ile sınar; yankı sunucusunu da kendisi açar (açıksa onu kullanır). Tek dosya için: `pnpm e2e e2e/<ad>.spec.ts`. Kurulu Google Chrome'da: `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome`.
+- macOS'ta ekran uykudayken WebKit'in tıklamaları hedefini şaşırır (`<html> intercepts pointer events`). Gözetimsiz koşuda ekranı uyandırıp uyanık tut: `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`.
+- `pnpm echo-server`: ses denemesinin yankı sunucusu (`127.0.0.1:4318`). `pnpm dev` ve `vite preview`, `/gelistirme/yanki` adresini ona aktarır.
+- `pnpm audio-trial`: ses denemesi sayfasını yerel ağda HTTPS ile sunar (`https://<ip>:4443/gelistirme/ses`, mkcert sertifikası) ve yankı sunucusunu açar. Gerçek cihaz adımları: `docs/ses-denemesi-sonuclari.md`.
+- `pnpm cap:sync`: `cap` kipinde derler (`dist-cap/`, geliştirme sayfaları dahil, uygulama ses denemesi sayfasıyla açılır) ve `ios/` ile `android/` projelerine kopyalar. Sonra `pnpm exec cap run ios --target <simülatör>` ya da `pnpm exec cap open ios|android`. Android, JDK 21 ister: `JAVA_HOME=$(mise where java@temurin-21) ANDROID_HOME=~/Library/Android/sdk pnpm exec cap run android --target <cihaz>`.
 - `pnpm shots <rota> [<rota> …]`: rotaların 390 × 844, 1180 × 820 ve 1440 × 900 ekran görüntüsü. Dosyalar `shots/<ad>-telefon.png`, `-tablet.png` ve `-web.png` adlarıyla yazılır; `/` için ad `index`.
 - `pnpm build`: üretim derlemesi (tip denetimi + `vite build`). Geliştirme sayfaları derlemeye girmez.
 - `pnpm format`: Prettier ile biçimle.
 
 ## Kod kuralları
 
-- Kod, tanımlayıcılar, yorumlar ve commit mesajları İngilizce. Arayüz metinleri Türkçe ve yalnız `src/i18n/tr.ts` içinde durur.
+- Kod, tanımlayıcılar, yorumlar ve commit mesajları İngilizce. Arayüz metinleri Türkçe ve yalnız `src/i18n/tr.ts` içinde durur; geliştirme sayfalarının metni `src/features/dev/` içinde (`docs/kararlar.md` T17).
 - Arayüz metinlerini tasarım dosyalarından birebir al. Kendin yazma, çevirme, kısaltma.
 - Alan terimlerinin kod adları `docs/urun.md` sonundaki sözlükte. Yeni ad uydurma.
 - TypeScript `strict`; `any` yok.
@@ -53,7 +57,7 @@ Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulu
 
 ## Çocuk ve mahremiyet kuralları
 
-- IMPORTANT: Ses kaydı ve mikrofon dinlemesi yalnız veli onayı kayıtlıyken başlar (`consent.voiceProcessing`).
+- IMPORTANT: Ses kaydı ve mikrofon dinlemesi yalnız veli onayı kayıtlıyken başlar (`consent.voiceProcessing`) (geliştirme sayfası istisnası: `docs/kararlar.md` T16).
 - Çalışma anında üçüncü taraf adrese istek yok: yazı tipleri depoda barındırılır, analitik ve izleme kütüphanesi eklenmez.
 - Çocuk ekranlarında puan, rozet, sıralama, başka çocukla kıyas ve olumsuz kıyas yok. Ayrıntı `docs/urun.md` bölüm 4.
 - Veli alanı (`/veli/*`) veli kapısının arkasındadır.

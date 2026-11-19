@@ -58,6 +58,11 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T15 | İçerik güvenlik politikası | Derlenen sayfada meta etiketi: `default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'` | varsayım | Geliştirme sunucusunda yok (Vite'in satır içi yenileme betiğini engellerdi). `e2e/no-external-requests.spec.ts` dış istekleri ve CSP ihlallerini yakalar. Faz 7'de mağaza denetimiyle gözden geçirilir. |
 | T12 | Üçüncü taraf | Çalışma anında dış adrese istek yok; analitik ve reklam yok | kesin | Yazı tipleri depoda barındırılır |
 | T13 | Depo düzeni | Kök web uygulaması; `server/` sonra; `ios/` ve `android/` Capacitor ile | varsayım | |
+| T16 | Ses denemesi sayfasında veli onayı | `/gelistirme/ses` mikrofonu veli onayı kaydı olmadan açar: Faz 1'de depo ve `consent.voiceProcessing` yok, sayfa üretim derlemesine girmez, denemeyi yetişkin yapar | kesin | Ürün sahibi, 2026-11-19. Ürün ekranlarındaki onay denetimi ve testi Faz 2'de seansla gelir. |
+| T17 | Geliştirme sayfalarının metinleri | `src/features/dev/` içinde, `src/i18n/tr.ts` dışında: `tr.ts` üretim paketine girer, geliştirme sayfaları girmez | varsayım | Tasarımları yok; ses denemesi sayfasının metinleri Faz 1 planıyla onaylandı (`docs/planlar/faz-1.md`). Emoji denetimi bu metinleri de tarar. |
+| T18 | Ses yakalama ayarları ve açılış sırası | Varsayılan: yankı giderme, gürültü bastırma ve otomatik kazanç açık (tarayıcıların varsayılanı). Sıra: `getUserMedia` → `AudioContext` → AudioWorklet → `resume()`; tek kanala tarayıcı indirger | varsayım | Ses denemesinin ayar setleri (`docs/ses-denemesi-sonuclari.md`) gelince gözden geçirilecek. Chromium'da gürültü bastırma sabit bir tonu ~19 dB bastırıyor (Faz 1'de ölçüldü). |
+| T19 | Capacitor deneme yapılandırması | appId `com.tikir.app`; webDir `dist-cap`; `cap` derleme kipi (geliştirme sayfaları dahil, CSP aynı); uygulama `/gelistirme/ses` ile açılır (`cap` kipinde `src/appShellStart.ts` yönlendirir, `main.tsx`'in ilk içe aktarması; `server.appStartPath` iOS'ta dosya yolu sayılıp uygulamayı kapattığı için kullanılmaz, ürün sahibi 2026-11-19); iOS mikrofon izni metni "Tıkır, sesli okumayı dinlemek için mikrofonu kullanır."; Android `RECORD_AUDIO` ve `MODIFY_AUDIO_SETTINGS`; Capacitor CLI'ın kullanım verisi kapalı | varsayım | Yalnız Faz 1 ses denemesi için. Uygulama kimliği, izin metinleri ve başlangıç yolu Faz 7'de kesinleşir. Kullanım verisi ayarı makineye kaydedilir: her makinede bir kez `pnpm exec cap telemetry off`. Uygulama içinden yankı testi yok: aynı köken yok, CSP, iOS ATS ve Android ağ güvenliği ayarı gerekirdi. |
+| T20 | Yankı ölçümü ve cihaz denemesi yolu | Yankı sunucusu `scripts/echo-server.ts` (`ws`, yalnız `127.0.0.1:4318`). Vite'in geliştirme ve önizleme sunucusu `/gelistirme/yanki` adresini ona aktarır; sayfa kendi kökenine bağlanır, CSP değişmez. Gerçek cihaz için `pnpm audio-trial` mkcert sertifikasıyla HTTPS açar | varsayım | Chromium ve WebKit'te `default-src 'self'` aynı kökenli `ws:` bağlantısını engellemiyor (Faz 1'de ölçüldü). Uygulama kabuğunda aynı köken olmadığı için kabuktan yankı testi kapsam dışı. |
 
 ## İçerik
 
@@ -129,6 +134,8 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `@fontsource-variable/atkinson-hyperlegible-next` | Tek yazı ailesi, depodan sunulur (D2, T12). `src/styles/fonts.css` paketin dosyalarını token'daki aile adıyla bağlar | 0 |
 | `react-router` | Yönlendirme (T4); rotalar `docs/ekranlar.md`, geliştirme sayfaları tembel yüklenir ve üretim derlemesine girmez | 0 |
 | `@fontsource/didact-gothic` | Okul harfleri yer tutucusu (D3). Türkçe harflerin hepsi bu yazı tipinden çiziliyor (Faz 0'da denetlendi) | 0 |
+| `@capacitor/core`, `@capacitor/ios`, `@capacitor/android`, `@capacitor/cli` | Uygulama kabuğu (T1, T19): aynı web kodu iOS ve Android uygulamasında. Faz 1'de yalnız ses denemesi için; CLI geliştirme bağımlılığı, `@capacitor/core` CLI'ın istediği çekirdek | 1 |
+| `ws`, `@types/ws` | Yerel yankı sunucusu (`scripts/echo-server.ts`, T20): çerçeveleri olduğu gibi geri gönderir. Node'da yerleşik WebSocket sunucusu yok; protokolü elle yazmak yerine yaygın, bağımlılıksız paket. Yalnız geliştirme bağımlılığı, uygulamaya girmez | 1 |
 
 ## Değişiklik günlüğü
 
@@ -136,3 +143,6 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-18: Faz 0: Node 26 LTS ve pnpm 12 (T11), TypeScript 6.0 (T14), ilk bağımlılıklar.
 - 2026-11-18: Faz 0: CSP (T15); `tokens-extra.css` (D10); MicButton'ın çizilmemiş durumları (D11); Albüm ve Stüdyo rotaları (D7); yanıt bekleyen sorulara 9–12. maddeler eklendi.
 - 2026-11-18: Faz 0 son incelemesi: 13. soru (iki bölmeli kabukların alt alta dizilmiş hâli, kurulum panosunun dikey tablette genişliği) ve 14. soru (okuma metninde rakamlar) eklendi.
+- 2026-11-19: Faz 1: ses denemesi sayfasında onay istisnası (T16), geliştirme sayfası metinleri (T17), ses yakalama ayarları ve açılış sırası (T18).
+- 2026-11-19: Faz 1: yankı ölçümü ve cihaz denemesi yolu (T20), `ws` bağımlılığı, sonuç şablonu (`docs/ses-denemesi-sonuclari.md`).
+- 2026-11-19: Faz 1: Capacitor deneme yapılandırması (T19) ve dört Capacitor paketi; `server.appStartPath` yerine `cap` kipinde açılış yönlendirmesi (ürün sahibinin onayıyla).

@@ -9,3 +9,6 @@ blob-report/
 .superpowers/
 *.log
 .DS_Store
+.cert/
+dist-trial/
+dist-cap/

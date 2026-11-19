@@ -1,0 +1,161 @@
+# Ses denemesi sonuçları
+
+Faz 1'in gerçek cihaz denemeleri (`docs/yol-haritasi.md` → Faz 1, `docs/dinleme-hatti.md` bölüm 5). Bu dosya hem yönergedir hem de sonuçların yazıldığı yerdir.
+
+## Amaç ve kural
+
+- Amaç: mikrofondan sunucuya giden ses yolunun gerçek cihazlarda çalıştığını ve gecikmesini görmek. Tanıma yok.
+- Denemeleri insan yapar. Yapılmayan deneme için "tuttu" denmez; boş satır boş kalır.
+- Denemeyi bir yetişkin yapar (`docs/kararlar.md` T16). Çocuk sesi kaydedilmez.
+- WAV dosyalarını depoya ekleme, içlerinde ses var. Tabloya dosya adını yaz.
+
+## Hazırlık
+
+**Mac**
+
+1. Depoda bir kez `pnpm install`. mkcert kurulu değilse `brew install mkcert`, ardından `mkcert -install`.
+2. Güvenlik duvarı: Sistem Ayarları → Ağ → Güvenlik Duvarı → Seçenekler. "Tüm gelen bağlantıları engelle" (Block all incoming connections) açıksa deneme süresince kapat. `node` için "Gelen bağlantılara izin ver" seç. Deneme bitince eski haline getir. Bu yapılmazsa telefon sayfayı açamaz (Faz 1'de bu Mac'te görüldü).
+3. `pnpm audio-trial`. Betik sertifikayı bu Mac'in o anki ağ adresleri için yeniden üretir, sayfayı derler ve iki sunucuyu açar. Ekrana şunları yazar:
+   - sayfanın adresleri (`https://<ip>:4443/gelistirme/ses`);
+   - telefona kurulacak kök sertifikanın yolu (`…/mkcert/rootCA.pem`).
+4. Mac ve cihazlar aynı Wi-Fi ağında olmalı. Bitince Ctrl+C iki sunucuyu da kapatır.
+
+**iPhone'a kök sertifika (bir kez)**
+
+1. `rootCA.pem` dosyasını AirDrop ile iPhone'a gönder.
+2. Ayarlar → Genel → VPN ve Aygıt Yönetimi → indirilen profili yükle.
+3. Ayarlar → Genel → Hakkında → Sertifika Güven Ayarları → mkcert sertifikası için tam güveni aç.
+
+**Android'e kök sertifika (bir kez)**
+
+1. `rootCA.pem` dosyasını tablete gönder.
+2. Ayarlar → Güvenlik → Şifreleme ve kimlik bilgileri → Sertifika yükle → CA sertifikası. Menü adları üreticiye göre değişir; ayarlarda "CA sertifikası" diye aratılabilir.
+
+## Okunacak metin
+
+Her ortamda aynı metin okunur: `seed/kayip-fenerin-izinde.json`, 4. bölüm ("Dar Patika"), 1. sayfa. Anlam ünitesi işaretleri ekranda olmadığı gibi burada da yok.
+
+> Deniz sırt çantasını omzuna aldı. Tıkır kulaklarını dikti ve rüzgârı dinledi. Dar patika, çam ağaçlarının arasından yukarıya kıvrılıyordu. “Fener bu tepenin ardında olmalı,” dedi Deniz.
+
+## Ayar setleri
+
+Sayfadaki üç anahtar: Yankı giderme, Gürültü bastırma, Otomatik kazanç. Mikrofon kapalıyken değiştirilir.
+
+- **A:** üçü açık (varsayılan, tarayıcıların da varsayılanı).
+- **B:** üçü kapalı.
+
+## Ortamlar
+
+| # | Ortam | Adres |
+|---|---|---|
+| 1 | Masaüstü Chrome (bu Mac) | `https://localhost:4443/gelistirme/ses` |
+| 2 | iPhone Safari | `https://<ip>:4443/gelistirme/ses` |
+| 3 | iPhone'da ana ekrana eklenmiş hali | 2'deki sayfa → Paylaş → Ana Ekrana Ekle → "Web Uygulaması Olarak Aç" açık → ana ekrandaki simgeyle aç |
+| 4 | Android Chrome (orta sınıf tablet) | `https://<ip>:4443/gelistirme/ses` |
+| 5–6 | Uygulama kabuğu (iOS, Android) | Aşağıda, "Uygulama kabuğu" bölümünde |
+
+## Adımlar
+
+Her ortamda sırayla:
+
+1. Adresi aç. Sertifika uyarısı çıkarsa dur: kök sertifika kurulmamış ya da güvenilmemiş.
+2. A setiyle "Mikrofonu aç". İzin sorulursa izin ver. "Durum" satırı "Açık" olmalı. İzin penceresinden sonra "Kapalı" görünürse bir kez daha "Mikrofonu aç"a bas ve bunu "Not" sütununa yaz.
+3. Konuş; "Ses düzeyi" çubuğu ve dBFS değeri sesle oynamalı. Konuşurken görülen en yüksek değeri tabloya yaz.
+4. "10 saniye kaydet", metni oku. "Kaydı çal" ile dinle: anlaşılır mı, bozuk mu, boş mu? Kaydın altında "Ayrıntı: …" diye bir satır çıkarsa çalma başarısız olmuştur; satırı "Not" sütununa aynen yaz. "Kaydı indir (WAV)" ile dosyayı al. Ana ekran uygulamasında indirme çalışmayabilir; çalışmazsa bunu not et.
+5. "Raporu indir (JSON)": bu, A setinin raporudur. İndirme çalışmazsa sayfadaki JSON'un ekran görüntüsünü al.
+6. Mikrofonu kapat, B setine geç, 2–5. adımları yinele.
+7. Mikrofonu yeniden aç ve "Yankı testini başlat". 500 çerçeve gider; ortanca ve 95. yüzdelik ms olarak çıkar. Sonra raporu bir kez daha indir: yankı sonucu bu rapordadır.
+8. Mikrofon açıkken sekmeyi ya da uygulamayı arka plana al. Telefonun mikrofon göstergesi (iPhone'da turuncu nokta) sönmeli; sayfaya dönünce "Durum" "Kapalı" olmalı.
+9. Tarayıcının site ayarlarından mikrofon iznini reddet, sayfayı yenile, "Mikrofonu aç": açıklama cümlesi görünmeli ve sayfa çökmemeli. Sonra izni geri aç.
+
+**Raporu paylaşmadan önce.** Rapor, aygıtın adını taşır ("deviceLabel"). Bu ad kişi adı içerebilir (örneğin "<ad> iPhone mikrofonu"). Raporu depoya eklemeden ya da paylaşmadan önce bu alanı sil.
+
+**Deneme bitince**
+
+- iPhone: Ayarlar → Genel → VPN ve Aygıt Yönetimi → mkcert profili → Profili Sil. Güven ayarı da onunla gider.
+- Android: Ayarlar → Güvenlik → Şifreleme ve kimlik bilgileri → Kullanıcı kimlik bilgileri → mkcert → Kaldır.
+- Mac: güvenlik duvarını eski haline getir.
+
+Güvenilen bir kök sertifikanın telefonda kalması, o sertifikanın anahtarı ele geçerse trafiğin okunabilmesi demektir.
+
+## Sonuçlar
+
+### Ses
+
+| # | Ortam | Ayar seti | Cihaz ve OS sürümü (elle) | Tarayıcı (rapordan) | Giriş hızı | Uygulanan ayarlar | Düzey (konuşurken, dBFS) | Geri çalma (anlaşılır / bozuk / boş) | WAV dosyası |
+|---|---|---|---|---|---|---|---|---|---|
+| 1A | Masaüstü Chrome | A | | | | | | | |
+| 1B | Masaüstü Chrome | B | | | | | | | |
+| 2A | iPhone Safari | A | | | | | | | |
+| 2B | iPhone Safari | B | | | | | | | |
+| 3A | iPhone ana ekran | A | | | | | | | |
+| 3B | iPhone ana ekran | B | | | | | | | |
+| 4A | Android Chrome | A | | | | | | | |
+| 4B | Android Chrome | B | | | | | | | |
+
+### Yol ve davranış
+
+| # | Ortam | Yankı ortancası (ms) | Yankı 95. yüzdelik (ms) | Kayıp | Kaçan çerçeve | Sessiz çerçeve | Arka planda mikrofon bırakıldı mı | İzin reddi açıklaması göründü mü | Rapor dosyası | Not |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | Masaüstü Chrome | | | | | | | | | |
+| 2 | iPhone Safari | | | | | | | | | |
+| 3 | iPhone ana ekran | | | | | | | | | |
+| 4 | Android Chrome | | | | | | | | | |
+
+"Kaçan çerçeve": tarayıcının mikrofondan hiç ses vermediği süre ve yolda kaybolan çerçeveler. "Sessiz çerçeve": örneklerinin hepsi sıfır olan çerçeve; sayı büyükse mikrofon ses vermeden çerçeve üretiyor demektir (`docs/dinleme-hatti.md` bölüm 1).
+
+"Giriş hızı": raporun "Giriş örnekleme hızı" satırı, yani ses bağlamının hızı. Dönüştürücü bu hızdan 16 kHz'e çevirir. Bu hız çıkış aygıtına bağlıdır: çoğu cihazda 48000, eller serbest kipindeki Bluetooth kulaklıkla 16000 olabilir. Mikrofonun kendi hızı JSON'da `capture.applied.sampleRate` alanındadır. İkisi farklıysa ikisini de yaz.
+
+Yankı testi yarıda durursa "Kayıp" sayısı yoldaki çerçeveleri de içerir. Kayıp yalnız tamamlanan testte anlamlıdır.
+
+## Gözlemler ve karar önerisi
+
+- Hangi ayar seti daha temiz duyuldu (cihaz cihaz):
+- iPhone'da mikrofon açıkken ve kapalıyken çalma sesi:
+- Ana ekran uygulamasında tarayıcıdan farklı davranan bir şey:
+- Faz 6 için not (varsayılan ayarlar, gecikme beklentisi):
+
+## Uygulama kabuğu
+
+Aynı sayfa Capacitor ile iOS ve Android uygulamasında açılır (`docs/kararlar.md` T19). Uygulama doğrudan ses denemesi sayfasıyla açılır. Uygulamanın içinden yankı testi yapılmaz, çünkü aynı köken yok. İndirme çalışmayabilir; rapor ekranda okunur.
+
+**Hazırlık (Mac)**
+
+1. `pnpm cap:sync`: sayfayı `cap` kipinde derler ve iki projeye kopyalar.
+2. Android için JDK 21 gerekir (Capacitor 8): bir kez `mise install java@temurin-21`. Android komutlarını `JAVA_HOME=$(mise where java@temurin-21)` ile başlat. SDK: `ANDROID_HOME=~/Library/Android/sdk`.
+
+**iPhone (gerçek cihaz)**
+
+1. iPhone'u kabloyla bağla. iPhone'da Ayarlar → Gizlilik ve Güvenlik → Geliştirici Modu açık olmalı.
+2. `pnpm exec cap open ios`. Xcode'da App hedefi → Signing & Capabilities → Team: kendi Apple hesabın. `com.tikir.app` kimliği kabul edilmezse sonuna bir ek koy; bu değişikliği commit'leme.
+3. Üstte cihazı seç → Run.
+4. "Güvenilmeyen Geliştirici" uyarısı çıkarsa: Ayarlar → Genel → VPN ve Aygıt Yönetimi → geliştiriciye güven.
+5. "Mikrofonu aç": iOS izin penceresi "Tıkır, sesli okumayı dinlemek için mikrofonu kullanır." der → İzin Ver.
+
+**Android (gerçek cihaz)**
+
+1. Tablette Geliştirici seçenekleri → USB hata ayıklama açık. Kabloyla bağla ve bilgisayara izin ver.
+2. `pnpm exec cap run android --list` ile cihazın kimliğini bul, sonra `JAVA_HOME=$(mise where java@temurin-21) pnpm exec cap run android --target <kimlik>`.
+3. "Mikrofonu aç": Android izin penceresi → İzin ver.
+
+**Adımlar.** Tarayıcıdaki 2–6 ve 8. adımlar; yankı testi ve indirme yok. Raporu ekranda oku, ekran görüntüsünü al. 9. adımın yerine uygulamada iznin kendisi denenir:
+
+- iPhone: Ayarlar → Tıkır → Mikrofon kapalı.
+- Android: Ayarlar → Uygulamalar → Tıkır → İzinler → Mikrofon → İzin verme.
+
+Uygulamaya dönüp "Mikrofonu aç"a bas: açıklama cümlesi görünmeli. Sonra izni geri aç.
+
+Ölçüt 6 için kabukta alınan ses boş olmamalı:
+
+- konuşurken düzey çubuğu oynamalı;
+- geri çalmada ses duyulmalı;
+- "Sessiz çerçeve", "Gelen çerçeve"nin küçük bir kısmı olmalı.
+
+| # | Kabuk | Ayar seti | Cihaz ve OS sürümü | Giriş hızı | Düzey (konuşurken, dBFS) | Geri çalma (anlaşılır / bozuk / boş) | Gelen çerçeve | Sessiz çerçeve | Kaçan çerçeve | Arka planda mikrofon bırakıldı mı | Not |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 5A | iOS uygulaması | A | | | | | | | | | |
+| 5B | iOS uygulaması | B | | | | | | | | | |
+| 6A | Android uygulaması | A | | | | | | | | | |
+| 6B | Android uygulaması | B | | | | | | | | | |
+
+Ön deneme (gerçek cihazın yerini tutmaz): Android emülatöründe mikrofon açıldı ve çerçeveler aksamadan geldi (1081 gelen, 0 kaçan). Ama 1040'ı sessizdi, çünkü emülatörün sanal mikrofonu ses vermiyor. Sessiz çerçeve sayacının "boş ses" durumunu gösterdiği orada görüldü. Ayrıntı: `docs/planlar/faz-1.md` → "Kanıtlar".

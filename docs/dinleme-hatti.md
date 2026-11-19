@@ -22,6 +22,14 @@
 
 Birim testleri: örnekleme hızı dönüştürücü (48 kHz ve 44,1 kHz girişten 16 kHz çıkış uzunluğu ve basit bir sinüsün korunması), çerçeveleyici (rastgele uzunlukta girdiden tam 320 örneklik çerçeveler).
 
+**Faz 1'de nasıl yapıldı** (`src/services/audio`, kararlar T18):
+
+- Açılış sırası: `getUserMedia` → `AudioContext` → `audioWorklet.addModule` → kaynak ve işleyici düğümü → `resume()`. Bağlam mikrofondan sonra kurulur: iPhone'da donanım hızı mikrofon açılınca belli olur. Tek kanala indirmeyi tarayıcı yapar (`channelCount: 1`, `explicit`, `speakers`).
+- Varsayılan ayar: üç işleme de açık. Ses denemesi hangisinin iyi olduğunu ölçer.
+- Dönüştürücü: pencereli sinc (Blackman), kesim küçük Nyquist'in 0,9 katı; 8–48 kHz arası her giriş hızını kabul eder.
+- Mikrofonu açılırken kapatmak da güvenlidir: izin sonradan gelirse mikrofon hemen bırakılır. Sekme gizlenince (`visibilitychange`, `pagehide`) servis mikrofonu kendisi bırakır.
+- `diagnostics()` sayaçları: gelen çerçeve; kaçan çerçeve (işleyicinin girdi alamadığı süre ve sıra atlayarak gelen çerçeveler); sessiz çerçeve (örneklerinin hepsi sıfır). Uygulama kabuğunda "ses boş geliyor" riski sessiz çerçeve sayısında görünür.
+
 ## 2. Olaylar ve sonuç
 
 Tipler `docs/mimari.md` içinde. Davranış sözleşmesi:
@@ -100,5 +108,12 @@ Amaç: mikrofondan sunucuya giden yolun gerçek cihazlarda çalıştığını ve
 - Cihaz raporu: tarayıcı, işletim sistemi, giriş örnekleme hızı, uygulanan ses ayarları, kaçan çerçeve sayısı. JSON olarak indirilebilir.
 
 Denenecek ortamlar (elle, gerçek cihaz): masaüstü Chrome, iPhone Safari, iPhone'da ana ekrana eklenmiş hali, Android Chrome (orta sınıf bir tablet). Sonuçlar `docs/ses-denemesi-sonuclari.md` dosyasına yazılır.
+
+**Faz 1'de nasıl yapıldı** (kararlar T20):
+
+- Yankı yolu: sayfa kendi kökenindeki `/gelistirme/yanki` adresine bağlanır (HTTPS'te `wss:`). Vite'in geliştirme ve önizleme sunucusu bu adresi `scripts/echo-server.ts` sunucusuna (`127.0.0.1:4318`) aktarır; CSP değişmez.
+- İleti biçimi: 8 baytlık başlık (sıra numarası, `uint32` küçük sonlu, ardından 4 boş bayt) ve çerçevenin 640 baytlık PCM'i. Sunucu iletiyi olduğu gibi geri yollar. Test sıradaki 500 çerçeveyi gönderir. Son gönderimden 2 sn sonra dönmemiş çerçeve kayıp sayılır; bağlantı 5 sn içinde açılmazsa sonuç "ulaşılamadı" olur.
+- Kayıt saatle değil çerçeve sayısıyla tutulur (500 çerçeve = 10 sn). "Kaydı çal" önce mikrofonu kapatır, WAV'ı Web Audio ile çalar.
+- Komutlar: `pnpm echo-server` (yalnız yankı sunucusu), `pnpm audio-trial` (cihazlar için `https://<ip>:4443`, mkcert sertifikası, yankı sunucusu dahil).
 
 Fazın ikinci yarısı aynı sayfayı Capacitor kabuğunda dener (iOS için macOS ve Xcode, Android için Android Studio gerekir). Seçtiğimiz yolun asıl riski burasıdır: uygulama içi tarayıcıda mikrofon izni alınsa bile ses verisinin bozuk ya da boş geldiği örnekler var. Sonuç kötüyse yalnız ses için yerel bir eklenti yazılır ve `AudioCapture` arayüzünün ikinci uygulaması olur; arayüz ve ekranlar değişmez.

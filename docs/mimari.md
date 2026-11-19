@@ -41,12 +41,12 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 │   ├── i18n/tr.ts        bütün arayüz metinleri
 │   └── styles/           tokens.css (design/tokens.css kopyası), tokens-extra.css, fonts.css, global.css
 ├── e2e/                  Playwright testleri
-└── scripts/              yardımcı betikler (shots.ts; yankı sunucusu vb.)
+└── scripts/              yardımcı betikler: shots.ts, echo-server.ts (yankı sunucusu), audio-trial.ts (cihaz denemesi için HTTPS)
 ```
 
 `design/` kopyaları (`tokens.css`, ikonlar, çizimler) `src/design-copies.test.ts` ile birebir aynı tutulur.
 
-Geliştirmeye özgü kod (geliştirme sayfaları, Faz 2'den sonra `?demo=` parametreleri) `import.meta.env.MODE !== 'production'` koşulunu **kullanıldığı modülde, satır içinde** sınar. Vite bu ifadeyi her modülde derleme anında yerine koyduğu için kod üretim derlemesinden atılır. Başka bir modülden içe aktarılan bir bayrak katlanmaz ve `dist/` içinde sahipsiz parçalar bırakır (Faz 0'da görüldü). `e2e` kipi (`vite build --mode e2e`) geliştirme araçlarını içerir.
+Geliştirmeye özgü kod (geliştirme sayfaları, Faz 2'den sonra `?demo=` parametreleri) `import.meta.env.MODE !== 'production'` koşulunu **kullanıldığı modülde, satır içinde** sınar. Vite bu ifadeyi her modülde derleme anında yerine koyduğu için kod üretim derlemesinden atılır. Başka bir modülden içe aktarılan bir bayrak katlanmaz ve `dist/` içinde sahipsiz parçalar bırakır (Faz 0'da görüldü). `e2e` kipi (`vite build --mode e2e`) geliştirme araçlarını içerir. `cap` kipi (`pnpm cap:sync`, `dist-cap/`) uygulama kabuğu içindir: geliştirme araçlarını içerir ve `src/appShellStart.ts` ile ses denemesi sayfasında açılır. Bu modül `main.tsx`'in ilk içe aktarmasıdır, çünkü `src/app/App.tsx` yönlendiriciyi yüklenirken kurar ve adresi o an okur.
 
 Bağımlılık yönü tek: `features` → `services` (arayüzler) → `domain`. `domain` hiçbir şeyi içe aktarmaz; `components` yalnız `styles` ve `domain` tiplerini bilir.
 
@@ -155,11 +155,13 @@ type Unsubscribe = () => void;
 // Mikrofon. Ayrıntı: docs/dinleme-hatti.md
 interface AudioCapture {
   readonly state: 'idle' | 'starting' | 'capturing' | 'denied' | 'unavailable' | 'error';
-  start(): Promise<void>;                         // kullanıcı hareketiyle çağrılır
-  stop(): Promise<void>;
+  start(): Promise<void>;                         // kullanıcı hareketiyle çağrılır; hiç reddetmez, hata bir duruma dönüşür
+  stop(): Promise<void>;                          // her durumda güvenli
   onFrame(cb: (pcm16: Int16Array) => void): Unsubscribe;   // 16 kHz, tek kanal, 20 ms
   onLevel(cb: (rms: number) => void): Unsubscribe;
   onStateChange(cb: (s: AudioCapture['state']) => void): Unsubscribe;
+  diagnostics(): CaptureDiagnostics;              // istenen ve uygulanan ayarlar, giriş hızı, aygıt adı,
+                                                  // gelen / kaçan / sessiz çerçeve, son hata (Faz 1)
 }
 
 // Okumayı izleyen dinleyici. Ayrıntı: docs/dinleme-hatti.md
@@ -219,6 +221,16 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 | `Repository` | `IndexedDbRepository`, ilk açılışta `seed/` ile dolar | `HttpRepository` |
 | `BookGenerator` | `MockBookGenerator` (aşağıda) | Arka uç |
 | `Telemetry` | `NoopTelemetry` | Kendi sunucumuza |
+
+**Ses yakalama (`src/services/audio`, Faz 1):**
+
+- `AudioCapture.ts`: arayüz ve tipler (`CaptureSettings`, `CaptureDiagnostics`, …). `types.ts` ortak `Unsubscribe` tipini tutar.
+- `WebAudioCapture.ts`: durumlar, sayaçlar, gizlenen sayfada ve geç gelen izinde mikrofonu kapatma kuralı. Tarayıcıya `captureEnvironment.ts` arayüzünden dokunur; testlerde sahtesi verilir.
+- Saf yardımcılar, birim testli: `resampler.ts` (pencereli sinc, her giriş hızı → 16 kHz), `framer.ts` (320 örneklik çerçeve), `levelMeter.ts` (saniyede 20 RMS), `captureChain.ts` (dördünü işleyici sırasıyla bağlar), `pcm.ts`, `wav.ts`. Ürün kuralı değil, yakalamanın parçası oldukları için `domain` içinde değiller (Faz 1 planı, karar 3).
+- `capture.worklet.ts`: `tikir-capture` AudioWorklet işleyicisi; `?worker&url` ile yüklenir (`vite.config.ts` → `worker.format: 'es'`). `browserCaptureEnvironment.ts`: `getUserMedia`, `AudioContext` ve işleyici düğümü; sekme gizlenince ve sayfa kapanınca haber verir.
+- `WavPlayer.ts`: WAV'ı Web Audio ile çalar; böylece CSP'ye `media-src` gerekmez.
+
+**Ses denemesinin öteki servisleri (Faz 1):** `echo/` (yankı ölçümü: `EchoProbe`, `WebSocketEchoProbe`, `roundTrip`), `device/environment.ts` (tarayıcı, işletim sistemi, kabuk, mikrofon izni), `files.ts` (indirme). Ses denemesi sayfası bunları `src/app/services.ts` içindeki `audioLabServices` nesnesinden prop olarak alır; rota bu dosyayı tembel yükler, üretim derlemesine girmez.
 
 **`MockBookGenerator`:**
 

@@ -38,6 +38,10 @@ export default defineConfig([
   globalIgnores([
     'dist/',
     'dist-e2e/',
+    'dist-trial/',
+    'dist-cap/',
+    'ios/',
+    'android/',
     'coverage/',
     'shots/',
     'test-results/',

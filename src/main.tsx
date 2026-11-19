@@ -1,3 +1,5 @@
+// First, before the router reads the address (see the module).
+import './appShellStart';
 import './styles/tokens.css';
 import './styles/tokens-extra.css';
 import './styles/fonts.css';

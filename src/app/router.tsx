@@ -51,9 +51,14 @@ const devRoutes: RouteObject[] =
         },
         {
           path: devPaths.audio,
-          lazy: async () => ({
-            Component: (await import('../features/dev/AudioLabPage')).AudioLabPage,
-          }),
+          // The page gets its services from here, so features never import src/app.
+          lazy: async () => {
+            const [{ AudioLabPage }, { audioLabServices }] = await Promise.all([
+              import('../features/dev/audio/AudioLabPage'),
+              import('./services'),
+            ]);
+            return { element: <AudioLabPage services={audioLabServices} /> };
+          },
         },
       ]
     : [];

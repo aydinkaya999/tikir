@@ -12,4 +12,11 @@ describe('tr', () => {
 
     expect(source).not.toMatch(/\p{Extended_Pictographic}/u);
   });
+
+  // Developer pages keep their copy next to them (docs/kararlar.md, T17); the rule still holds.
+  it('leaves no emoji in the developer pages’ copy either', () => {
+    const source = readFileSync(new URL('../features/dev/audio/copy.ts', import.meta.url), 'utf8');
+
+    expect(source).not.toMatch(/\p{Extended_Pictographic}/u);
+  });
 });
