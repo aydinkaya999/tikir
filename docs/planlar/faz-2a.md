@@ -56,7 +56,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 11: Kayıt
 - [x] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
 - [x] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
-- [ ] Task 14: `useReading` ve `useNarration`
+- [x] Task 14: `useReading` ve `useNarration`
 - [ ] Task 15: Belgeler ve 2a'nın denetimi
 
 ## Onaylanan kararlar
@@ -1205,7 +1205,7 @@ export function useNarration(options: { narrator: Narrator; pages: readonly Scre
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`useReading.test.tsx`** (`renderHook`, sahte zaman):
     1. **`design` anı:**
        - Girdi: `design` 2. okuma, 4. bölüm, `ghostPaceWpm` 40.
@@ -1233,9 +1233,9 @@ export function useNarration(options: { narrator: Narrator; pages: readonly Scre
       - `restart()` → sayfa 0, ünite 0, `finishedOnce` korunur;
       - `setRate('normal')` sonraki üniteden uygulanır ve `totalMs` yeniden hesaplanır;
       - bileşen kaldırılınca `narrator.stop` çağrılır.
-- [ ] İki test dosyası → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(reading): drive reading and narration from the listener and narrator`.
+- [x] İki test dosyası → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(reading): drive reading and narration from the listener and narrator`.
 
 ### Task 15: Belgeler ve 2a'nın denetimi
 
