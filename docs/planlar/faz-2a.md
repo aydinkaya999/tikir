@@ -52,7 +52,7 @@ Sürümlere kurulum anında bakılır. Zustand 2b'de gelir.
 - [x] Task 7: Dinleyici yalıtımı ve Faz 1'den kalan bulgular
 - [x] Task 8: `ReadingListener` ve `FakeListener`
 - [x] Task 9: Seslendirme
-- [ ] Task 10: Depo
+- [x] Task 10: Depo
 - [ ] Task 11: Kayıt
 - [ ] Task 12: Demo profili yükleyicisi ve vitrin düğmeleri
 - [ ] Task 13: Sayfalar, okuma durumu ve mikrofon kapısı
@@ -928,9 +928,9 @@ export function appRepository(): Promise<Repository>;                  // one sh
 
 **Adımlar:**
 
-- [ ] Önce `docs/kararlar.md` → Bağımlılıklar: `idb` ve `fake-indexeddb` (geliştirme) satırları.
-- [ ] Kur: `pnpm add idb` ve `pnpm add -D fake-indexeddb`.
-- [ ] **Kırmızı:**
+- [x] Önce `docs/kararlar.md` → Bağımlılıklar: `idb` ve `fake-indexeddb` (geliştirme) satırları.
+- [x] Kur: `pnpm add idb` ve `pnpm add -D fake-indexeddb`.
+- [x] **Kırmızı:**
   - **`id.test.ts`:** 100 kimliğin hepsi farklı ve `/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/` kalıbında. `crypto.randomUUID` yokken de çalışır.
   - **`seedContent.test.ts`:**
     - Seri kitabın 5 bölümü, `totalChapters` 12.
@@ -947,9 +947,9 @@ export function appRepository(): Promise<Repository>;                  // one sh
     5. **`clearAll()`:** kullanıcı verisi gider; seri kitap ve ölçüm metinleri yeniden vardır.
     6. **İkinci açılış:** aynı fabrikada kitabı çoğaltmaz.
     7. **Kullanılamayan depo:** `indexedDB` tanımsızken ya da `open()` fırlatırken `IndexedDbRepository.open()` `RepositoryUnavailableError` ile reddeder.
-- [ ] Üç test dosyası → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(repository): store app data in IndexedDB, seeded from seed/`.
+- [x] Üç test dosyası → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(repository): store app data in IndexedDB, seeded from seed/`.
 
 ### Task 11: Kayıt
 

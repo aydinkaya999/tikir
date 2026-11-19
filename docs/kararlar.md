@@ -138,6 +138,8 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `@fontsource/didact-gothic` | Okul harfleri yer tutucusu (D3). Türkçe harflerin hepsi bu yazı tipinden çiziliyor (Faz 0'da denetlendi) | 0 |
 | `@capacitor/core`, `@capacitor/ios`, `@capacitor/android`, `@capacitor/cli` | Uygulama kabuğu (T1, T19): aynı web kodu iOS ve Android uygulamasında. Faz 1'de yalnız ses denemesi için; CLI geliştirme bağımlılığı, `@capacitor/core` CLI'ın istediği çekirdek | 1 |
 | `ws`, `@types/ws` | Yerel yankı sunucusu (`scripts/echo-server.ts`, T20): çerçeveleri olduğu gibi geri gönderir. Node'da yerleşik WebSocket sunucusu yok; protokolü elle yazmak yerine yaygın, bağımlılıksız paket. Yalnız geliştirme bağımlılığı, uygulamaya girmez | 1 |
+| `idb` | IndexedDB'yi söz (promise) arayüzüyle saran küçük, bağımlılıksız paket; `IndexedDbRepository` ve kayıt deposu bunun üstünde (`docs/mimari.md`, "Yığın"; Faz 2a planı, karar 12) | 2 |
+| `fake-indexeddb` | Vitest'te IndexedDB: depo ve kayıt testleri bellekte çalışan gerçek bir IndexedDB uygulamasına karşı koşar. Yalnız geliştirme bağımlılığı | 2 |
 
 ## Değişiklik günlüğü
 
