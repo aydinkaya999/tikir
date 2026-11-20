@@ -94,6 +94,9 @@
   --lift-recording: 0 6px 0 var(--color-cobalt);
   --radius-chapter-square: 5px;
   --radius-share: 18px;
+  /* G6: the question (22 px on phones, 30 px from 700 px) and its options (17 px, 20 px). */
+  --size-question: 22px;
+  --size-answer: 17px;
 }
 
 @media (min-width: 700px) {
@@ -108,6 +111,8 @@
     --size-warmup-word: 50px;
     --size-syllable: 28px;
     --size-chain: 18px;
+    --size-question: 30px;
+    --size-answer: 20px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;

@@ -1,0 +1,144 @@
+/* Phone (below 700 px): G6 telefon. The question card fills the column. */
+.card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-white);
+  box-shadow: var(--lift-page);
+}
+
+.counter {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.prompt {
+  margin: 0 0 12px;
+  padding: 0;
+  color: var(--color-ink);
+  font-size: var(--size-question);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.25;
+}
+
+/* An option: the chosen one light cobalt with the button lift. */
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+  min-height: 56px;
+  padding: 10px 16px;
+  border: var(--border);
+  border-radius: var(--radius-button);
+  background: var(--color-white);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.option[data-checked] {
+  background: var(--color-cobalt-light);
+  box-shadow: var(--lift-button);
+}
+
+.question:disabled .option {
+  cursor: default;
+}
+
+.radio {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--color-cobalt);
+}
+
+.optionText {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--size-answer);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+.option[data-checked] .optionText {
+  font-weight: var(--weight-bold);
+}
+
+/* The right option after a wrong answer. TODO(design) */
+.rightMark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-ink);
+  font-size: var(--size-small);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+/* "Metne geri dön": a link's look, a button's job (it opens the text layer). */
+.back {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-cobalt);
+  font: inherit;
+  font-size: var(--size-body);
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+/* The phone's bar holds one wide button; from 700 px it keeps its own width. */
+.action {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+@media (min-width: 700px) {
+  .card {
+    gap: 20px;
+    padding: 30px;
+  }
+
+  .question {
+    gap: 14px;
+  }
+
+  .prompt {
+    margin-bottom: 16px;
+  }
+
+  .option {
+    min-height: 64px;
+  }
+
+  .action {
+    flex: none;
+  }
+}

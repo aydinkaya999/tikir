@@ -55,7 +55,7 @@
 - [x] Task 11: G3 Dinle
 - [x] Task 12: G4 Oku
 - [x] Task 13: G5 Kayıt
-- [ ] Task 14: G6 Kapanış sorusu
+- [x] Task 14: G6 Kapanış sorusu
 - [ ] Task 15: G7 Bugünlük bitti
 - [ ] Task 16: Albüm ve Stüdyo
 - [ ] Task 17: Uçtan uca seans testleri
@@ -1134,7 +1134,7 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `WrapUpPage.test.tsx` (StrictMode, sabit `random`):
+- [x] **Kırmızı:** `WrapUpPage.test.tsx` (StrictMode, sabit `random`):
   1. **İçerik:**
      - "Kapanış", "2 soru", "Soru 1 / 2", soru;
      - üç seçenek gerçek `radio`, sırası `random`'dan;
@@ -1152,11 +1152,11 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
      - bölümün bütün kelimeleriyle pencere açılır;
      - "Kapat" kapatır; seans değişmez.
   7. **Karışma:** farklı `random` farklı sıra verir; yanıt içerikteki sırayla yazılır.
-- [ ] `pnpm test src/features/session/WrapUpPage.test.tsx` → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots --dokun "Tepenin ardında" '/seans/kapanis?demo=cocuk-sabahi&adim=wrapUp'` → G6 ile karşılaştır, farkları yaz, düzelt. Seçenek sırası farka yazılır.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the wrap-up questions (G6)`.
+- [x] `pnpm test src/features/session/WrapUpPage.test.tsx` → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots --dokun "Tepenin ardında" '/seans/kapanis?demo=cocuk-sabahi&adim=wrapUp'` → G6 ile karşılaştır, farkları yaz, düzelt. Seçenek sırası farka yazılır.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the wrap-up questions (G6)`.
 
 ### Task 15: G7 Bugünlük bitti
 
@@ -1390,6 +1390,12 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 | üçü | Çubuk boyları tasarımdakinden düzgün ve yüksek | kalır: düzeyler 52 sn'lik yapay kayıttan gelir (karar 21) |
 | üçü | Kayıtlı bölüm karelerinden yalnız 4.'sü dolu, "12 bölümün 1’i kayıtlı" | kalır: demo profilinin eski seanslarında ses yok (karar 15) |
 | üçü | Çalan kaydın düğmesi duraklat simgesi gösterir; tasarımın anında oynat simgesi var | kalır: karar 15 ("Kaydı dinle" çalınca düğme "Duraklat" olur) |
+
+**G6** (planlanan komut; ayrıca yanlış cevap durumu `--dokun "Çam ağaçlarının altında" --dokun "Cevabı gönder" --bekle "Devam et"` ile bakıldı, tasarımı yok):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | Seçeneklerin sırası tasarımdakinden farklı | kalır: sıra her gösterimde karışır (karar 16) |
 
 ## Açık sorular (onayı beklemez)
 

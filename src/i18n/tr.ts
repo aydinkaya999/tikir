@@ -172,6 +172,21 @@ export const tr = {
     next: 'Devam et',
   },
 
+  /** G6 Kapanış (docs/ekranlar.md, G6; docs/planlar/faz-2b.md, karar 16). */
+  wrapUp: {
+    questionCount: (count: number) => `${String(count)} soru`,
+    counter: (question: number, total: number) => `Soru ${String(question)} / ${String(total)}`,
+    bubble: 'Emin değilsen metne geri dönebilirsin.',
+    backToText: 'Metne geri dön',
+    submit: 'Cevabı gönder',
+    /** After a wrong answer only the right option is marked; nothing says "wrong". TODO(design) */
+    correctLabel: 'Doğru cevap',
+    correctBubble: 'Doğru cevabı işaretledim.',
+    next: 'Devam et',
+    /** The chapter's read-only layer, titled as the page card. TODO(design) */
+    close: 'Kapat',
+  },
+
   /** G7, and G1 once the day is done (docs/ekranlar.md, G1: "G7'deki 'Yarın' kartını kullan"). */
   done: {
     tomorrow: (title: string) => `Yarın: ${title}`,

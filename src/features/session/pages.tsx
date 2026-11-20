@@ -3,11 +3,6 @@
 import { tr } from '../../i18n/tr';
 import { SessionLayout } from './SessionLayout';
 
-/** G6 Kapanış sorusu. */
-export function WrapUpPage() {
-  return <SessionLayout title={tr.session.steps.wrapUp} companion={{ expression: 'think' }} />;
-}
-
 /** G7 Bugünlük bitti. */
 export function DonePage() {
   return <SessionLayout title={tr.session.doneTitle} companion={{ expression: 'sleep' }} />;
