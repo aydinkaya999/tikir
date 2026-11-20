@@ -466,6 +466,8 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
 İçerikten gelen kitapta (`/kitaplik/uzay-istasyonunda-gizemli-ses/hazir`) isteği olmadığı için "Yeniden üret" yok (karar 1). Bugün seans varken (`&adim=read-1`) "Okumaya başla" pasif, altında "Yarın okuyabilirsin.".
 
+**G1, kitapla geçen gün** (tasarımı yok; `/?demo=cocuk-sabahi&kitap=uzay-istasyonunda-gizemli-ses`): G1'in kartı, karo yerine kitabın ilk kapak deseniyle "Bugünkü kitap", kitabın adı, "Kitaplıktan, 12 dakika" ve "Sürdür"; tablette ve webde balon "Bugün kitaplıktan okuyoruz: …". Seri yolu değişmez: üç bölüm bitmiş, hiçbir karo "bugün" değil. Telefonda balon yok (G1'in telefon düzeni).
+
 **Üretim beklemesi** (tasarımı yok; `--dokun 'Kitabımı yap' --ileri 100` ile): Tıkır `think`, "Kitabın yazılıyor", "Vazgeç"; içerik alanının ortasında, yan sütun ve eylem yok.
 
 ## Kanıtlar

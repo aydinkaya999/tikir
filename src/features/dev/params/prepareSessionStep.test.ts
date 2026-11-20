@@ -55,6 +55,40 @@ describe('prepareSessionStep', () => {
     });
   });
 
+  it('starts today’s session with a library book and brings it to its step', async () => {
+    const { repository, services, recordings } = await setup();
+
+    await prepareSessionStep(
+      services,
+      'read-2',
+      'typical',
+      recordings,
+      'uzay-istasyonunda-gizemli-ses',
+    );
+
+    const session = await sessionOf(repository);
+    expect(session.chapterRef).toEqual({ bookId: 'uzay-istasyonunda-gizemli-ses', chapter: 1 });
+    expect(placeOf(session)).toEqual({ step: 'read', attempt: 2, redo: false });
+  });
+
+  it('only starts the session with the book when no step is asked', async () => {
+    const { repository, services, recordings } = await setup();
+
+    await prepareSessionStep(services, null, 'typical', recordings, 'dinozorlar-neden-buyuktu');
+
+    const session = await sessionOf(repository);
+    expect(session.chapterRef.bookId).toBe('dinozorlar-neden-buyuktu');
+    expect(session.readings).toEqual([]);
+  });
+
+  it('refuses a book the library does not have', async () => {
+    const { services, recordings } = await setup();
+
+    await expect(prepareSessionStep(services, null, 'typical', recordings, 'yok')).rejects.toThrow(
+      'yok',
+    );
+  });
+
   it('brings the session to the second reading after a typical first one', async () => {
     const { repository, services, recordings } = await setup();
 

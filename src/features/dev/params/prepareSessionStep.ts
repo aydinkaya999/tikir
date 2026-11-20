@@ -3,7 +3,7 @@
 // readings simulated from the scenario, questions answered correctly. The session counts as
 // started twelve minutes ago (G7's "12 dakika").
 import { chapterTokens } from '../../../domain/text';
-import type { Chapter, ReadingOutcome } from '../../../domain/types';
+import type { Chapter, Id, ReadingOutcome } from '../../../domain/types';
 import { scenarioSets, type ScenarioName } from '../../../services/listener/scenarios';
 import { simulateReading, toWordResults } from '../../../services/listener/simulateReading';
 import type { FakeScenario } from '../../../services/listener/types';
@@ -41,9 +41,10 @@ function simulatedOutcome(chapter: Chapter, scenario: FakeScenario): ReadingOutc
 
 export async function prepareSessionStep(
   services: SessionStoreServices,
-  step: DevStep,
+  step: DevStep | null,
   scenario: ScenarioName,
   recordings: RecordingStore,
+  bookId?: Id,
 ): Promise<void> {
   let offsetMs = -sessionLengthMs;
   const now = () => new Date(services.now().getTime() + offsetMs);
@@ -55,7 +56,20 @@ export async function prepareSessionStep(
     throw new Error(`Today's session cannot be prepared: the store is ${state().status}.`);
   }
   if (state().data?.session === null) {
-    await state().start();
+    if (bookId === undefined) {
+      await state().start();
+    } else {
+      // &kitap=: the day is read from a library book (docs/kararlar.md P18).
+      await state().startWithBook(bookId);
+      if (state().data?.session === null) {
+        throw new Error(`There is no book ${bookId} in the library to read today.`);
+      }
+    }
+  } else if (bookId !== undefined && state().data?.session?.chapterRef.bookId !== bookId) {
+    console.warn(`Today's session already reads another book; ${bookId} waits for tomorrow.`);
+  }
+  if (step === null) {
+    return;
   }
   const target = devSteps.indexOf(step);
   for (let action = 0; action < actionLimit; action += 1) {

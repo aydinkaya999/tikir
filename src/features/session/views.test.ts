@@ -3,7 +3,8 @@ import { seriesBook } from '../../services/repository/seedContent';
 import { testSession } from '../../test/sessions';
 import { demoSessionStore, testToday } from '../../test/sessionStore';
 import type { SessionData } from './sessionStore';
-import { doneView, roadView, sessionListens, studioRows } from './views';
+import { coverPatterns } from '../library/views';
+import { doneView, pageTitle, roadView, sessionListens, studioRows } from './views';
 
 async function dataAt(options: Parameters<typeof demoSessionStore>[0] = {}): Promise<SessionData> {
   const { store } = await demoSessionStore(options);
@@ -80,6 +81,48 @@ describe('roadView', () => {
     });
 
     expect(view.streak).toBeNull();
+  });
+});
+
+describe('roadView on a day read from the library (P18)', () => {
+  const cardsBook = 'uzay-istasyonunda-gizemli-ses';
+
+  it('shows the library book in place of the chapter, the series road as it was', async () => {
+    const view = roadView(await dataAt({ book: cardsBook }));
+
+    expect(view).toMatchObject({
+      state: 'resume',
+      chapter: null,
+      libraryBook: { title: 'Uzay İstasyonunda Gizemli Ses', pattern: coverPatterns(cardsBook)[0] },
+      completed: 3,
+      bookTitle: 'Kayıp Fenerin İzinde',
+    });
+    expect(view.tiles.filter((tile) => tile.state === 'today')).toEqual([]);
+    expect(view.tiles[3]).toEqual({ chapter: 4, state: 'locked', pattern: 4 });
+  });
+
+  it('counts the finished library day in a row and leaves tomorrow to the series', async () => {
+    const view = roadView(await dataAt({ book: cardsBook, step: 'done' }));
+
+    expect(view).toMatchObject({
+      state: 'done',
+      streak: 3,
+      completed: 3,
+      tomorrow: { number: 4, title: 'Dar Patika' },
+    });
+  });
+});
+
+describe('pageTitle', () => {
+  it('names a page of the series by its chapter and a library book’s by the book', async () => {
+    const series = await dataAt({ step: 'listen' });
+    const library = await dataAt({ step: 'listen', book: 'uzay-istasyonunda-gizemli-ses' });
+    if (series.chapter === null || library.chapter === null) {
+      throw new Error('no chapter');
+    }
+
+    expect(pageTitle(series, series.chapter)).toBe('Kayıp Fenerin İzinde, 4. bölüm');
+    expect(pageTitle(library, library.chapter)).toBe('Uzay İstasyonunda Gizemli Ses');
   });
 });
 

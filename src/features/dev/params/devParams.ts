@@ -1,7 +1,9 @@
 // The developer address parameters (docs/mimari.md, "Depolama ve örnek veri"; docs/planlar/
-// faz-2b.md, karar 21; faz-3.md, kararlar 5 ve 26): ?demo=<kip|bos>, ?kurulum=<adım>, &adim=<adım>,
-// &senaryo=<ad|elle>, &onay=kapali, &kapi=acik. Developer and e2e builds only.
+// faz-2b.md, karar 21; faz-3.md, kararlar 5 ve 26; faz-5.md, Task 9): ?demo=<kip|bos>,
+// ?kurulum=<adım>, &adim=<adım>, &kitap=<kimlik>, &senaryo=<ad|elle>, &onay=kapali, &kapi=acik.
+// Developer and e2e builds only.
 import { scenarioNames, type ScenarioName } from '../../../services/listener/scenarios';
+import type { Id } from '../../../domain/types';
 import { type DemoMode, demoModes } from '../demo/loadDemoProfile';
 
 export const devSteps = [
@@ -31,6 +33,8 @@ export interface DevParams {
   demo?: DemoMode | typeof emptyStore;
   setup?: SetupParam;
   step?: DevStep;
+  /** Today's session reads this library book: at `step`, or at its start. */
+  book?: Id;
   scenario?: ScenarioName | typeof manualListener;
   consentOff?: true;
   /** The parent gate stays open in this tab. */
@@ -82,6 +86,14 @@ export function readDevParams(search: string): { params: DevParams; rest: string
       params.step = step;
     } else {
       warnUnknown('adim', step);
+    }
+  }
+  const book = take(query, 'kitap');
+  if (book !== null) {
+    if (book !== '') {
+      params.book = book;
+    } else {
+      warnUnknown('kitap', book);
     }
   }
   const scenario = take(query, 'senaryo');

@@ -67,6 +67,8 @@ function RecordingResult({ data, session, chapter, recordingId }: RecordingResul
   const playback = usePlayback(devices.recorder);
   const [sent, setSent] = useState(false);
 
+  // A library book's reading is not a chapter of the series' audio book (docs/kararlar.md P19).
+  const series = session.chapterRef.bookId === data.series.id;
   const recorded = recordedChapters(data.sessions, data.series.id);
   const total = data.series.totalChapters;
   const recordedCount = withPossessiveSuffix(recorded.length);
@@ -172,24 +174,28 @@ function RecordingResult({ data, session, chapter, recordingId }: RecordingResul
               />
               <div className={styles.playerText}>
                 <p className={styles.recordingTitle}>{tr.record.title(chapter.title)}</p>
-                <p className={styles.added}>{tr.record.added}</p>
+                {series && <p className={styles.added}>{tr.record.added}</p>}
               </div>
             </div>
-            <div className={styles.book}>
-              <ol
-                className={styles.squares}
-                aria-label={tr.record.chaptersLabel(total, recordedCount)}
-              >
-                {Array.from({ length: total }, (_, index) => (
-                  <li
-                    key={index}
-                    className={styles.square}
-                    data-recorded={recorded.includes(index + 1) ? '' : undefined}
-                  />
-                ))}
-              </ol>
-              <p className={styles.bookCount}>{tr.record.chaptersRecorded(total, recordedCount)}</p>
-            </div>
+            {series && (
+              <div className={styles.book}>
+                <ol
+                  className={styles.squares}
+                  aria-label={tr.record.chaptersLabel(total, recordedCount)}
+                >
+                  {Array.from({ length: total }, (_, index) => (
+                    <li
+                      key={index}
+                      className={styles.square}
+                      data-recorded={recorded.includes(index + 1) ? '' : undefined}
+                    />
+                  ))}
+                </ol>
+                <p className={styles.bookCount}>
+                  {tr.record.chaptersRecorded(total, recordedCount)}
+                </p>
+              </div>
+            )}
           </section>
           <section className={styles.share}>
             <div className={styles.shareText}>

@@ -549,4 +549,11 @@ describe('ReadPage (G4)', () => {
     expect(wordAt(1)).toHaveAttribute('data-current');
     expect(screen.getAllByRole('button', { name: 'Duraklat' }).length).toBeGreaterThan(0);
   });
+
+  it('names the page by the library book the day is read from (karar 32)', async () => {
+    await openRead({ book: 'uzay-istasyonunda-gizemli-ses' });
+
+    expect(screen.getAllByText('Uzay İstasyonunda Gizemli Ses').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Kayıp Fenerin İzinde/)).toBeNull();
+  });
 });

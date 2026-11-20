@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { companionImages } from '../../components/illustrations';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
+import { prepareSessionStep } from '../dev/params/prepareSessionStep';
 import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
 import { testToday } from '../../test/sessionStore';
 
@@ -184,5 +185,40 @@ describe('WrapUpPage (G6)', () => {
     await waitFor(async () => {
       expect((await sessionOf(app))?.answers).toEqual([2]);
     });
+  });
+
+  it('asks a library book’s questions under the book’s name (karar 32)', async () => {
+    const user = userEvent.setup();
+    await renderApp('/seans/kapanis', { step: 'wrapUp', book: 'uzay-istasyonunda-gizemli-ses' });
+    expect(await screen.findByText('Soru 1 / 2')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Metne geri dön' }));
+
+    expect(
+      screen.getByRole('dialog', { name: 'Uzay İstasyonunda Gizemli Ses' }),
+    ).toBeInTheDocument();
+  });
+
+  it('goes on to G7 from a library book without questions (karar 34)', async () => {
+    const app = await renderApp('/seans/kapanis', {
+      // The sample text again, without its questions, read up to the wrap-up.
+      before: async ({ repository, services, recordings }) => {
+        const sample = await repository.getBook('dinozorlar-neden-buyuktu');
+        if (sample === null) {
+          throw new Error('No sample book.');
+        }
+        await repository.saveBook({
+          ...sample,
+          id: 'sorusuz',
+          chapters: sample.chapters.map((chapter) => ({ ...chapter, questions: [] })),
+        });
+        await prepareSessionStep(services, 'wrapUp', 'typical', recordings, 'sorusuz');
+      },
+    });
+
+    await waitFor(() => {
+      expect(app.router.state.location.pathname).toBe('/seans/bitti');
+    });
+    expect((await sessionOf(app))?.chapterRef.bookId).toBe('sorusuz');
   });
 });

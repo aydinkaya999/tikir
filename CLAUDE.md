@@ -24,7 +24,7 @@ Hepsini her seferinde okuma; yaptığın işe karşılık geleni oku.
 
 Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulum: `pnpm install` ve `pnpm exec playwright install chromium webkit`.
 
-- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses` (ses denemesi). Geliştirme adres parametreleri (`?demo=`, `?demo=bos`, `?kurulum=`, `&adim=`, `&senaryo=`, `&onay=kapali`, `&kapi=acik`): `docs/mimari.md` → "Depolama ve örnek veri".
+- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses` (ses denemesi). Geliştirme adres parametreleri (`?demo=`, `?demo=bos`, `?kurulum=`, `&adim=`, `&kitap=`, `&senaryo=`, `&onay=kapali`, `&kapi=acik`): `docs/mimari.md` → "Depolama ve örnek veri".
 - `pnpm check`: tip denetimi + lint (ESLint, Stylelint, Prettier denetimi) + birim testleri. Her görevden sonra çalıştır.
 - `pnpm test <dosya>`: tek test dosyası; bütün takım yerine bunu tercih et. Araya `--` koyma: `pnpm test -- <dosya>` bütün takımı koşar.
 - `pnpm e2e`: Playwright uçtan uca testleri, Chromium ve WebKit'te. `e2e` kipinde derleyip (`dist-e2e/`) `vite preview` ile sınar; yankı sunucusunu da kendisi açar (açıksa onu kullanır). Tek dosya için: `pnpm e2e e2e/<ad>.spec.ts`. Kurulu Google Chrome'da: `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome`.

@@ -545,6 +545,11 @@ export const tr = {
     bubble: (number: number, title: string) =>
       `Bugün ${String(number)}. bölümü okuyoruz: ${title}. Hazırsan başlayalım.`,
     todayLabel: 'Bugünkü bölüm',
+    /** A day read from the library (docs/kararlar.md P18; docs/planlar/faz-5.md, D18). */
+    libraryLabel: 'Bugünkü kitap',
+    libraryMeta: (minutes: number) => `Kitaplıktan, ${String(minutes)} dakika`,
+    /** The bubble's pattern of D13 for the library book. */
+    libraryBubble: (title: string) => `Bugün kitaplıktan okuyoruz: ${title}. Hazırsan başlayalım.`,
     chapterMeta: (number: number, minutes: number) =>
       `${String(number)}. bölüm, ${String(minutes)} dakika`,
     start: 'Başla',

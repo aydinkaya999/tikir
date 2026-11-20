@@ -49,10 +49,16 @@ export async function prepareDevelopment(services: DevelopmentServices): Promise
     if (params.gateOpen === true) {
       writeTabSetting(tabSettingKeys.parentGate, 'acik');
     }
-    if (params.step !== undefined) {
+    if (params.step !== undefined || params.book !== undefined) {
       const chosen = readTabSetting(tabSettingKeys.listener);
       const scenario = scenarioNames.find((name) => name === chosen) ?? 'typical';
-      await prepareSessionStep(services.storeServices, params.step, scenario, services.recordings);
+      await prepareSessionStep(
+        services.storeServices,
+        params.step ?? null,
+        scenario,
+        services.recordings,
+        params.book,
+      );
     }
   } catch (error) {
     // The app still starts; its screens show the store's state.

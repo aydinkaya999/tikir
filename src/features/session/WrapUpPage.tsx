@@ -12,6 +12,7 @@ import { SessionLayout } from './SessionLayout';
 import { placeOf } from './sessionMachine';
 import { TextLayer } from './TextLayer';
 import styles from './WrapUpPage.module.css';
+import { pageTitle } from './views';
 
 /** The answered question stays on the screen until its answer is written, or the child goes on. */
 interface HeldAnswer {
@@ -111,7 +112,7 @@ export function WrapUpPage() {
       total={questionCount}
       chapter={chapter}
       readingStyle={data.child.readingStyle}
-      pageTitle={tr.page.title(data.series.title, chapter.number)}
+      pageTitle={pageTitle(data, chapter)}
       held={held}
       onAnswer={answer}
       onGoOn={goOn}

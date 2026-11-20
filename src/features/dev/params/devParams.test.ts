@@ -50,6 +50,15 @@ describe('readDevParams', () => {
     expect(readDevParams('?kurulum=bitti')).toEqual({ params: {}, rest: '' });
   });
 
+  it('reads a library book for today’s session', () => {
+    expect(
+      readDevParams('?demo=cocuk-sabahi&kitap=uzay-istasyonunda-gizemli-ses&adim=read-1&x=1'),
+    ).toEqual({
+      params: { demo: 'cocuk-sabahi', book: 'uzay-istasyonunda-gizemli-ses', step: 'read-1' },
+      rest: '?x=1',
+    });
+  });
+
   it('reads nothing from an address without them', () => {
     expect(readDevParams('')).toEqual({ params: {}, rest: '' });
     expect(readDevParams('?x=1')).toEqual({ params: {}, rest: '?x=1' });

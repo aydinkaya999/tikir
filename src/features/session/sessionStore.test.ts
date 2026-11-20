@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { measurementReadings } from '../../domain/measurement';
+import { stuckKey } from '../../domain/stuckWords';
 import { chapterTokens, passageChapter } from '../../domain/text';
 import type { Book, Chapter, Passage, ReadingOutcome, StuckWord } from '../../domain/types';
 import { type DemoMode, loadDemoProfile } from '../dev/demo/loadDemoProfile';
@@ -947,6 +948,34 @@ describe('the library in the session store', () => {
 
     expect(store.getState().data?.book.id).toBe(cardsBook);
     expect(store.getState().data?.chapter?.title).toBe('Uzay İstasyonunda Gizemli Ses');
+  });
+
+  it('turns a library book’s stumbles into cards, as the series’ do', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    await store.getState().startWithBook('dinozorlar-neden-buyuktu');
+    await store.getState().skipWarmup();
+    await store.getState().finishListening();
+    const chapter = store.getState().data?.chapter;
+    if (!chapter) {
+      throw new Error('no chapter');
+    }
+
+    await store
+      .getState()
+      .saveReading(typicalOutcome(chapter, 0), { startedAt, recordingId: null });
+
+    const tokens = chapterTokens(chapter);
+    const cards = await repository.listStuckWords();
+    // The first typical reading's counted errors: a suffix (15) and a skipped word (40).
+    for (const index of [15, 40]) {
+      const word = tokens[index]?.word ?? '';
+      expect(cards.find((card) => stuckKey(card.word) === stuckKey(word))).toMatchObject({
+        status: 'wild',
+        dueOn: '2026-11-22',
+      });
+    }
   });
 
   it('starts nothing with a book it does not know', async () => {

@@ -20,7 +20,7 @@ import styles from './ListenPage.module.css';
 import { useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { SessionLayout } from './SessionLayout';
 import { useNarrator } from './useNarrator';
-import { sessionListens } from './views';
+import { pageTitle, sessionListens } from './views';
 
 const rates: readonly NarrationRate[] = ['slow', 'normal'];
 
@@ -151,7 +151,7 @@ function Listening({ narrator }: { narrator: Narrator }) {
     >
       <PageCard
         className={styles.page}
-        title={tr.page.title(data.series.title, chapter.number)}
+        title={pageTitle(data, chapter)}
         counter={tr.page.counter(narration.pageIndex + 1, pages.length)}
       >
         {screen !== undefined && (

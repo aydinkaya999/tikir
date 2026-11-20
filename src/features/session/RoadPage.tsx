@@ -52,8 +52,27 @@ export function RoadPage() {
   const bubble =
     view.state === 'done'
       ? tr.done.bubble(view.childName)
-      : view.state !== 'seriesEnd' && view.chapter !== null
-        ? tr.road.bubble(view.chapter.number, view.chapter.title)
+      : view.libraryBook !== null
+        ? tr.road.libraryBubble(view.libraryBook.title)
+        : view.state !== 'seriesEnd' && view.chapter !== null
+          ? tr.road.bubble(view.chapter.number, view.chapter.title)
+          : null;
+  // Today's card: the series' chapter, or the library book the day is read from (P18).
+  const todayCard =
+    view.libraryBook !== null
+      ? {
+          label: tr.road.libraryLabel,
+          title: view.libraryBook.title,
+          meta: tr.road.libraryMeta(sessionMinutes),
+          pattern: view.libraryBook.pattern,
+        }
+      : view.chapter !== null
+        ? {
+            label: tr.road.todayLabel,
+            title: view.chapter.title,
+            meta: tr.road.chapterMeta(view.chapter.number, sessionMinutes),
+            pattern: chapterPattern(view.chapter.number),
+          }
         : null;
 
   const measuring = measurementDue(
@@ -127,7 +146,7 @@ export function RoadPage() {
             )}
           </div>
           <div className={styles.chapterCard}>
-            {view.state === 'seriesEnd' || view.chapter === null ? (
+            {view.state === 'seriesEnd' || todayCard === null ? (
               <>
                 {/* TODO(design): no chapter left to read. */}
                 <p className={styles.notice}>{tr.road.seriesEnd}</p>
@@ -138,21 +157,13 @@ export function RoadPage() {
             ) : (
               <>
                 <div className={styles.chapterHead}>
-                  <Tile
-                    className={styles.cover}
-                    state="done"
-                    pattern={chapterPattern(view.chapter.number)}
-                  />
+                  <Tile className={styles.cover} state="done" pattern={todayCard.pattern} />
                   <div className={styles.chapterText}>
-                    <p className={styles.label}>{tr.road.todayLabel}</p>
+                    <p className={styles.label}>{todayCard.label}</p>
                     <h2 className={styles.chapterTitle}>
-                      {view.state === 'done' ? tr.session.doneTitle : view.chapter.title}
+                      {view.state === 'done' ? tr.session.doneTitle : todayCard.title}
                     </h2>
-                    {view.state !== 'done' && (
-                      <p className={styles.meta}>
-                        {tr.road.chapterMeta(view.chapter.number, sessionMinutes)}
-                      </p>
-                    )}
+                    {view.state !== 'done' && <p className={styles.meta}>{todayCard.meta}</p>}
                   </div>
                 </div>
                 {view.state === 'done' ? (

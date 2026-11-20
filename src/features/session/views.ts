@@ -15,6 +15,8 @@ import type { WarmupItem, WarmupSource } from '../../domain/stuckWords';
 import type { ChapterToken } from '../../domain/text';
 import { chapterTokens } from '../../domain/text';
 import type { Book, Chapter, Id } from '../../domain/types';
+import { tr } from '../../i18n/tr';
+import { coverPatterns } from '../library/views';
 import type { SessionData } from './sessionStore';
 
 export interface ChapterLine {
@@ -27,8 +29,10 @@ export interface RoadView {
   childName: string;
   /** Days in a row; null below two (docs/ekranlar.md, G1). */
   streak: number | null;
-  /** Today's chapter; null when the series has no chapter left to read. */
+  /** Today's chapter; null when the series has no chapter left to read, or on a library day. */
   chapter: ChapterLine | null;
+  /** The library book today's session reads (docs/kararlar.md P18); null on a series day. */
+  libraryBook: { title: string; pattern: TilePattern } | null;
   /** Tomorrow's chapter once today's session is done, if it is written. */
   tomorrow: ChapterLine | null;
   completed: number;
@@ -57,18 +61,36 @@ export function roadView(data: SessionData): RoadView {
     .map((each) => each.date);
   const streak = streakDays(completedDates, today);
   const doneToday = session?.completedAt !== undefined;
+  // A day read from the library: its book takes the chapter's place, the road stays (P18).
+  const libraryBook =
+    session !== null && session.chapterRef.bookId !== series.id
+      ? { title: data.book.title, pattern: coverPatterns(data.book.id)[0] }
+      : null;
   const chapter =
-    session === null
-      ? chapterLine(series, nextSeriesChapter(sessions, series))
-      : chapterLine(series, session.chapterRef.chapter);
+    libraryBook !== null
+      ? null
+      : session === null
+        ? chapterLine(series, nextSeriesChapter(sessions, series))
+        : chapterLine(series, session.chapterRef.chapter);
   const state =
-    chapter === null ? 'seriesEnd' : session === null ? 'start' : doneToday ? 'done' : 'resume';
+    libraryBook !== null
+      ? doneToday
+        ? 'done'
+        : 'resume'
+      : chapter === null
+        ? 'seriesEnd'
+        : session === null
+          ? 'start'
+          : doneToday
+            ? 'done'
+            : 'resume';
   const todayTile = state === 'start' || state === 'resume' ? (chapter?.number ?? null) : null;
   return {
     state,
     childName: data.child.name,
     streak: streak >= 2 ? streak : null,
     chapter,
+    libraryBook,
     tomorrow: doneToday ? chapterLine(series, nextSeriesChapter(sessions, series)) : null,
     completed: completed.length,
     totalChapters: series.totalChapters,
@@ -82,6 +104,13 @@ export function roadView(data: SessionData): RoadView {
       };
     }),
   };
+}
+
+/** The page card's title: "{seri}, {n}. bölüm"; a library book's own title (karar 32). */
+export function pageTitle(data: Pick<SessionData, 'series' | 'book'>, chapter: Chapter): string {
+  return data.book.id === data.series.id
+    ? tr.page.title(data.series.title, chapter.number)
+    : data.book.title;
 }
 
 /** Today's words and chains, where the warmup finds a word of the text and its chain. */

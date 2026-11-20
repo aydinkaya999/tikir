@@ -114,6 +114,39 @@ describe('RoadPage (G1)', () => {
     expect(screen.getByText('5. bölüm, 12 dakika')).toBeInTheDocument();
   });
 
+  it('shows the library book the day is read from, and resumes it (P18)', async () => {
+    const user = userEvent.setup();
+    const { router } = await renderApp('/', { book: 'uzay-istasyonunda-gizemli-ses' });
+
+    expect(await screen.findByText('Bugünkü kitap')).toBeInTheDocument();
+    expect(screen.queryByText('Bugünkü bölüm')).toBeNull();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Uzay İstasyonunda Gizemli Ses' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Kitaplıktan, 12 dakika')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Bugün kitaplıktan okuyoruz: Uzay İstasyonunda Gizemli Ses. Hazırsan başlayalım.',
+      ),
+    ).toBeInTheDocument();
+    // The series' road stays where it was.
+    expect(screen.getByText('12 bölümün 3’ü tamam')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Sürdür' }));
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/seans/isinma');
+    });
+  });
+
+  it('shows a finished library day with the series’ chapter for tomorrow', async () => {
+    await renderApp('/', { book: 'uzay-istasyonunda-gizemli-ses', step: 'done' });
+
+    expect(await screen.findByText('Yarın: Dar Patika')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Bugünlük bitti' })).toBeInTheDocument();
+    expect(screen.getByText('Bugünkü kitap')).toBeInTheDocument();
+  });
+
   it('points to the library when every written chapter is read', async () => {
     const { repository, store } = await renderApp('/');
     await repository.saveSession(testSession('2026-11-10', 4));

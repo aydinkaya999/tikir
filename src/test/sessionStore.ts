@@ -3,7 +3,7 @@
 import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { vi } from 'vitest';
-import type { LocalDate, ReadingStyle } from '../domain/types';
+import type { Id, LocalDate, ReadingStyle } from '../domain/types';
 import type { DevStep, SetupParam } from '../features/dev/params/devParams';
 import { prepareSessionStep } from '../features/dev/params/prepareSessionStep';
 import { prepareSetupStep } from '../features/dev/params/prepareSetupStep';
@@ -29,6 +29,8 @@ export interface DemoSessionOptions {
   setup?: SetupParam;
   /** The store's recorder; the screen's own recorder when a test shares them, as the app does. */
   recorder?: SessionStoreServices['recorder'];
+  /** Today's session reads this library book (`&kitap=`), at `step` or at its start. */
+  book?: Id;
 }
 
 export async function demoSessionStore(options: DemoSessionOptions = {}) {
@@ -67,8 +69,14 @@ export async function demoSessionStore(options: DemoSessionOptions = {}) {
   if (options.setup !== undefined) {
     await prepareSetupStep(services, options.setup, { consent: options.consent !== false });
   }
-  if (options.step !== undefined) {
-    await prepareSessionStep(services, options.step, options.scenario ?? 'typical', recordings);
+  if (options.step !== undefined || options.book !== undefined) {
+    await prepareSessionStep(
+      services,
+      options.step ?? null,
+      options.scenario ?? 'typical',
+      recordings,
+      options.book,
+    );
   }
   return { repository, recordings, services, store: createSessionStore(services) };
 }
