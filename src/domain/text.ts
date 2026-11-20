@@ -219,6 +219,17 @@ export function withPossessiveLocativeSuffix(count: number): string {
   return `${possessive}nd${twoWayVowel(letters(possessive))}`;
 }
 
+/** A name with its dative suffix: "Deniz’e", "Ali’ye", "Umut’a", "Kemal’e" (U2 on phones). */
+export function withNameDativeSuffix(name: string): string {
+  const trimmed = name.trim();
+  if (hasSoftL(trimmed)) {
+    return `${trimmed}’e`;
+  }
+  const characters = letters(trimmed).map(toLowerTr);
+  const buffer = isVowel(characters.at(-1) ?? '') ? 'y' : '';
+  return `${trimmed}’${buffer}${twoWayVowel(characters)}`;
+}
+
 type WrittenToken = Omit<Token, 'spoken'>;
 
 /**
@@ -442,11 +453,15 @@ const SOFT_L_NAMES = new Set([
   'zülal',
 ]);
 
+/** Whether the name's last word ends in a soft l: its suffixes take front vowels. */
+function hasSoftL(name: string): boolean {
+  return SOFT_L_NAMES.has(toLowerTr(name.split(/\s+/u).at(-1) ?? name));
+}
+
 /** A name with its genitive suffix: "Deniz’in", "Ali’nin", "Umut’un" (vowel harmony, a buffer n). */
 export function withGenitiveSuffix(name: string): string {
   const trimmed = name.trim();
-  const lastWord = trimmed.split(/\s+/u).at(-1) ?? trimmed;
-  if (SOFT_L_NAMES.has(toLowerTr(lastWord))) {
+  if (hasSoftL(trimmed)) {
     return `${trimmed}’in`;
   }
   const characters = letters(trimmed);
