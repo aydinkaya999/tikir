@@ -374,7 +374,37 @@ export const tr = {
       groups: { hero: 'Kahraman', place: 'Mekân', event: 'Olay' },
       make: 'Kitabımı yap',
     },
-    bookReady: { title: 'Kitabın hazır', subtitle: 'Denetimden geçti, okunmaya hazır.' },
+    bookReady: {
+      title: 'Kitabın hazır',
+      subtitle: 'Denetimden geçti, okunmaya hazır.',
+      /** The level check failed (docs/planlar/faz-5.md, D18). */
+      subtitleFailed: 'Seviye denetiminden geçmedi.',
+      meta: (pages: number, words: number, minutes: number) =>
+        `${String(pages)} sayfa, ${String(words)} kelime, yaklaşık ${String(minutes)} dakika`,
+      questions: (count: number) => `${String(count)} soru`,
+      level: {
+        title: 'Seviye denetimi',
+        passed: (grade: number) => `${String(grade)}. sınıf düzeyine uygun`,
+        /** D18. */
+        failed: (grade: number) => `${String(grade)}. sınıf düzeyinin üstünde`,
+        /** One decimal with a comma ("2,5"); a whole number without one ("7"). */
+        syllables: (value: string) => `Kelime başına ortalama ${value} hece`,
+        words: (value: string) => `Cümle başına ortalama ${value} kelime`,
+        /** D18: the end of a line over its grade's limit. */
+        limit: (value: string) => ` (en çok ${value})`,
+      },
+      inserted: {
+        title: 'İçine eklenen kelimeler',
+        /** The name comes with its genitive suffix (withGenitiveSuffix). */
+        note: (nameGenitive: string) =>
+          `${nameGenitive} bu hafta takıldığı kelimeler hikâyede üçer kez geçiyor.`,
+      },
+      /** A parent asked the mock for stuck words or questions (D18; docs/mimari.md). */
+      backendNote: 'Kelime yerleştirme ve sorular arka uçla gelecek.',
+      bubble: 'Kitabın hazır. Önce ben okuyayım, sonra sıra sende.',
+      start: 'Okumaya başla',
+      remake: 'Yeniden üret',
+    },
   },
 
   onboarding: {

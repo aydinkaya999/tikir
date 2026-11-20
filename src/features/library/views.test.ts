@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { type DemoSessionOptions, demoSessionStore } from '../../test/sessionStore';
 import type { SessionData } from '../session/sessionStore';
-import { coverPatterns, libraryView } from './views';
+import { coverPatterns, libraryView, readyView } from './views';
 
 async function demoData(options: DemoSessionOptions = {}): Promise<SessionData> {
   const { store } = await demoSessionStore(options);
@@ -51,5 +51,42 @@ describe('coverPatterns', () => {
       expect(new Set(patterns).size).toBe(2);
       expect(patterns).not.toContain(1);
     }
+  });
+});
+
+describe('readyView (U4)', () => {
+  it('says the stuck words come three times only when each one does', async () => {
+    const data = await demoData();
+    const book = data.books.find((each) => each.id === 'uzay-istasyonunda-gizemli-ses');
+    const chapter = book?.chapters[0];
+    if (book === undefined || chapter === undefined) {
+      throw new Error('No sample book.');
+    }
+    expect(readyView(data, book).inserted?.note).toBe(
+      'Deniz’in bu hafta takıldığı kelimeler hikâyede üçer kez geçiyor.',
+    );
+
+    // The first page carries one of the three "kıvrılıyordu".
+    const fewer = { ...book, chapters: [{ ...chapter, pages: chapter.pages.slice(1) }] };
+    const view = readyView(data, fewer);
+
+    expect(view.inserted?.words).toEqual(['kıvrılıyordu', 'belirdiğinde', 'ağaçlarının']);
+    expect(view.inserted?.note).toBeNull();
+  });
+
+  it('shows only the inserted words that are the child’s cards', async () => {
+    const data = await demoData();
+    const book = data.books.find((each) => each.id === 'uzay-istasyonunda-gizemli-ses');
+    if (book === undefined) {
+      throw new Error('No sample book.');
+    }
+
+    const cards = data.cards.filter((card) => card.word !== 'belirdiğinde');
+
+    expect(readyView({ ...data, cards }, book).inserted?.words).toEqual([
+      'kıvrılıyordu',
+      'ağaçlarının',
+    ]);
+    expect(readyView({ ...data, cards: [] }, book).inserted).toBeNull();
   });
 });

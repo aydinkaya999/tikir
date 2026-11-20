@@ -457,6 +457,15 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 2. Metin kutusu boş, sayaç "0 kelime", "Kitabı üret" pasif: görüntü aracında yazma adımı yok. Dolu hâli birim ve uçtan uca testlerde.
 3. Telefonun üst şeridinde Faz 4'ün Hesap ve geri düğmeleri var (kabuk; Faz 4, karar 27).
 
+**U4** (`--dokun 'Deniz ve Tıkır' --dokun 'Uzay istasyonu' --dokun 'Gizemli ses' --dokun 'Kitabımı yap' --bekle 'Okumaya başla' '/kitaplik/kur?demo=cocuk-sabahi'` ile U3'te üretilen kitap ↔ `design/png/U4-kitap-hazir-*.png`): kapak, ad, bilgi satırı, seviye denetimi kartı, eklenen kelimeler ve notu, Tıkır'ın balonu, "Okumaya başla" ile "Yeniden üret" (telefonda yuvarlak simge) üç genişlikte örtüşür. Düzeltilenler: kapak 700 px'ten sonra tasarımdaki gibi daralır. Webde iki düğme arası 24 px'ti, 12 px oldu. Farklar:
+
+1. "Resimli" ve "Seslendirildi" çipleri yok (karar 23).
+2. Sayılar gerçek hesap: 176 kelime, 2,5 hece, 5,9 kelime (tasarımda 180, 2,6, 7; tutarsızlık 6).
+3. Telefonun kapağında kitabın tam adı (tasarımda "Gizemli Ses").
+4. Kapak desenleri (U1'deki fark).
+
+İçerikten gelen kitapta (`/kitaplik/uzay-istasyonunda-gizemli-ses/hazir`) isteği olmadığı için "Yeniden üret" yok (karar 1). Bugün seans varken (`&adim=read-1`) "Okumaya başla" pasif, altında "Yarın okuyabilirsin.".
+
 **Üretim beklemesi** (tasarımı yok; `--dokun 'Kitabımı yap' --ileri 100` ile): Tıkır `think`, "Kitabın yazılıyor", "Vazgeç"; içerik alanının ortasında, yan sütun ve eylem yok.
 
 ## Kanıtlar

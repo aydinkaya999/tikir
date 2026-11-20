@@ -1,7 +1,7 @@
 // U1 Kitaplık (docs/ekranlar.md, U1): the series to go on with, the child's books and the ways to
 // make one (docs/planlar/faz-5.md, kararlar 10–13).
-import { useId, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { useId } from 'react';
+import { Link } from 'react-router';
 import { BookCover, CoverBand } from '../../components/BookCover/BookCover';
 import { Button } from '../../components/Button/Button';
 import { Icon } from '../../components/Icon/Icon';
@@ -9,19 +9,13 @@ import { ProgressBar } from '../../components/ProgressBar/ProgressBar';
 import type { Id } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import { parentPaths } from '../parent/paths';
-import { useMicrophone } from '../reading/useMicrophone';
-import { childPaths, sessionPaths } from '../session/paths';
-import {
-  useLoadSession,
-  useSession,
-  useSessionDevices,
-  useSessionStore,
-} from '../session/sessionContext';
+import { childPaths } from '../session/paths';
+import { useLoadSession, useSession } from '../session/sessionContext';
 import { StatusScreen } from '../session/StatusScreen';
 import { useDayRefresh } from '../session/useDayRefresh';
-import { sessionListens } from '../session/views';
 import styles from './LibraryPage.module.css';
 import { libraryPaths } from './paths';
+import { useReadBook } from './useReadBook';
 import { type LibraryBook, libraryView } from './views';
 
 interface BookCardProps {
@@ -69,11 +63,7 @@ export function LibraryPage() {
   useDayRefresh();
   const status = useSession((state) => state.status);
   const data = useSession((state) => state.data);
-  const store = useSessionStore();
-  const { audio } = useSessionDevices();
-  const microphone = useMicrophone(audio, data === null ? false : sessionListens(data));
-  const navigate = useNavigate();
-  const [starting, setStarting] = useState(false);
+  const { read, starting } = useReadBook();
   const seriesTitleId = useId();
   const booksTitleId = useId();
 
@@ -89,24 +79,6 @@ export function LibraryPage() {
   }
 
   const view = libraryView(data);
-  // A book's tap starts the day with it and opens the microphone, as G1's "Başla" does (T22).
-  const read = (bookId: Id) => {
-    microphone.start();
-    setStarting(true);
-    store
-      .getState()
-      .startWithBook(bookId)
-      .then(() => {
-        const session = store.getState().data?.session;
-        if (session !== undefined && session !== null) {
-          void navigate(sessionPaths[session.step]);
-        }
-      })
-      .catch(() => undefined)
-      .finally(() => {
-        setStarting(false);
-      });
-  };
 
   return (
     <div className={styles.library}>

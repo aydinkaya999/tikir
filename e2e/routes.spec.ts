@@ -177,7 +177,8 @@ const focusRoutes = [
     back: '/kitaplik',
   },
   {
-    path: '/kitaplik/ornek/hazir',
+    // The demo's sample book; a book the library does not have opens the library.
+    path: '/kitaplik/uzay-istasyonunda-gizemli-ses/hazir',
     title: 'Kitabın hazır',
     subtitle: 'Denetimden geçti, okunmaya hazır.',
     back: '/kitaplik',

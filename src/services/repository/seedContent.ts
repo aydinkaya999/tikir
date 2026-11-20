@@ -20,6 +20,8 @@ export interface SeedBook {
   source?: string;
   totalChapters: number;
   chapters: readonly SeedChapter[];
+  /** A made book's stuck words in its text (U4). */
+  insertedWords?: readonly string[];
 }
 
 const grades: readonly Grade[] = [1, 2, 3, 4];
@@ -50,6 +52,7 @@ export function bookFromSeed(json: SeedBook): Book {
     grade: asGrade(json.grade),
     source: sources.find((source) => source === json.source) ?? 'series',
     totalChapters: json.totalChapters,
+    ...(json.insertedWords === undefined ? {} : { insertedWords: [...json.insertedWords] }),
     chapters: json.chapters.map((chapter) => ({
       number: chapter.number,
       title: chapter.title,

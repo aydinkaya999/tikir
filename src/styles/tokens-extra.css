@@ -132,6 +132,10 @@
   --size-card-group: 17px;
   /* U3, U4: Tıkır's bubble in a focus page's side column, 15 px on phones, 18 px later. */
   --size-bubble-focus: 15px;
+  /* U4: the book's title beside its cover (22 px on phones, 30 px from 700 px) and the inserted
+     words' chips (15 px on phones, 16 px from 700 px). */
+  --size-book-heading: 22px;
+  --size-inserted-word: 15px;
   /* U2: the numbered boxes of "Kitap böyle hazırlanır" (tablet and web). */
   --size-step-number: 15px;
   --radius-step-number: 8px;
@@ -161,6 +165,8 @@
     --size-strip-link: 16px;
     --size-card-group: 21px;
     --size-bubble-focus: 18px;
+    --size-book-heading: 30px;
+    --size-inserted-word: 16px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;
