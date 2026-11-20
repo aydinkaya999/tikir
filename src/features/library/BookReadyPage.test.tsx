@@ -117,6 +117,30 @@ describe('BookReadyPage (U4)', () => {
     expect(screen.getByText('Yarın okuyabilirsin.')).toBeInTheDocument();
   });
 
+  it('resumes the session of the book read today, as G1 does', async () => {
+    const user = userEvent.setup();
+    const { router, devices } = await renderApp(sample, { book: 'uzay-istasyonunda-gizemli-ses' });
+
+    expect(await screen.findByRole('button', { name: 'Sürdür' })).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'Okumaya başla' })).toBeNull();
+    expect(screen.queryByText('Yarın okuyabilirsin.')).toBeNull();
+    await user.click(screen.getByRole('button', { name: 'Sürdür' }));
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/seans/isinma');
+    });
+    expect(devices.audio.start).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps another book for tomorrow while today’s session reads one', async () => {
+    await renderApp('/kitaplik/dinozorlar-neden-buyuktu/hazir', {
+      book: 'uzay-istasyonunda-gizemli-ses',
+    });
+
+    expect(await screen.findByRole('button', { name: 'Okumaya başla' })).toBeDisabled();
+    expect(screen.getByText('Yarın okuyabilirsin.')).toBeInTheDocument();
+  });
+
   it('makes a book from a request again under its own id, and stays on it', async () => {
     const user = userEvent.setup();
     const books = new MockBookGenerator({ delayMs: 0 });

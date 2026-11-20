@@ -114,14 +114,14 @@ export function BookReadyPage() {
             size="large"
             icon="play"
             fullWidth
-            disabled={!view.canStart || starting}
+            disabled={view.start === 'tomorrow' || starting}
             onClick={() => {
               read(book.id);
             }}
           >
-            {copy.start}
+            {view.start === 'resume' ? copy.resume : copy.start}
           </Button>
-          {!view.canStart && (
+          {view.start === 'tomorrow' && (
             // TODO(design): docs/ekranlar.md's default while today has its session (D18).
             <p className={styles.tomorrow}>{tr.library.tomorrow}</p>
           )}

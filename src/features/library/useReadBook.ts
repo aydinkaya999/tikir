@@ -9,7 +9,7 @@ import { useSession, useSessionDevices, useSessionStore } from '../session/sessi
 import { sessionListens } from '../session/views';
 
 export interface ReadBook {
-  /** Starts today's session with the book and opens its first step. */
+  /** Starts today's session with the book, or resumes the one that reads it, at its step. */
   read: (bookId: Id) => void;
   /** The session is starting: the taps wait. */
   starting: boolean;
@@ -23,9 +23,13 @@ export function useReadBook(): ReadBook {
   const navigate = useNavigate();
   const [starting, setStarting] = useState(false);
 
-  // The tap opens the microphone, as G1's "Başla" does for the warmup (docs/kararlar.md T22).
+  // The tap that leads into a listening step opens the microphone, as G1's "Başla" and "Sürdür"
+  // do (docs/kararlar.md T22): a new session opens with its warmup.
   const read = (bookId: Id) => {
-    microphone.start();
+    const step = data?.session?.step ?? 'warmup';
+    if (step === 'warmup' || step === 'read') {
+      microphone.start();
+    }
     setStarting(true);
     store
       .getState()

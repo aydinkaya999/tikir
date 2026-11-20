@@ -29,12 +29,15 @@ describe('libraryView (U1)', () => {
       ['dinozorlar-neden-buyuktu', 'Dinozorlar Neden Büyüktü?', 'Velin ekledi'],
     ]);
     expect(view.books[0]?.patterns).toEqual(coverPatterns('uzay-istasyonunda-gizemli-ses'));
-    expect(view.canStart).toBe(true);
   });
 
   it('keeps the books for tomorrow once today has its session (P5)', async () => {
-    expect(libraryView(await demoData({ step: 'read-1' })).canStart).toBe(false);
-    expect(libraryView(await demoData({ step: 'done' })).canStart).toBe(false);
+    for (const step of ['read-1', 'done'] as const) {
+      expect(libraryView(await demoData({ step })).books.map((book) => book.state)).toEqual([
+        'tomorrow',
+        'tomorrow',
+      ]);
+    }
   });
 });
 
@@ -105,5 +108,37 @@ describe('readyView for a book from cards (review finding 1)', () => {
 
     expect(view.passed).toBe(true);
     expect(view.level[0]).toEqual({ text: '3. sınıf düzeyine uygun', ok: true });
+  });
+});
+
+describe('the book read today (review finding 2)', () => {
+  const cardsBook = 'uzay-istasyonunda-gizemli-ses';
+
+  it('resumes the book today’s session reads; the others wait for tomorrow', async () => {
+    const data = await demoData({ book: cardsBook });
+
+    expect(libraryView(data).books.map((book) => [book.id, book.state])).toEqual([
+      [cardsBook, 'resume'],
+      ['dinozorlar-neden-buyuktu', 'tomorrow'],
+    ]);
+    const today = data.books.find((book) => book.id === cardsBook);
+    const other = data.books.find((book) => book.id === 'dinozorlar-neden-buyuktu');
+    if (today === undefined || other === undefined) {
+      throw new Error('No sample books.');
+    }
+    expect(readyView(data, today).start).toBe('resume');
+    expect(readyView(data, other).start).toBe('tomorrow');
+  });
+
+  it('starts any book on a day without a session, and none once the day is done', async () => {
+    expect(libraryView(await demoData()).books.map((book) => book.state)).toEqual([
+      'start',
+      'start',
+    ]);
+    expect(
+      libraryView(await demoData({ book: cardsBook, step: 'done' })).books.map(
+        (book) => book.state,
+      ),
+    ).toEqual(['tomorrow', 'tomorrow']);
   });
 });

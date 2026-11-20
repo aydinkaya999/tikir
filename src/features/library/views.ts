@@ -11,19 +11,36 @@ import type { Book, Id } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import type { SessionData } from '../session/sessionStore';
 
+/**
+ * What a book's tap does today (P5, P18): `start` the day with it while the day has no session,
+ * `resume` the unfinished session that reads it, else nothing until tomorrow ("Yarın
+ * okuyabilirsin.").
+ */
+export type BookToday = 'start' | 'resume' | 'tomorrow';
+
 export interface LibraryBook {
   id: Id;
   title: string;
   /** "Kartlarla yaptın" or "Velin ekledi". */
   source: string;
   patterns: readonly [TilePattern, TilePattern];
+  state: BookToday;
 }
 
 export interface LibraryView {
   series: { title: string; completed: number; total: number; progress: string };
   books: LibraryBook[];
-  /** A book starts today's session only while the day has none (P5); else "Yarın okuyabilirsin.". */
-  canStart: boolean;
+}
+
+/** Today's session reads the book and is not over: its tap resumes it, as G1's "Sürdür" does. */
+export function bookToday(data: Pick<SessionData, 'session'>, bookId: Id): BookToday {
+  const { session } = data;
+  if (session === null) {
+    return 'start';
+  }
+  return session.chapterRef.bookId === bookId && session.completedAt === undefined
+    ? 'resume'
+    : 'tomorrow';
 }
 
 /** The patterns a book's cover takes: cini-1 is the series' own (U1). */
@@ -64,8 +81,8 @@ export function libraryView(data: SessionData): LibraryView {
       title: book.title,
       source: sourceOf(book),
       patterns: coverPatterns(book.id),
+      state: bookToday(data, book.id),
     })),
-    canStart: data.session === null,
   };
 }
 
@@ -97,8 +114,8 @@ export interface ReadyView {
   backendNote: boolean;
   /** "Yeniden üret": a book made from a request that no session has read (karar 29). */
   canRemake: boolean;
-  /** "Okumaya başla" while today has no session (P5); else "Yarın okuyabilirsin.". */
-  canStart: boolean;
+  /** "Okumaya başla" on a day without a session, "Sürdür" for the book read today (P5, P18). */
+  start: BookToday;
 }
 
 const oneDecimal = new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 1 });
@@ -166,6 +183,6 @@ export function readyView(data: SessionData, book: Book): ReadyView {
     canRemake:
       request !== undefined &&
       !data.sessions.some((session) => session.chapterRef.bookId === book.id),
-    canStart: data.session === null,
+    start: bookToday(data, book.id),
   };
 }

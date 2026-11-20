@@ -83,6 +83,24 @@ describe('LibraryPage (U1)', () => {
     expect(screen.getByRole('button', { name: 'Dinozorlar Neden Büyüktü?' })).toBeDisabled();
   });
 
+  it('lets the book read today resume the session, the others wait for tomorrow', async () => {
+    const user = userEvent.setup();
+    const { router } = await renderApp('/kitaplik', { book: 'uzay-istasyonunda-gizemli-ses' });
+
+    const today = await screen.findByRole('button', { name: 'Uzay İstasyonunda Gizemli Ses' });
+    expect(today).toBeEnabled();
+    expect(today).toHaveAccessibleDescription('Kartlarla yaptın');
+    const other = screen.getByRole('button', { name: 'Dinozorlar Neden Büyüktü?' });
+    expect(other).toBeDisabled();
+    expect(other).toHaveAccessibleDescription('Velin ekledi Yarın okuyabilirsin.');
+
+    await user.click(today);
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/seans/isinma');
+    });
+  });
+
   it('lets a book start the new day when the library stays open past midnight', async () => {
     vi.useFakeTimers({
       shouldAdvanceTime: true,

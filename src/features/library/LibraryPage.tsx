@@ -124,8 +124,8 @@ export function LibraryPage() {
             <BookCard
               key={book.id}
               book={book}
-              disabled={!view.canStart || starting}
-              tomorrow={!view.canStart}
+              disabled={book.state === 'tomorrow' || starting}
+              tomorrow={book.state === 'tomorrow'}
               onRead={read}
             />
           ))}

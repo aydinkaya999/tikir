@@ -403,6 +403,8 @@ export const tr = {
       backendNote: 'Kelime yerleştirme ve sorular arka uçla gelecek.',
       bubble: 'Kitabın hazır. Önce ben okuyayım, sonra sıra sende.',
       start: 'Okumaya başla',
+      /** The book today's unfinished session reads: G1's word for going on (D18). */
+      resume: 'Sürdür',
       remake: 'Yeniden üret',
     },
   },
