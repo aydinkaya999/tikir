@@ -45,7 +45,11 @@ Geliştirme rotaları (üretim derlemesine girmez): `/gelistirme/vitrin`, `/geli
 
 Seans kabuğunun ortak parçaları: kapat düğmesi (sol üst), beş adım karosu (biten turkuaz ve onay işaretli, geçerli safran, sıradaki beyaz), "3 / 5" sayacı, Tıkır ve konuşma balonu, alt denetim çubuğu.
 
-Kapat düğmesi onay sorar ("Seanstan çıkılsın mı?"). Çıkılırsa adım kaydedilir ve G1'deki "Başla" düğmesi "Sürdür" olur. Bu onay penceresinin tasarımı yok.
+Kapat düğmesi onay sorar ("Seanstan çıkılsın mı?"). Çıkılırsa adım kaydedilir ve G1'deki "Başla" düğmesi "Sürdür" olur. Bu onay penceresinin tasarımı yok. G7'de kapat düğmesi sormadan G1'e döner.
+
+**Dinlemesiz seans** (Faz 2b; `docs/kararlar.md` P13): veli ses onayı vermediyse seans mikrofonsuz yürür; ayrıntı `docs/dinleme-hatti.md`, bölüm 1. Tasarımı yok.
+
+**Tasarımı olmayan durumların metinleri** (yükleniyor, depo hatası, mikrofon sorunları, dinlemesiz seans, G6'nın yanlış cevabı, Albüm ve Stüdyo'nun boş hâli): `docs/planlar/faz-2b.md` → "Tasarımı olmayan durumların metinleri"; onay `docs/kararlar.md` D15.
 
 ### G1 Yol
 
@@ -54,6 +58,7 @@ Kapat düğmesi onay sorar ("Seanstan çıkılsın mı?"). Çıkılırsa adım k
 - **Karo durumları:** `done` (desenli çini), `today` (safran zemin, Tıkır), `locked` (kesik çizgili, kilit).
 - **Üst üste gün:** seansı bitirilen ardışık gün sayısı. Bugünün seansı henüz yapılmadıysa dünle biten seri sayılır. 2'den küçükse etiket gizlenir. Seri bozulunca uyarı ya da ceza gösterilmez.
 - **Bugün bittiyse:** bölüm kartı "Bugünlük bitti" durumuna geçer ve "Başla" yerine yarının bölüm adı görünür. Bu durumun tasarımı yok; G7'deki "Yarın" kartını kullan.
+- **Tıkır'ın balonu** (tablet ve web): "Bugün {n}. bölümü okuyoruz: {başlık}. Hazırsan başlayalım." (D13). İçerik her bölüme bir giriş cümlesi yazınca onun yerine geçer (C6).
 - **Geçiş:** Başla → G2.
 
 ### G2 Isınma
@@ -62,6 +67,8 @@ Kapat düğmesi onay sorar ("Seanstan çıkılsın mı?"). Çıkılırsa adım k
 - **İçerik:** kart sayacı (1 / 3), kelime, heceleri, büyüyen kelime zinciri, "Evcilleşmesine N doğru okuma kaldı". Zinciri olmayan kelimede "Büyüyen kelime" bölümü, kartı olmayan kelimede (günü gelen kart yokken metinden seçilen kelimeler) evcilleşme satırı gizlenir.
 - **Akış:** Çocuk kelimeyi sesli okur. Doğruysa sıradaki karta geçilir. Yanlışsa Tıkır kelimeyi seslendirir ve bir kez daha denetir; ikinci denemeden sonra sonuç ne olursa olsun geçilir.
 - **Denetimler:** kelimeyi dinle, mikrofon, ileri.
+- **Hece karoları:** Tıkır kelimeyi seslendirirken heceler sırayla vurgulanır; vurgu seslendirmenin hece hızını izler. Çocuk okurken vurgu yoktur; gerçek dinleyici hece zamanı verirse (Faz 6) çocuğun okumasını da izleyebilir.
+- **Kelime zinciri:** kökten bugünkü kelimeye basamaklar. Bilinen basamaklar onay işaretli, son basamak bugünkü kelimedir.
 - **Geçiş:** son karttan sonra → G3.
 
 ### G3 Dinle
@@ -94,7 +101,9 @@ Uygulamanın kalbi. Ayrıntılı davranış `docs/dinleme-hatti.md` içinde.
 
 - **İçerik:** kayıt süresi, dalga biçimi ve oynat düğmesi, "Sesli kitabına eklendi", kayıtlı bölüm sayısı, "Ailene dinlet", Tıkır'ın yorumu.
 - **Tıkır'ın yorumu** yalnız doğruysa söylenir: "Bu, bugünkü en akıcı okuman oldu." üçüncü okumanın `wcpm` değeri ilk ikisinden yüksekse görünür. Değilse nötr bir cümle kullanılır (tasarımı yok: "Kaydın hazır.").
-- **Gönder:** kaydı "veli onayı bekliyor" olarak işaretler. Veli tarafındaki onay ekranının tasarımı yok.
+- **Dalga biçimi:** kaydın 64 ses düzeyinden çizilir: telefonda 26, tablet ve webde 36 çubuk, her çubuk kendi grubunun en yükseği. Kayıt çalarken çalınan kısım safran, kalanı açık turkuazdır; durağanken hepsi açık turkuaz. Çalan kaydın düğmesi "Duraklat" olur.
+- **Gönder:** kaydı "veli onayı bekliyor" olarak işaretler; düğme pasifleşir ve "Veli onayı bekliyor" yazar. Veli tarafındaki onay ekranının tasarımı yok.
+- **Kayıt yoksa** (kayıt başlatılamadı ya da bulunamadı) kartın yerinde hata cümlesi görünür; "Baştan kaydet" ve "Devam et" çalışır.
 - **Baştan kaydet:** G4'e 3. okuma olarak döner.
 - **Geçiş:** Devam et → G6.
 
@@ -102,7 +111,7 @@ Uygulamanın kalbi. Ayrıntılı davranış `docs/dinleme-hatti.md` içinde.
 
 - **İçerik:** 2 soru, her biri 3 seçenek; seçenek sırası her gösterimde karışır.
 - **"Metne geri dön":** metni salt okunur bir katmanda açar; seansı geri sarmaz.
-- **Yanıt yanlışsa:** doğru seçenek sakin biçimde gösterilir ve ilgili cümle metinde vurgulanır. Çocuğa puan ya da "yanlış" yazısı gösterilmez. Bu durumun tasarımı yok.
+- **Yanıt yanlışsa:** doğru seçenek sakin biçimde gösterilir: onay işareti ve "Doğru cevap" etiketi; balon "Doğru cevabı işaretledim.", düğme "Devam et" (D14). Çocuğa puan ya da "yanlış" yazısı gösterilmez. İlgili cümlenin metinde vurgulanması, içerik her soruya kendi cümlesini ekleyince gelir (C7). Bu durumun tasarımı yok.
 - **Geçiş:** ikinci sorudan sonra → G7.
 
 ### G7 Bugünlük bitti

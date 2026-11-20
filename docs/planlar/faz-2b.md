@@ -59,7 +59,7 @@
 - [x] Task 15: G7 Bugünlük bitti
 - [x] Task 16: Albüm ve Stüdyo
 - [x] Task 17: Uçtan uca seans testleri
-- [ ] Task 18: Belgeler, tasarım karşılaştırması ve denetim
+- [x] Task 18: Belgeler, tasarım karşılaştırması ve denetim
 
 ## Ürün sahibinin yanıtları (2026-11-20)
 
@@ -377,14 +377,14 @@ Hepsi `src/i18n/tr.ts` içine `TODO(design)` yorumuyla girer (D15). Kaynağı be
 
 | # | Yol haritası ölçütü (Faz 2) | Kanıt | Görev |
 |---|---|---|---|
-| 1 | `typical` ile G1'den G7'ye seans; G1, G2 ve G7 `expected` değerleri | `e2e/session.spec.ts` › "a typical session runs from G1 to G7 with the demo profile's numbers" | 17 |
+| 1 | `typical` ile G1'den G7'ye seans; G1, G2 ve G7 `expected` değerleri | `e2e/session.spec.ts` › "a typical session runs from G1 to G7 with the demo profile’s numbers" | 17 |
 | 2 | `design` senaryosunda G4 görüntüsü tasarımdaki anı gösterir | `e2e/session-design.spec.ts` › "the design scenario reaches the G4 moment"; `pnpm shots` görüntüsü | 12, 17 |
 | 3 | 3 sn'de yardım balonu, hece, seslendirme, `helped` | `e2e/session-design.spec.ts` (aynı test); `ReadPage.test.tsx` › "opens the help at three seconds and saves the word as helped" | 12, 17 |
 | 4 | Üçüncü okuma kaydedilir, G5'te dinlenir, "Baştan kaydet" yeni kayıt alır | `e2e/session.spec.ts` › "the third reading is recorded, played and recorded again"; `RecordPage.test.tsx` | 13, 17 |
 | 5 | Yenilenince seans kaldığı adımdan sürer | `e2e/session.spec.ts` (1. testte iki yenileme); `sessionStore.test.ts` › "a new store resumes at the same place" | 5, 17 |
 | 6 | Bitince sonuçlar depoda, takılınanlar kart, G1 "bugün bitti" | `e2e/session.spec.ts` (1. testin sonu, depo denetimi); `sessionStore.test.ts` | 5, 9, 17 |
-| 7 | Ertesi gün sıradaki bölüm, ısınmada dünün kelimeleri, G4'te "dün" imleci | `e2e/session.spec.ts` › "the next day opens the next chapter with yesterday's words and the ghost" | 17 |
-| 8 | Veli onayı kapalıyken mikrofon hiçbir adımda açılmaz | `e2e/session-consent.spec.ts` › "without the parent's consent the session runs unheard and never opens the microphone"; `useMicrophone.test.tsx`; G2 ve G4 testleri | 7, 10, 12, 17 |
+| 7 | Ertesi gün sıradaki bölüm, ısınmada dünün kelimeleri, G4'te "dün" imleci | `e2e/session.spec.ts` › "the next day opens the next chapter with yesterday’s words and the ghost" | 17 |
+| 8 | Veli onayı kapalıyken mikrofon hiçbir adımda açılmaz | `e2e/session-consent.spec.ts` › "without the parent’s consent the session runs unheard and never opens the microphone"; `useMicrophone.test.tsx`; G2 ve G4 testleri | 7, 10, 12, 17 |
 | 9 | Çocuğa olumsuz fark yok | `ReadPage.test.tsx` › "never shows a race sentence when the child is behind or level"; `DonePage.test.tsx` › "shows the gain over the previous session only when it is positive" | 12, 15 |
 | 10 | G1–G7 üç genişlikte tasarımla karşılaştırıldı | "Tasarım karşılaştırması" bölümü | 9–15, 18 |
 
@@ -1230,7 +1230,7 @@ export function doneView(data: SessionData): DoneView;
 **Adımlar:**
 
 - [x] **Kırmızı** (Chromium ve WebKit):
-  1. **`session.spec.ts` › "a typical session runs from G1 to G7 with the demo profile's numbers"** (ölçüt 1, 5, 6):
+  1. **`session.spec.ts` › "a typical session runs from G1 to G7 with the demo profile’s numbers"** (ölçüt 1, 5, 6):
      - `/?demo=cocuk-sabahi`.
      - **G1:** "Dar Patika", "4. bölüm, 12 dakika", "12 bölümün 3’ü tamam", "2 gün üst üste".
      - **G2:** "Başla" → kartlar sırasıyla kıvrılıyordu, ağaçlarının, belirdiğinde; ilk kartta "Evcilleşmesine 2 doğru okuma kaldı". Saat ilerler.
@@ -1248,7 +1248,7 @@ export function doneView(data: SessionData): DoneView;
      - "Kaydı dinle" → "Duraklat" → dokun → "Kaydı dinle";
      - "Baştan kaydet" → "3. okuma / 3"; saat ilerler → G5;
      - depoda 3. okumanın kayıt kimliği değişmiş, eski kayıt silinmiş.
-  3. **"the next day opens the next chapter with yesterday's words and the ghost"** (ölçüt 7):
+  3. **"the next day opens the next chapter with yesterday’s words and the ghost"** (ölçüt 7):
      - `/?demo=cocuk-sabahi&adim=done` → saat bir gün ileri → yenile;
      - G1 "Yıldız Tepesi", "5. bölüm, 12 dakika";
      - "Başla" → G2'de "tırmanmaya", "arasından", "rüzgârı";
@@ -1261,7 +1261,7 @@ export function doneView(data: SessionData): DoneView;
        - "Süre 0:19", "Doğru 13", "Takılma 1";
        - "Takıldın mı? Hecele: a-ğaç-la-rı-nın", "Dünkü senin 2 kelime önündesin.".
      - Saat 3000 ms ilerler → 14 `hesitation`, balon gizli.
-  5. **`session-consent.spec.ts` › "without the parent's consent the session runs unheard and never opens the microphone"** (ölçüt 8):
+  5. **`session-consent.spec.ts` › "without the parent’s consent the session runs unheard and never opens the microphone"** (ölçüt 8):
      - `getUserMedia` sayılır; `/?demo=cocuk-sabahi&onay=kapali`.
      - G1 "Başla"; G2'de iki kez "Sıradaki kelime" ve "Dinle adımına geç".
      - G3 saati ilerler, "Sıra sende".
@@ -1277,7 +1277,7 @@ export function doneView(data: SessionData): DoneView;
 
 **Dosyalar:** `docs/mimari.md`, `docs/dinleme-hatti.md`, `docs/ekranlar.md`, `docs/kararlar.md`, bu plan ("Tasarım karşılaştırması", "Kanıtlar").
 
-- [ ] **`docs/mimari.md`:**
+- [x] **`docs/mimari.md`:**
   - seans durum makinesi ve depo (Zustand), yeni alanlar;
   - `SessionProvider` ve servis seçimi;
   - mikrofon kuralı;
@@ -1285,23 +1285,23 @@ export function doneView(data: SessionData): DoneView;
   - `pnpm shots` adımları;
   - uçtan uca testlerde saat;
   - `features/session/paths.ts`.
-- [ ] **`docs/dinleme-hatti.md`:**
+- [x] **`docs/dinleme-hatti.md`:**
   - dinlemesiz seans (bölüm 1);
   - elle kipin tuşları ve `&senaryo=elle` (bölüm 3);
   - seslendirmenin geri dönüşü.
-- [ ] **`docs/ekranlar.md`:**
+- [x] **`docs/ekranlar.md`:**
   - G1 balonu (D13);
   - G2'de hece karoları ve zincir;
   - G5'te dalga biçimi;
   - G6'nın yanlış cevabı (D14, C7);
   - dinlemesiz seans ve tasarımı olmayan durumların metinlerine gönderme.
-- [ ] **`docs/kararlar.md`:**
+- [x] **`docs/kararlar.md`:**
   - "Tasarımdaki örnek veri tutarsızlıkları"na yeni maddeler: G5 "4’ü kayıtlı", G3'teki an (0:21);
   - değişiklik günlüğüne 2b satırı.
-- [ ] **Tasarım karşılaştırması:**
+- [x] **Tasarım karşılaştırması:**
   - G1–G7'nin üç genişlikteki görüntüleri bu plandaki komutlarla yeniden alınır;
   - her ekranın fark listesi tamamlanır (ölçüt 10).
-- [ ] **Denetim:**
+- [x] **Denetim:**
   - `pnpm check`;
   - `pnpm build`; `dist/` içinde şu dizgiler 0 dosyada:
     - `demo-profil`, `veli@example.com`, `Demo profili`, `Kuruluyor`, `gelistirme`, `fake-indexeddb`;
@@ -1312,7 +1312,7 @@ export function doneView(data: SessionData): DoneView;
   - `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`.
 
   Çıktılar "Kanıtlar"a yazılır. "Ölçütler ve kanıtları" tablosundaki test adları doğrulanır.
-- [ ] Commit: `docs: record phase 2b decisions and evidence`.
+- [x] Commit: `docs: record phase 2b decisions and evidence`.
 
 Sonra bütün dal bağımsız bir incelemeden geçer (executing-plans → "Final Review"). Düzeltmeler tek geçişte yapılır.
 
@@ -1417,8 +1417,33 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 
 ## Kanıtlar
 
-Uygulama sırasında doldurulur.
+- `pnpm check` → tip denetimi, ESLint, Stylelint ve Prettier temiz; **92 test dosyası, 716 test geçti**.
+- `pnpm build` → temiz. `dist/` içinde şu dizgilerin hiçbiri yok (`grep -rlF`, 0 dosya): `demo-profil`, `veli@example.com`, `Demo profili`, `Kuruluyor`, `gelistirme`, `fake-indexeddb`, `tikir.gelistirme.dinleyici`, ses denemesinin "Ses denemesi" ve "Ayarlar mikrofon bir sonraki açılışta uygulanır." metinleri, `gelistirme/yanki`. `FakeListener` artık ürün paketinde (karar 7).
+- `caffeinate -u -t 2; caffeinate -d -i pnpm e2e` → **172 passed** (Chromium ve WebKit, 1,3 dk). Faz 2a'nın 156 testine ek: geliştirme adres parametreleri, seansın uçtan uca üç testi, tasarım anı, veli onayı olmadan seans ve mikrofon açık bir okumada dış istek yokluğu.
+- Seans testleri ayrıca üç kez art arda koşuldu (`--repeat-each=3`): 60/60.
+- G1–G7 görüntüleri "Tasarım karşılaştırması"ndaki komutlarla yeniden alındı (21 dosya, `shots/`); fark listeleri yukarıda.
+- "Ölçütler ve kanıtları" tablosundaki test adları denetlendi: hepsi var (kesme işaretleri testlerdeki gibi ’).
 
 ## Uygulamada verilen kararlar
 
-Uygulama sırasında doldurulur.
+Ayrıntı ve "yanlışsa bedeli" uygulama defterinde; özetleri:
+
+1. **Dinleyici sekme ayarının anahtarı** `src/services/tabSettings.ts`'te durur (`tabSettingKeys.listener`): ürün kodu geliştirme modüllerini içe aktarmaz.
+2. **Kayıt testleri** (Task 3): iki test değişiklikten önce geçti; mevcut kod zaten öyle davranıyordu, gerileme koruması olarak kaldılar.
+3. **Kartların yazılması** (M8): planın varsaydığı yakalanmamış ret yoktu; asıl zarar daha büyüktü (temizlik işlenip kartlar kayboluyordu). İşlem artık hata verirse geri alınır, eski kartlar kalır.
+4. **`answerQuestion`** `boolean | null` döner: yok sayılan bir çağrı (yanlış yer, çift dokunma) yanlış cevap gibi görünmez.
+5. **Depo:** `load()` reddetmez (ekran durumu okur); yazan eylemler `error` durumuna geçip reddeder. Aynı anda tek eylem çalışır; ikincisi kuyruğa girmez, yok sayılır.
+6. **Depo, yayın:** Bir adım ancak bütün yazıları bitince yayınlanır (Task 11'de bulunan hata). Yayın eylemin son adımıdır ve eylemi bitirir; yeni durumla açılan ekran hemen eylem başlatabilir (Task 14; G6'nın açılışta seansı bitirmesi reddediliyordu).
+7. **`prepareSessionStep`** kendi deposunu kurar (seans 12 dakika önce başlamış sayılsın diye). Geçilmiş bir adım istenirse uyarır, seansı geri sarmaz. Onay yoksa dinlemesiz yolu yürür (Task 15).
+8. **Ses denemesinin sızması** (Task 7): planın kırmızı adımı yeniden üretilemedi (Rollup kullanılmayan kodu attı); taşıma yine yapıldı.
+9. **Ekran görüntüsünde saat** sayfa yüklendikten hemen sonra durdurulur; yüklenirken durdurulmaz.
+10. **G2:** Tıkır kelimeyi okurken mikrofon düğmesi "Dinliyor" kalır; yalnız çocuğun kendi duraklatması "Duraklatıldı" gösterir.
+11. **Web:** seans denetimleri balonun hemen altında; tablette sütunun dibinde (G2, G3, G4 web tasarımlarından ölçüldü).
+12. **G3:** `formatClock` önce tam milisaniyeye yuvarlar ("0:46" hatası). Kaymasız vurgunun geniş kelime aralığı korunur, fark listesinde durur.
+13. **G4:** Tıkır yardım anında da `listen` yüzündedir (tasarım böyle; plan `talk` diyordu). Yarış imleçleri gerçek konumdan çizilir; yakınken etiketler üst üste biner (açık soru 6).
+14. **G5:** Saf modülün adı `waveformBars.ts` (macOS'ta `waveform.ts` ile `Waveform.tsx` aynı modül sayılıyor). Tasarım anı 22,5 sn (23 sn telefonda yuvarlama sınırı). Kayıt yoksa "Ailene dinlet" kartı da gizlenir. Chip'e `turquoise` tonu ve üç yeni değişken eklendi.
+15. **G4 testleri:** seslendiricinin yüklenmesiyle yarışan iki test, kalan ekranı bekleyecek biçimde düzeltildi; G4'ün önce başlığı çizmesi her adımın kalıbı olduğu için kod değişmedi (bedeli: ekran okuyucu başlığı iki kez duyabilir).
+16. **G6:** Yanlış cevaptan sonra seçenekler pasifleşir ve işaretli olan doğru seçenektir; çocuğun kendi seçimi işaretli görünmez.
+17. **G7:** "Yarın" kartı 700 px'ten 14 px iç boşluk ve 60 px kare alır (G7 tablet tasarımı); G1'in "bugün bitti" hâli de aynı kartı gösterir.
+18. **Albüm ve Stüdyo:** G7'nin evcil kartları (`TamedWords`) ve G5'in kayıt kancaları (`playback.ts`) ortak kullanılır. `tamedWords` alan mantığındadır; bir bölüm iki kez kaydedildiyse Stüdyo son kaydı gösterir.
+19. **Uçtan uca testler:** Ekranlardan sonra yazıldıkları için kırmızı adımları görülemedi. Onay testinin `getUserMedia` sayacına olumlu bir denetim eklendi. Mikrofonu açan her dokunuştan sonra saat ancak "Dinliyor" görününce ilerletilir. Ertesi gün testi ısınma destesini depodan denetler. `routes.spec.ts` G4'ün hazır bölmesini ölçer.

@@ -30,7 +30,8 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 │   ├── assets/           design/svg çizimlerinin birebir kopyaları
 │   ├── components/       tasarım sistemi bileşenleri
 │   ├── features/
-│   │   ├── session/      günlük seans (G1–G7), Albüm, Stüdyo ve durum makinesi
+│   │   ├── session/      günlük seans (G1–G7), Albüm, Stüdyo, durum makinesi ve deposu;
+│   │   │                 paths.ts çocuk ekranlarının ve seans adımlarının adresleri
 │   │   ├── reading/      okuma metni, takip, hayalet, yarış çubuğu
 │   │   ├── onboarding/   K1–K4
 │   │   ├── library/      U1–U4
@@ -277,7 +278,15 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
 - Durum `Session.step` içinde tutulur ve her geçişte depoya yazılır; sayfa yenilense de seans kaldığı adımdan sürer.
 - `read` adımında her okuma bittiğinde `ReadingResult` hesaplanır, takılınan kelimeler `stuckWords` mantığına verilir.
 - `done` olunca `completedAt` yazılır; aynı gün yeni seans başlatılamaz.
-- Mikrofon yalnız `warmup`, `read` ve ölçüm sırasında açıktır; adım değişince ya da sekme gizlenince kapatılır.
+
+**Uygulama (Faz 2b, `src/features/session/`):**
+
+- **Makine** (`sessionMachine.ts`): saf geçişler. `placeOf(session)` kayıttan ekrandaki yeri türetir: ısınmada kart ve deneme, okumada okuma sırası ve "Baştan kaydet", kapanışta soru. `sessionRedirect` her seans adresini o anki adıma yönlendirir. Isınma destesi seansla birlikte yazılır (`Session.warmup`: kelimeler, biten kartlar, ilk denemesi geride kalan kartlar).
+- **Depo** (`sessionStore.ts`, Zustand `createStore`): ekranların okuduğu durum (`status`, `data`, `error`) ve depoya yazan eylemler. Aynı anda tek eylem çalışır; ikinci dokunuş yok sayılır. Bir eylem önce bütün yazılarını bitirir (seans, kartlar, eski kaydın silinmesi), sonra durumu yayınlar. Yayın eylemin son adımıdır ve eylemi bitirir: yeni durumla açılan bir ekran hemen bir eylem başlatabilir (G6, son cevabı yazılmış seansı açılınca bitirir). Yazı hata verirse durum `error` olur ve çağrı reddedilir.
+- **Ekranlar ve aygıtlar** (`SessionProvider`, `sessionContext.ts`): ekranlar depoyu ve `SessionDevices`'ı bağlamdan alır. `SessionDevices`: mikrofon (`AudioCapture`), seslendirici, kaydedici, her okuma için yeni bir dinleyici, geliştirme senaryosunun hayalet hızı ve sayfa düzeni, rastgelelik kaynağı (G6'nın karışık seçenekleri). Ürün derlemesinde aygıtları `src/app/services.ts` seçer: Faz 6'ya kadar dinleyici `FakeListener`'dır ve okumalar `typical` senaryosundandır (`docs/kararlar.md` T22, karar 7). Testler aynı yapıyı sahte aygıtlarla kurar.
+- **Yönlendirme** (`SessionGuard`): depo yüklenmeden adım çizilmez; her seans adresi o anki adımı açar. Bir ekran yalnız depoyu günceller, adres kendiliğinden değişir.
+- **Mikrofon kuralı** (`SessionRoot`, `paths.ts` → `listeningPaths`): mikrofon yalnız dinleyen adımlarda (G2, G4) açık kalır; adres dinlemeyen bir yere geçince kapatılır. Dinleyen adıma götüren dokunuş mikrofonu açar (G1 "Başla"/"Sürdür", G3 "Sıra sende", G5 "Baştan kaydet"); iPhone mikrofonu yalnız bir dokunuşun içinde açar. Veli onayı (`consent.voiceProcessing`) yoksa mikrofon hiçbir adımda açılmaz ve seans dinlemesiz sürer (`docs/kararlar.md` P13; `docs/dinleme-hatti.md`, bölüm 1).
+- **Okuma ve kayıt:** 3. okumada dinleyici ile kaydedici birlikte başlar ve biter; kayıt kimliği okumaya yazılır. Yarıda kalan okuma ve yarım kayıt yazılmaz. "Baştan kaydet"te eski kayıt, yeni okuma yazıldıktan sonra silinir.
 
 ## Depolama ve örnek veri
 
@@ -289,7 +298,12 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
   - `veli-haftasonu`: hafta bitmiş, ölçüm yapılmış. V1–V4 tasarımlarındaki sayılar.
 - Dosyadaki günler görelidir (`day`); yükleyici kipin `anchor` gününü takvime oturtur: `cocuk-sabahi` kipinde bugüne, `veli-haftasonu` kipinde bugünden önceki en yakın pazara (hafta şeridi tasarımdaki günlere denk gelsin diye). Okumalar ve ölçümler sahte dinleyici senaryosu biçimindedir; yükleyici onları `FakeListener` ile aynı benzetimden geçirip `ReadingResult` üretir. Dosyanın `expected` alanı, ekranlarda görülmesi gereken sayıları verir; testlerde kullan.
 - Kurulum akışı yazılana kadar (Faz 3) geliştirme derlemesi, profil yoksa `cocuk-sabahi` kipini kendiliğinden yükler.
-- Geliştirme derlemesinde adres parametreleri bir ekranı doğrudan istenen durumda açar: `?demo=<kip>` depoyu o kipe kurar, `&adim=<adım>` seansı o adıma getirir (örnek: `/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design`). Ekran görüntüsü betiği ve uçtan uca testler bunu kullanır; üretim derlemesinde yoktur.
+- **Geliştirme adres parametreleri** (Faz 2b, `src/features/dev/params/`) bir ekranı doğrudan istenen durumda açar. Ekran görüntüsü betiği ve uçtan uca testler bunları kullanır; üretim derlemesinde yoktur.
+  - `?demo=<kip>`: depoyu temizleyip o kipi kurar (`cocuk-sabahi`, `veli-haftasonu`).
+  - `&adim=<adım>`: bugünün seansını o adıma getirir: `warmup`, `listen`, `read-1`, `read-2`, `read-3`, `record`, `wrapUp`, `done`. Adımlar uygulamanın kendi eylemleriyle yürünür; okumalar senaryonun okumalarıdır, `record` ve sonrası için 52 sn'lik yapay bir kayıt yazılır. Seans 12 dakika önce başlamış sayılır (G7'deki "12 dakika").
+  - `&senaryo=<ad>`: o sekmede dinleyicinin senaryosu (`typical`, `design`…); `elle` sahte dinleyiciyi tuşlarla yürütür (`docs/dinleme-hatti.md`, bölüm 3). Sekme ayarıdır (`sessionStorage`, `tikir.gelistirme.dinleyici`); sekme kapanınca biter.
+  - `&onay=kapali`: velinin ses onayını kaldırır. `&adim=` o zaman dinlemesiz yolu yürür: ısınma kartları puansız geçilir, okumalar dinlenmeden okunur.
+  - Parametreler uygulama yüklenmeden önce bir kez uygulanır (`main.tsx`) ve adresten silinir; sayfa yenilenince yeniden kurulmaz. Örnek: `/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design`.
 
 ## Test
 
@@ -301,6 +315,10 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
 | Görsel | Her ekran 390, 1180 ve 1440 px genişlikte (`pnpm shots`); `design/png` ile yan yana karşılaştırma ve fark listesi |
 
 Piksel piksel eşitlik beklenmez (yazı tipi işleme farkları olur). Beklenen: aynı düzen, aynı metin, aynı renkler, taşma ve kırpılma yok.
+
+**Ekran görüntüsünde adımlar** (`pnpm shots`, Faz 2b): `--dokun <ad>` o erişilebilir adı taşıyan düğmeye, bağlantıya ya da seçeneğe dokunur, `--bekle <ad>` o adla bir öğeyi bekler, `--ileri <ms>` saati ilerletir. Adımlar her rotada, verildiği sırayla çalışır. Saat sayfadan önce kurulur ve sayfa yüklenince durdurulur; sayfada konuşma sentezi yoktur, Tıkır'ın seslendirmesi sessizce saate göre zamanlanır. Seans ekranlarının komutları: `docs/planlar/faz-2b.md` → "Tasarım karşılaştırması".
+
+**Uçtan uca testlerde saat** (`e2e/support/session.ts`): saat sabit bir güne kurulur, sayfa yüklenince durdurulur ve yalnız test ilerletir (`page.clock.runFor`). Bir sonraki adım depoya yazıları bekler; yazılar saate değil gerçek zamana bağlıdır. Bu yüzden testler saati küçük adımlarla, beklenen öğe görünene kadar ilerletir. Mikrofonu açan her dokunuştan sonra saat ancak mikrofon dinlemeye başlayınca ilerletilir: yakalama, yeni açılan bir izin susmuş sayılması için saate bağlı bir süre bekler ve saat hızla ilerlerse bu süre ilk sesten önce dolar. Sayfada konuşma sentezi yoktur.
 
 ## Capacitor'a hazır kalmak için
 

@@ -101,6 +101,8 @@ Tuvaldeki ekranlar tek bir andan değil, ayrı ayrı örnek anlardan çizildi. A
 5. Tarihler ("16 Kasım Pazar") 2025 takvimine göredir. Demo profilinde günler görelidir.
 6. U4 "180 kelime, 2,6 hece, 7 kelime" der; örnek kitabın gerçek değerleri 176 kelime, 2,5 hece ve 5,9 kelimedir. Ekranda gerçek hesap görünür.
 7. V3'teki bant etiketi "%90–98"dir; sınıflama yuvarlanmamış değerle yapılır (%99'un altı öğretim düzeyi).
+8. G5 "12 bölümün 4’ü kayıtlı" der; demo profilinin eski seanslarında ses kaydı yoktur, uygulama "12 bölümün 1’i kayıtlı" gösterir (Faz 2b).
+9. G3 o anki üniteyi "yukarıya kıvrılıyordu." gösterir ve "0:21 / 0:47" der; bizim zamanlamamızda bu ünite 0:16,5 ile 0:20 arasında okunur, 0:21'de sıradaki ünite vurgulanır. Telefon tasarımı aynı anda başka bir üniteyi ("Dar patika,") vurgular. Ekran görüntüsü 0:18'de alınır (Faz 2b).
 
 ## Ürün sahibinin yanıtlaması gerekenler
 
@@ -162,3 +164,4 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-20: Faz 2a planı onaylandı: rakamların okunuşu (C5) ve `design` senaryosunun sayfaları (D12); 12. ve 14. sorular yanıtlandı.
 - 2026-11-20: Faz 2a: `idb` ve `fake-indexeddb` bağımlılıkları; okuma kaydı (T21); seslendirme ayrıntısı (T8 notu); `docs/mimari.md` ve `docs/dinleme-hatti.md` güncellendi (tarih, ilerleme, servis klasörleri, yardım akışı, senaryo tablosu).
 - 2026-11-20: Faz 2b planı onaylandı: dinlemesiz seans (P13), G1 balonu (D13), G6'da yanlış cevap (D14), tasarımı olmayan durumların metinleri (D15), seslendirmenin geri dönüşü (T8 notu), seansın mikrofonu (T22); açık içerik soruları C6 ve C7.
+- 2026-11-20: Faz 2b: G1–G7, Albüm ve Stüdyo; seans durum makinesi ve deposu (`docs/mimari.md` → "Seans durum makinesi"); geliştirme adres parametrelerinin son hali; tasarım tutarsızlıklarına 8. ve 9. maddeler; `docs/dinleme-hatti.md` (dinlemesiz seans, elle kip, seslendirmenin geri dönüşü) ve `docs/ekranlar.md` (G1 balonu, G2 karoları, G5 dalga biçimi, G6 yanlış cevap) güncellendi.
