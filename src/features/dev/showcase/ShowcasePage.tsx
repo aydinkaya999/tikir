@@ -8,6 +8,8 @@ import {
   SwitchDemo,
   TextAreaDemo,
   TextFieldDemo,
+  ChoicePillsDemo,
+  DialogDemo,
 } from './FormDemo';
 import { IconDemo } from './IconDemo';
 import { BookCoverDemo, CompanionDemo, MonsterDemo, TileDemo } from './IllustrationDemo';
@@ -46,6 +48,8 @@ export function ShowcasePage({ repository, today }: DemoProfileSectionProps) {
       <SwitchDemo />
       <CheckboxDemo />
       <TextFieldDemo />
+      <ChoicePillsDemo />
+      <DialogDemo />
       <TextAreaDemo />
       <StatCardDemo />
       <LineChartDemo />

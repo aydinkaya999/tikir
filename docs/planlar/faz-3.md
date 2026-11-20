@@ -334,7 +334,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
 - [x] Task 4: Geliştirme parametreleri ve boş depo
 - [x] Task 5: Kurulum koruması ve yönlendirme
-- [ ] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
+- [x] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
 - [ ] Task 7: Kurulum çatısı
 - [ ] Task 8: K1 Veli hesabı
 - [ ] Task 9: K2 Okuyucu profili
@@ -586,7 +586,7 @@ ChoicePills<T extends string>({ label: string; options: readonly { value: T; lab
   mode: 'single' | 'multiple'; value: readonly T[]; onChange: (value: T[]) => void; max?: number; className?: string })
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. `TextField` hata verince `aria-invalid="true"` olur, hata metni `aria-describedby` ile bağlanır; ipucu da öyle.
   2. `Dialog`:
      - `open` olunca modal açılır, başlık pencerenin adıdır.
@@ -600,10 +600,10 @@ ChoicePills<T extends string>({ label: string; options: readonly { value: T; lab
      - `max: 3` dolunca öteki düğmeler `aria-disabled` olur ve dokunuş seçimi değiştirmez.
      - Seçili düğme yeniden dokununca bırakılır.
   5. G6'nın metin katmanı ve çıkış onayı testleri `Dialog` ile aynen geçer.
-- [ ] → FAIL.
-- [ ] Uygula. Seçim düğmesinin değerleri (yükseklik, kenar, yarıçap, seçili zemin ve onay işareti) K2 tasarımından ölçülür. Token'da olmayan değerler kaynağıyla `tokens-extra.css`'e girer. Vitrine üç bileşen de eklenir.
-- [ ] → PASS. `pnpm check`. Vitrin görüntüsü (`pnpm shots '/gelistirme/vitrin'`) taşmasız.
-- [ ] Commit: `feat(components): add field errors, a dialog and choice pills`.
+- [x] → FAIL.
+- [x] Uygula. Seçim düğmesinin değerleri (yükseklik, kenar, yarıçap, seçili zemin ve onay işareti) K2 tasarımından ölçülür. Token'da olmayan değerler kaynağıyla `tokens-extra.css`'e girer. Vitrine üç bileşen de eklenir.
+- [x] → PASS. `pnpm check`. Vitrin görüntüsü (`pnpm shots '/gelistirme/vitrin'`) taşmasız.
+- [x] Commit: `feat(components): add field errors, a dialog and choice pills`.
 
 ### Task 7: Kurulum çatısı
 
