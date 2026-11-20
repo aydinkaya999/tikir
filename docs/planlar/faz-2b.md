@@ -45,7 +45,7 @@
 - [x] Task 1: Seslendirmede sayfanın kalanı sessiz
 - [x] Task 2: Seans ekranlarının alan kuralları
 - [x] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
-- [ ] Task 4: Seans durum makinesi
+- [x] Task 4: Seans durum makinesi
 - [ ] Task 5: Seans deposu
 - [ ] Task 6: Geliştirme adres parametreleri
 - [ ] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
@@ -595,7 +595,7 @@ Geçiş, oturum beklenen adımda değilse `Error('Not at <step>')` fırlatır. D
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `sessionMachine.test.ts`:
+- [x] **Kırmızı:** `sessionMachine.test.ts`:
   1. **Başlangıç:** `createSession` → `step: 'warmup'`, `warmup: {words, done: 0, scored: 0}`, okuma ve yanıt yok. Kelime yoksa `step: 'listen'`.
   2. **Isınma:**
      - `afterWarmupScore(…, true)` → `done` 1, `scored` 1; üçüncü kartta `listen`;
@@ -627,9 +627,9 @@ Geçiş, oturum beklenen adımda değilse `Error('Not at <step>')` fırlatır. D
      | herhangi | `/kitaplik` | `null` |
   8. **Yanlış adım:** `afterListen` bir `warmup` oturumunda fırlatır.
   - `routes.test.ts`: `screenPaths.G2…G7` `sessionPaths` ile aynı; mevcut testler değişmeden geçer.
-- [ ] `pnpm test src/features/session/sessionMachine.test.ts` → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): add the session state machine`.
+- [x] `pnpm test src/features/session/sessionMachine.test.ts` → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): add the session state machine`.
 
 ### Task 5: Seans deposu
 

@@ -1,19 +1,20 @@
 // Route table (docs/ekranlar.md, "Rotalar"). Screen codes are the keys the docs and the design
 // files use, so a path can always be traced back to its screen.
+import { childPaths, sessionPaths } from '../features/session/paths';
 
 export const screenPaths = {
-  G1: '/',
-  G2: '/seans/isinma',
-  G3: '/seans/dinle',
-  G4: '/seans/oku',
-  G5: '/seans/kayit',
-  G6: '/seans/kapanis',
-  G7: '/seans/bitti',
+  G1: childPaths.road,
+  G2: sessionPaths.warmup,
+  G3: sessionPaths.listen,
+  G4: sessionPaths.read,
+  G5: sessionPaths.record,
+  G6: sessionPaths.wrapUp,
+  G7: sessionPaths.done,
   K1: '/kurulum/hesap',
   K2: '/kurulum/okuyucu',
   K3: '/kurulum/seviye',
   K4: '/kurulum/tanisma',
-  U1: '/kitaplik',
+  U1: childPaths.library,
   U2: '/veli/kitap',
   U3: '/kitaplik/kur',
   U4: '/kitaplik/:bookId/hazir',
@@ -27,8 +28,8 @@ export type ScreenCode = keyof typeof screenPaths;
 
 /** Child tabs without a design yet (docs/ekranlar.md, "Tasarımı olmayan durumlar"). */
 export const extraPaths = {
-  album: '/album',
-  studio: '/studyo',
+  album: childPaths.album,
+  studio: childPaths.studio,
 } as const;
 
 /** Developer pages; never part of the production build (src/app/router.tsx). */
