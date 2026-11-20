@@ -1,6 +1,6 @@
 // The developer address parameters (docs/mimari.md, "Depolama ve örnek veri"; docs/planlar/
-// faz-2b.md, karar 21; faz-3.md, karar 5): ?demo=<kip|bos>, ?kurulum=<adım>, &adim=<adım>,
-// &senaryo=<ad|elle>, &onay=kapali. Developer and e2e builds only.
+// faz-2b.md, karar 21; faz-3.md, kararlar 5 ve 26): ?demo=<kip|bos>, ?kurulum=<adım>, &adim=<adım>,
+// &senaryo=<ad|elle>, &onay=kapali, &kapi=acik. Developer and e2e builds only.
 import { scenarioNames, type ScenarioName } from '../../../services/listener/scenarios';
 import { type DemoMode, demoModes } from '../demo/loadDemoProfile';
 
@@ -33,6 +33,8 @@ export interface DevParams {
   step?: DevStep;
   scenario?: ScenarioName | typeof manualListener;
   consentOff?: true;
+  /** The parent gate stays open in this tab. */
+  gateOpen?: true;
 }
 
 function oneOf<T extends string>(values: readonly T[], value: string): value is T {
@@ -96,6 +98,15 @@ export function readDevParams(search: string): { params: DevParams; rest: string
       params.consentOff = true;
     } else {
       warnUnknown('onay', consent);
+    }
+  }
+
+  const gate = take(query, 'kapi');
+  if (gate !== null) {
+    if (gate === 'acik') {
+      params.gateOpen = true;
+    } else {
+      warnUnknown('kapi', gate);
     }
   }
 

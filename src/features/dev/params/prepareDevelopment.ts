@@ -46,6 +46,9 @@ export async function prepareDevelopment(services: DevelopmentServices): Promise
     if (params.scenario !== undefined) {
       writeTabSetting(tabSettingKeys.listener, params.scenario);
     }
+    if (params.gateOpen === true) {
+      writeTabSetting(tabSettingKeys.parentGate, 'acik');
+    }
     if (params.step !== undefined) {
       const chosen = readTabSetting(tabSettingKeys.listener);
       const scenario = scenarioNames.find((name) => name === chosen) ?? 'typical';

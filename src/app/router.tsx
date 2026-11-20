@@ -37,6 +37,7 @@ import { appRepository, sessionDevices, sessionStoreServices } from './services'
 import { ChildShell } from './shells/ChildShell';
 import { FocusShell } from './shells/FocusShell';
 import { OnboardingShell } from './shells/OnboardingShell';
+import { ParentGate } from '../features/parent/ParentGate';
 import { ParentShell } from './shells/ParentShell';
 import { SessionShell } from './shells/SessionShell';
 
@@ -144,13 +145,19 @@ export function appRoutes(session: AppSession): RouteObject[] {
               ],
             },
             {
-              element: <ParentShell />,
+              // The parent gate stands in front of the parent area (karar 25).
+              element: <ParentGate />,
               children: [
-                { path: screenPaths.V1, element: <WeeklySummaryPage /> },
-                { path: screenPaths.V2, element: <StuckWordsPage /> },
-                { path: screenPaths.V3, element: <AssessmentPage /> },
-                { path: screenPaths.V4, element: <ReadingStylePage /> },
-                { path: screenPaths.U2, element: <BookFromTextPage /> },
+                {
+                  element: <ParentShell />,
+                  children: [
+                    { path: screenPaths.V1, element: <WeeklySummaryPage /> },
+                    { path: screenPaths.V2, element: <StuckWordsPage /> },
+                    { path: screenPaths.V3, element: <AssessmentPage /> },
+                    { path: screenPaths.V4, element: <ReadingStylePage /> },
+                    { path: screenPaths.U2, element: <BookFromTextPage /> },
+                  ],
+                },
               ],
             },
           ],

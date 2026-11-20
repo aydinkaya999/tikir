@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { passParentGate } from './support/parentGate';
 
 // Every route of docs/ekranlar.md opens in its shell; navigation marks where you are; the
 // phone bottom bar never covers content; every navigation target is at least 44 px.
@@ -43,6 +44,10 @@ function withDemo(path: string): string {
 async function open(page: Page, path: string, viewport: keyof typeof viewports) {
   await page.setViewportSize(viewports[viewport]);
   await page.goto(withDemo(path));
+  // The parent area opens behind its gate, on every page load (docs/planlar/faz-3.md, karar 26).
+  if (path.startsWith('/veli')) {
+    await passParentGate(page);
+  }
   await expect(page.locator('[data-shell]')).toBeVisible();
 }
 
@@ -260,17 +265,32 @@ test('a portrait tablet opens the setup in the phone layout, full width', async 
   expect((await pane.boundingBox())?.width).toBe(768);
 });
 
-test('the way between the child and parent areas is a web-only link', async ({ page }) => {
-  await open(page, '/', 'web');
-  await expect(page.getByRole('link', { name: 'Veli alanı' })).toHaveAttribute('href', '/veli');
-  await open(page, '/veli', 'web');
-  await expect(page.getByRole('link', { name: 'Çocuk ekranı' })).toHaveAttribute('href', '/');
+test('the child and parent areas lead to each other at every width', async ({ page }) => {
+  // The sidebar's and the rail's foot links (docs/planlar/faz-3.md, karar 27).
+  for (const viewport of ['web', 'tablet'] as const) {
+    await open(page, '/', viewport);
+    await expect(
+      page
+        .getByRole('navigation', { name: 'Ana gezinme' })
+        .getByRole('link', { name: 'Veli alanı' }),
+    ).toHaveAttribute('href', '/veli');
+    await open(page, '/veli', viewport);
+    await expect(
+      page
+        .getByRole('navigation', { name: 'Veli gezinmesi' })
+        .getByRole('link', { name: 'Çocuk ekranı' }),
+    ).toHaveAttribute('href', '/');
+  }
 
-  // TODO(design): phones and tablets have no way into the parent area (docs/planlar/faz-0.md, 12).
+  // Phones: the road's lock button, then the parent strip's button back.
   await open(page, '/', 'telefon');
-  await expect(page.getByRole('link', { name: 'Veli alanı' })).toBeHidden();
-  await open(page, '/veli', 'tablet');
-  await expect(page.getByRole('link', { name: 'Çocuk ekranı' })).toBeHidden();
+  await page.getByRole('main').getByRole('link', { name: 'Veli alanı' }).click();
+  await passParentGate(page);
+  const back = page.getByRole('link', { name: 'Çocuk ekranı' });
+  await expect(back).toHaveCount(1);
+  await back.click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'child');
 });
 
 // docs/tasarim-sistemi.md, "Ek kurallar": a two-pane layout stacks when its content is narrower

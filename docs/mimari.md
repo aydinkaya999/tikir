@@ -309,6 +309,7 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
   - `&adim=<adım>`: bugünün seansını o adıma getirir: `warmup`, `listen`, `read-1`, `read-2`, `read-3`, `record`, `wrapUp`, `done`. Adımlar uygulamanın kendi eylemleriyle yürünür; okumalar senaryonun okumalarıdır, `record` ve sonrası için 52 sn'lik yapay bir kayıt yazılır. Seans 12 dakika önce başlamış sayılır (G7'deki "12 dakika").
   - `&senaryo=<ad>`: o sekmede dinleyicinin senaryosu (`typical`, `design`…); `elle` sahte dinleyiciyi tuşlarla yürütür (`docs/dinleme-hatti.md`, bölüm 3). Sekme ayarıdır (`sessionStorage`, `tikir.gelistirme.dinleyici`); sekme kapanınca biter.
   - `&onay=kapali`: velinin ses onayını kaldırır. `&adim=` o zaman dinlemesiz yolu yürür: ısınma kartları puansız geçilir, okumalar dinlenmeden okunur.
+  - `&kapi=acik`: o sekmede veli kapısını açık tutar; ekran görüntüleri ve uçtan uca testler içindir. Sekme ayarıdır (`sessionStorage`, `tikir.gelistirme.kapi`); sekme kapanınca biter. Uçtan uca testlerin çoğu kapıyı soruyu okuyarak geçer (`e2e/support/parentGate.ts`).
   - Parametreler uygulama yüklenmeden önce bir kez uygulanır (`main.tsx`) ve adresten silinir; sayfa yenilenince yeniden kurulmaz. Örnek: `/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design`.
 
 ## Test

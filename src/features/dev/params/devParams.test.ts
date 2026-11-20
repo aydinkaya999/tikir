@@ -20,6 +20,13 @@ describe('readDevParams', () => {
     });
   });
 
+  it('opens the parent gate for the tab', () => {
+    expect(readDevParams('?kapi=acik&demo=veli-haftasonu')).toEqual({
+      params: { gateOpen: true, demo: 'veli-haftasonu' },
+      rest: '',
+    });
+  });
+
   it('drops an unknown value with a warning, and the parameter with it', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 

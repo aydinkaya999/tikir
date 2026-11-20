@@ -341,7 +341,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 10: Yazı ayarının okuma metinlerine uygulanması
 - [x] Task 11: K3 Seviye tespiti
 - [x] Task 12: K4 Tıkır ile tanışma
-- [ ] Task 13: Veli kapısı, girişler ve çıkışlar
+- [x] Task 13: Veli kapısı, girişler ve çıkışlar
 - [ ] Task 14: V4 Yazı ayarı
 - [ ] Task 15: P14 seansta
 - [ ] Task 16: Uçtan uca testler
@@ -786,7 +786,7 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
 
 **Kullanır:** Task 2 (`gateQuestion`, `isGateAnswer`), aygıtların `random`'ı.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **Kapalı kapı:** `/veli` kapıyı gösterir ("Veli alanı", sabit rastgelelikle "47 + 38 = ?"); veli kabuğu çizilmez.
   2. **Doğru cevap:** V1 açılır; veli alanında gezinince kapı açık kalır.
   3. **Üç yanlış:**
@@ -800,14 +800,14 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
      - Telefonda veli şeridinde "Çocuk ekranı" düğmesi.
   6. **Etiket:** Veli kabuğunda "Deniz, 3. sınıf".
   7. **Uçtan uca:** Veli rotalarını açan testler kapıyı yardımcıyla geçer (sorudaki sayıları ekrandan okuyup toplamı yazar).
-- [ ] → FAIL. Uygula.
-- [ ] `&kapi=acik` geliştirme parametresi kapıyı o sekmede açar; ekran görüntüleri ve uçtan uca testler için. Satır içi `MODE` denetimiyle üretimden düşer.
-- [ ] Görüntü:
+- [x] → FAIL. Uygula.
+- [x] `&kapi=acik` geliştirme parametresi kapıyı o sekmede açar; ekran görüntüleri ve uçtan uca testler için. Satır içi `MODE` denetimiyle üretimden düşer.
+- [x] Görüntü:
   - kapı (`/veli?demo=veli-haftasonu`, tasarımı yok, taşma);
   - telefonda G1 (`/?demo=cocuk-sabahi`, kilit düğmesi; G1 tasarımıyla fark listesine);
   - telefonda V1 (`/veli?demo=veli-haftasonu&kapi=acik`, çıkış düğmesi).
-- [ ] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts e2e/no-external-requests.spec.ts`.
-- [ ] Commit: `feat(parent): guard the parent area with the parent gate`.
+- [x] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts e2e/no-external-requests.spec.ts`.
+- [x] Commit: `feat(parent): guard the parent area with the parent gate`.
 
 ### Task 14: V4 Yazı ayarı
 
@@ -945,6 +945,16 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 | web, tablet | Yok | — |
 | telefon | Sonuç kartı 2 px aşağıda: Tıkır satırıyla kart arası 16 px, tasarımda 14 px | kalır: satır düzenin ana sütununda durur (16 px aralık) |
 | üçü (onaysız) | Tasarımı yok: başlık, Tıkır'ın onaysız balonu, tek madde | taşma ve kırpılma yok |
+
+**Veli kapısı ve girişler** (`/veli?demo=veli-haftasonu`; `/?demo=cocuk-sabahi`; `/veli?demo=veli-haftasonu&kapi=acik`):
+
+| Ekran, genişlik | Fark | Sonuç |
+|---|---|---|
+| Kapı, üçü | Tasarımı yok: beyaz zeminde başlık, soru, "Cevap" alanı, "Gir", "Çocuk ekranı" | taşma ve kırpılma yok |
+| G1, telefon | Sağ üstte 44 px'lik kilit düğmesi ("Veli alanı") | kalır: tasarımı yok (karar 27); gün sayısındaki fark demo verisinden |
+| G1, tablet | Rayın altında "Veli alanı" bağlantısı | kalır: tasarımı yok (karar 27) |
+| V1, telefon | Şeridin sağında 44 px'lik "Çocuk ekranı" düğmesi; çocuk etiketi profilden ("Deniz, 3. sınıf") | kalır: düğmenin tasarımı yok |
+| V1, tablet | Rayın altında "Çocuk ekranı" bağlantısı | kalır: tasarımı yok (karar 27) |
 
 ## Kanıtlar
 

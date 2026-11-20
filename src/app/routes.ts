@@ -1,6 +1,7 @@
 // Route table (docs/ekranlar.md, "Rotalar"). Screen codes are the keys the docs and the design
 // files use, so a path can always be traced back to its screen.
 import { onboardingPaths } from '../features/onboarding/paths';
+import { parentPaths } from '../features/parent/paths';
 import { childPaths, sessionPaths } from '../features/session/paths';
 
 export const screenPaths = {
@@ -16,13 +17,13 @@ export const screenPaths = {
   K3: onboardingPaths.level,
   K4: onboardingPaths.meet,
   U1: childPaths.library,
-  U2: '/veli/kitap',
+  U2: parentPaths.books,
   U3: '/kitaplik/kur',
   U4: '/kitaplik/:bookId/hazir',
-  V1: '/veli',
-  V2: '/veli/takilinan',
-  V3: '/veli/olcum',
-  V4: '/veli/yazi',
+  V1: parentPaths.summary,
+  V2: parentPaths.stuckWords,
+  V3: parentPaths.assessment,
+  V4: parentPaths.readingStyle,
 } as const;
 
 export type ScreenCode = keyof typeof screenPaths;

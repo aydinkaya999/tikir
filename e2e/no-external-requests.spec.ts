@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { devPaths, extraPaths, screenPaths } from '../src/app/routes';
+import { passParentGate } from './support/parentGate';
 import {
   openPaused,
   prepareSessionPage,
@@ -27,6 +28,10 @@ test('loading every route asks nothing from another origin', async ({ page, base
   await settle(page);
   for (const path of allPaths) {
     await page.goto(path);
+    // The parent screens open behind their gate.
+    if (path.startsWith('/veli')) {
+      await passParentGate(page);
+    }
     await settle(page);
   }
 
@@ -52,6 +57,9 @@ for (const viewport of [
       ['/veli', 'Veli gezinmesi'],
     ] as const) {
       await page.goto(start);
+      if (start === '/veli') {
+        await passParentGate(page);
+      }
       await settle(page);
       const links = page.getByRole('navigation', { name: navName }).getByRole('link');
       const count = await links.count();

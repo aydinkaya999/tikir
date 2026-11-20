@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
 import { Companion } from '../../components/Companion/Companion';
+import { IconButton } from '../../components/IconButton/IconButton';
 import { SpeechBubble } from '../../components/SpeechBubble/SpeechBubble';
 import { Tile } from '../../components/Tile/Tile';
 import { sessionMinutes } from '../../domain/config';
 import { withPossessiveSuffix } from '../../domain/text';
 import { tr } from '../../i18n/tr';
+import { parentPaths } from '../parent/paths';
 import { useMicrophone } from '../reading/useMicrophone';
 import { childPaths, sessionPaths } from './paths';
 import styles from './RoadPage.module.css';
@@ -98,6 +100,14 @@ export function RoadPage() {
             </Chip>
           )}
         </div>
+        {/* Phones reach the parent area here (karar 27); wider screens from the rail. TODO(design) */}
+        <IconButton
+          className={styles.parentArea}
+          to={parentPaths.summary}
+          icon="lock"
+          label={tr.nav.child.parentArea}
+          size={44}
+        />
       </div>
       <div className={styles.columns}>
         <div className={styles.today}>

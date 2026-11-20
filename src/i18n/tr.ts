@@ -15,7 +15,7 @@ export const tr = {
       library: 'Kitaplık',
       album: 'Albüm',
       studio: 'Stüdyo',
-      /** Web sidebar only. */
+      /** The rail's and the sidebar's link, and G1's lock button on phones (karar 27). */
       parentArea: 'Veli alanı',
     },
     /** V1: parent navigation; phones and tablets use the short labels. */
@@ -27,9 +27,23 @@ export const tr = {
       assessment: 'Ölçüm',
       readingStyle: { short: 'Yazı', long: 'Yazı ayarı' },
       books: 'Kitaplar',
-      /** Web sidebar only. */
+      /** The rail's and the sidebar's link, and the strip's button on phones (karar 27). */
       childScreen: 'Çocuk ekranı',
+      /** The top strip's chip: "Deniz, 3. sınıf" (design/ekranlar/V1-*.html). */
+      childLabel: (name: string, grade: number) => `${name}, ${String(grade)}. sınıf`,
     },
+  },
+
+  /** The parent gate (docs/kararlar.md D16, P11). TODO(design) */
+  parentGate: {
+    title: 'Veli alanı',
+    lead: 'Devam etmek için soruyu yanıtlayın.',
+    question: (a: number, b: number) => `${String(a)} + ${String(b)} = ?`,
+    answer: 'Cevap',
+    enter: 'Gir',
+    wrong: 'Olmadı. Bir daha deneyin.',
+    wait: (seconds: number) => `${String(seconds)} saniye sonra yeniden deneyebilirsiniz.`,
+    back: 'Çocuk ekranı',
   },
 
   focus: {
