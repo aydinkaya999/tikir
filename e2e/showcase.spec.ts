@@ -138,3 +138,14 @@ test('a dialog closes with Escape and gives the focus back', async ({ page }) =>
   await expect(dialog).toBeHidden();
   await expect(opener).toBeFocused();
 });
+
+test('a pill’s radio takes the tap itself', async ({ page }) => {
+  await openShowcase(page);
+  const grades = page.getByRole('radiogroup', { name: 'Sınıfı' });
+
+  // The radio covers its pill: a tap on it hits the radio, not only its label.
+  await grades.getByRole('radio', { name: '1. sınıf' }).click({ timeout: 3000 });
+
+  await expect(grades.getByRole('radio', { name: '1. sınıf' })).toBeChecked();
+  await expect(grades.getByRole('radio', { name: '3. sınıf' })).not.toBeChecked();
+});
