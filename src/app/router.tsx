@@ -31,7 +31,6 @@ import type { SessionDevices } from '../features/session/sessionContext';
 import { SessionRoot } from '../features/session/SessionRoot';
 import { createSessionStore, type SessionState } from '../features/session/sessionStore';
 import { localDateOf } from '../domain/date';
-import { tr } from '../i18n/tr';
 import { devPaths, extraPaths, parentExtraPaths, screenPaths } from './routes';
 import { appRepository, sessionDevices, sessionStoreServices } from './services';
 import { ChildShell } from './shells/ChildShell';
@@ -116,24 +115,11 @@ export function appRoutes(session: AppSession): RouteObject[] {
               ],
             },
             {
-              element: (
-                <FocusShell
-                  title={tr.focus.bookFromCards.title}
-                  subtitle={tr.focus.bookFromCards.subtitle}
-                  backTo={screenPaths.U1}
-                />
-              ),
-              children: [{ path: screenPaths.U3, element: <BookFromCardsPage /> }],
-            },
-            {
-              element: (
-                <FocusShell
-                  title={tr.focus.bookReady.title}
-                  subtitle={tr.focus.bookReady.subtitle}
-                  backTo={screenPaths.U3}
-                />
-              ),
-              children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
+              element: <FocusShell />,
+              children: [
+                { path: screenPaths.U3, element: <BookFromCardsPage /> },
+                { path: screenPaths.U4, element: <BookReadyPage /> },
+              ],
             },
             {
               // The weekly measurement borrows the level check's frame (Faz 4, karar 32).

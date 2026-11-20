@@ -180,7 +180,7 @@ const focusRoutes = [
     path: '/kitaplik/ornek/hazir',
     title: 'Kitabın hazır',
     subtitle: 'Denetimden geçti, okunmaya hazır.',
-    back: '/kitaplik/kur',
+    back: '/kitaplik',
   },
 ];
 
