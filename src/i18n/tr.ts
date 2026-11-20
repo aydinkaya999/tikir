@@ -229,6 +229,17 @@ export const tr = {
     recordings: {
       chapter: (chapter: number, date: string) => `${String(chapter)}. bölüm, ${date}`,
       measurement: (date: string) => `1 dakikalık ölçüm, ${date}`,
+      /** V2: the recordings the child sent (docs/ekranlar.md's default; D17). */
+      pendingTitle: 'Onay bekleyen kayıtlar',
+      listen: 'Dinle',
+      approve: 'Onayla',
+      remove: 'Sil',
+      removeDialog: {
+        title: 'Kayıt silinsin mi?',
+        body: 'Kayıt bu cihazdan silinir, geri alınamaz.',
+        confirm: 'Sil',
+        cancel: 'Vazgeç',
+      },
     },
   },
 

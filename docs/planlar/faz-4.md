@@ -563,6 +563,14 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
   - telefonda "Hedefi güncelle" grafiğin altında (telefon tasarımında yok; karar 2);
   - telefon şeridindeki çıkış düğmesi ve tablette raydaki "Çocuk ekranı" (Faz 3, karar 27).
 
+**V2** (`shots/veli-takilinan-demo-veli-haftasonu-kapi-acik-*.png`):
+
+- Üç genişlikte kartlar, satırlar, çubuklar ve durum etiketleri tasarımla örtüşüyor; tablette sol sütun (hata türleri, ek zinciri) ile sağ sütun (kelimeler) ızgarada.
+- Bilinen farklar:
+  - demoda kayıt olmadığı için kelimelerin dinleme düğmeleri yok (karar 19);
+  - demoda okumaların "duyulan" kelimesi olmadığı için "geliyordu yerine geliyor" satırı yok (karar 18);
+  - onay bekleyen kayıtlar bölümü demoda görünmez (kayıt yok; testlerde sınanıyor).
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.

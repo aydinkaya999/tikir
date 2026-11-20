@@ -82,6 +82,12 @@
   --size-chapter-title: 24px;
   /* G1: the number under each chapter tile. */
   --size-tile-number: 13px;
+  /* V2: a stuck word (17/19/18 px), an error type's name (15/16/15 px), the small details (status
+     chips, the error's example) and the phone's drill card title. */
+  --size-stuck-word: 17px;
+  --size-error-label: 15px;
+  --size-detail: 13px;
+  --size-drill-title: 18px;
   /* V1: the session days' boxes and their weekday labels. */
   --radius-day: 8px;
   --size-day: 13px;
@@ -124,6 +130,8 @@
     --size-stat: 34px;
     --size-stat-hero: 64px;
     --size-stat-hero-label: 16px;
+    --size-stuck-word: 19px;
+    --size-error-label: 16px;
     --size-chapter-title: 30px;
     --size-warmup-word: 50px;
     --size-syllable: 28px;
@@ -144,6 +152,8 @@
   :root {
     --size-subtitle: 15px;
     --size-stat-hero-label: 15px;
+    --size-stuck-word: 18px;
+    --size-error-label: 15px;
     --size-trial-text: 15px;
     --reading-size-0: 22px;
     --reading-size-1: 25px;

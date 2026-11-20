@@ -2,7 +2,7 @@
 // 15 ve 18).
 import { useEffect, useRef, useState } from 'react';
 import type { Id } from '../../domain/types';
-import type { Recorder, RecordingInfo } from '../../services/recorder/Recorder';
+import type { PlaybackRange, Recorder, RecordingInfo } from '../../services/recorder/Recorder';
 
 /** How often the playback's progress is read. */
 const playbackTickMs = 100;
@@ -67,16 +67,18 @@ export function usePlayback(recorder: Recorder) {
     [recorder],
   );
 
-  /** Call from the tap: the recorder prepares the player before its first await. */
-  const play = (id: Id) => {
+  /**
+   * Call from the tap: the recorder prepares the player before its first await. A range plays
+   * only that part (V2: one word).
+   */
+  const play = (id: Id, range?: PlaybackRange) => {
     playback.current += 1;
     const current = playback.current;
     const at = performance.now();
     playing.current = true;
     setStartedAt(at);
     setNow(at);
-    recorder
-      .play(id)
+    (range === undefined ? recorder.play(id) : recorder.play(id, range))
       .catch(() => undefined)
       .finally(() => {
         if (playback.current === current) {
