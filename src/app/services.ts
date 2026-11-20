@@ -2,12 +2,18 @@
 // this module lazily. TODO(phase 2b): when a product screen imports appRepository, move
 // audioLabServices into a developer-only module so the audio lab stays out of the production build.
 import type { AudioLabServices } from '../features/dev/audio/AudioLabPage';
+import type { SessionStoreServices } from '../features/session/sessionStore';
+import { localDateOf } from '../domain/date';
 import { browserCaptureEnvironment } from '../services/audio/browserCaptureEnvironment';
 import { type WavPlayer, WebAudioWavPlayer } from '../services/audio/WavPlayer';
 import { WebAudioCapture } from '../services/audio/WebAudioCapture';
 import { readEnvironment, readMicrophonePermission } from '../services/device/environment';
 import { pageWebSocketUrl, WebSocketEchoProbe } from '../services/echo/WebSocketEchoProbe';
 import { saveFile } from '../services/files';
+import { createId } from '../services/id';
+import { PcmRecorder } from '../services/recorder/PcmRecorder';
+import type { Recorder } from '../services/recorder/Recorder';
+import { IndexedDbRecordingStore, type RecordingStore } from '../services/recorder/RecordingStore';
 import { IndexedDbRepository } from '../services/repository/IndexedDbRepository';
 import type { Repository } from '../services/repository/Repository';
 import { devEndpoints } from './routes';
@@ -33,4 +39,29 @@ export function appRepository(): Promise<Repository> {
     throw error;
   });
   return repository;
+}
+
+const recordingStore: RecordingStore = new IndexedDbRecordingStore();
+let recorder: Recorder | null = null;
+
+/** Where the page's recordings are kept (the recordings store of IndexedDB). */
+export function appRecordingStore(): RecordingStore {
+  return recordingStore;
+}
+
+/** The page's one recorder; its player starts inside the child's tap (iPhone). */
+export function appRecorder(): Recorder {
+  recorder ??= new PcmRecorder(recordingStore, new WebAudioWavPlayer());
+  return recorder;
+}
+
+/** What the session store needs: the repository, the recorder, today and the clock. */
+export function sessionStoreServices(): SessionStoreServices {
+  return {
+    repository: appRepository,
+    recorder: appRecorder(),
+    today: () => localDateOf(new Date()),
+    now: () => new Date(),
+    createId,
+  };
 }

@@ -47,7 +47,7 @@
 - [x] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
 - [x] Task 4: Seans durum makinesi
 - [x] Task 5: Seans deposu
-- [ ] Task 6: Geliştirme adres parametreleri
+- [x] Task 6: Geliştirme adres parametreleri
 - [ ] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
 - [ ] Task 8: `pnpm shots` adımları
 - [ ] Task 9: G1 Yol
@@ -757,7 +757,7 @@ export function prepareDevelopment(services: { repository: () => Promise<Reposit
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`devParams.test.ts`:**
     - `'?demo=cocuk-sabahi&adim=read-2&senaryo=design&x=1'` → parametreler ve `rest` `'?x=1'`;
     - `'?onay=kapali'` → `consentOff: true`;
@@ -773,14 +773,14 @@ export function prepareDevelopment(services: { repository: () => Promise<Reposit
     - `/gelistirme/vitrin?demo=cocuk-sabahi&adim=read-2` → "Depoda 5 seans, 6 kelime kartı, 6 ölçüm var." (demo profilinin 4 kartı ve `typical` 1. okumanın iki yeni kartı: "arasından", "soluk").
     - Adres `/gelistirme/vitrin` olur; sayfa yenilenince sayılar aynı.
     - `/gelistirme/vitrin` profil yokken "Depo boş." kalır.
-- [ ] İlgili testler → FAIL.
-- [ ] Uygula. `main.tsx` (karar 21, "Kurulum sırası"):
+- [x] İlgili testler → FAIL.
+- [x] Uygula. `main.tsx` (karar 21, "Kurulum sırası"):
   - `import './appShellStart'` ilk satırda kalır;
   - geliştirme kipinde `prepareDevelopment` ve `src/app/services.ts` satır içi denetimle dinamik içe aktarılır ve `await` edilir; üretimde `main.tsx` `services.ts`'i içe aktarmaz;
   - `App` ondan sonra dinamik içe aktarılır, böylece yönlendirici temizlenmiş adresi görür;
   - ürün adresinde profil yoksa `cocuk-sabahi` yüklenir.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(dev): open session steps from the address`.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(dev): open session steps from the address`.
 
 ### Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
 

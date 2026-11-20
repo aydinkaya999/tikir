@@ -18,7 +18,7 @@ export const recordingLimits = { maxSeconds: 300, levelBars: 64 } as const;
 type RecordingLimits = { maxSeconds: number; levelBars: number };
 
 /** The loudness of each of `bars` equal parts, scaled so the loudest is 1. */
-function waveform(samples: Int16Array, bars: number): number[] {
+export function waveformLevels(samples: Int16Array, bars: number): number[] {
   const floats = toFloat32(samples);
   const levels = Array.from({ length: bars }, (_, bar) => {
     const start = Math.floor((bar * floats.length) / bars);
@@ -79,7 +79,7 @@ export class PcmRecorder implements Recorder {
     const info: RecordingInfo = {
       id: createId(),
       seconds: samples.length / captureFormat.sampleRate,
-      levels: waveform(samples, this.limits.levelBars),
+      levels: waveformLevels(samples, this.limits.levelBars),
     };
     await this.store.put({
       ...info,
