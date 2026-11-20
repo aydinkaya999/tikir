@@ -11,7 +11,7 @@ import { PageCard } from '../../components/PageCard/PageCard';
 import { readingsPerSession } from '../../domain/config';
 import { ghostPace, previousReading } from '../../domain/ghost';
 import { chapterTokens, tokenizePage } from '../../domain/text';
-import type { Attempt, Chapter, Id } from '../../domain/types';
+import type { Attempt, Chapter } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import { onKeyDown } from '../../services/keyboard';
 import type { ListenerOutcome } from '../../services/listener/types';
@@ -22,6 +22,7 @@ import { ReadingStyleScope } from '../reading/ReadingStyleScope';
 import { ReadingText } from '../reading/ReadingText';
 import { useMicrophone } from '../reading/useMicrophone';
 import { useReading } from '../reading/useReading';
+import { useReadingRecorder } from '../reading/useReadingRecorder';
 import { useExitDialogOpen } from './exitDialogState';
 import { formatClock } from './format';
 import { MicrophoneProblem } from './MicrophoneProblem';
@@ -96,22 +97,12 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
   );
   const records = attempt === readingsPerSession;
   const startedAt = useRef<string | null>(null);
-  const recording = useRef<'off' | 'on' | 'failed'>('off');
-  const saving = useRef(false);
   const pausedBeforeExit = useRef(false);
 
   /** The reading ended: the third one's recording stops, and the reading is stored. */
   const finish = (outcome: ListenerOutcome) => {
-    saving.current = true;
     const save = async () => {
-      let recordingId: Id | null = null;
-      if (recording.current === 'on') {
-        recording.current = 'off';
-        recordingId = await devices.recorder.stop().then(
-          (info) => info.id,
-          () => null,
-        );
-      }
+      const recordingId = await readingRecorder.finish();
       await store.getState().saveReading(outcome, {
         startedAt: startedAt.current ?? new Date().toISOString(),
         recordingId,
@@ -133,13 +124,12 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
   const capturing = microphone.state === 'capturing';
   // The recording follows the reading's own clock: the child's pauses, the exit dialog's hold and
   // Tıkır's help are left out of it.
-  const recordingRuns =
-    capturing && !reading.paused && reading.helpIndex === null && reading.view.ended === null;
-  // The recorder starts a moment after the reading: held at once if the reading is not running.
-  const holdNewRecording = useEffectEvent(() => {
-    if (!recordingRuns) {
-      devices.recorder.pause();
-    }
+  const readingRecorder = useReadingRecorder({
+    enabled: records,
+    recorder: devices.recorder,
+    audio: devices.audio,
+    running:
+      capturing && !reading.paused && reading.helpIndex === null && reading.view.ended === null,
   });
   // The reading starts once the microphone listens; the third starts the recorder with it.
   const begin = useEffectEvent(() => {
@@ -147,17 +137,7 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
     reading
       .start()
       .then(() => {
-        if (records && recording.current === 'off' && !saving.current) {
-          recording.current = 'on';
-          devices.recorder.start(devices.audio).then(
-            () => {
-              holdNewRecording();
-            },
-            () => {
-              recording.current = 'failed';
-            },
-          );
-        }
+        readingRecorder.start();
       })
       .catch(() => undefined);
   });
@@ -166,31 +146,6 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       begin();
     }
   }, [capturing, exitOpen]);
-
-  useEffect(() => {
-    if (recording.current !== 'on') {
-      return;
-    }
-    if (recordingRuns) {
-      devices.recorder.resume();
-    } else {
-      devices.recorder.pause();
-    }
-  }, [recordingRuns, devices.recorder]);
-
-  // A reading cut short (the exit, leaving the screen) is not stored; nor is its recording.
-  useEffect(
-    () => () => {
-      if (recording.current === 'on' && !saving.current) {
-        recording.current = 'off';
-        devices.recorder
-          .stop()
-          .then((info) => devices.recorder.remove(info.id))
-          .catch(() => undefined);
-      }
-    },
-    [devices.recorder],
-  );
 
   const holdForExit = useEffectEvent((open: boolean) => {
     if (open) {
