@@ -34,4 +34,19 @@ describe('OnboardingLayout', () => {
     expect(screen.getByRole('button', { name: 'Devam et' })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Tıkır' })).toBeInTheDocument();
   });
+
+  it('draws Tıkır and his words in the content too when the step asks (K3’s microphone problem)', () => {
+    const { rerender } = render(
+      <OnboardingLayout step={3} companion={{ bubble: 'Mikrofon durdu.' }} />,
+    );
+    expect(screen.getAllByText('Mikrofon durdu.')).toHaveLength(1);
+
+    rerender(<OnboardingLayout step={3} companion={{ bubble: 'Mikrofon durdu.', phone: true }} />);
+
+    expect(screen.getAllByText('Mikrofon durdu.')).toHaveLength(2);
+    expect(screen.getByRole('main')).toContainElement(
+      screen.getAllByText('Mikrofon durdu.')[1] ?? null,
+    );
+    expect(screen.getAllByRole('img', { name: 'Tıkır' })).toHaveLength(2);
+  });
 });

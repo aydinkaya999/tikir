@@ -1,0 +1,82 @@
+/* K3 (design/ekranlar/K3-seviye-*.html): the measurement card with the minute at its foot. */
+.card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-white);
+  box-shadow: var(--lift-page);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.bar {
+  flex: 1 1 auto;
+}
+
+.remaining {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-timer);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+  white-space: nowrap;
+}
+
+/* Below 1000 px, in the foot bar: a 64 px microphone and the finish button across the rest. */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.controls .mic {
+  width: 64px;
+  height: 64px;
+}
+
+.controls .mic svg {
+  width: 28px;
+  height: 28px;
+}
+
+.finish {
+  flex: 1 1 auto;
+}
+
+@media (min-width: 700px) {
+  .card {
+    min-height: 300px;
+    padding: 28px;
+  }
+}
+
+/* From 1000 px: the 72 px microphone and the button at the bottom right. */
+@media (min-width: 1000px) {
+  .controls {
+    gap: 16px;
+  }
+
+  .controls .mic {
+    width: 72px;
+    height: 72px;
+  }
+
+  .controls .mic svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .finish {
+    flex: none;
+  }
+}

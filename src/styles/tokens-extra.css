@@ -96,6 +96,8 @@
   --radius-share: 18px;
   /* K1: the consent card. */
   --radius-consent: 18px;
+  /* K3: the minute's remaining time, 16 px at every width. */
+  --size-timer: 16px;
   /* G6: the question (22 px on phones, 30 px from 700 px) and its options (17 px, 20 px). */
   --size-question: 22px;
   --size-answer: 17px;

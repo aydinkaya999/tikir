@@ -16,8 +16,11 @@ interface OnboardingLayoutProps {
   /** The step's heading and the line under it: every setup step draws them alike. */
   title?: string;
   lead?: ReactNode;
-  /** Tıkır's face and words on the cobalt panel. */
-  companion: { expression?: CompanionExpression; bubble?: ReactNode };
+  /**
+   * Tıkır's face and words on the cobalt panel. phone: below 1000 px, where the panel is hidden,
+   * Tıkır and his words come at the head of the content too (K3's microphone problem; not drawn).
+   */
+  companion: { expression?: CompanionExpression; bubble?: ReactNode; phone?: boolean };
   /** The step's main action: the foot bar below 1000 px, bottom right of the content above. */
   action?: ReactNode;
   children?: ReactNode;
@@ -38,7 +41,9 @@ export function OnboardingLayout({
         <div className={styles.companion}>
           <Companion expression={companion.expression} size={220} label={tr.appName} />
           {companion.bubble !== undefined && (
-            <SpeechBubble arrow="top">{companion.bubble}</SpeechBubble>
+            <SpeechBubble arrow="top" live>
+              {companion.bubble}
+            </SpeechBubble>
           )}
         </div>
         <div className={styles.strip} aria-hidden="true">
@@ -79,6 +84,20 @@ export function OnboardingLayout({
             <div className={styles.head}>
               <h1 className={styles.title}>{title}</h1>
               {lead !== undefined && <p className={styles.lead}>{lead}</p>}
+            </div>
+          )}
+          {companion.phone === true && companion.bubble !== undefined && (
+            // TODO(design): the setup's phone layout draws no Tıkır; the session's phone row.
+            <div className={styles.phoneCompanion}>
+              <Companion
+                className={styles.phoneFace}
+                expression={companion.expression}
+                size={72}
+                label={tr.appName}
+              />
+              <SpeechBubble className={styles.phoneBubble} live>
+                {companion.bubble}
+              </SpeechBubble>
             </div>
           )}
           {children}

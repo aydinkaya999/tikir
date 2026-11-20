@@ -49,6 +49,9 @@ export const readerNameMaxLength = 30;
 /** K2: the reader picks at most this many interests (docs/ekranlar.md, K2). */
 export const readerInterestLimit = 3;
 
+/** K3: the level check reads for one minute of reading time (docs/ekranlar.md, K3). */
+export const assessmentMs = 60_000;
+
 /** K3's measurement text is paged at most this many words a page (docs/planlar/faz-3.md, karar 14). */
 export const passagePageWords = 25;
 

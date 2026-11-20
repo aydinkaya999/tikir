@@ -5,7 +5,8 @@ import {
   BookReadyPage,
   LibraryPage,
 } from '../features/library/pages';
-import { LevelAssessmentPage, MeetCompanionPage } from '../features/onboarding/pages';
+import { MeetCompanionPage } from '../features/onboarding/pages';
+import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
 import {
@@ -138,7 +139,7 @@ export function appRoutes(session: AppSession): RouteObject[] {
               children: [
                 { path: screenPaths.K1, element: <AccountPage /> },
                 { path: screenPaths.K2, element: <ReaderPage /> },
-                { path: screenPaths.K3, element: <LevelAssessmentPage /> },
+                { path: screenPaths.K3, element: <LevelPage /> },
                 { path: screenPaths.K4, element: <MeetCompanionPage /> },
               ],
             },

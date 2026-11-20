@@ -339,7 +339,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 8: K1 Veli hesabı
 - [x] Task 9: K2 Okuyucu profili
 - [x] Task 10: Yazı ayarının okuma metinlerine uygulanması
-- [ ] Task 11: K3 Seviye tespiti
+- [x] Task 11: K3 Seviye tespiti
 - [ ] Task 12: K4 Tıkır ile tanışma
 - [ ] Task 13: Veli kapısı, girişler ve çıkışlar
 - [ ] Task 14: V4 Yazı ayarı
@@ -725,7 +725,7 @@ useReadingRecorder(options: { enabled: boolean; recorder: Recorder; audio: Audio
 MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () => void } });
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **İçerik:**
      - "1 dakikalık okuma";
      - "Deniz metni sesli okusun. Hata yapması sorun değil; başlangıç noktasını arıyoruz.";
@@ -743,10 +743,10 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
      - Dokununca ölçüm yazılmaz, adres `/kurulum/tanisma`.
      - "Yeniden dene"den önce atlama düğmesi yoktur.
   6. **G4 aynen:** G4'ün 3. okuma ve kayıt testleri `useReadingRecorder` ile aynen geçer.
-- [ ] → FAIL. Uygula.
-- [ ] Görüntü: `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 22000 '/kurulum/seviye?kurulum=seviye'` → K3 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(onboarding): build the level check (K3)`.
+- [x] → FAIL. Uygula.
+- [x] Görüntü: `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 22000 '/kurulum/seviye?kurulum=seviye'` → K3 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(onboarding): build the level check (K3)`.
 
 ### Task 12: K4 Tıkır ile tanışma
 
@@ -929,6 +929,14 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 | üçü | Üç ilgi alanı seçiliyken öteki düğmeler soluktu; tasarım onları değiştirmeden çiziyor | düzeltildi (`ChoicePills`) |
 | web | "Devam et" içerikten 44 px aşağıdaydı; tasarımda 30 px | düzeltildi |
 | üçü | Ad alanı boş, "Deniz" yer tutucu; tasarım dolu hâlini gösteriyor | kalır: görüntü komutu ad yazmaz |
+
+**K3** (`/kurulum/seviye?kurulum=seviye`; mikrofona dokunulur, saat 22 sn ve 11,5 sn ilerletilir):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | 22 sn'de ("0:38 kaldı") ikinci sayfa açık; tasarım bu anda ilk sayfayı ve "çitin"i gösteriyor | kalır: tipik ölçüm senaryosu "etti."yi 21,7 sn'de bitirir (tasarımın anı senaryonun hızına uymuyor). 11,5 sn'deki görüntüde metin tasarımla aynı ("çitin" vurgulu), sayaç "0:49 kaldı" |
+| üçü | Kelime aralıkları biraz geniş | kalır: Faz 0'ın kaymasız vurgu payı (G4'te de böyle) |
+| telefon | Mikrofon sorununda Tıkır ve balon içeriğin başında | kalır: tasarımı yok; seans kabuğunun telefon satırı (`docs/ekranlar.md`, "Mikrofon izni reddedildi") |
 
 ## Kanıtlar
 

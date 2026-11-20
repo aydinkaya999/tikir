@@ -95,6 +95,18 @@ export const tr = {
       nameError: 'Okuyucunun adını yazın.',
       gradeError: 'Sınıfını seçin.',
     },
+    /** K3 Seviye tespiti (design/ekranlar/K3-seviye-*.html). */
+    level: {
+      bubble: 'Hazır olduğunda başla. Dinliyorum.',
+      title: '1 dakikalık okuma',
+      lead: (name: string) =>
+        `${name} metni sesli okusun. Hata yapması sorun değil; başlangıç noktasını arıyoruz.`,
+      elapsed: 'Geçen süre',
+      remaining: (clock: string) => `${clock} kaldı`,
+      finish: 'Okumayı bitir',
+      /** After a retry did not help (docs/kararlar.md D16, P14). TODO(design) */
+      skip: 'Seviye tespitini atla',
+    },
   },
 
   session: {

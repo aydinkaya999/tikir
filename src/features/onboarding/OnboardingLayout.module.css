@@ -50,6 +50,21 @@
   line-height: var(--leading-ui);
 }
 
+/* Below 1000 px, when the step asks: Tıkır and his words at the head of the content (G4's row). */
+.phoneCompanion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.phoneFace {
+  flex: none;
+}
+
+.phoneBubble {
+  flex: 1 1 auto;
+}
+
 .progressRow {
   display: flex;
   align-items: center;
@@ -115,6 +130,10 @@
 
 /* From 1000 px: K1 tablet — 420 px cobalt panel. */
 @media (min-width: 1000px) {
+  .phoneCompanion {
+    display: none;
+  }
+
   .layout {
     flex-direction: row;
   }
