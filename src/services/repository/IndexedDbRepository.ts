@@ -98,13 +98,29 @@ export class IndexedDbRepository implements Repository {
     return this.db.getAll('stuckWords');
   }
 
+  /**
+   * Replaces the whole set in one transaction. A card that cannot be stored aborts it, so the old
+   * set stays (it used to commit the clear and lose every card); the writes and the transaction
+   * are awaited together, so a failure never leaves a rejection unhandled (faz-2a review, M8).
+   */
   async saveStuckWords(words: StuckWord[]): Promise<void> {
     const transaction = this.db.transaction('stuckWords', 'readwrite');
-    await transaction.store.clear();
-    for (const word of words) {
-      await transaction.store.put(word);
+    const writes = (async () => {
+      await transaction.store.clear();
+      for (const word of words) {
+        await transaction.store.put(word);
+      }
+    })();
+    try {
+      await Promise.all([writes, transaction.done]);
+    } catch (error) {
+      try {
+        transaction.abort();
+      } catch {
+        // Already finished: the failure came from the transaction itself.
+      }
+      throw error;
     }
-    await transaction.done;
   }
 
   async listAssessments(): Promise<Assessment[]> {

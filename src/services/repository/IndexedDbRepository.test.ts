@@ -135,6 +135,16 @@ describe('IndexedDbRepository', () => {
     expect(await repository.listStuckWords()).toEqual([card('patika', 2)]);
   });
 
+  it('keeps the stored cards when one card of a new set cannot be stored', async () => {
+    const repository = await IndexedDbRepository.open();
+    await repository.saveStuckWords([card('patika')]);
+    const unkeyed = { ...card('dere'), word: undefined } as unknown as StuckWord;
+
+    await expect(repository.saveStuckWords([card('tepe'), unkeyed])).rejects.toThrow();
+
+    expect(await repository.listStuckWords()).toEqual([card('patika')]);
+  });
+
   it('clears the user data and loads the content again', async () => {
     const repository = await IndexedDbRepository.open();
     await repository.saveParent(parent);

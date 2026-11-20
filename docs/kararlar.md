@@ -148,6 +148,7 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `ws`, `@types/ws` | Yerel yankı sunucusu (`scripts/echo-server.ts`, T20): çerçeveleri olduğu gibi geri gönderir. Node'da yerleşik WebSocket sunucusu yok; protokolü elle yazmak yerine yaygın, bağımlılıksız paket. Yalnız geliştirme bağımlılığı, uygulamaya girmez | 1 |
 | `idb` | IndexedDB'yi söz (promise) arayüzüyle saran küçük, bağımlılıksız paket; `IndexedDbRepository` ve kayıt deposu bunun üstünde (`docs/mimari.md`, "Yığın"; Faz 2a planı, karar 12) | 2 |
 | `fake-indexeddb` | Vitest'te IndexedDB: depo ve kayıt testleri bellekte çalışan gerçek bir IndexedDB uygulamasına karşı koşar. Yalnız geliştirme bağımlılığı | 2 |
+| `zustand` | Seans durumu (T4; `docs/mimari.md` → "Yığın"): seans deposu, depoya yazan eylemleri ve ekranların okuduğu durumu tek yerde tutar. Küçük, bağımlılıksız; React bağlamında `useStore` ile okunur | 2 |
 
 ## Değişiklik günlüğü
 

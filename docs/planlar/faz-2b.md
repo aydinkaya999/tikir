@@ -46,7 +46,7 @@
 - [x] Task 2: Seans ekranlarının alan kuralları
 - [x] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
 - [x] Task 4: Seans durum makinesi
-- [ ] Task 5: Seans deposu
+- [x] Task 5: Seans deposu
 - [ ] Task 6: Geliştirme adres parametreleri
 - [ ] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
 - [ ] Task 8: `pnpm shots` adımları
@@ -675,8 +675,8 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
 
 **Adımlar:**
 
-- [ ] Önce `docs/kararlar.md` → Bağımlılıklar: `zustand` satırı (T4; seans durumu, `docs/mimari.md` "Yığın"). Kur: `pnpm add zustand`.
-- [ ] **Kırmızı:** `sessionStore.test.ts`. Kurulum: `fake-indexeddb`, `loadDemoProfile(repo, 'cocuk-sabahi', '2026-11-21')`, bugün `'2026-11-21'`, sabit `now`, sıralı kimlikler. Okumalar 4. bölümün söyleyişleriyle `simulateReading` + `toWordResults`.
+- [x] Önce `docs/kararlar.md` → Bağımlılıklar: `zustand` satırı (T4; seans durumu, `docs/mimari.md` "Yığın"). Kur: `pnpm add zustand`.
+- [x] **Kırmızı:** `sessionStore.test.ts`. Kurulum: `fake-indexeddb`, `loadDemoProfile(repo, 'cocuk-sabahi', '2026-11-21')`, bugün `'2026-11-21'`, sabit `now`, sıralı kimlikler. Okumalar 4. bölümün söyleyişleriyle `simulateReading` + `toWordResults`.
   1. **Yükleme:**
      - `ready`; okuyucu Deniz; bölüm 4; bugünün seansı yok.
      - Boş depo → `noProfile`.
@@ -713,9 +713,9 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
   12. **Çift dokunuş:** Aynı anda iki `finishListening()` → tek yazma, okuma 1.
   13. **Yazma hatası:** Depo bir yazmayı reddederse eylem reddeder ve `status` `error` olur.
   - **`IndexedDbRepository.test.ts` (M8):** Geçersiz anahtarlı bir kartla (`word` yok) `saveStuckWords` `DataError` ile reddeder ve işlenmemiş ret kalmaz. Vitest işlenmemiş reddi hata sayar; şimdiki kodda bu test düşer.
-- [ ] `pnpm test src/features/session/sessionStore.test.ts` ve `pnpm test src/services/repository/IndexedDbRepository.test.ts` → FAIL.
-- [ ] Uygula. `saveStuckWords` işlemin bütün adımlarını `transaction.done` ile birlikte bekler; aynı kalıpta başka çok adımlı yazma varsa o da. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): add the session store`.
+- [x] `pnpm test src/features/session/sessionStore.test.ts` ve `pnpm test src/services/repository/IndexedDbRepository.test.ts` → FAIL.
+- [x] Uygula. `saveStuckWords` işlemin bütün adımlarını `transaction.done` ile birlikte bekler; aynı kalıpta başka çok adımlı yazma varsa o da. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): add the session store`.
 
 ### Task 6: Geliştirme adres parametreleri
 
