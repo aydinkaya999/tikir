@@ -10,6 +10,7 @@ import type { ManualMark } from '../../services/listener/FakeListener';
 import type { ReadingListener } from '../../services/listener/types';
 import type { Narrator } from '../../services/narrator/Narrator';
 import type { Recorder } from '../../services/recorder/Recorder';
+import type { ShareService } from '../../services/share/ShareService';
 import type { PageLayout } from '../reading/pages';
 import type { SessionState } from './sessionStore';
 
@@ -37,6 +38,8 @@ export interface SessionDevices {
   scenario: { ghostWpm: number | null; layout: PageLayout };
   /** The source of G6's shuffles; tests give a fixed one. */
   random: () => number;
+  /** V3's "Öğretmenle paylaş": the share sheet, else the clipboard (docs/kararlar.md T23). */
+  share: ShareService;
 }
 
 export interface SessionContextValue {

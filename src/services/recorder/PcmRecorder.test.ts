@@ -3,7 +3,7 @@ import { IDBFactory } from 'fake-indexeddb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { WavPlayer } from '../audio/WavPlayer';
 import { toInt16 } from '../audio/pcm';
-import { parseWav } from '../audio/wav';
+import { encodeWav, parseWav } from '../audio/wav';
 import { FakeAudioCapture } from '../../test/fakeCapture';
 import { sine } from '../../test/signal';
 import { PcmRecorder } from './PcmRecorder';
@@ -11,6 +11,7 @@ import {
   IndexedDbRecordingStore,
   type RecordingStore,
   type StoredRecording,
+  type StoredRecordingInfo,
 } from './RecordingStore';
 
 class MemoryStore implements RecordingStore {
@@ -29,13 +30,34 @@ class MemoryStore implements RecordingStore {
     this.records.delete(id);
     return Promise.resolve();
   }
+
+  list(): Promise<StoredRecordingInfo[]> {
+    return Promise.resolve(
+      [...this.records.values()].map((recording) => {
+        const info: StoredRecordingInfo & { wav?: ArrayBuffer } = { ...recording };
+        delete info.wav;
+        return info;
+      }),
+    );
+  }
+}
+
+function stored(id: string, createdAt: string, fields: Partial<StoredRecording> = {}) {
+  return {
+    id,
+    createdAt,
+    seconds: 3,
+    levels: [0.5, 1],
+    wav: encodeWav(new Int16Array(48000), 16000),
+    ...fields,
+  } satisfies StoredRecording;
 }
 
 function fakePlayer() {
   let finish: () => void = () => undefined;
   const player = {
     prepare: vi.fn(),
-    play: vi.fn(
+    play: vi.fn<WavPlayer['play']>(
       () =>
         new Promise<void>((resolve) => {
           finish = resolve;
@@ -120,6 +142,51 @@ describe('PcmRecorder', () => {
 
     recorder.stopPlayback();
     expect(player.stop).toHaveBeenCalledTimes(1);
+  });
+
+  it('plays only the part of a recording between two times', async () => {
+    const { audio, player, finish, recorder, send } = setup();
+    await recorder.start(audio);
+    send(toneFrames(100));
+    const { id } = await recorder.stop();
+
+    const playing = recorder.play(id, { fromMs: 500, toMs: 1000 });
+
+    expect(player.prepare).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => {
+      expect(player.play).toHaveBeenCalledTimes(1);
+    });
+    const [wav] = player.play.mock.calls[0] ?? [];
+    expect(wav === undefined ? 0 : parseWav(wav).samples.length).toBe(8000);
+    finish();
+    await playing;
+  });
+
+  it('lists the recordings newest first, without their sound', async () => {
+    const { store, recorder } = setup();
+    await store.put(stored('eski', '2026-11-20T08:10:00.000Z', { approval: 'pending' }));
+    await store.put(stored('yeni', '2026-11-21T08:10:00.000Z'));
+
+    expect(await recorder.list()).toEqual([
+      { id: 'yeni', createdAt: '2026-11-21T08:10:00.000Z', seconds: 3, levels: [0.5, 1] },
+      {
+        id: 'eski',
+        createdAt: '2026-11-20T08:10:00.000Z',
+        seconds: 3,
+        levels: [0.5, 1],
+        approval: 'pending',
+      },
+    ]);
+  });
+
+  it('marks a recording the parent approves', async () => {
+    const { store, recorder } = setup();
+    await store.put(stored('kayit-1', '2026-11-21T08:10:00.000Z', { approval: 'pending' }));
+
+    await recorder.approve('kayit-1');
+
+    expect((await recorder.get('kayit-1'))?.approval).toBe('approved');
+    await expect(recorder.approve('yok')).rejects.toThrow('No recording yok');
   });
 
   it('removes a recording', async () => {
@@ -217,6 +284,18 @@ describe('PcmRecorder', () => {
     const info = await recorder.stop();
 
     expect(info.seconds).toBe(1);
+  });
+
+  it('lists what IndexedDB keeps without the sound', async () => {
+    const store = new IndexedDbRecordingStore();
+    await store.put(stored('kayit-1', '2026-11-21T08:10:00.000Z'));
+    await store.put(stored('kayit-2', '2026-11-20T08:10:00.000Z', { approval: 'approved' }));
+
+    const listed = await store.list();
+
+    expect(listed.map((each) => each.id).sort()).toEqual(['kayit-1', 'kayit-2']);
+    expect(listed.every((each) => !('wav' in each))).toBe(true);
+    expect(listed.find((each) => each.id === 'kayit-2')?.approval).toBe('approved');
   });
 
   it('keeps recordings in IndexedDB for a later page', async () => {

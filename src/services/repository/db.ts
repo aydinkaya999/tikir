@@ -26,8 +26,11 @@ export interface StoredRecording {
   seconds: number;
   levels: number[];
   wav: ArrayBuffer;
-  /** Set when the child sends it to the family from G5: it waits for the parent (docs/urun.md rule 11). */
-  approval?: 'pending';
+  /**
+   * Set when the child sends it to the family from G5: it waits for the parent (docs/urun.md rule
+   * 11), who approves it on V2 (docs/planlar/faz-4.md, karar 4).
+   */
+  approval?: 'pending' | 'approved';
 }
 
 export interface TikirSchema extends DBSchema {

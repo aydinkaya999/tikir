@@ -17,6 +17,7 @@ import type { Recorder } from '../services/recorder/Recorder';
 import { IndexedDbRecordingStore, type RecordingStore } from '../services/recorder/RecordingStore';
 import { IndexedDbRepository } from '../services/repository/IndexedDbRepository';
 import type { Repository } from '../services/repository/Repository';
+import { BrowserShareService } from '../services/share/ShareService';
 import { readTabSetting, tabSettingKeys } from '../services/tabSettings';
 
 let repository: Promise<Repository> | null = null;
@@ -99,5 +100,6 @@ export function sessionDevices(): SessionDevices {
     },
     scenario: { ghostWpm: scenarios.ghostWpm ?? null, layout: scenarios.layout ?? 'content' },
     random: () => Math.random(),
+    share: new BrowserShareService(),
   };
 }

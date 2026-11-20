@@ -48,6 +48,18 @@ export function encodeWav(samples: Int16Array, sampleRate: number): ArrayBuffer 
   return buffer;
 }
 
+/**
+ * The part of a recording between two times, as a WAV of its own (V2 plays one word of a reading).
+ * The times are clamped to the recording; an empty range gives no samples.
+ */
+export function sliceWav(buffer: ArrayBuffer, fromMs: number, toMs: number): ArrayBuffer {
+  const { samples, sampleRate } = parseWav(buffer);
+  const at = (ms: number) =>
+    Math.min(samples.length, Math.max(0, Math.round((ms * sampleRate) / 1000)));
+  const start = at(fromMs);
+  return encodeWav(samples.slice(start, Math.max(start, at(toMs))), sampleRate);
+}
+
 interface FormatChunk {
   audioFormat: number;
   channels: number;
