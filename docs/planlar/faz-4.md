@@ -571,6 +571,14 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
   - demoda okumaların "duyulan" kelimesi olmadığı için "geliyordu yerine geliyor" satırı yok (karar 18);
   - onay bekleyen kayıtlar bölümü demoda görünmez (kayıt yok; testlerde sınanıyor).
 
+**V3** (`shots/veli-olcum-demo-veli-haftasonu-kapi-acik-*.png`):
+
+- Düzeltilen: alıntı sayfanın varsayılan ağırlığıyla (500) çiziliyordu; tasarımdaki gibi 400 oldu, satır kırılmaları tasarımla aynı. İşaretler demo okumasında da tasarımdaki kelimelerde ("vardıklarında", "aydınlattı." yanlış okuma; "kulaklarını" takılma).
+- Bilinen farklar:
+  - tarihler demo verisinin kaymasıyla "15 Kasım Pazar" ve "22 Kasım Pazar";
+  - doğruluk %93 (tutarsızlık 1);
+  - demoda ölçümün kaydı olmadığı için "Kaydı dinle" yok, "Öğretmenle paylaş" satırı tek başına kaplıyor (karar 25).
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.

@@ -9,7 +9,7 @@ import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
-import { AssessmentPage } from '../features/parent/pages';
+import { AssessmentPage } from '../features/parent/AssessmentPage';
 import { StuckWordsPage } from '../features/parent/StuckWordsPage';
 import { SummaryPage } from '../features/parent/SummaryPage';
 import { ReadingStylePage } from '../features/parent/ReadingStylePage';

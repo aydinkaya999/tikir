@@ -82,10 +82,14 @@
   --size-chapter-title: 24px;
   /* G1: the number under each chapter tile. */
   --size-tile-number: 13px;
-  /* V2: a stuck word (17/19/18 px), an error type's name (15/16/15 px), the small details (status
-     chips, the error's example) and the phone's drill card title. */
+  /* V2: a stuck word (17/19/18 px); labels in the report's cards, 15/16/15 px (V2's error types,
+     V3's level band and sentence); the small details (status chips, the error's example, V3's
+     band ranges); the phone's drill card title. V3: the result's number (64/88 px) and its
+     excerpt (20/19 px; not on phones). */
   --size-stuck-word: 17px;
-  --size-error-label: 15px;
+  --size-card-label: 15px;
+  --size-result: 64px;
+  --size-excerpt: 20px;
   --size-detail: 13px;
   --size-drill-title: 18px;
   /* V1: the session days' boxes and their weekday labels. */
@@ -131,7 +135,8 @@
     --size-stat-hero: 64px;
     --size-stat-hero-label: 16px;
     --size-stuck-word: 19px;
-    --size-error-label: 16px;
+    --size-card-label: 16px;
+    --size-result: 88px;
     --size-chapter-title: 30px;
     --size-warmup-word: 50px;
     --size-syllable: 28px;
@@ -153,7 +158,8 @@
     --size-subtitle: 15px;
     --size-stat-hero-label: 15px;
     --size-stuck-word: 18px;
-    --size-error-label: 15px;
+    --size-card-label: 15px;
+    --size-excerpt: 19px;
     --size-trial-text: 15px;
     --reading-size-0: 22px;
     --reading-size-1: 25px;

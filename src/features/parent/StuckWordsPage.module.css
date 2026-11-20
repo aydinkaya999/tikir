@@ -90,7 +90,7 @@
 
 .errorLabel {
   color: var(--color-ink);
-  font-size: var(--size-error-label);
+  font-size: var(--size-card-label);
   font-weight: var(--weight-bold);
   line-height: var(--leading-ui);
 }
