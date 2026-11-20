@@ -64,7 +64,7 @@ const devRoutes: RouteObject[] =
           lazy: async () => {
             const [{ AudioLabPage }, { audioLabServices }] = await Promise.all([
               import('../features/dev/audio/AudioLabPage'),
-              import('./services'),
+              import('./devServices'),
             ]);
             return { element: <AudioLabPage services={audioLabServices} /> };
           },
