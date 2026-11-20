@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import seriesBook from '../../../seed/kayip-fenerin-izinde.json';
+import { splitPhraseUnits } from '../../domain/text';
 import type { Page } from '../../domain/types';
 import { FakeSpeechPort } from '../../test/fakeSpeech';
 import { unitDurationMs } from './Narrator';
@@ -9,6 +11,15 @@ const page: Page = [
   ['Deniz sırt çantasını', 'omzuna aldı.'],
   ['Tıkır kulaklarını dikti', 've rüzgârı dinledi.'],
 ];
+
+/** The G3 design page: pages 1 and 2 of chapter 4, 18 phrase units, 47.0 s slow. */
+const designPage: Page = (() => {
+  const chapter = seriesBook.chapters.find((item) => item.number === 4);
+  if (chapter === undefined) {
+    throw new Error('seed chapter 4 is missing');
+  }
+  return chapter.pages.slice(0, 2).flat().map(splitPhraseUnits);
+})();
 
 function setup() {
   const port = new FakeSpeechPort([voice]);
@@ -65,27 +76,70 @@ describe('SpeechSynthesisNarrator', () => {
     expect(units).toEqual([0, 1]);
   });
 
-  it('times a unit silently when speech does not start in 1.5 s, then speaks the next', async () => {
+  it('times the rest of the page silently once a unit does not start in 1.5 s', async () => {
     const { port, narrator, units } = setup();
-    const end = narrator.speakPage(page, (unit) => units.push(unit));
+    let ended: string | null = null;
+    void narrator
+      .speakPage(designPage, (unit) => units.push(unit))
+      .then((end) => {
+        ended = end;
+      });
 
-    vi.advanceTimersByTime(1500);
-    expect(port.cancels).toBe(1);
-    expect(units).toEqual([0]);
+    // 1.5 s of waiting, then the 47.0 s of silent timing: one try, no 1.5 s per unit.
+    await vi.advanceTimersByTimeAsync(48_480);
+    expect(ended).toBeNull();
+    await vi.advanceTimersByTimeAsync(40);
+    expect(ended).toBe('completed');
+
     expect(port.spoken).toHaveLength(1);
+    expect(units).toEqual(Array.from({ length: 18 }, (_, unit) => unit));
+  });
 
-    vi.advanceTimersByTime(Math.ceil(unitDurationMs('Deniz sırt çantasını', 'slow')));
-    expect(port.spoken).toHaveLength(2);
-    port.last().handlers.onError();
-    vi.advanceTimersByTime(Math.ceil(unitDurationMs('omzuna aldı.', 'slow')));
-    expect(units).toEqual([0, 1]);
-
-    for (let unit = 2; unit < 4; unit += 1) {
+  it('times the rest of the page silently after a unit fails', async () => {
+    const { port, narrator, units } = setup();
+    const end = narrator.speakPage(designPage, (unit) => units.push(unit));
+    for (let unit = 0; unit < 3; unit += 1) {
       port.last().handlers.onStart();
       port.last().handlers.onEnd();
     }
+
+    port.last().handlers.onError();
+    await vi.advanceTimersByTimeAsync(60_000);
+
+    expect(port.spoken).toHaveLength(4);
+    expect(units).toEqual(Array.from({ length: 18 }, (_, unit) => unit));
     await expect(end).resolves.toBe('completed');
-    expect(units).toEqual([0, 1, 2, 3]);
+  });
+
+  it('tries the voice again on the next page and for a word', async () => {
+    const { port, narrator } = setup();
+    void narrator.speakPage(designPage, () => undefined);
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(port.spoken).toHaveLength(1);
+
+    void narrator.speakPage(page, () => undefined);
+    expect(port.spoken).toHaveLength(2);
+    expect(port.last().text).toBe('Deniz sırt çantasını');
+
+    void narrator.speakWord('ağaçlarının');
+    expect(port.spoken).toHaveLength(3);
+    expect(port.last().text).toBe('ağaçlarının');
+  });
+
+  it('stays silent through a pause in the silent rest of a page', async () => {
+    const { port, narrator, units } = setup();
+    const end = narrator.speakPage(designPage, (unit) => units.push(unit));
+    await vi.advanceTimersByTimeAsync(2500);
+    expect(units).toEqual([0]);
+
+    narrator.pause();
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(units).toEqual([0]);
+
+    narrator.resume();
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(port.spoken).toHaveLength(1);
+    await expect(end).resolves.toBe('completed');
   });
 
   it('ends a unit whose speech started but never ended, and goes on to the next', async () => {

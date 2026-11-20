@@ -41,8 +41,8 @@
 
 ## Görev listesi
 
-- [ ] Task 0: Plan dosyası, dal ve ürün sahibinin yanıtları
-- [ ] Task 1: Seslendirmede sayfanın kalanı sessiz
+- [x] Task 0: Plan dosyası, dal ve ürün sahibinin yanıtları
+- [x] Task 1: Seslendirmede sayfanın kalanı sessiz
 - [ ] Task 2: Seans ekranlarının alan kuralları
 - [ ] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
 - [ ] Task 4: Seans durum makinesi
@@ -443,7 +443,7 @@ Görevlerin kendi testleri dışında en çok can yakabilecek beş durum. Her bi
 **Dosyalar:** `docs/planlar/faz-2b.md`, `docs/kararlar.md`.
 
 - [x] `main`'den `faz-2b` dalını aç. Bu planın durum satırını "onaylandı (tarih)", "Onaya sunulan kararlar" başlığını "Onaylanan kararlar" yap.
-- [ ] `docs/kararlar.md`:
+- [x] `docs/kararlar.md`:
   - Ürün: **P13** dinlemesiz seans (kesin, ürün sahibi 2026-11-20; ayrıntı: Faz 2b planı, karar 10).
   - Tasarım:
     - **D13** G1 balonunun genel kalıbı (kesin, 2026-11-20).
@@ -456,7 +456,7 @@ Görevlerin kendi testleri dışında en çok can yakabilecek beş durum. Her bi
     - **C6** bölümlerin G1 giriş cümlesi (açık; şimdilik D13 kalıbı).
     - **C7** her sorunun cevabının metindeki cümlesi (açık; şimdilik vurgu yok).
   - Değişiklik günlüğüne bir satır.
-- [ ] Commit: `docs: add the phase 2b plan and record the product owner's answers`.
+- [x] Commit: `docs: add the phase 2b plan and record the product owner's answers`.
 
 ### Task 1: Seslendirmede sayfanın kalanı sessiz
 
@@ -470,15 +470,15 @@ Görevlerin kendi testleri dışında en çok can yakabilecek beş durum. Her bi
 
 **Adımlar:**
 
-- [ ] **Kırmızı** (sahte zaman, sahte `SpeechPort`; 4. bölümün `design` düzenindeki ilk sayfası, 18 ünite):
+- [x] **Kırmızı** (sahte zaman, sahte `SpeechPort`; 4. bölümün `design` düzenindeki ilk sayfası, 18 ünite):
   1. Hiç başlamayan ses: tek `speak` çağrısı; `onUnit` 0'dan 17'ye sırayla gelir; sayfa 48,5 sn'de (1,5 + 47,0) `'completed'` biter.
   2. 4. ünitede (`unitIndex` 3) `onError`: `speak` 4 kez çağrılır; 4–17 sessiz; `'completed'`.
   3. 1. testten sonra yeni bir `speakPage` ilk ünite için `speak` çağırır.
   4. 1. testten sonra `speakWord('ağaçlarının')` `speak` çağırır.
   5. Sessiz kalan sayfada `pause()` ve `resume()`: `speak` çağrılmaz, sayfa biter.
-- [ ] `pnpm test src/services/narrator/SpeechSynthesisNarrator.test.ts` → FAIL.
-- [ ] Uygula. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `fix(narrator): time the rest of a page silently once the voice fails`.
+- [x] `pnpm test src/services/narrator/SpeechSynthesisNarrator.test.ts` → FAIL.
+- [x] Uygula. → PASS. `pnpm check` → geçer.
+- [x] Commit: `fix(narrator): time the rest of a page silently once the voice fails`.
 
 ### Task 2: Seans ekranlarının alan kuralları
 
