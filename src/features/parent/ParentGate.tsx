@@ -7,7 +7,6 @@ import { Link, Outlet } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Icon } from '../../components/Icon/Icon';
 import { TextField } from '../../components/TextField/TextField';
-import { parentGateAttempts } from '../../domain/config';
 import { gateQuestion, isGateAnswer } from '../../domain/parentGate';
 import { tr } from '../../i18n/tr';
 import { childPaths } from '../session/paths';
@@ -17,7 +16,8 @@ import {
   endGateWait,
   gateOpenedForDevelopment,
   gateWaitLeft,
-  startGateWait,
+  missGate,
+  passGate,
 } from './parentGateState';
 
 const copy = tr.parentGate;
@@ -41,7 +41,6 @@ function GateScreen({ onOpen }: { onOpen: () => void }) {
   const { random } = useSessionDevices();
   const [question, setQuestion] = useState(() => gateQuestion(random));
   const [answer, setAnswer] = useState('');
-  const [misses, setMisses] = useState(0);
   const [missed, setMissed] = useState(false);
   const [waitLeft, setWaitLeft] = useState(() => gateWaitLeft(Date.now()));
   const field = useRef<HTMLInputElement>(null);
@@ -71,19 +70,18 @@ function GateScreen({ onOpen }: { onOpen: () => void }) {
       return;
     }
     if (isGateAnswer(question, answer)) {
+      passGate();
       onOpen();
       return;
     }
     setAnswer('');
-    if (misses + 1 >= parentGateAttempts) {
-      const now = Date.now();
-      startGateWait(now);
+    // The count lives in the tab: leaving the gate or reloading does not start it again.
+    const now = Date.now();
+    if (missGate(now)) {
       setWaitLeft(gateWaitLeft(now));
-      setMisses(0);
       setMissed(false);
       return;
     }
-    setMisses(misses + 1);
     setMissed(true);
     field.current?.focus();
   };

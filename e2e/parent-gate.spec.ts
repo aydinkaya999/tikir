@@ -48,4 +48,14 @@ test('the parent area opens only through the gate', async ({ page }) => {
     .click();
   await expect(question).toBeVisible();
   await expect(page.locator('[data-shell="parent"]')).toHaveCount(0);
+
+  // The wrong answers count across a reload too: two, a reload, one more, and the gate waits.
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await field.fill(await wrongAnswer());
+    await enter.click();
+  }
+  await page.reload();
+  await field.fill(await wrongAnswer());
+  await enter.click();
+  await expect(page.getByText('30 saniye sonra yeniden deneyebilirsiniz.')).toBeVisible();
 });

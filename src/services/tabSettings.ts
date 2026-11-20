@@ -5,6 +5,9 @@
 /** The parent gate waits until this time (ms since 1970) after three wrong answers. */
 export const parentGateWaitKey = 'tikir.kapi.bekleme';
 
+/** The parent gate's wrong answers since its last wait or right answer. */
+export const parentGateMissesKey = 'tikir.kapi.yanlis';
+
 /** Developer settings: read only behind an inline MODE check, so production drops them. */
 export const tabSettingKeys = {
   /** A ready scenario's name, or 'elle' for the manual listener (docs/dinleme-hatti.md, section 3). */

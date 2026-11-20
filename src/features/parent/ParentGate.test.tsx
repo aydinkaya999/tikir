@@ -103,6 +103,53 @@ describe('ParentGate', () => {
     expect(screen.queryByText(/saniye sonra yeniden deneyebilirsiniz/)).toBeNull();
   });
 
+  it('keeps counting wrong answers across leaving the gate and coming back', async () => {
+    const user = userEvent.setup();
+    await openGate();
+    await answer('84');
+    await answer('83');
+
+    await user.click(screen.getByRole('link', { name: 'Çocuk ekranı' }));
+    await screen.findByRole('heading', { level: 1, name: 'Merhaba Deniz' });
+    await user.click(within(screen.getByRole('main')).getByRole('link', { name: 'Veli alanı' }));
+    await screen.findByText('47 + 38 = ?');
+    await answer('82');
+
+    expect(screen.getByText('30 saniye sonra yeniden deneyebilirsiniz.')).toBeInTheDocument();
+    expect(screen.getByLabelText('Cevap')).toBeDisabled();
+  });
+
+  it('keeps counting wrong answers across a reload', async () => {
+    await openGate();
+    await answer('84');
+    await answer('83');
+
+    // The page starts again in the same tab.
+    cleanup();
+    await openGate();
+    await answer('82');
+
+    expect(screen.getByText('30 saniye sonra yeniden deneyebilirsiniz.')).toBeInTheDocument();
+  });
+
+  it('counts wrong answers anew after the right answer', async () => {
+    const user = userEvent.setup();
+    await openGate();
+    await answer('84');
+    await answer('83');
+    await answer('85');
+    await screen.findByRole('navigation', { name: 'Veli gezinmesi' });
+
+    await user.click(screen.getAllByRole('link', { name: 'Çocuk ekranı' })[0] as HTMLElement);
+    await screen.findByRole('heading', { level: 1, name: 'Merhaba Deniz' });
+    await user.click(within(screen.getByRole('main')).getByRole('link', { name: 'Veli alanı' }));
+    await screen.findByText('47 + 38 = ?');
+    await answer('82');
+
+    expect(screen.getByText('Olmadı. Bir daha deneyin.')).toBeInTheDocument();
+    expect(screen.getByLabelText('Cevap')).toBeEnabled();
+  });
+
   it('asks again once the parent has gone back to the child screen', async () => {
     const user = userEvent.setup();
     await openGate();
