@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { devPaths, extraPaths, screenPaths } from '../src/app/routes';
+import { devPaths, extraPaths, parentExtraPaths, screenPaths } from '../src/app/routes';
 import { enterAccountAndReader, heading, readTheMinute } from './support/onboarding';
 import { passParentGate } from './support/parentGate';
+import { openTomorrow, readUntil } from './support/measurement';
 import {
   openPaused,
   prepareSessionPage,
@@ -16,6 +17,7 @@ import { settle, watch } from './support/watch';
 const allPaths = [
   ...Object.values(screenPaths).map((path) => path.replace(':bookId', 'ornek')),
   ...Object.values(extraPaths),
+  ...Object.values(parentExtraPaths),
   ...Object.values(devPaths),
 ];
 
@@ -135,6 +137,27 @@ test.describe('a reading', () => {
     await page.getByRole('button', { name: 'Duraklatıldı. Sürdürmek için dokun' }).click();
     await waitForListening(page);
     await runUntilVisible(page, page.getByText('2. okuma / 3'));
+
+    expect(watcher.foreign).toEqual([]);
+    expect(watcher.violations).toEqual([]);
+  });
+});
+
+test.describe('the weekly measurement', () => {
+  test.use({ permissions: ['microphone'], timezoneId: 'Europe/Istanbul' });
+
+  // Phase 4 (docs/planlar/faz-4.md, Task 12): a measurement with the microphone open.
+  test('a weekly measurement asks nothing from another origin', async ({ page, baseURL }) => {
+    test.setTimeout(150_000);
+    const origin = new URL(baseURL ?? '').origin;
+    const watcher = await watch(page, origin);
+    await prepareSessionPage(page);
+    await openPaused(page, '/?demo=cocuk-sabahi');
+    await openTomorrow(page);
+
+    await page.getByRole('button', { name: 'Ölçüme başla' }).click();
+    await readUntil(page, page.getByText('2. okuma / 2'));
+    await settle(page);
 
     expect(watcher.foreign).toEqual([]);
     expect(watcher.violations).toEqual([]);
