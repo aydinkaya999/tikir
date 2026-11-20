@@ -1,10 +1,10 @@
 // Stuck words ("canavar kelimeler"): docs/urun.md sections 3 and 4, docs/planlar/faz-2a.md
 // karar 7. A word the child stumbles on becomes a card; correct warmups on spaced days tame it.
-import { tamingIntervalsDays, warmupCardLimit } from './config';
+import { drillCardsPerDay, tamingIntervalsDays, warmupCardLimit } from './config';
 import { addDays, daysBetween } from './date';
 import { isCountedError } from './scoring';
 import { syllabify, toLowerTr, tokenize } from './text';
-import type { LocalDate, StuckWord, WordStatus } from './types';
+import type { DrillSuggestion, LocalDate, StuckWord, WordStatus } from './types';
 
 const LETTER = /\p{L}/gu;
 const tamingStreak = tamingIntervalsDays.length;
@@ -141,6 +141,38 @@ export function tamedWords(cards: readonly StuckWord[]): string[] {
 function spokenOfWord(word: string): string {
   const tokens = tokenize(word);
   return tokens.length === 1 ? (tokens[0]?.spoken ?? word) : word;
+}
+
+/**
+ * "Isınmaya ekle" (V2; docs/planlar/faz-4.md, karar 8): the suggested words without a card become
+ * new cards, due two a day from tomorrow. Cards already there stay as they are; the warmup's rules
+ * (three cards, the most missed first) put the older cards ahead of these.
+ */
+export function drillCards(
+  drill: DrillSuggestion,
+  cards: readonly StuckWord[],
+  chains: Readonly<Record<string, readonly string[]>>,
+  today: LocalDate,
+): StuckWord[] {
+  const taken = new Set(cards.map((card) => stuckKey(card.word)));
+  const added: StuckWord[] = [];
+  for (const word of drill.words) {
+    const key = stuckKey(word);
+    if (taken.has(key)) {
+      continue;
+    }
+    taken.add(key);
+    added.push({
+      word,
+      syllables: syllabify(spokenOfWord(word)),
+      chain: [...(chains[word] ?? chains[key] ?? [])],
+      misses: 0,
+      status: 'wild',
+      correctStreak: 0,
+      dueOn: addDays(today, 1 + Math.floor(added.length / drillCardsPerDay)),
+    });
+  }
+  return added;
 }
 
 function letterCount(word: string): number {

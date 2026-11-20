@@ -4,6 +4,7 @@ import demoProfile from '../../seed/demo-profil.json';
 import { addDays } from './date';
 import {
   applyWarmupResult,
+  drillCards,
   isWarmupCorrect,
   recordMisses,
   remainingToTame,
@@ -320,5 +321,75 @@ describe('tamedWords', () => {
 
   it('is empty without a tamed card', () => {
     expect(tamedWords([card('patika', { status: 'practicing' })])).toEqual([]);
+  });
+});
+
+describe('drillCards', () => {
+  const drill = {
+    suffixes: ['‑yordu', '‑diğinde'],
+    words: [
+      'kıvrılıyordu',
+      'güneşleniyordu',
+      'bulamıyordu',
+      'parlıyordu',
+      'belirdiğinde',
+      'geldiğinde',
+    ],
+    days: 3,
+  };
+  const card = (word: string, status: StuckWordStatus): StuckWord => ({
+    word,
+    syllables: syllabify(word),
+    chain: [],
+    misses: 3,
+    status,
+    correctStreak: 0,
+    dueOn: status === 'tamed' ? null : '2026-11-17',
+  });
+
+  it('makes new cards of the suggested words, two a day from tomorrow', () => {
+    const cards = drillCards(drill, [], {}, '2026-11-15');
+    expect(cards.map((each) => [each.word, each.dueOn])).toEqual([
+      ['kıvrılıyordu', '2026-11-16'],
+      ['güneşleniyordu', '2026-11-16'],
+      ['bulamıyordu', '2026-11-17'],
+      ['parlıyordu', '2026-11-17'],
+      ['belirdiğinde', '2026-11-18'],
+      ['geldiğinde', '2026-11-18'],
+    ]);
+    expect(cards.find((each) => each.word === 'geldiğinde')).toEqual({
+      word: 'geldiğinde',
+      syllables: ['gel', 'di', 'ğin', 'de'],
+      chain: [],
+      misses: 0,
+      status: 'wild',
+      correctStreak: 0,
+      dueOn: '2026-11-18',
+    });
+  });
+
+  it('leaves out the words that already have a card, whatever their case', () => {
+    const cards = drillCards(
+      drill,
+      [card('kıvrılıyordu', 'tamed'), card('Belirdiğinde', 'practicing')],
+      {},
+      '2026-11-15',
+    );
+    expect(cards.map((each) => [each.word, each.dueOn])).toEqual([
+      ['güneşleniyordu', '2026-11-16'],
+      ['bulamıyordu', '2026-11-16'],
+      ['parlıyordu', '2026-11-17'],
+      ['geldiğinde', '2026-11-17'],
+    ]);
+  });
+
+  it('takes a word’s chain from the series when it has one', () => {
+    const chains = { parlıyordu: ['parla', 'parlıyor', 'parlıyordu'] };
+    const cards = drillCards(drill, [], chains, '2026-11-15');
+    expect(cards.find((each) => each.word === 'parlıyordu')?.chain).toEqual([
+      'parla',
+      'parlıyor',
+      'parlıyordu',
+    ]);
   });
 });

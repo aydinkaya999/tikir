@@ -190,7 +190,7 @@ export interface DrillSuggestion {
 
 export type ReadingLevel = 'frustration' | 'instructional' | 'independent';
 
-/** trial: the second reading, made with the reading style being tried. */
+/** trial: the reading made in the style being tried, read first or second (docs/kararlar.md P16). */
 export interface Assessment {
   id: Id;
   childId: Id;
