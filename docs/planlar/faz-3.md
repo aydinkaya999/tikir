@@ -329,7 +329,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 ## Görev listesi
 
 - [x] Task 0: Planı ve kararları işle
-- [ ] Task 1: Yazı ayarı alan mantığı
+- [x] Task 1: Yazı ayarı alan mantığı
 - [ ] Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
 - [ ] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
 - [ ] Task 4: Geliştirme parametreleri ve boş depo
@@ -389,7 +389,7 @@ export const trialMeasurementsNeeded = 4;
 export const trialSmallDifference = 5;
 ```
 
-- [ ] **Kırmızı** (`readingStyle.test.ts`, `date.test.ts`):
+- [x] **Kırmızı** (`readingStyle.test.ts`, `date.test.ts`):
   1. `defaultReadingStyle`: 1 ve 2 → `school`; 3 ve 4 → `clear`; hepsinde `sizeStep: 1`, `spacingStep: 0`, `trialEnabled: false`.
   2. `trialReadingStyle`: aralık 0 → 1, 1 → 2, 2 → 1; yazı tipi ve boyut aynı.
   3. **Demo profilinin karşılığı:**
@@ -401,10 +401,10 @@ export const trialSmallDifference = 5;
   5. Dörder ölçümde fark 3 → `'smallDifference'`; fark 6 → `'recommend'`, `better: 'trial'`.
   6. Boyutu farklı ölçümler sayılmaz (ayar değişince sıfırdan).
   7. `weekStart('2026-11-22')` (pazar) → `'2026-11-16'`; `weekStart('2026-11-16')` → kendisi.
-- [ ] `pnpm test src/domain/readingStyle.test.ts src/domain/date.test.ts` → FAIL.
-- [ ] Uygula. Ortalama `Math.round`. Bir hafta, `weekStart`'ı aynı olan ölçümlerdir; sayılmak için o haftada hem geçerli ayarla bir ölçüm hem deneme ayarıyla bir `trial` ölçüm bulunmalı.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(domain): add the reading style rules`.
+- [x] `pnpm test src/domain/readingStyle.test.ts src/domain/date.test.ts` → FAIL.
+- [x] Uygula. Ortalama `Math.round`. Bir hafta, `weekStart`'ı aynı olan ölçümlerdir; sayılmak için o haftada hem geçerli ayarla bir ölçüm hem deneme ayarıyla bir `trial` ölçüm bulunmalı.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(domain): add the reading style rules`.
 
 ### Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
 

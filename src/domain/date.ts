@@ -40,3 +40,8 @@ export function weekdayOf(date: LocalDate): number {
 export function localDateOf(moment: Date): LocalDate {
   return format(moment.getFullYear(), moment.getMonth(), moment.getDate());
 }
+
+/** The Monday of the date's week. */
+export function weekStart(date: LocalDate): LocalDate {
+  return addDays(date, -((weekdayOf(date) + 6) % 7));
+}

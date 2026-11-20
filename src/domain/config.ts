@@ -42,3 +42,9 @@ export const tamingIntervalsDays = [1, 2, 4] as const;
 
 /** Accuracy floors of the reading levels (docs/kararlar.md P7). */
 export const readingLevelFloors = { instructional: 0.9, independent: 0.99 } as const;
+
+/** Measurements each reading style needs before V4 recommends one (docs/urun.md section 7). */
+export const trialMeasurementsNeeded = 4;
+
+/** Under this many correct words a minute the two styles' difference is small (docs/urun.md section 7). */
+export const trialSmallDifference = 5;
