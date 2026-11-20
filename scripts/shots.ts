@@ -36,12 +36,13 @@ function fileStem(route: string): string {
 
 /** The first visible control with this accessible name. */
 function control(page: Page, name: string): Locator {
-  const byRole = (role: 'button' | 'link' | 'radio' | 'checkbox') =>
+  const byRole = (role: 'button' | 'link' | 'radio' | 'checkbox' | 'switch') =>
     page.getByRole(role, { name, exact: true });
   return byRole('button')
     .or(byRole('link'))
     .or(byRole('radio'))
     .or(byRole('checkbox'))
+    .or(byRole('switch'))
     .filter({ visible: true })
     .first();
 }

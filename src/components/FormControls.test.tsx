@@ -133,20 +133,24 @@ describe('OptionCard', () => {
     expect(card).toHaveAttribute('aria-pressed', 'true');
   });
 
-  it('shows a description in the detailed layout', () => {
+  it('names the card by its label and describes it by its description (V4)', () => {
     render(
       <OptionCard
         layout="detail"
         label="Net harfler"
         description="I, l, ı ve i kolay ayrılır"
+        media="I l ı i"
         selected
         onSelect={vi.fn()}
       />,
     );
 
-    expect(screen.getByRole('button', { name: /Net harfler/ })).toHaveTextContent(
-      'I, l, ı ve i kolay ayrılır',
-    );
+    expect(
+      screen.getByRole('button', {
+        name: 'Net harfler',
+        description: 'I, l, ı ve i kolay ayrılır',
+      }),
+    ).toHaveTextContent('I, l, ı ve i kolay ayrılır');
   });
 });
 

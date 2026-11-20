@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useId } from 'react';
 import { Icon, type IconName } from '../Icon/Icon';
 import styles from './OptionCard.module.css';
 
@@ -18,7 +18,10 @@ interface OptionCardProps {
   className?: string;
 }
 
-/** A large choice card; the chosen one is saffron with the button lift. */
+/**
+ * A large choice card; the chosen one is saffron with the button lift. Its label names it and its
+ * description describes it, so a screen reader says the name first.
+ */
 export function OptionCard({
   label,
   selected,
@@ -29,9 +32,18 @@ export function OptionCard({
   description,
   className,
 }: OptionCardProps) {
+  const labelId = useId();
+  const descriptionId = useId();
   const classes = [styles.card, styles[layout], className ?? ''].filter(Boolean).join(' ');
   return (
-    <button type="button" aria-pressed={selected} className={classes} onClick={onSelect}>
+    <button
+      type="button"
+      aria-pressed={selected}
+      aria-labelledby={labelId}
+      aria-describedby={description === undefined ? undefined : descriptionId}
+      className={classes}
+      onClick={onSelect}
+    >
       {layout === 'tile' && selected && (
         <span aria-hidden="true" className={styles.badge}>
           <Icon name="check" size={12} strokeWidth={3.4} />
@@ -43,8 +55,14 @@ export function OptionCard({
         </span>
       )}
       {media === undefined && icon && <Icon name={icon} className={styles.icon} strokeWidth={2} />}
-      <span className={styles.label}>{label}</span>
-      {description !== undefined && <span className={styles.description}>{description}</span>}
+      <span id={labelId} className={styles.label}>
+        {label}
+      </span>
+      {description !== undefined && (
+        <span id={descriptionId} className={styles.description}>
+          {description}
+        </span>
+      )}
     </button>
   );
 }

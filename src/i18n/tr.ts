@@ -34,6 +34,46 @@ export const tr = {
     },
   },
 
+  /** V4 Yazı ayarı (design/ekranlar/V4-yazi-ayari-*.html). */
+  readingStyle: {
+    title: 'Yazı ayarı',
+    /** {name}: the name with its genitive suffix, "Deniz’in". */
+    lead: (name: string) => `${name} okuma metinleri bu ayarla görünür.`,
+    preview: 'Önizleme',
+    font: 'Yazı tipi',
+    fonts: {
+      clear: { label: 'Net harfler', description: 'I, l, ı ve i kolay ayrılır', sample: 'I l ı i' },
+      school: { label: 'Okul harfleri', description: 'a ve g defterdeki gibi', sample: 'a g' },
+    },
+    size: 'Harf boyutu',
+    sizes: ['Küçük', 'Orta', 'Büyük', 'En büyük'],
+    spacing: 'Harf aralığı',
+    spacings: ['Normal', 'Açık', 'Daha açık'],
+    trial: {
+      title: 'Hangi ayar daha iyi?',
+      /** {name}: the name with its genitive suffix. */
+      text: (name: string) =>
+        `Haftalık ölçümde iki ayar arka arkaya denenir. Dört ölçümden sonra ${name} daha iyi okuduğu ayar önerilir.`,
+      toggle: 'Ölçümlerde iki ayarı dene',
+      rows: 'Denenen ayarlar ve sonuçları',
+      current: 'Şu anki ayar',
+      tried: 'Denenen ayar',
+      /** "Net harfler, normal aralık": the spacing in lower case. */
+      styleName: (font: string, spacing: string) => `${font}, ${spacing} aralık`,
+      collecting: (count: number, remaining: number) =>
+        `Doğru kelime / dk, ${String(count)} ölçümün ortalaması. Fark henüz küçük; karar için ${String(remaining)} ölçüm daha gerekiyor.`,
+      /** The sentences the design does not draw (docs/kararlar.md D16). TODO(design) */
+      none: 'Henüz iki ayarla ölçüm yapılmadı. İlk ölçümlerden sonra sonuçlar burada görünür.',
+      collectingApart: (count: number, remaining: number) =>
+        `Doğru kelime / dk, ${String(count)} ölçümün ortalaması. Karar için ${String(remaining)} ölçüm daha gerekiyor.`,
+      small: (count: number) =>
+        `Doğru kelime / dk, ${String(count)} ölçümün ortalaması. Fark küçük; iki ayar da uygun.`,
+      better: (name: string, gain: number) =>
+        `${name} ile ortalama ${String(gain)} doğru kelime daha fazla okuyor.`,
+      switchTo: 'Bu ayara geçebilirsiniz.',
+    },
+  },
+
   /** The parent gate (docs/kararlar.md D16, P11). TODO(design) */
   parentGate: {
     title: 'Veli alanı',

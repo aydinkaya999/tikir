@@ -100,6 +100,11 @@
   --size-timer: 16px;
   /* K4: the first measurement's correct words a minute; 84 px from 700 px. */
   --size-baseline: 60px;
+  /* V4: the trial card's text (16 px on tablets), its rows' style, note and average. */
+  --size-trial-text: 15px;
+  --size-trial-row: 15px;
+  --size-trial-note: 13px;
+  --size-trial-value: 26px;
   /* G6: the question (22 px on phones, 30 px from 700 px) and its options (17 px, 20 px). */
   --size-question: 22px;
   --size-answer: 17px;
@@ -123,6 +128,7 @@
     --size-answer: 20px;
     --size-done-number: 104px;
     --size-baseline: 84px;
+    --size-trial-text: 16px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;
@@ -133,6 +139,7 @@
 @media (min-width: 1200px) {
   :root {
     --size-subtitle: 15px;
+    --size-trial-text: 15px;
     --reading-size-0: 22px;
     --reading-size-1: 25px;
     --reading-size-2: 29px;

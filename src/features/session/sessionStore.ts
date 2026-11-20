@@ -83,6 +83,8 @@ export interface SessionData {
   /** Every session up to today, in date order; today's included once it exists. */
   sessions: Session[];
   cards: StuckWord[];
+  /** Every measurement, the level check first (V4's comparison; V3 in phase 4). */
+  assessments: Assessment[];
   today: LocalDate;
   session: Session | null;
 }
@@ -231,12 +233,13 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
     async function readState(): Promise<Pick<SessionState, 'status' | 'data' | 'setup'>> {
       const repository = await services.repository();
       const today = services.today();
-      const [parent, child, books, sessions, cards] = await Promise.all([
+      const [parent, child, books, sessions, cards, assessments] = await Promise.all([
         repository.getParent(),
         repository.getChild(),
         repository.listBooks(),
         repository.listSessions(firstDate, today),
         repository.listStuckWords(),
+        repository.listAssessments(),
       ]);
       if (parent === null || parent.setup !== undefined || child === null) {
         const step: SetupPlace = parent === null ? 'account' : (parent.setup ?? 'reader');
@@ -244,8 +247,7 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           step === 'level' && child !== null
             ? ((await repository.listPassages(child.grade))[0] ?? null)
             : null;
-        const baseline =
-          step === 'meet' ? ((await repository.listAssessments()).at(-1) ?? null) : null;
+        const baseline = step === 'meet' ? (assessments.at(-1) ?? null) : null;
         return {
           status: 'setup',
           data: null,
@@ -263,7 +265,7 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           : chapterOf(series, session.chapterRef.chapter);
       return {
         status: 'ready',
-        data: { parent, child, series, chapter, sessions, cards, today, session },
+        data: { parent, child, series, chapter, sessions, cards, assessments, today, session },
         setup: null,
       };
     }

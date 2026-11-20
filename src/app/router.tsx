@@ -9,12 +9,8 @@ import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
-import {
-  AssessmentPage,
-  ReadingStylePage,
-  StuckWordsPage,
-  WeeklySummaryPage,
-} from '../features/parent/pages';
+import { AssessmentPage, StuckWordsPage, WeeklySummaryPage } from '../features/parent/pages';
+import { ReadingStylePage } from '../features/parent/ReadingStylePage';
 import { AlbumPage } from '../features/session/AlbumPage';
 import { DonePage } from '../features/session/DonePage';
 import type { StoreApi } from 'zustand/vanilla';

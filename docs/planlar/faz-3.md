@@ -342,7 +342,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 11: K3 Seviye tespiti
 - [x] Task 12: K4 Tıkır ile tanışma
 - [x] Task 13: Veli kapısı, girişler ve çıkışlar
-- [ ] Task 14: V4 Yazı ayarı
+- [x] Task 14: V4 Yazı ayarı
 - [ ] Task 15: P14 seansta
 - [ ] Task 16: Uçtan uca testler
 - [ ] Task 17: Belgeler, karşılaştırma ve denetim
@@ -815,7 +815,7 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
 
 **Kullanır:** Task 1 (`trialComparison`, `trialReadingStyle`), Task 3 (`setReadingStyle`), Task 10 (`ReadingStyleScope`), Task 2 (`withGenitiveSuffix`).
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **İçerik:**
      - "Yazı ayarı", "Deniz’in okuma metinleri bu ayarla görünür.";
      - "Önizleme", "Kayıp Fenerin İzinde", "Deniz sırt çantasını omzuna aldı. Tıkır kulaklarını dikti ve rüzgârı dinledi." (`veli-haftasonu`, son okunan bölüm 4);
@@ -827,14 +827,14 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
      - Anahtar açık (demo): "Net harfler, normal aralık", "Şu anki ayar", "69", "Net harfler, açık aralık", "Denenen ayar", "72" ve tasarımın cümlesi.
      - Kapalıyken satırlar yok.
   5. **Sonuç cümlesi:** Her durumun cümlesi (`views.ts` birim testi; plandaki tablo).
-- [ ] → FAIL. Uygula. Önizleme kutusunun yüksekliği en büyük boyut ve en açık aralığa göre sabit.
-- [ ] Görüntü (tasarımın üç durumu):
+- [x] → FAIL. Uygula. Önizleme kutusunun yüksekliği en büyük boyut ve en açık aralığa göre sabit.
+- [x] Görüntü (tasarımın üç durumu):
   - varsayılan: `pnpm shots '/veli/yazi?demo=veli-haftasonu&kapi=acik'`;
   - `--dokun "Okul harfleri" --dokun "En büyük" --dokun "Daha açık"` (`@okul-buyuk`);
   - `--dokun "Küçük" --dokun "Ölçümlerde iki ayarı dene"` (`@kucuk-kapali`).
   - Her biri V4 ile karşılaştırılır; `@okul-buyuk`'un sonuç satırları bilinen fark.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(parent): build the reading style setting (V4)`.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(parent): build the reading style setting (V4)`.
 
 ### Task 15: P14 seansta
 
@@ -955,6 +955,17 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 | G1, tablet | Rayın altında "Veli alanı" bağlantısı | kalır: tasarımı yok (karar 27) |
 | V1, telefon | Şeridin sağında 44 px'lik "Çocuk ekranı" düğmesi; çocuk etiketi profilden ("Deniz, 3. sınıf") | kalır: düğmenin tasarımı yok |
 | V1, tablet | Rayın altında "Çocuk ekranı" bağlantısı | kalır: tasarımı yok (karar 27) |
+| V1, telefon | Çıkış düğmesi şeridi 72 px'e uzatıyordu; tasarımda şerit 61 px | düzeltildi (Task 14: düğme şeridin iç boşluğuna taşar) |
+
+**V4** (`/veli/yazi?demo=veli-haftasonu&kapi=acik`; `@okul-buyuk`: "Okul harfleri", "En büyük", "Daha açık"; `@kucuk-kapali`: "Küçük", "Açık", "Ölçümlerde iki ayarı dene"):
+
+| Durum, genişlik | Fark | Sonuç |
+|---|---|---|
+| @kucuk-kapali, tablet ve web | Anahtar kapalıyken giriş tüm genişliğe yayılıyordu; tasarımda sol yarıda | düzeltildi (sonuç sütunu boş da olsa yer tutar) |
+| @okul-buyuk, üçü | Sonuç satırları "Okul harfleri, daha açık aralık" ve "Henüz iki ayarla ölçüm yapılmadı…"; tasarım 69 ve 72'yi gösteriyor | kalır: bilinen tutarsızlık (`docs/kararlar.md`, tutarsızlık 10): ayar değişince karşılaştırma sıfırdan başlar |
+| üçü | Önizlemede satır kırılması bir kelime önce | kalır: okuma metninin kaymasız vurgu payı (G4, K3 ile aynı) |
+| telefon | Önizleme kartı tasarımdakinden bir satır yüksek; sayfa o kadar uzun | kalır: kutu net harflerin de en büyük ayarına yer ayırır, denetimler hiçbir seçimde yer değiştirmez (ölçüt 6) |
+| telefon | Görüntüde alt çubuk sayfanın ortasında | kalır: görüntü aracı tam sayfa çeker, yapışkan çubuk 844 px'te kalır; 390 × 1248 görüntüde yerinde |
 
 ## Kanıtlar
 
