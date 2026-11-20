@@ -122,6 +122,26 @@ export const tr = {
     start: 'Sıra sende',
   },
 
+  /** G4 Oku (docs/ekranlar.md, G4). */
+  read: {
+    attemptChip: (attempt: number, total: number) => `${String(attempt)}. okuma / ${String(total)}`,
+    /** Only when the child is ahead; a negative difference is never shown (rule 7). */
+    raceLead: (words: number) => `Dünkü senin ${String(words)} kelime önündesin.`,
+    helpLead: 'Takıldın mı? Hecele:',
+    elapsed: (time: string) => `Süre ${time}`,
+    correct: (count: number) => `Doğru ${String(count)}`,
+    stuck: (count: number) => `Takılma ${String(count)}`,
+    spaceHint: 'Boşluk tuşu: duraklat ve devam et',
+    pause: 'Duraklat',
+    /** The paused reading's button; "Sürdür" as on G1. TODO(design) */
+    resume: 'Sürdür',
+    finish: 'Okumayı bitir',
+    /** Above the page while the third reading is recorded (docs/ekranlar.md, G4). TODO(design) */
+    recording: 'Kayıt',
+    /** The unheard session (P13, D15). TODO(design) */
+    unheardBubble: 'Dinleme kapalı. Metni sesli oku, bitince Okumayı bitir’e dokun.',
+  },
+
   /** G7, and G1 once the day is done (docs/ekranlar.md, G1: "G7'deki 'Yarın' kartını kullan"). */
   done: {
     tomorrow: (title: string) => `Yarın: ${title}`,

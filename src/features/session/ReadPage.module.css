@@ -1,0 +1,108 @@
+/* Phone (below 700 px): G4 telefon. */
+.page {
+  flex: 1 1 auto;
+}
+
+/* The third reading is recorded: a coral dot and "Kayıt" above the page. TODO(design) */
+.recording {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--color-coral-dark);
+  font-size: var(--size-small);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+.recordingDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-coral);
+}
+
+.race {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.raceSentence {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-small);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+/* The side column's groups: the counters, the hint and the controls, 20 px apart (G4). */
+.side {
+  display: contents;
+}
+
+/* The counters show from 700 px, the Space hint on the web only (G4). */
+.counters,
+.hint {
+  display: none;
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+  text-align: center;
+}
+
+.phoneControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.wideControls {
+  display: none;
+}
+
+.mic {
+  margin: 0 10px;
+}
+
+@media (min-width: 700px) {
+  .side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .counters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .phoneControls {
+    display: none;
+  }
+
+  .wideControls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hint {
+    display: block;
+  }
+}

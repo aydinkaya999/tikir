@@ -53,7 +53,7 @@
 - [x] Task 9: G1 Yol
 - [x] Task 10: G2 Isınma ve mikrofon sorunları
 - [x] Task 11: G3 Dinle
-- [ ] Task 12: G4 Oku
+- [x] Task 12: G4 Oku
 - [ ] Task 13: G5 Kayıt
 - [ ] Task 14: G6 Kapanış sorusu
 - [ ] Task 15: G7 Bugünlük bitti
@@ -1046,7 +1046,7 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `ReadPage.test.tsx` (StrictMode, sahte zaman, `FakeAudioCapture`, `SilentNarrator`):
+- [x] **Kırmızı:** `ReadPage.test.tsx` (StrictMode, sahte zaman, `FakeAudioCapture`, `SilentNarrator`):
   1. **Tasarımdaki an** (`design`, 2. okuma, hayalet dakikada 40). Yardım açılınca:
      - balon "Takıldın mı? Hecele: a-ğaç-la-rı-nın";
      - o anki 14, hayalet 12, işaretler 6 duraksama ve 9 hata;
@@ -1088,11 +1088,11 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
   11. **Mikrofon sorunu:** `denied` → izin metni ve "Yeniden dene"; dinleyici başlamaz.
   12. **Sayfa çevirme** (`typical`, içerik düzeni): 25. kelimede (indeks 25) sayaç "2 / 6".
   13. **Elle kip:** Boşluk kelimeyi doğru işaretler ve duraklatmaz.
-- [ ] `pnpm test src/features/session/ReadPage.test.tsx` → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 19300 '/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design'` → G4 ile karşılaştır, farkları yaz, düzelt. Telefondaki 45 kelimelik birleşik sayfa (2a, karar 3) farka yazılır.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the reading screen (G4)`.
+- [x] `pnpm test src/features/session/ReadPage.test.tsx` → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 19300 '/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design'` → G4 ile karşılaştır, farkları yaz, düzelt. Telefondaki 45 kelimelik birleşik sayfa (2a, karar 3) farka yazılır.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the reading screen (G4)`.
 
 ### Task 13: G5 Kayıt
 
@@ -1373,6 +1373,16 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 | telefon | Sayfa 45 kelimenin hepsini gösterir ve kayar, denetim çubuğu yapışkan; tasarım yalnız 1. içerik sayfasını gösteriyor | kalır: 2a, karar 3 (ölçüm: belge 924 px) |
 | üçü | Toplam süre "0:46" yazıyordu (47,0 sn kayan noktada 46,99…) | düzeltildi (`formatClock` önce tam milisaniyeye yuvarlar) |
 
+**G4** (planlanan komut: `design` senaryosu, 2. okuma, mikrofon açılır, saat 19 300 ms):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | Yardımda Tıkır `talk` yüzüyle ve yarım kalmış bir geçişle çıkıyordu; tasarımda yardım anında da `listen` | düzeltildi (G4'te yüz hep `listen`) |
+| tablet, web | Yan sütunda sayaçlar, ipucu ve düğmeler 14 px aralıklıydı; tasarımda 20 px | düzeltildi |
+| üçü | Yarış imleçleri gerçek konumdan çizilir (99 kelimenin 14'ü ve 12'si) ve etiketleri üst üste biner; tasarımın %40 ve %33'ü veriden türemiyor | kalır: tutarsızlık 4. İmleçler yakınken etiketlerin yeri tasarımda yok (açık soru 6) |
+| üçü | Kelime aralıkları geniş, satırlar farklı kırılıyor | kalır: G3'teki gibi (kaymasız vurgu, Faz 0) |
+| telefon | "1 / 2" sayfası 45 kelimenin hepsini gösterir ve kayar; Tıkır ve balon, sayfa kaydırılınca yapışkan çubuğun üstünde görünür | kalır: 2a, karar 3 (tam sayfa görüntüsünde yapışkan çubuk ilk görünüm alanında kalır) |
+
 ## Açık sorular (onayı beklemez)
 
 1. **C6:** Bölümlerin G1 giriş cümleleri. İçerik yazarı yazarsa D13 kalıbının yerine geçer.
@@ -1380,6 +1390,7 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 3. **Dinlemesiz seansın tasarımı:** Faz 3'te K1'in onaysız yoluyla birlikte ele alınır.
 4. **G2'de hece karoları:** Gerçek dinleyici (Faz 6) hece zamanı verirse çocuğun okumasını izleyebilir.
 5. **iPhone:** Yardım seslendirmesi sırasında açık mikrofon ve dokunuşsuz başlayan G3 seslendirmesi cihaz denemesinde bakılır.
+6. **Yarış çubuğunda yakın imleçler:** Çocuk ve hayalet birkaç kelime arayla okurken "sen" ve "dün" etiketleri üst üste biniyor. Tasarımda bu durum yok; tasarımcıya sorulur (bileşen Faz 0'dan).
 
 ## Kanıtlar
 
