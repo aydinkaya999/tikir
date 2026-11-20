@@ -3,11 +3,6 @@
 import { tr } from '../../i18n/tr';
 import { SessionLayout } from './SessionLayout';
 
-/** G3 Dinle. */
-export function ListenPage() {
-  return <SessionLayout title={tr.session.steps.listen} companion={{ expression: 'talk' }} />;
-}
-
 /** G4 Oku. */
 export function ReadPage() {
   return <SessionLayout title={tr.session.steps.read} companion={{ expression: 'listen' }} />;

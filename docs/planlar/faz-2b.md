@@ -52,7 +52,7 @@
 - [x] Task 8: `pnpm shots` adımları
 - [x] Task 9: G1 Yol
 - [x] Task 10: G2 Isınma ve mikrofon sorunları
-- [ ] Task 11: G3 Dinle
+- [x] Task 11: G3 Dinle
 - [ ] Task 12: G4 Oku
 - [ ] Task 13: G5 Kayıt
 - [ ] Task 14: G6 Kapanış sorusu
@@ -1016,7 +1016,7 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`format.test.ts`:** 0 → "0:00", 19 190 → "0:19", 47 000 → "0:47", 83 662 → "1:23".
   - **`ListenPage.test.tsx`** (StrictMode, `SilentNarrator`, sahte zaman, `design` düzeni):
     1. **Açılış:**
@@ -1032,11 +1032,11 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
     5. **Hız:** "Normal" → seslendirici hızı ve okuyucunun `narrationRate`'i yazılır; sonraki açılış normal hızla.
     6. **Çıkış penceresi:** açıkken seslendirme durur, kapanınca sürer.
     7. **Onay yok:** "Sıra sende" `audio.start`'ı çağırmaz ama G4'e geçer.
-- [ ] İki test dosyası → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots --ileri 18000 '/seans/dinle?demo=cocuk-sabahi&adim=listen&senaryo=design'` → G3 ile karşılaştır, farkları yaz, düzelt.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the listen screen (G3)`.
+- [x] İki test dosyası → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots --ileri 18000 '/seans/dinle?demo=cocuk-sabahi&adim=listen&senaryo=design'` → G3 ile karşılaştır, farkları yaz, düzelt.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the listen screen (G3)`.
 
 ### Task 12: G4 Oku
 
@@ -1362,6 +1362,16 @@ Düzeltmelerden sonra üç genişlikte düzen, metin, renk ve karolar tasarımla
 | üçü | yok: kart, heceler ("yor" o anki), zincir, Tıkır, balon ve denetimler tasarımla aynı yerde | — |
 
 Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde böyle); tablette sütunun dibinde kalır.
+
+**G3** (planlanan komut: `design` düzeni, saat 18 000 ms):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | An 0:18'de, tasarım 0:21 der; ilerleme çubuğu buna göre %38 | kalır: önceden bilinen (tasarımın süresi ile vurgusu uyuşmuyor) |
+| üçü | "Sıra sende" pasif; tasarımda etkin görünüyor | kalır: seslendirme bir kez bitmeden düğme pasif (`docs/ekranlar.md`, G3) |
+| üçü | Kelime aralıkları tasarımdakinden geniş, satırlar farklı kırılıyor; webde o anki ünite iki satıra bölünüyor | kalır: her kelime kalın halinin genişliğini baştan ayırır, vurgu satır kaydırmaz (`docs/tasarim-sistemi.md`, "Okuma metni"; Faz 0) |
+| telefon | Sayfa 45 kelimenin hepsini gösterir ve kayar, denetim çubuğu yapışkan; tasarım yalnız 1. içerik sayfasını gösteriyor | kalır: 2a, karar 3 (ölçüm: belge 924 px) |
+| üçü | Toplam süre "0:46" yazıyordu (47,0 sn kayan noktada 46,99…) | düzeltildi (`formatClock` önce tam milisaniyeye yuvarlar) |
 
 ## Açık sorular (onayı beklemez)
 

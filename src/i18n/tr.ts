@@ -100,6 +100,28 @@ export const tr = {
     seriesEnd: 'Yeni bölümler yolda.',
   },
 
+  /** The page card of the reading screens (G3, G4): "Kayıp Fenerin İzinde, 4. bölüm", "1 / 2". */
+  page: {
+    title: (book: string, chapter: number) => `${book}, ${String(chapter)}. bölüm`,
+    counter: (page: number, total: number) => `${String(page)} / ${String(total)}`,
+  },
+
+  /** G3 Dinle (docs/ekranlar.md, G3). */
+  listen: {
+    chip: 'Tıkır okuyor',
+    pause: 'Seslendirmeyi duraklat',
+    /** The paused narration's button; approved with the phase 2b plan (D15). TODO(design) */
+    resume: 'Seslendirmeyi sürdür',
+    progressLabel: 'Seslendirme',
+    time: (elapsed: string, total: string) => `${elapsed} / ${total}`,
+    rateLabel: 'Okuma hızı',
+    slow: 'Yavaş',
+    normal: 'Normal',
+    bubble: 'Ben okurken parmağınla takip et.',
+    restart: 'Baştan dinle',
+    start: 'Sıra sende',
+  },
+
   /** G7, and G1 once the day is done (docs/ekranlar.md, G1: "G7'deki 'Yarın' kartını kullan"). */
   done: {
     tomorrow: (title: string) => `Yarın: ${title}`,

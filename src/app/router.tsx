@@ -20,13 +20,13 @@ import {
 import {
   AlbumPage,
   DonePage,
-  ListenPage,
   ReadPage,
   RecordPage,
   StudioPage,
   WrapUpPage,
 } from '../features/session/pages';
 import type { StoreApi } from 'zustand/vanilla';
+import { ListenPage } from '../features/session/ListenPage';
 import { RoadPage } from '../features/session/RoadPage';
 import { SessionGuard } from '../features/session/SessionGuard';
 import { WarmupPage } from '../features/session/WarmupPage';
