@@ -24,7 +24,7 @@ Hepsini her seferinde okuma; yaptığın işe karşılık geleni oku.
 
 Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulum: `pnpm install` ve `pnpm exec playwright install chromium webkit`.
 
-- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses` (ses denemesi).
+- `pnpm dev`: geliştirme sunucusu (`http://localhost:5173`). Geliştirme sayfaları: `/gelistirme/vitrin` (bileşen vitrini) ve `/gelistirme/ses` (ses denemesi). Geliştirme adres parametreleri (`?demo=`, `&adim=`, `&senaryo=`, `&onay=kapali`): `docs/mimari.md` → "Depolama ve örnek veri".
 - `pnpm check`: tip denetimi + lint (ESLint, Stylelint, Prettier denetimi) + birim testleri. Her görevden sonra çalıştır.
 - `pnpm test <dosya>`: tek test dosyası; bütün takım yerine bunu tercih et. Araya `--` koyma: `pnpm test -- <dosya>` bütün takımı koşar.
 - `pnpm e2e`: Playwright uçtan uca testleri, Chromium ve WebKit'te. `e2e` kipinde derleyip (`dist-e2e/`) `vite preview` ile sınar; yankı sunucusunu da kendisi açar (açıksa onu kullanır). Tek dosya için: `pnpm e2e e2e/<ad>.spec.ts`. Kurulu Google Chrome'da: `E2E_CHROME=1 pnpm e2e e2e/audio-lab.spec.ts --project=chrome`.
@@ -32,7 +32,7 @@ Node 26 (`.nvmrc`) ve pnpm 12 (`package.json` → `packageManager`). İlk kurulu
 - `pnpm echo-server`: ses denemesinin yankı sunucusu (`127.0.0.1:4318`). `pnpm dev` ve `vite preview`, `/gelistirme/yanki` adresini ona aktarır.
 - `pnpm audio-trial`: ses denemesi sayfasını yerel ağda HTTPS ile sunar (`https://<ip>:4443/gelistirme/ses`, mkcert sertifikası) ve yankı sunucusunu açar. Gerçek cihaz adımları: `docs/ses-denemesi-sonuclari.md`.
 - `pnpm cap:sync`: `cap` kipinde derler (`dist-cap/`, geliştirme sayfaları dahil, uygulama ses denemesi sayfasıyla açılır) ve `ios/` ile `android/` projelerine kopyalar. Sonra `pnpm exec cap run ios --target <simülatör>` ya da `pnpm exec cap open ios|android`. Android, JDK 21 ister: `JAVA_HOME=$(mise where java@temurin-21) ANDROID_HOME=~/Library/Android/sdk pnpm exec cap run android --target <cihaz>`.
-- `pnpm shots <rota> [<rota> …]`: rotaların 390 × 844, 1180 × 820 ve 1440 × 900 ekran görüntüsü. Dosyalar `shots/<ad>-telefon.png`, `-tablet.png` ve `-web.png` adlarıyla yazılır; `/` için ad `index`.
+- `pnpm shots [--dokun <ad>] [--bekle <ad>] [--ileri <ms>] <rota> [<rota> …]`: rotaların 390 × 844, 1180 × 820 ve 1440 × 900 ekran görüntüsü. Dosyalar `shots/<ad>-telefon.png`, `-tablet.png` ve `-web.png` adlarıyla yazılır; `/` için ad `index`. Adımlar verildiği sırayla her rotada, görüntüden önce çalışır: `--dokun` o erişilebilir adı taşıyan düğmeye, bağlantıya ya da seçeneğe dokunur, `--bekle` o adla bir öğeyi bekler, `--ileri` saati ilerletir (saat sayfa yüklenince durur). Sayfada konuşma sentezi yok; Tıkır sessiz zamanlanır. Seans adımlarının komutları: `docs/planlar/faz-2b.md` → "Tasarım karşılaştırması".
 - `pnpm build`: üretim derlemesi (tip denetimi + `vite build`). Geliştirme sayfaları derlemeye girmez.
 - `pnpm format`: Prettier ile biçimle.
 

@@ -49,7 +49,7 @@
 - [x] Task 5: Seans deposu
 - [x] Task 6: Geliştirme adres parametreleri
 - [x] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
-- [ ] Task 8: `pnpm shots` adımları
+- [x] Task 8: `pnpm shots` adımları
 - [ ] Task 9: G1 Yol
 - [ ] Task 10: G2 Isınma ve mikrofon sorunları
 - [ ] Task 11: G3 Dinle
@@ -892,22 +892,22 @@ export function parseShotArgs(args: readonly string[]): { steps: ShotStep[]; rou
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `shotArgs.test.ts`:
+- [x] **Kırmızı:** `shotArgs.test.ts`:
   - `['--dokun','Kelimeyi dinle','--ileri','1200','/a','/b']` → iki adım, iki rota;
   - `--ileri abc` → hata;
   - `/` ile başlamayan rota → hata;
   - `--` yok sayılır.
-- [ ] `pnpm test scripts/shotArgs.test.ts` → FAIL.
-- [ ] Uygula. `shots.ts` (karar 22):
+- [x] `pnpm test scripts/shotArgs.test.ts` → FAIL.
+- [x] Uygula. `shots.ts` (karar 22):
   - Chromium sahte mikrofon ve izinle açılır; bir başlangıç betiği sayfadan `speechSynthesis`'i kaldırır (karar 7);
   - `--ileri` varsa saat sayfa açılmadan kurulur ve durdurulur (`page.clock.install`, ardından `pauseAt`); `--ileri` adımı `runFor` çağırır;
   - `--dokun` adı `button`, `link`, `radio` ve `checkbox` rollerinde arar;
   - adımlar sırayla koşar;
   - ekran görüntüsü yazı tipleri yüklenince alınır.
-- [ ] `pnpm shots /gelistirme/vitrin` eskisi gibi çalışır. CLAUDE.md komut satırı:
+- [x] `pnpm shots /gelistirme/vitrin` eskisi gibi çalışır. CLAUDE.md komut satırı:
   `pnpm shots [--dokun <ad>] [--bekle <ad>] [--ileri <ms>] <rota> …`, adımların sırayla çalıştığı notuyla.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(shots): tap, wait and move the clock before a screenshot`.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(shots): tap, wait and move the clock before a screenshot`.
 
 ### Task 9: G1 Yol
 
