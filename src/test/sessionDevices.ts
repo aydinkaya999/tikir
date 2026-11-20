@@ -34,6 +34,34 @@ export function testRecorder(
   };
 }
 
+/**
+ * A recorder whose playback lasts until it is stopped, as a real recording does, and which keeps
+ * the approval sent from G5. null: the recording cannot be found.
+ */
+export function heldPlaybackRecorder(
+  recording: Omit<RecordingInfo, 'id'> | null = { seconds: 52, levels: [] },
+): TestRecorder {
+  const recorder = testRecorder();
+  let current = recording;
+  let endPlayback: (() => void) | null = null;
+  recorder.get.mockImplementation((id) => Promise.resolve(current && { ...current, id }));
+  recorder.play.mockImplementation(
+    () =>
+      new Promise<void>((resolve) => {
+        endPlayback = resolve;
+      }),
+  );
+  recorder.stopPlayback.mockImplementation(() => {
+    endPlayback?.();
+    endPlayback = null;
+  });
+  recorder.requestApproval.mockImplementation(() => {
+    current = current && { ...current, approval: 'pending' };
+    return Promise.resolve();
+  });
+  return recorder;
+}
+
 export interface TestDevicesOptions {
   audio?: FakeAudioCapture;
   narrator?: Narrator;

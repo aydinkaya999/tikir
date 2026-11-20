@@ -4,15 +4,15 @@
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
-import { Monster } from '../../components/Monster/Monster';
 import { tr } from '../../i18n/tr';
 import styles from './DonePage.module.css';
 import { childPaths } from './paths';
 import { useSession } from './sessionContext';
 import { SessionLayout } from './SessionLayout';
 import { placeOf } from './sessionMachine';
+import { TamedWords } from './TamedWords';
 import { TomorrowCard } from './TomorrowCard';
-import { doneView, monsterKindOf } from './views';
+import { doneView } from './views';
 
 export function DonePage() {
   const data = useSession((state) => state.data);
@@ -51,24 +51,7 @@ export function DonePage() {
             {view.delta !== null && <Chip icon="chart">{tr.done.gain(view.delta)}</Chip>}
           </section>
         )}
-        {view.tamed.length > 0 && (
-          <ul className={styles.tamed} aria-label={tr.done.tamedLabel}>
-            {view.tamed.map((word) => (
-              <li key={word} className={styles.tamedWord}>
-                <Monster
-                  className={styles.monster}
-                  kind={monsterKindOf(word)}
-                  state="tamed"
-                  size={64}
-                />
-                <span className={styles.tamedText}>
-                  <span className={styles.word}>{word}</span>
-                  <span className={styles.note}>{tr.done.tamed}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+        {view.tamed.length > 0 && <TamedWords words={view.tamed} />}
         {view.tomorrow === null ? (
           // TODO(design): the series' end is not drawn on G7.
           <p className={styles.seriesEnd}>{tr.road.seriesEnd}</p>

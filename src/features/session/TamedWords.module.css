@@ -1,0 +1,65 @@
+/* G7: the tamed words two to a row; 52 px monsters on the phone, 64 px from 700 px. */
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.word {
+  display: flex;
+  flex: 1 1 150px;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 10px;
+  border: var(--border);
+  border-radius: var(--radius-button);
+  background: var(--color-white);
+}
+
+.monster {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.name {
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+.note {
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+@media (min-width: 700px) {
+  .words {
+    gap: 14px;
+  }
+
+  .word {
+    flex-basis: 200px;
+    padding: 14px;
+  }
+
+  .monster {
+    width: 64px;
+    height: 64px;
+  }
+}

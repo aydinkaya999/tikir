@@ -3,36 +3,16 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { companionImages } from '../../components/illustrations';
 import type { ReadingResult } from '../../domain/types';
-import type { RecordingInfo } from '../../services/recorder/Recorder';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
-import { type TestRecorder, testRecorder } from '../../test/sessionDevices';
+import { heldPlaybackRecorder, type TestRecorder } from '../../test/sessionDevices';
 import { testToday } from '../../test/sessionStore';
 
 const levels = Array.from({ length: 64 }, (_, index) => ((index * 7) % 10) / 10 + 0.05);
 
-/** A recorder whose playback lasts until it is stopped and which keeps the sent approval. */
 function playbackRecorder(
-  recording: Omit<RecordingInfo, 'id'> | null = { seconds: 52, levels },
-): TestRecorder {
-  const recorder = testRecorder();
-  let current = recording;
-  let endPlayback: (() => void) | null = null;
-  recorder.get.mockImplementation((id) => Promise.resolve(current && { ...current, id }));
-  recorder.play.mockImplementation(
-    () =>
-      new Promise<void>((resolve) => {
-        endPlayback = resolve;
-      }),
-  );
-  recorder.stopPlayback.mockImplementation(() => {
-    endPlayback?.();
-    endPlayback = null;
-  });
-  recorder.requestApproval.mockImplementation(() => {
-    current = current && { ...current, approval: 'pending' };
-    return Promise.resolve();
-  });
-  return recorder;
+  recording: Parameters<typeof heldPlaybackRecorder>[0] = { seconds: 52, levels },
+) {
+  return heldPlaybackRecorder(recording);
 }
 
 async function openRecord(

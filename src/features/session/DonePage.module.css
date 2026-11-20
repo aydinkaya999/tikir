@@ -41,49 +41,6 @@
   line-height: 1.2;
 }
 
-/* The words tamed today, two to a row. */
-.tamed {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tamedWord {
-  display: flex;
-  flex: 1 1 150px;
-  align-items: center;
-  gap: 10px;
-  box-sizing: border-box;
-  min-width: 0;
-  padding: 10px;
-  border: var(--border);
-  border-radius: var(--radius-button);
-  background: var(--color-white);
-}
-
-.monster {
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-}
-
-.tamedText {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
-.word {
-  color: var(--color-ink);
-  font-size: var(--size-body);
-  font-weight: var(--weight-extrabold);
-  line-height: var(--leading-ui);
-}
-
 .note {
   margin: 0;
   color: var(--color-muted);
@@ -118,20 +75,6 @@
 
   .pace {
     padding: 28px;
-  }
-
-  .tamed {
-    gap: 14px;
-  }
-
-  .tamedWord {
-    flex-basis: 200px;
-    padding: 14px;
-  }
-
-  .monster {
-    width: 64px;
-    height: 64px;
   }
 
   .action {
