@@ -73,7 +73,9 @@ export function MeasurementPage() {
         <OnboardingLayout
           title={copy.title}
           back={back}
-          companion={{ expression: 'listen', bubble, phone: problem }}
+          // Below 1000 px there is no panel: the second reading's words, which ask for the tap,
+          // come at the head of the content too.
+          companion={{ expression: 'listen', bubble, phone: problem || second }}
           action={controls}
         >
           {total > 1 && (

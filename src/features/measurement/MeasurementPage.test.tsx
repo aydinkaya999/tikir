@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ReadingStyle } from '../../domain/types';
@@ -107,8 +107,11 @@ describe('MeasurementPage', () => {
     await advance(61_000);
 
     expect(await screen.findByText('2. okuma / 2')).toBeInTheDocument();
+    // Phones and portrait tablets have no panel: Tıkır says it in the content (karar 32).
     expect(
-      screen.getByText('Bir metin daha. Hazır olduğunda mikrofona dokun.'),
+      within(screen.getByRole('main')).getByText(
+        'Bir metin daha. Hazır olduğunda mikrofona dokun.',
+      ),
     ).toBeInTheDocument();
     expect(shownSpacing()).toBe('0');
     await advance(5_000);
