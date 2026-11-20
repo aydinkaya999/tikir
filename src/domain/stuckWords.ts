@@ -130,6 +130,14 @@ function byTurkishKey(a: string, b: string): number {
   return stuckKey(a).localeCompare(stuckKey(b), 'tr');
 }
 
+/** The album's words: the tamed cards, in the Turkish alphabet's order. */
+export function tamedWords(cards: readonly StuckWord[]): string[] {
+  return cards
+    .filter((card) => card.status === 'tamed')
+    .map((card) => card.word)
+    .sort(byTurkishKey);
+}
+
 function spokenOfWord(word: string): string {
   const tokens = tokenize(word);
   return tokens.length === 1 ? (tokens[0]?.spoken ?? word) : word;

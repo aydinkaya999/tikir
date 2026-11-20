@@ -17,13 +17,14 @@ import {
   StuckWordsPage,
   WeeklySummaryPage,
 } from '../features/parent/pages';
+import { AlbumPage } from '../features/session/AlbumPage';
 import { DonePage } from '../features/session/DonePage';
-import { AlbumPage, StudioPage } from '../features/session/pages';
 import type { StoreApi } from 'zustand/vanilla';
 import { ListenPage } from '../features/session/ListenPage';
 import { ReadPage } from '../features/session/ReadPage';
 import { RecordPage } from '../features/session/RecordPage';
 import { RoadPage } from '../features/session/RoadPage';
+import { StudioPage } from '../features/session/StudioPage';
 import { WrapUpPage } from '../features/session/WrapUpPage';
 import { SessionGuard } from '../features/session/SessionGuard';
 import { WarmupPage } from '../features/session/WarmupPage';

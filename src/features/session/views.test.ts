@@ -3,7 +3,7 @@ import { seriesBook } from '../../services/repository/seedContent';
 import { testSession } from '../../test/sessions';
 import { demoSessionStore, testToday } from '../../test/sessionStore';
 import type { SessionData } from './sessionStore';
-import { doneView, roadView } from './views';
+import { doneView, roadView, studioRows } from './views';
 
 async function dataAt(options: Parameters<typeof demoSessionStore>[0] = {}): Promise<SessionData> {
   const { store } = await demoSessionStore(options);
@@ -139,5 +139,43 @@ describe('doneView', () => {
     const sessions = data.sessions.map((each) => (each.date === data.today ? session : each));
 
     expect(doneView({ ...data, session, sessions }).tomorrow).toBeNull();
+  });
+});
+
+describe('studioRows', () => {
+  it('lists the recorded chapters of the series in chapter order, each with its latest take', async () => {
+    const data = await dataAt({ step: 'done' });
+    const today = data.session;
+    const take = today?.readings[2]?.recordingId;
+    if (today === null || take === undefined) {
+      throw new Error('No recorded session today.');
+    }
+    const earlier = (date: string, chapter: number, recordingId: string) => ({
+      ...today,
+      date,
+      chapterRef: { ...today.chapterRef, chapter },
+      readings: today.readings.map((reading, index) =>
+        index === 2 ? { ...reading, recordingId } : reading,
+      ),
+    });
+    const otherBook = {
+      ...earlier('2026-11-17', 1, 'baska'),
+      chapterRef: { bookId: 'baska-kitap', chapter: 1 },
+    };
+    const sessions = [
+      earlier('2026-11-18', 2, 'ilk'),
+      otherBook,
+      earlier('2026-11-19', 2, 'son'),
+      earlier('2026-11-20', 1, 'bir'),
+      today,
+    ];
+    const title = (number: number) =>
+      data.series.chapters.find((chapter) => chapter.number === number)?.title;
+
+    expect(studioRows({ ...data, sessions })).toEqual([
+      { chapter: 1, title: title(1), recordingId: 'bir' },
+      { chapter: 2, title: title(2), recordingId: 'son' },
+      { chapter: 4, title: 'Dar Patika', recordingId: take },
+    ]);
   });
 });

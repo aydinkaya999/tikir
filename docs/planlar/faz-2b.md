@@ -57,7 +57,7 @@
 - [x] Task 13: G5 Kayıt
 - [x] Task 14: G6 Kapanış sorusu
 - [x] Task 15: G7 Bugünlük bitti
-- [ ] Task 16: Albüm ve Stüdyo
+- [x] Task 16: Albüm ve Stüdyo
 - [ ] Task 17: Uçtan uca seans testleri
 - [ ] Task 18: Belgeler, tasarım karşılaştırması ve denetim
 
@@ -1202,18 +1202,18 @@ export function doneView(data: SessionData): DoneView;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **Albüm:**
      - `veli-haftasonu` → "ağaçlarının" ve "kıvrılıyordu" (alfabe sırasıyla) ve "evcilleşti";
      - `cocuk-sabahi` → "Evcilleşen kelimelerin burada toplanır." ve "Yola dön" (`/`).
   2. **Stüdyo:**
      - `record`'a kadar hazırlanmış depo → "Dar Patika, 3. okuma", "0:52"; "Kaydı dinle" → `play`, "Duraklat" → `stopPlayback`;
      - kayıt yok → "Kaydettiğin bölümler burada sesli kitabın olur." ve "Yola dön".
-- [ ] Test dosyaları → FAIL.
-- [ ] Uygula. Tasarım sistemi bileşenleriyle (`Card`, `Monster`, `IconButton`); `TODO(design)`.
-- [ ] Görüntü: `pnpm shots '/album?demo=veli-haftasonu' '/studyo?demo=cocuk-sabahi&adim=done'`. Tasarımı yok; üç genişlikte taşma ve kırpılma yok.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): add the minimal album and studio screens`.
+- [x] Test dosyaları → FAIL.
+- [x] Uygula. Tasarım sistemi bileşenleriyle (`Card`, `Monster`, `IconButton`); `TODO(design)`.
+- [x] Görüntü: `pnpm shots '/album?demo=veli-haftasonu' '/studyo?demo=cocuk-sabahi&adim=done'`. Tasarımı yok; üç genişlikte taşma ve kırpılma yok.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): add the minimal album and studio screens`.
 
 ### Task 17: Uçtan uca seans testleri
 
@@ -1403,6 +1403,8 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 |---|---|---|
 | tablet, web | "Yarın" kartı 10 px iç boşluk ve 52 px kareyle alçaktı (82 px; tasarımda 90 px) | düzeltildi (700 px'ten 14 px ve 60 px; G1'deki aynı kart da) |
 | üçü | Evcilleşen kelime yalnız "ağaçlarının"; tek kart satırı doldurur | kalır: demo profilinde `typical` yalnız bu kelimeyi evcilleştirir (karar 21); iki kelimede kartlar tasarımdaki gibi yan yanadır |
+
+**Albüm ve Stüdyo** (`/album?demo=veli-haftasonu`, `/studyo?demo=cocuk-sabahi&adim=done`, boş durum `/album?demo=cocuk-sabahi`; tasarımı yok): üç genişlikte taşma ve kırpılma yok.
 
 ## Açık sorular (onayı beklemez)
 

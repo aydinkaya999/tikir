@@ -14,7 +14,7 @@ import {
 import type { WarmupItem, WarmupSource } from '../../domain/stuckWords';
 import type { ChapterToken } from '../../domain/text';
 import { chapterTokens } from '../../domain/text';
-import type { Book, Chapter } from '../../domain/types';
+import type { Book, Chapter, Id } from '../../domain/types';
 import type { SessionData } from './sessionStore';
 
 export interface ChapterLine {
@@ -140,4 +140,25 @@ export function doneView(data: SessionData): DoneView {
     tomorrow: chapterLine(series, nextSeriesChapter(sessions, series)),
     childName: data.child.name,
   };
+}
+
+/** A recorded chapter in the studio (docs/planlar/faz-2b.md, karar 18). */
+export interface StudioRow {
+  chapter: number;
+  title: string;
+  recordingId: Id;
+}
+
+/** The series' recorded chapters in chapter order; a chapter read again keeps its latest take. */
+export function studioRows(data: SessionData): StudioRow[] {
+  const { series } = data;
+  const rows = new Map<number, StudioRow>();
+  for (const session of data.sessions) {
+    const recordingId = session.readings[2]?.recordingId;
+    const chapter = series.chapters.find((each) => each.number === session.chapterRef.chapter);
+    if (session.chapterRef.bookId === series.id && recordingId !== undefined && chapter) {
+      rows.set(chapter.number, { chapter: chapter.number, title: chapter.title, recordingId });
+    }
+  }
+  return [...rows.values()].sort((a, b) => a.chapter - b.chapter);
 }

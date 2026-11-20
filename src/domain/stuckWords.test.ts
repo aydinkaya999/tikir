@@ -7,6 +7,7 @@ import {
   isWarmupCorrect,
   recordMisses,
   remainingToTame,
+  tamedWords,
   warmupDeck,
   warmupItems,
   type WarmupSource,
@@ -298,5 +299,26 @@ describe('warmupItems', () => {
         card: null,
       },
     ]);
+  });
+});
+
+describe('tamedWords', () => {
+  it('lists the tamed cards in the Turkish alphabet’s order', () => {
+    const cards = [
+      card('kıvrılıyordu', { status: 'tamed' }),
+      card('çam', { status: 'practicing' }),
+      card('ışık', { status: 'tamed' }),
+      card('ağaçlarının', { status: 'tamed' }),
+      card('İkisi', { status: 'tamed' }),
+      card('ceviz', { status: 'tamed' }),
+      card('patika', { status: 'wild' }),
+    ];
+
+    // c < ç, ı < i, and İ is i's capital (docs/mimari.md, Türkçe metin).
+    expect(tamedWords(cards)).toEqual(['ağaçlarının', 'ceviz', 'ışık', 'İkisi', 'kıvrılıyordu']);
+  });
+
+  it('is empty without a tamed card', () => {
+    expect(tamedWords([card('patika', { status: 'practicing' })])).toEqual([]);
   });
 });

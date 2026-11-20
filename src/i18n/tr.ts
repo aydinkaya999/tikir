@@ -205,6 +205,18 @@ export const tr = {
     close: 'Kapat',
   },
 
+  /** The album tab (docs/planlar/faz-2b.md, karar 18). TODO(design) */
+  album: {
+    empty: 'Evcilleşen kelimelerin burada toplanır.',
+    back: 'Yola dön',
+  },
+
+  /** The studio tab (docs/planlar/faz-2b.md, karar 18). TODO(design) */
+  studio: {
+    empty: 'Kaydettiğin bölümler burada sesli kitabın olur.',
+    back: 'Yola dön',
+  },
+
   /** Loading and the error notice; approved with the phase 2b plan (D15). TODO(design) */
   status: {
     loading: 'Hazırlanıyor…',
