@@ -64,6 +64,8 @@ export async function prepareSessionStep(
     if (session === null || chapter === null) {
       throw new Error('There is no session to prepare today.');
     }
+    // Without the parent's consent the steps go as the screens take them unheard (P13).
+    const heard = data?.parent.consent.voiceProcessing ?? false;
     const place = placeOf(session);
     const here = devSteps.indexOf(devStepOf(place));
     if (here >= target) {
@@ -74,12 +76,18 @@ export async function prepareSessionStep(
     }
     switch (place.step) {
       case 'warmup':
-        await (place.secondAttempt ? state().nextWarmupCard() : state().answerWarmupCard(true));
+        await (place.secondAttempt || !heard
+          ? state().nextWarmupCard()
+          : state().answerWarmupCard(true));
         break;
       case 'listen':
         await state().finishListening();
         break;
       case 'read': {
+        if (!heard) {
+          await state().skipUnheardReading();
+          break;
+        }
         const reading = scenarioSets[scenario].readings[place.attempt - 1];
         if (reading === undefined) {
           throw new Error(`The ${scenario} scenario has no reading ${String(place.attempt)}.`);

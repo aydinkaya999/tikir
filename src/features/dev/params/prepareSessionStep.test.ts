@@ -101,4 +101,28 @@ describe('prepareSessionStep', () => {
     expect(session.tamedToday).toEqual(['ağaçlarının']);
     expect(sessionMinutesSpent(session)).toBe(12);
   });
+
+  it('walks the unheard session when the parent has not consented', async () => {
+    const { repository, services, recordings } = await setup();
+    const parent = await repository.getParent();
+    if (parent === null) {
+      throw new Error('no parent');
+    }
+    await repository.saveParent({
+      ...parent,
+      consent: { ...parent.consent, voiceProcessing: false },
+    });
+    const cards = await repository.listStuckWords();
+
+    await prepareSessionStep(services, 'done', 'typical', recordings);
+
+    // As the screens do without consent (docs/kararlar.md P13): no scored warmup, no reading, no
+    // recording.
+    const session = await sessionOf(repository);
+    expect(session.step).toBe('done');
+    expect(session.readings).toEqual([]);
+    expect(session.tamedToday).toEqual([]);
+    expect(await repository.listStuckWords()).toEqual(cards);
+    expect(session.answers).toHaveLength(2);
+  });
 });
