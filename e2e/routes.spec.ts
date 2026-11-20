@@ -204,11 +204,13 @@ for (const route of focusRoutes) {
   });
 }
 
+// Each step opens with the developer parameter that prepares it: the setup opens only its
+// current step (docs/planlar/faz-3.md, karar 4).
 const onboardingSteps = [
-  { path: '/kurulum/hesap', step: 1 },
-  { path: '/kurulum/okuyucu', step: 2 },
-  { path: '/kurulum/seviye', step: 3 },
-  { path: '/kurulum/tanisma', step: 4 },
+  { path: '/kurulum/hesap?kurulum=hesap', step: 1 },
+  { path: '/kurulum/okuyucu?kurulum=okuyucu', step: 2 },
+  { path: '/kurulum/seviye?kurulum=seviye', step: 3 },
+  { path: '/kurulum/tanisma?kurulum=tanisma', step: 4 },
 ];
 
 for (const route of onboardingSteps) {

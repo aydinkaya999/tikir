@@ -20,6 +20,7 @@ import {
 import { AlbumPage } from '../features/session/AlbumPage';
 import { DonePage } from '../features/session/DonePage';
 import type { StoreApi } from 'zustand/vanilla';
+import { SetupGuard } from '../features/onboarding/SetupGuard';
 import { ListenPage } from '../features/session/ListenPage';
 import { ReadPage } from '../features/session/ReadPage';
 import { RecordPage } from '../features/session/RecordPage';
@@ -86,68 +87,74 @@ export function appRoutes(session: AppSession): RouteObject[] {
       element: <SessionRoot store={session.store} devices={session.devices} />,
       children: [
         {
-          element: <ChildShell />,
-          children: [
-            { path: screenPaths.G1, element: <RoadPage /> },
-            { path: screenPaths.U1, element: <LibraryPage /> },
-            { path: extraPaths.album, element: <AlbumPage /> },
-            { path: extraPaths.studio, element: <StudioPage /> },
-          ],
-        },
-        {
-          element: <SessionShell />,
+          // Nothing opens before the setup is done (docs/planlar/faz-3.md, karar 4).
+          element: <SetupGuard />,
           children: [
             {
-              // The steps open in order (docs/ekranlar.md, "Yönlendirme kuralları").
-              element: <SessionGuard />,
+              element: <ChildShell />,
               children: [
-                { path: screenPaths.G2, element: <WarmupPage /> },
-                { path: screenPaths.G3, element: <ListenPage /> },
-                { path: screenPaths.G4, element: <ReadPage /> },
-                { path: screenPaths.G5, element: <RecordPage /> },
-                { path: screenPaths.G6, element: <WrapUpPage /> },
-                { path: screenPaths.G7, element: <DonePage /> },
+                { path: screenPaths.G1, element: <RoadPage /> },
+                { path: screenPaths.U1, element: <LibraryPage /> },
+                { path: extraPaths.album, element: <AlbumPage /> },
+                { path: extraPaths.studio, element: <StudioPage /> },
               ],
             },
-          ],
-        },
-        {
-          element: (
-            <FocusShell
-              title={tr.focus.bookFromCards.title}
-              subtitle={tr.focus.bookFromCards.subtitle}
-              backTo={screenPaths.U1}
-            />
-          ),
-          children: [{ path: screenPaths.U3, element: <BookFromCardsPage /> }],
-        },
-        {
-          element: (
-            <FocusShell
-              title={tr.focus.bookReady.title}
-              subtitle={tr.focus.bookReady.subtitle}
-              backTo={screenPaths.U3}
-            />
-          ),
-          children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
-        },
-        {
-          element: <OnboardingShell />,
-          children: [
-            { path: screenPaths.K1, element: <ParentAccountPage /> },
-            { path: screenPaths.K2, element: <ChildProfilePage /> },
-            { path: screenPaths.K3, element: <LevelAssessmentPage /> },
-            { path: screenPaths.K4, element: <MeetCompanionPage /> },
-          ],
-        },
-        {
-          element: <ParentShell />,
-          children: [
-            { path: screenPaths.V1, element: <WeeklySummaryPage /> },
-            { path: screenPaths.V2, element: <StuckWordsPage /> },
-            { path: screenPaths.V3, element: <AssessmentPage /> },
-            { path: screenPaths.V4, element: <ReadingStylePage /> },
-            { path: screenPaths.U2, element: <BookFromTextPage /> },
+            {
+              element: <SessionShell />,
+              children: [
+                {
+                  // The steps open in order (docs/ekranlar.md, "Yönlendirme kuralları").
+                  element: <SessionGuard />,
+                  children: [
+                    { path: screenPaths.G2, element: <WarmupPage /> },
+                    { path: screenPaths.G3, element: <ListenPage /> },
+                    { path: screenPaths.G4, element: <ReadPage /> },
+                    { path: screenPaths.G5, element: <RecordPage /> },
+                    { path: screenPaths.G6, element: <WrapUpPage /> },
+                    { path: screenPaths.G7, element: <DonePage /> },
+                  ],
+                },
+              ],
+            },
+            {
+              element: (
+                <FocusShell
+                  title={tr.focus.bookFromCards.title}
+                  subtitle={tr.focus.bookFromCards.subtitle}
+                  backTo={screenPaths.U1}
+                />
+              ),
+              children: [{ path: screenPaths.U3, element: <BookFromCardsPage /> }],
+            },
+            {
+              element: (
+                <FocusShell
+                  title={tr.focus.bookReady.title}
+                  subtitle={tr.focus.bookReady.subtitle}
+                  backTo={screenPaths.U3}
+                />
+              ),
+              children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
+            },
+            {
+              element: <OnboardingShell />,
+              children: [
+                { path: screenPaths.K1, element: <ParentAccountPage /> },
+                { path: screenPaths.K2, element: <ChildProfilePage /> },
+                { path: screenPaths.K3, element: <LevelAssessmentPage /> },
+                { path: screenPaths.K4, element: <MeetCompanionPage /> },
+              ],
+            },
+            {
+              element: <ParentShell />,
+              children: [
+                { path: screenPaths.V1, element: <WeeklySummaryPage /> },
+                { path: screenPaths.V2, element: <StuckWordsPage /> },
+                { path: screenPaths.V3, element: <AssessmentPage /> },
+                { path: screenPaths.V4, element: <ReadingStylePage /> },
+                { path: screenPaths.U2, element: <BookFromTextPage /> },
+              ],
+            },
           ],
         },
       ],

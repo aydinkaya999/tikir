@@ -333,7 +333,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
 - [x] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
 - [x] Task 4: Geliştirme parametreleri ve boş depo
-- [ ] Task 5: Kurulum koruması ve yönlendirme
+- [x] Task 5: Kurulum koruması ve yönlendirme
 - [ ] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
 - [ ] Task 7: Kurulum çatısı
 - [ ] Task 8: K1 Veli hesabı
@@ -548,23 +548,23 @@ export const onboardingPaths: Readonly<Record<SetupPlace, string>>; // account �
 export function setupRedirect(setup: SetupData | null, pathname: string): string | null;
 ```
 
-- [ ] **Kırmızı** (`router.test.tsx`):
+- [x] **Kırmızı** (`router.test.tsx`):
   1. Boş depo: `/` → `/kurulum/hesap`.
   2. `'level'` adımında `/seans/oku`, `/veli` ve `/kitaplik` → `/kurulum/seviye`.
   3. Kurulum bitmiş: `/kurulum/hesap` → `/`.
   4. `'reader'` adımında `/kurulum/tanisma` → `/kurulum/okuyucu`.
   5. Boş depoyla `/gelistirme/vitrin` açılır.
   6. Depo yüklenirken "Hazırlanıyor…" görünür, yönlendirme olmaz.
-- [ ] **Uçtan uca:**
+- [x] **Uçtan uca:**
   - `dev-params.spec.ts` › "an empty store opens the onboarding".
   - `routes.spec.ts`'te kurulum adresleri `?kurulum=<adım>` ile açılır.
-- [ ] → FAIL.
-- [ ] Uygula:
+- [x] → FAIL.
+- [x] Uygula:
   - `SetupGuard` bütün ürün kabuklarını, `OnboardingGuard` kurulum adreslerini sarar.
   - Geliştirme rotaları korumaların dışında kalır.
   - `SessionGuard`'ın profil yok dalı ve sayfalardaki `TODO(phase 3)` dalları kalkar.
-- [ ] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts e2e/dev-params.spec.ts` → geçer.
-- [ ] Commit: `feat(app): send every product address through the setup`.
+- [x] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts e2e/dev-params.spec.ts` → geçer.
+- [x] Commit: `feat(app): send every product address through the setup`.
 
 ### Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
 

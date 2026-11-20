@@ -30,3 +30,10 @@ test('?kurulum=seviye prepares the reader at the level check', async ({ page }) 
   ]);
   expect(new URL(page.url()).search).toBe('');
 });
+
+test('an empty store opens the setup', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page).toHaveURL(/\/kurulum\/hesap$/);
+  await expect(page.locator('[data-shell="onboarding"]')).toBeVisible();
+});

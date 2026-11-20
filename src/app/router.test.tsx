@@ -44,6 +44,53 @@ describe('appRoutes', () => {
     });
   });
 
+  it('opens the setup on an empty store', async () => {
+    const router = await renderAt('/', { setup: 'hesap' });
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/kurulum/hesap');
+    });
+  });
+
+  it.each(['/seans/oku', '/veli', '/kitaplik'])(
+    'sends %s to the setup step still ahead',
+    async (path) => {
+      const router = await renderAt(path, { setup: 'seviye' });
+
+      await waitFor(() => {
+        expect(router.state.location.pathname).toBe('/kurulum/seviye');
+      });
+    },
+  );
+
+  it('sends the setup addresses to the road once the setup is done', async () => {
+    const router = await renderAt('/kurulum/hesap');
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/');
+    });
+  });
+
+  it('keeps the setup in order: a later step goes back to the current one', async () => {
+    const router = await renderAt('/kurulum/tanisma', { setup: 'okuyucu' });
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/kurulum/okuyucu');
+    });
+  });
+
+  it('opens the developer pages on an empty store', async () => {
+    await renderAt('/gelistirme/vitrin', { setup: 'hesap' });
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Vitrin' })).toBeInTheDocument();
+  });
+
+  it('decides nothing while the store loads', async () => {
+    renderWithStore('/kurulum/hesap', () => new Promise<never>(() => undefined));
+
+    expect(await screen.findByText('Hazırlanıyor…')).toBeInTheDocument();
+  });
+
   it('serves the showcase outside the production build', async () => {
     await renderAt('/gelistirme/vitrin');
 

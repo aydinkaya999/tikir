@@ -24,10 +24,6 @@ export function SessionGuard() {
   if (status === 'error') {
     return <StatusScreen kind="error" as="main" />;
   }
-  if (status === 'setup') {
-    // TODO(phase 3): no profile goes to the onboarding (/kurulum/hesap).
-    return <main />;
-  }
   const target = sessionRedirect(session, pathname);
   return target === null ? <Outlet /> : <Navigate to={target} replace />;
 }
