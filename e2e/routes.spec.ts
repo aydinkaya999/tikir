@@ -32,9 +32,17 @@ const viewports = {
   web: { width: 1440, height: 900 },
 } as const;
 
+/** Product addresses open with the demo profile: an empty store opens the setup (phase 3). */
+function withDemo(path: string): string {
+  if (path.startsWith('/gelistirme') || path.startsWith('/kurulum') || path.includes('demo=')) {
+    return path;
+  }
+  return `${path}${path.includes('?') ? '&' : '?'}demo=cocuk-sabahi`;
+}
+
 async function open(page: Page, path: string, viewport: keyof typeof viewports) {
   await page.setViewportSize(viewports[viewport]);
-  await page.goto(path);
+  await page.goto(withDemo(path));
   await expect(page.locator('[data-shell]')).toBeVisible();
 }
 
@@ -258,7 +266,9 @@ for (const route of twoPaneShells) {
     }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(
-        route.path === '/seans/oku' ? `${route.path}?demo=cocuk-sabahi&adim=read-1` : route.path,
+        route.path === '/seans/oku'
+          ? `${route.path}?demo=cocuk-sabahi&adim=read-1`
+          : withDemo(route.path),
       );
       if (route.path === '/seans/oku') {
         // G4 draws its controls when Tıkır's voice is ready, in a new pane: measure that one.

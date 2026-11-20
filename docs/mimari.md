@@ -302,9 +302,10 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
   - `cocuk-sabahi`: 4. bölüm okunmak üzere. G1–G7 tasarımlarının başlangıç durumu.
   - `veli-haftasonu`: hafta bitmiş, ölçüm yapılmış. V1–V4 tasarımlarındaki sayılar.
 - Dosyadaki günler görelidir (`day`); yükleyici kipin `anchor` gününü takvime oturtur: `cocuk-sabahi` kipinde bugüne, `veli-haftasonu` kipinde bugünden önceki en yakın pazara (hafta şeridi tasarımdaki günlere denk gelsin diye). Okumalar ve ölçümler sahte dinleyici senaryosu biçimindedir; yükleyici onları `FakeListener` ile aynı benzetimden geçirip `ReadingResult` üretir. Dosyanın `expected` alanı, ekranlarda görülmesi gereken sayıları verir; testlerde kullan.
-- Kurulum akışı yazılana kadar (Faz 3) geliştirme derlemesi, profil yoksa `cocuk-sabahi` kipini kendiliğinden yükler.
+- Faz 3'ten beri profil yoksa demo kendiliğinden kurulmaz: boş depo kuruluma gider. Demo yalnız `?demo=` ile kurulur.
 - **Geliştirme adres parametreleri** (Faz 2b, `src/features/dev/params/`) bir ekranı doğrudan istenen durumda açar. Ekran görüntüsü betiği ve uçtan uca testler bunları kullanır; üretim derlemesinde yoktur.
-  - `?demo=<kip>`: depoyu temizleyip o kipi kurar (`cocuk-sabahi`, `veli-haftasonu`).
+  - `?demo=<kip>`: depoyu temizleyip o kipi kurar (`cocuk-sabahi`, `veli-haftasonu`). `?demo=bos` depoyu boşaltır; kurulum açılır.
+  - `?kurulum=<adım>`: depoyu boşaltıp kurulumu o adımda açar (`hesap`, `okuyucu`, `seviye`, `tanisma`). Veli ve çocuk demo profilindendir (veli@example.com, Deniz, 3. sınıf); `tanisma` demo profilinin ilk ölçümünü (58 doğru kelime) yazar. `&onay=kapali` ile kurulum onaysız yürür; o zaman seviye tespiti yoktur.
   - `&adim=<adım>`: bugünün seansını o adıma getirir: `warmup`, `listen`, `read-1`, `read-2`, `read-3`, `record`, `wrapUp`, `done`. Adımlar uygulamanın kendi eylemleriyle yürünür; okumalar senaryonun okumalarıdır, `record` ve sonrası için 52 sn'lik yapay bir kayıt yazılır. Seans 12 dakika önce başlamış sayılır (G7'deki "12 dakika").
   - `&senaryo=<ad>`: o sekmede dinleyicinin senaryosu (`typical`, `design`…); `elle` sahte dinleyiciyi tuşlarla yürütür (`docs/dinleme-hatti.md`, bölüm 3). Sekme ayarıdır (`sessionStorage`, `tikir.gelistirme.dinleyici`); sekme kapanınca biter.
   - `&onay=kapali`: velinin ses onayını kaldırır. `&adim=` o zaman dinlemesiz yolu yürür: ısınma kartları puansız geçilir, okumalar dinlenmeden okunur.

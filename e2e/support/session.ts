@@ -65,7 +65,7 @@ export async function getUserMediaCalls(page: Page): Promise<number> {
   return page.evaluate(() => (window as unknown as SessionTestWindow).__getUserMediaCalls);
 }
 
-type StoreName = 'sessions' | 'stuckWords' | 'recordings';
+type StoreName = 'sessions' | 'stuckWords' | 'recordings' | 'parent' | 'child' | 'assessments';
 
 /** Every record of a store of the app's database. */
 export async function storedRecords<T>(page: Page, store: Exclude<StoreName, 'recordings'>) {

@@ -1,6 +1,6 @@
 // The developer address parameters (docs/mimari.md, "Depolama ve örnek veri"; docs/planlar/
-// faz-2b.md, karar 21): ?demo=<kip>, &adim=<adım>, &senaryo=<ad|elle>, &onay=kapali. Developer and
-// e2e builds only.
+// faz-2b.md, karar 21; faz-3.md, karar 5): ?demo=<kip|bos>, ?kurulum=<adım>, &adim=<adım>,
+// &senaryo=<ad|elle>, &onay=kapali. Developer and e2e builds only.
 import { scenarioNames, type ScenarioName } from '../../../services/listener/scenarios';
 import { type DemoMode, demoModes } from '../demo/loadDemoProfile';
 
@@ -16,11 +16,20 @@ export const devSteps = [
 ] as const;
 export type DevStep = (typeof devSteps)[number];
 
+/** The setup steps (docs/planlar/faz-3.md, karar 5): `?kurulum=` opens the setup at one of them. */
+export const setupParams = ['hesap', 'okuyucu', 'seviye', 'tanisma'] as const;
+
+export type SetupParam = (typeof setupParams)[number];
+
+/** `?demo=bos`: an empty store, so the setup opens. */
+export const emptyStore = 'bos';
+
 /** The manual listener: an adult marks each word from the keyboard. */
 export const manualListener = 'elle';
 
 export interface DevParams {
-  demo?: DemoMode;
+  demo?: DemoMode | typeof emptyStore;
+  setup?: SetupParam;
   step?: DevStep;
   scenario?: ScenarioName | typeof manualListener;
   consentOff?: true;
@@ -51,10 +60,18 @@ export function readDevParams(search: string): { params: DevParams; rest: string
 
   const demo = take(query, 'demo');
   if (demo !== null) {
-    if (oneOf(demoModes, demo)) {
+    if (oneOf([...demoModes, emptyStore], demo)) {
       params.demo = demo;
     } else {
       warnUnknown('demo', demo);
+    }
+  }
+  const setup = take(query, 'kurulum');
+  if (setup !== null) {
+    if (oneOf(setupParams, setup)) {
+      params.setup = setup;
+    } else {
+      warnUnknown('kurulum', setup);
     }
   }
   const step = take(query, 'adim');

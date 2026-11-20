@@ -137,6 +137,39 @@ function checkWcpm(result: ReadingResult, wcpm: number, what: string): void {
  * the sessions and assessments up to the mode's day, its stuck word cards and its drill. Throws
  * if a simulated reading does not give the seed's wcpm.
  */
+/** The demo profile's parent, reader and first measurement, for the setup steps (Faz 3, karar 5). */
+export interface DemoSetupSeed {
+  email: string;
+  weeklyEmail: boolean;
+  reader: { name: string; grade: Grade; interests: string[] };
+  /** The level check's reading: its text and the timed scenario that reads it. */
+  firstMeasurement: { passageId: string; scenario: FakeScenario };
+}
+
+export function demoSetupSeed(): DemoSetupSeed {
+  const first = demoJson.timeline.assessments[0];
+  if (first === undefined) {
+    throw new Error('demo-profil.json: no assessment.');
+  }
+  return {
+    email: demoJson.parent.email,
+    weeklyEmail: demoJson.parent.consent.weeklyEmail,
+    reader: {
+      name: demoJson.child.name,
+      grade: oneOf(grades, demoJson.child.grade, 'grade'),
+      interests: [...demoJson.child.interests],
+    },
+    firstMeasurement: {
+      passageId: first.passageId,
+      scenario: {
+        timed: { seconds: first.seconds, wordsRead: first.wordsRead },
+        ...scenarioOf(first),
+        prosodyScore: oneOf(prosodyScores, first.prosodyScore, 'prosody score'),
+      },
+    },
+  };
+}
+
 export async function loadDemoProfile(
   repository: Repository,
   mode: DemoMode,

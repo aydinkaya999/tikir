@@ -27,6 +27,22 @@ describe('readDevParams', () => {
     expect(warn).toHaveBeenCalledTimes(2);
   });
 
+  it('reads an empty store and the setup steps', () => {
+    expect(readDevParams('?demo=bos')).toEqual({ params: { demo: 'bos' }, rest: '' });
+    expect(readDevParams('?kurulum=seviye&x=1')).toEqual({
+      params: { setup: 'seviye' },
+      rest: '?x=1',
+    });
+    expect(readDevParams('?kurulum=tanisma&onay=kapali')).toEqual({
+      params: { setup: 'tanisma', consentOff: true },
+      rest: '',
+    });
+  });
+
+  it('drops an unknown setup step with a warning', () => {
+    expect(readDevParams('?kurulum=bitti')).toEqual({ params: {}, rest: '' });
+  });
+
   it('reads nothing from an address without them', () => {
     expect(readDevParams('')).toEqual({ params: {}, rest: '' });
     expect(readDevParams('?x=1')).toEqual({ params: {}, rest: '?x=1' });

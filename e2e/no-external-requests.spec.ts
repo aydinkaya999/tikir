@@ -21,6 +21,10 @@ test('loading every route asks nothing from another origin', async ({ page, base
   const origin = new URL(baseURL ?? '').origin;
   const watcher = await watch(page, origin);
 
+  // The demo profile first, so the product addresses show their screens (phase 3: an empty store
+  // opens the setup).
+  await page.goto('/?demo=cocuk-sabahi');
+  await settle(page);
   for (const path of allPaths) {
     await page.goto(path);
     await settle(page);
@@ -44,7 +48,7 @@ for (const viewport of [
 
     // Child and parent navigation: every item, client-side.
     for (const [start, navName] of [
-      ['/', 'Ana gezinme'],
+      ['/?demo=cocuk-sabahi', 'Ana gezinme'],
       ['/veli', 'Veli gezinmesi'],
     ] as const) {
       await page.goto(start);

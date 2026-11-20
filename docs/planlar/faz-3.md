@@ -332,7 +332,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 1: Yazı ayarı alan mantığı
 - [x] Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
 - [x] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
-- [ ] Task 4: Geliştirme parametreleri ve boş depo
+- [x] Task 4: Geliştirme parametreleri ve boş depo
 - [ ] Task 5: Kurulum koruması ve yönlendirme
 - [ ] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
 - [ ] Task 7: Kurulum çatısı
@@ -518,7 +518,7 @@ export function prepareSetupStep(services: SessionStoreServices, step: SetupPara
 DemoSessionOptions.setup?: SetupParam; // testlerde boş depo ve kurulum adımları
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. `devParams`: `?demo=bos`, `?kurulum=seviye`, `?kurulum=tanisma&onay=kapali` okunur; bilinmeyen değer yok sayılır.
   2. `prepareSetupStep` her adımı depoya doğru yazar:
      - `okuyucu`: veli (`veli@example.com`, onaylı);
@@ -528,14 +528,14 @@ DemoSessionOptions.setup?: SetupParam; // testlerde boş depo ve kurulum adımla
   3. **Uçtan uca** (`dev-params.spec.ts`):
      - "a product address with no profile sets up the demo child" testi kalkar.
      - Yerine "`?kurulum=seviye` prepares the reader at the level step" gelir (vitrindeki depo sayaçlarıyla).
-- [ ] → FAIL.
-- [ ] Uygula:
+- [x] → FAIL.
+- [x] Uygula:
   - Profil yokken demo kendiliğinden kurulmaz.
   - `?demo=bos` depoyu boşaltır.
   - `?kurulum=` depoyu boşaltıp adımı Task 3'ün eylemleriyle hazırlar.
   - Ürün adresi açan uçtan uca testler ilk adreste `?demo=cocuk-sabahi` alır.
-- [ ] → PASS. `pnpm check`. `caffeinate -u -t 2; caffeinate -d -i pnpm e2e` → geçer.
-- [ ] Commit: `feat(dev): open an empty store and the setup steps from the address`.
+- [x] → PASS. `pnpm check`. `caffeinate -u -t 2; caffeinate -d -i pnpm e2e` → geçer.
+- [x] Commit: `feat(dev): open an empty store and the setup steps from the address`.
 
 ### Task 5: Kurulum koruması ve yönlendirme
 
