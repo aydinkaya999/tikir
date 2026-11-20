@@ -58,7 +58,7 @@
 - [x] Task 14: G6 Kapanış sorusu
 - [x] Task 15: G7 Bugünlük bitti
 - [x] Task 16: Albüm ve Stüdyo
-- [ ] Task 17: Uçtan uca seans testleri
+- [x] Task 17: Uçtan uca seans testleri
 - [ ] Task 18: Belgeler, tasarım karşılaştırması ve denetim
 
 ## Ürün sahibinin yanıtları (2026-11-20)
@@ -1229,7 +1229,7 @@ export function doneView(data: SessionData): DoneView;
 
 **Adımlar:**
 
-- [ ] **Kırmızı** (Chromium ve WebKit):
+- [x] **Kırmızı** (Chromium ve WebKit):
   1. **`session.spec.ts` › "a typical session runs from G1 to G7 with the demo profile's numbers"** (ölçüt 1, 5, 6):
      - `/?demo=cocuk-sabahi`.
      - **G1:** "Dar Patika", "4. bölüm, 12 dakika", "12 bölümün 3’ü tamam", "2 gün üst üste".
@@ -1269,9 +1269,9 @@ export function doneView(data: SessionData): DoneView;
      - G6'da iki yanıt; G7'de "71" yok.
      - `getUserMedia` 0 kez çağrıldı.
   6. **`no-external-requests.spec.ts`:** `/seans/oku?demo=cocuk-sabahi&adim=read-1`'de mikrofon açık bir okuma boyunca dış istek yok.
-- [ ] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/session.spec.ts e2e/session-design.spec.ts e2e/session-consent.spec.ts e2e/no-external-requests.spec.ts` → geçer.
-- [ ] `pnpm check` → geçer.
-- [ ] Commit: `test(e2e): run the daily session end to end`.
+- [x] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/session.spec.ts e2e/session-design.spec.ts e2e/session-consent.spec.ts e2e/no-external-requests.spec.ts` → geçer.
+- [x] `pnpm check` → geçer.
+- [x] Commit: `test(e2e): run the daily session end to end`.
 
 ### Task 18: Belgeler, tasarım karşılaştırması ve denetim
 

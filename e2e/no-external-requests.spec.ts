@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { devPaths, extraPaths, screenPaths } from '../src/app/routes';
+import {
+  openPaused,
+  prepareSessionPage,
+  runUntilVisible,
+  waitForListening,
+} from './support/session';
 import { settle, watch } from './support/watch';
 
 // Phase 0 acceptance criterion 6: while pages load and while you move around, no request leaves
@@ -73,4 +79,27 @@ test('the build carries a content security policy that starts from self', async 
 
   await expect(policy).toHaveAttribute('content', /default-src 'self'/);
   await expect(policy).toHaveAttribute('content', /object-src 'none'/);
+});
+
+test.describe('a reading', () => {
+  test.use({ permissions: ['microphone'], timezoneId: 'Europe/Istanbul' });
+
+  // Phase 2b (docs/planlar/faz-2b.md, Task 17): a whole reading with the microphone open.
+  test('a reading with the microphone open asks nothing from another origin', async ({
+    page,
+    baseURL,
+  }) => {
+    test.setTimeout(120_000);
+    const origin = new URL(baseURL ?? '').origin;
+    const watcher = await watch(page, origin);
+    await prepareSessionPage(page);
+    await openPaused(page, '/seans/oku?demo=cocuk-sabahi&adim=read-1');
+
+    await page.getByRole('button', { name: 'Duraklatıldı. Sürdürmek için dokun' }).click();
+    await waitForListening(page);
+    await runUntilVisible(page, page.getByText('2. okuma / 3'));
+
+    expect(watcher.foreign).toEqual([]);
+    expect(watcher.violations).toEqual([]);
+  });
 });
