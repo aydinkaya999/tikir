@@ -335,7 +335,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 4: Geliştirme parametreleri ve boş depo
 - [x] Task 5: Kurulum koruması ve yönlendirme
 - [x] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
-- [ ] Task 7: Kurulum çatısı
+- [x] Task 7: Kurulum çatısı
 - [ ] Task 8: K1 Veli hesabı
 - [ ] Task 9: K2 Okuyucu profili
 - [ ] Task 10: Yazı ayarının okuma metinlerine uygulanması
@@ -616,7 +616,7 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
   action?: ReactNode; children: ReactNode })
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. `OnboardingLayout`:
      - "Kurulum adımı 2 / 4" ilerlemesi ve "2 / 4" sayacı;
      - balon ve eylem düğmesi çizilir;
@@ -625,10 +625,10 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
      - 768 px'te Tıkır ve pano gizli, içerik tam genişlikte.
      - 1180 px'te pano görünür.
      - İki bölmeli düzen testinde kurulum yalnız 1000 px'ten itibaren iki bölmeli sayılır.
-- [ ] → FAIL.
-- [ ] Uygula. Kabuk yalnız `data-shell="onboarding"` çerçevesini ve `Outlet`'i tutar; panoyu, ilerlemeyi ve eylem çubuğunu `OnboardingLayout` çizer. 700–719 px'lik eski alt alta dizilme kalkar.
-- [ ] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts`.
-- [ ] Commit: `refactor(onboarding): let each step draw its own panel and action`.
+- [x] → FAIL.
+- [x] Uygula. Kabuk yalnız `data-shell="onboarding"` çerçevesini ve `Outlet`'i tutar; panoyu, ilerlemeyi ve eylem çubuğunu `OnboardingLayout` çizer. 700–719 px'lik eski alt alta dizilme kalkar.
+- [x] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts`.
+- [x] Commit: `refactor(onboarding): let each step draw its own panel and action`.
 
 ### Task 8: K1 Veli hesabı
 

@@ -1,22 +1,23 @@
-// First-run setup (docs/ekranlar.md, "İlk kurulum"). Phase 0 only lays out the routes: each page
-// is empty inside its shell; the screens are built in phase 3.
+// The setup steps not built yet (docs/planlar/faz-3.md, Tasks 8–12): each draws its layout at its
+// step, so the shell stays whole while the screens arrive one by one.
+import { OnboardingLayout } from './OnboardingLayout';
 
 /** K1 Veli hesabı. */
 export function ParentAccountPage() {
-  return null;
+  return <OnboardingLayout step={1} companion={{}} />;
 }
 
 /** K2 Okuyucu profili. */
 export function ChildProfilePage() {
-  return null;
+  return <OnboardingLayout step={2} companion={{}} />;
 }
 
 /** K3 Seviye tespiti. */
 export function LevelAssessmentPage() {
-  return null;
+  return <OnboardingLayout step={3} companion={{}} />;
 }
 
 /** K4 Tıkır ile tanışma. */
 export function MeetCompanionPage() {
-  return null;
+  return <OnboardingLayout step={4} companion={{}} />;
 }

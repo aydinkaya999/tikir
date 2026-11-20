@@ -228,7 +228,7 @@ for (const route of onboardingSteps) {
       await expect(progress.getByRole('listitem')).toHaveCount(4);
       await expect(page.getByText(`${String(route.step)} / 4`, { exact: true })).toBeVisible();
 
-      // The cobalt panel with Tıkır shows from 700 px only.
+      // The cobalt panel with Tıkır shows from 1000 px only (docs/planlar/faz-3.md, yanıt 7).
       const companion = page.getByRole('img', { name: 'Tıkır' });
       if (viewport === 'telefon') {
         await expect(companion).toBeHidden();
@@ -238,6 +238,16 @@ for (const route of onboardingSteps) {
     }
   });
 }
+
+test('a portrait tablet opens the setup in the phone layout, full width', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto('/kurulum/hesap?kurulum=hesap');
+  const pane = page.locator('[data-shell="onboarding"] [data-pane="main"]');
+  await expect(pane).toBeVisible();
+
+  await expect(page.getByRole('img', { name: 'Tıkır' })).toBeHidden();
+  expect((await pane.boundingBox())?.width).toBe(768);
+});
 
 test('the way between the child and parent areas is a web-only link', async ({ page }) => {
   await open(page, '/', 'web');
@@ -291,7 +301,8 @@ for (const route of twoPaneShells) {
       });
 
       expect(overflow).toBe(0);
-      if (contentWidth < 720) {
+      // The setup has its panel from 1000 px only (docs/planlar/faz-3.md, yanıt 7).
+      if (contentWidth < 720 || (route.shell === 'onboarding' && width < 1000)) {
         expect(
           Math.abs(paneWidth - contentWidth),
           'stacked: the main pane is full width',
