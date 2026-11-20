@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { tilePatternImages } from '../illustrations';
-import { BookCover } from './BookCover';
+import { BookCover, CoverBand } from './BookCover';
 
 describe('BookCover', () => {
   it('is a single pattern tile in the library list', () => {
@@ -20,5 +20,14 @@ describe('BookCover', () => {
     expect(
       Array.from(container.querySelectorAll('img'), (image) => image.getAttribute('src')),
     ).toEqual([tilePatternImages[2], tilePatternImages[3]]);
+  });
+
+  it('lends its band of two patterns to a book card (U1)', () => {
+    const { container } = render(<CoverBand patterns={[4, 5]} />);
+
+    expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true');
+    expect(
+      Array.from(container.querySelectorAll('img'), (image) => image.getAttribute('src')),
+    ).toEqual([tilePatternImages[4], tilePatternImages[5]]);
   });
 });

@@ -315,6 +315,22 @@ export const tr = {
     back: 'Çocuk ekranı',
   },
 
+  /** U1 Kitaplık (design/ekranlar/U1-kitaplik-*.html). */
+  library: {
+    title: 'Kitaplık',
+    newBook: 'Yeni kitap',
+    progressLabel: 'Hikâyedeki ilerleme',
+    resume: 'Sürdür',
+    yourBooks: 'Senin kitapların',
+    source: { cards: 'Kartlarla yaptın', parentText: 'Velin ekledi' },
+    makeFromCards: 'Kartlarla kitap yap',
+    parentText: 'Veli bir metinden kitap ekleyebilir',
+    /** Today has its session (docs/ekranlar.md's default; docs/planlar/faz-5.md, D18). */
+    tomorrow: 'Yarın okuyabilirsin.',
+    /** A phone's empty library (D18). */
+    empty: 'Henüz kitabın yok. Kartlarla ilk kitabını yap.',
+  },
+
   focus: {
     /** U3, U4: back button name. */
     back: 'Geri dön',

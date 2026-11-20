@@ -16,6 +16,28 @@ interface BookCoverProps {
   className?: string;
 }
 
+interface CoverBandProps {
+  patterns: readonly [TilePattern] | readonly [TilePattern, TilePattern];
+  className?: string;
+}
+
+/** A book's patterns side by side: the top of a book card (U1) and of the ready page's cover (U4). */
+export function CoverBand({ patterns, className }: CoverBandProps) {
+  return (
+    <span className={[styles.band, className ?? ''].filter(Boolean).join(' ')} aria-hidden="true">
+      {patterns.map((pattern, index) => (
+        <img
+          key={`${String(pattern)}-${String(index)}`}
+          className={styles.bandImage}
+          src={tilePatternImages[pattern]}
+          alt=""
+          draggable={false}
+        />
+      ))}
+    </span>
+  );
+}
+
 /**
  * TODO(design): U1 and U4 also use a pattern that is not in design/svg (saffron star on light
  * cobalt); covers are built from the six tiles that are.
@@ -46,17 +68,7 @@ export function BookCover({
 
   return (
     <div className={[styles.card, className ?? ''].filter(Boolean).join(' ')}>
-      <div className={styles.band} aria-hidden="true">
-        {patterns.map((pattern, index) => (
-          <img
-            key={`${String(pattern)}-${String(index)}`}
-            className={styles.bandImage}
-            src={tilePatternImages[pattern]}
-            alt=""
-            draggable={false}
-          />
-        ))}
-      </div>
+      <CoverBand patterns={patterns} />
       {title !== undefined && <p className={styles.title}>{title}</p>}
     </div>
   );

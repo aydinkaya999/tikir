@@ -4,11 +4,6 @@ import { tr } from '../../i18n/tr';
 import { FocusLayout } from './FocusLayout';
 import { libraryPaths } from './paths';
 
-/** U1 Kitaplık. */
-export function LibraryPage() {
-  return null;
-}
-
 /** U3 Kartlarla kitap. */
 export function BookFromCardsPage() {
   return (

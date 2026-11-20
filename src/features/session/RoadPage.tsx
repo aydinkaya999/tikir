@@ -1,5 +1,5 @@
 // G1 Yol (docs/ekranlar.md, G1): today's chapter one tap away, and the road of the series.
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
@@ -18,10 +18,8 @@ import styles from './RoadPage.module.css';
 import { useLoadSession, useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { StatusScreen } from './StatusScreen';
 import { TomorrowCard } from './TomorrowCard';
+import { useDayRefresh } from './useDayRefresh';
 import { chapterPattern, roadView, sessionListens } from './views';
-
-/** How often an open road checks whether the day has changed. */
-const dayCheckMs = 60_000;
 
 export function RoadPage() {
   useLoadSession();
@@ -29,19 +27,7 @@ export function RoadPage() {
   const data = useSession((state) => state.data);
   const store = useSessionStore();
   // A road left open past midnight turns to the new day.
-  useEffect(() => {
-    const refresh = () => {
-      store
-        .getState()
-        .refreshDay()
-        .catch(() => undefined);
-    };
-    refresh();
-    const timer = setInterval(refresh, dayCheckMs);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [store]);
+  useDayRefresh();
   const { audio } = useSessionDevices();
   const microphone = useMicrophone(audio, data === null ? false : sessionListens(data));
   // The measurement listens whenever the parent consented, whatever today's session did (P14).

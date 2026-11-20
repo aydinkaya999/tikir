@@ -123,6 +123,11 @@
   --size-answer: 17px;
   /* G7: today's pace (72 px on phones, 104 px from 700 px). */
   --size-done-number: 72px;
+  /* U1: a book card's title and its source line, on every device. */
+  --size-book-title: 17px;
+  --size-book-source: 13px;
+  /* U1: the parent's strip link "Veli bir metinden kitap ekleyebilir" (15/16/15 px). */
+  --size-strip-link: 15px;
 }
 
 @media (min-width: 700px) {
@@ -146,6 +151,7 @@
     --size-done-number: 104px;
     --size-baseline: 84px;
     --size-trial-text: 16px;
+    --size-strip-link: 16px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;
@@ -161,6 +167,7 @@
     --size-card-label: 15px;
     --size-excerpt: 19px;
     --size-trial-text: 15px;
+    --size-strip-link: 15px;
     --reading-size-0: 22px;
     --reading-size-1: 25px;
     --reading-size-2: 29px;

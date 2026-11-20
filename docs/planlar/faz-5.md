@@ -444,6 +444,11 @@ Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte
 
 Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
+**U1** (`shots/kitaplik-demo-cocuk-sabahi-*.png` ↔ `design/png/U1-kitaplik-*.png`): yerleşim, ölçüler, metinler, seri kartı, kesik kenarlı kart ve veli bağlantısı üç genişlikte örtüşür. Farklar:
+
+1. Kitap kapaklarının desenleri: kitabın kimliğinden türetilir (karar 11). Tasarımın ikinci desenleri (açık kobalt zeminde safran yıldız, açık turkuaz zeminde kobalt yarım daireler) `design/svg`'de yok (10. soru). Bilinen fark.
+2. Kapak şeridi tasarımdan 1–2 px yüksek (desenler kare çizilir). Düzeltilmedi.
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.
