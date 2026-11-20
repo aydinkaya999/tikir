@@ -52,6 +52,12 @@ export const readerInterestLimit = 3;
 /** K3: the level check reads for one minute of reading time (docs/ekranlar.md, K3). */
 export const assessmentMs = 60_000;
 
+/**
+ * K3: a word the child is finishing as the minute ends still counts, as when an adult times the
+ * minute; the reading stops this long after it.
+ */
+export const assessmentGraceMs = 250;
+
 /** K3's measurement text is paged at most this many words a page (docs/planlar/faz-3.md, karar 14). */
 export const passagePageWords = 25;
 

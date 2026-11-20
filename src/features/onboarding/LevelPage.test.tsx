@@ -117,6 +117,33 @@ describe('LevelPage (K3)', () => {
     expect(app.recorder.start).toHaveBeenCalledTimes(1);
   });
 
+  it('counts the word the child is finishing as the minute ends', async () => {
+    // The 64th word ends 100 ms after the minute.
+    const lateLastWord = {
+      ...scenarioSets.typical.assessment,
+      timed: { seconds: 60.1, wordsRead: 64 },
+    };
+    const app = await openLevel({
+      devices: {
+        listener: (kind) => ({
+          listener:
+            kind === 'assessment'
+              ? new FakeListener({ kind: 'scenario', scenario: lateLastWord })
+              : new FakeListener(),
+        }),
+      },
+    });
+    await listen(app);
+
+    await advance(61_000);
+
+    await waitFor(() => {
+      expect(app.router.state.location.pathname).toBe('/kurulum/tanisma');
+    });
+    const [assessment] = await app.repository.listAssessments();
+    expect(assessment?.result).toMatchObject({ wordsAttempted: 64, correctWords: 58, seconds: 60 });
+  });
+
   it('ends early only once a word is read, and stores what was read', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const app = await openLevel();

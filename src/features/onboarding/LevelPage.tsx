@@ -8,7 +8,7 @@ import { Button } from '../../components/Button/Button';
 import { Icon } from '../../components/Icon/Icon';
 import { MicButton, type MicState } from '../../components/MicButton/MicButton';
 import { ProgressBar } from '../../components/ProgressBar/ProgressBar';
-import { assessmentMs } from '../../domain/config';
+import { assessmentGraceMs, assessmentMs } from '../../domain/config';
 import { chapterTokens, passageChapter } from '../../domain/text';
 import type { Child, Passage } from '../../domain/types';
 import { tr } from '../../i18n/tr';
@@ -81,7 +81,9 @@ function LevelCheck({ child, passage, narrator, consent }: LevelCheckProps) {
   const finish = (outcome: ListenerOutcome) => {
     const save = async () => {
       const recordingId = await readingRecorder.finish();
-      await store.getState().saveBaseline(outcome, {
+      // The words of the minute count over the minute, a word finished in its grace included.
+      const minute = { ...outcome, seconds: Math.min(outcome.seconds, assessmentMs / 1000) };
+      await store.getState().saveBaseline(minute, {
         startedAt: startedAt.current ?? new Date().toISOString(),
         recordingId,
       });
@@ -125,16 +127,22 @@ function LevelCheck({ child, passage, narrator, consent }: LevelCheckProps) {
     }
   }, [capturing]);
 
-  // The minute is reading time: pauses and Tıkır's help stay out of it; at its end the reading
-  // stops by itself.
+  // The minute is reading time: pauses and Tıkır's help stay out of it. At its end the reading
+  // stops by itself, a moment later, so the word being finished counts.
   const timeUp = reading.elapsedMs >= assessmentMs;
   const endAtTheMinute = useEffectEvent(() => {
     reading.finish().catch(() => undefined);
   });
   useEffect(() => {
-    if (timeUp) {
-      endAtTheMinute();
+    if (!timeUp) {
+      return undefined;
     }
+    const timer = setTimeout(() => {
+      endAtTheMinute();
+    }, assessmentGraceMs);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [timeUp]);
 
   const view = reading.view;
