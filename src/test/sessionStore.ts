@@ -3,7 +3,7 @@
 import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { vi } from 'vitest';
-import type { LocalDate } from '../domain/types';
+import type { LocalDate, ReadingStyle } from '../domain/types';
 import type { DevStep, SetupParam } from '../features/dev/params/devParams';
 import { prepareSessionStep } from '../features/dev/params/prepareSessionStep';
 import { prepareSetupStep } from '../features/dev/params/prepareSetupStep';
@@ -21,6 +21,8 @@ export interface DemoSessionOptions {
   step?: DevStep;
   scenario?: ScenarioName;
   consent?: boolean;
+  /** The demo child's reading style (Faz 3, karar 23). */
+  readingStyle?: ReadingStyle;
   /** The store's day; testToday unless a test moves it. */
   today?: () => LocalDate;
   /** An empty store brought to a setup step instead of the demo profile (Faz 3, karar 5). */
@@ -40,6 +42,12 @@ export async function demoSessionStore(options: DemoSessionOptions = {}) {
         ...parent,
         consent: { ...parent.consent, voiceProcessing: false },
       });
+    }
+  }
+  if (options.readingStyle !== undefined && options.setup === undefined) {
+    const child = await repository.getChild();
+    if (child !== null) {
+      await repository.saveChild({ ...child, readingStyle: options.readingStyle });
     }
   }
   let id = 0;

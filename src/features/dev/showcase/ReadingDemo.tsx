@@ -3,6 +3,7 @@ import { PageCard } from '../../../components/PageCard/PageCard';
 import { tokenizePage } from '../../../domain/text';
 import { tr } from '../../../i18n/tr';
 import { PhraseText } from '../../reading/PhraseText';
+import { ReadingStyleScope } from '../../reading/ReadingStyleScope';
 import { RaceBar } from '../../reading/RaceBar';
 import { ReadingText } from '../../reading/ReadingText';
 import { Row, Section } from './Section';
@@ -15,20 +16,24 @@ const wordCount = tokenizePage(samplePage).length;
 // The G4 moment: hesitation on "kulaklarını", error on "rüzgârı".
 const g4Marks = { 6: 'hesitation', 9: 'error' } as const;
 
+/** The school letters at the four sizes, with the widest spacing (e2e/reading-text.spec.ts). */
+const schoolWalkthroughs = [
+  { variant: 'school-0', sizeStep: 0 },
+  { variant: 'school-1', sizeStep: 1 },
+  { variant: 'school-2', sizeStep: 2 },
+  { variant: 'school-3', sizeStep: 3 },
+] as const;
+
 interface WalkthroughProps {
   /** Test hook for e2e/reading-text.spec.ts. */
-  variant: 'default' | 'school-largest';
-  className?: string;
+  variant: 'default' | (typeof schoolWalkthroughs)[number]['variant'];
 }
 
 /** Moves the highlight word by word; the e2e test checks that no word box moves meanwhile. */
-function Walkthrough({ variant, className }: WalkthroughProps) {
+function Walkthrough({ variant }: WalkthroughProps) {
   const [current, setCurrent] = useState(0);
   return (
-    <div
-      className={[styles.wide, className ?? ''].filter(Boolean).join(' ')}
-      data-reading-demo={variant}
-    >
+    <div className={styles.wide} data-reading-demo={variant}>
       <label className={styles.slider}>
         <code>currentIndex = {current}</code>
         <input
@@ -73,9 +78,18 @@ export function ReadingTextDemo() {
       <Row label="walkthrough: default reading style">
         <Walkthrough variant="default" />
       </Row>
-      <Row label="walkthrough: school letters, largest size, widest spacing">
-        <Walkthrough variant="school-largest" className={styles.schoolLargest} />
-      </Row>
+      {schoolWalkthroughs.map(({ variant, sizeStep }) => (
+        <Row
+          key={variant}
+          label={`walkthrough: school letters, size step ${String(sizeStep)}, widest spacing`}
+        >
+          <ReadingStyleScope
+            style={{ font: 'school', sizeStep, spacingStep: 2, trialEnabled: false }}
+          >
+            <Walkthrough variant={variant} />
+          </ReadingStyleScope>
+        </Row>
+      ))}
     </Section>
   );
 }

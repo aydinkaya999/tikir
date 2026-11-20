@@ -4,8 +4,9 @@ import { useMemo } from 'react';
 import { Button } from '../../components/Button/Button';
 import { Dialog } from '../../components/Dialog/Dialog';
 import { tokenizePage } from '../../domain/text';
-import type { Chapter } from '../../domain/types';
+import type { Chapter, ReadingStyle } from '../../domain/types';
 import { tr } from '../../i18n/tr';
+import { ReadingStyleScope } from '../reading/ReadingStyleScope';
 import { ReadingText } from '../reading/ReadingText';
 
 interface TextLayerProps {
@@ -13,11 +14,13 @@ interface TextLayerProps {
   /** The page card's title: "Kayıp Fenerin İzinde, 4. bölüm". */
   title: string;
   chapter: Chapter;
+  /** The child's reading style: the layer is reading text too. */
+  readingStyle: ReadingStyle;
   /** "Kapat", Esc. */
   onClose: () => void;
 }
 
-export function TextLayer({ open, title, chapter, onClose }: TextLayerProps) {
+export function TextLayer({ open, title, chapter, readingStyle, onClose }: TextLayerProps) {
   const page = useMemo(() => chapter.pages.flat(), [chapter]);
   const wordCount = useMemo(() => tokenizePage(page).length, [page]);
 
@@ -33,7 +36,11 @@ export function TextLayer({ open, title, chapter, onClose }: TextLayerProps) {
         </Button>
       }
     >
-      {open && <ReadingText page={page} readCount={wordCount} />}
+      {open && (
+        <ReadingStyleScope style={readingStyle}>
+          <ReadingText page={page} readCount={wordCount} />
+        </ReadingStyleScope>
+      )}
     </Dialog>
   );
 }

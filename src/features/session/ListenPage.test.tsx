@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ControlledNarrator } from '../../test/controlledNarrator';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
+import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
 
 const designPages = { ghostWpm: 40, layout: 'design' as const };
 
@@ -41,6 +42,12 @@ function startButtons() {
 }
 
 describe('ListenPage (G3)', () => {
+  it('shows the text in the child’s reading style', async () => {
+    await openListen({ readingStyle: schoolLargest });
+
+    expect(shownStyle(document.querySelector('[data-unit-index]'))).toEqual(schoolLargestShown);
+  });
+
   afterEach(() => {
     vi.useRealTimers();
   });

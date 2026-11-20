@@ -11,6 +11,7 @@ import { tr } from '../../i18n/tr';
 import type { Narrator } from '../../services/narrator/Narrator';
 import { screenPages } from '../reading/pages';
 import { PhraseText } from '../reading/PhraseText';
+import { ReadingStyleScope } from '../reading/ReadingStyleScope';
 import { useMicrophone } from '../reading/useMicrophone';
 import { useNarration } from '../reading/useNarration';
 import { useExitDialogOpen } from './exitDialogState';
@@ -153,11 +154,13 @@ function Listening({ narrator }: { narrator: Narrator }) {
         counter={tr.page.counter(narration.pageIndex + 1, pages.length)}
       >
         {screen !== undefined && (
-          <PhraseText
-            page={screen.page}
-            currentUnit={narration.currentUnit}
-            readUnits={narration.readUnits}
-          />
+          <ReadingStyleScope style={data.child.readingStyle}>
+            <PhraseText
+              page={screen.page}
+              currentUnit={narration.currentUnit}
+              readUnits={narration.readUnits}
+            />
+          </ReadingStyleScope>
         )}
         <div className={styles.player}>
           <IconButton

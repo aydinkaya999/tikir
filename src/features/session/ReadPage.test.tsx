@@ -6,6 +6,7 @@ import { FakeListener } from '../../services/listener/FakeListener';
 import { type ScenarioName, scenarioSets } from '../../services/listener/scenarios';
 import { ControlledNarrator } from '../../test/controlledNarrator';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
+import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
 import { testRecorder } from '../../test/sessionDevices';
 
 /** Listeners of a ready scenario; the ones the screen starts are kept (StrictMode makes two). */
@@ -390,6 +391,18 @@ describe('ReadPage (G4)', () => {
     });
     expect(app.recorder.start).toHaveBeenCalledTimes(1);
     expect(app.recorder.stop).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the text in the child’s reading style', async () => {
+    await openRead({ readingStyle: schoolLargest });
+
+    expect(shownStyle(document.querySelector('[data-word-index]'))).toEqual(schoolLargestShown);
+  });
+
+  it('shows the unheard text in the child’s reading style', async () => {
+    await openRead({ consent: false, readingStyle: schoolLargest });
+
+    expect(shownStyle(document.querySelector('[data-word-index]'))).toEqual(schoolLargestShown);
   });
 
   it('shows the whole text unheard and goes on reading by reading without the parent consent', async () => {

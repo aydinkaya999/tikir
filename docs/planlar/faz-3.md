@@ -338,7 +338,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 7: Kurulum çatısı
 - [x] Task 8: K1 Veli hesabı
 - [x] Task 9: K2 Okuyucu profili
-- [ ] Task 10: Yazı ayarının okuma metinlerine uygulanması
+- [x] Task 10: Yazı ayarının okuma metinlerine uygulanması
 - [ ] Task 11: K3 Seviye tespiti
 - [ ] Task 12: K4 Tıkır ile tanışma
 - [ ] Task 13: Veli kapısı, girişler ve çıkışlar
@@ -696,13 +696,13 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
 
 **Üretir:** `ReadingStyleScope({ style: ReadingStyle; className?: string; children: ReactNode })`: `data-reading-font`, `data-reading-size`, `data-reading-spacing` yazan bir kap.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. `ReadingStyleScope` öznitelikleri yazar.
   2. G3, G4 (dinlenen ve dinlemesiz) ve G6'nın metin katmanında metin kabı çocuğun ayarını taşır. Testler okul harfi, boyut 3, aralık 2 ayarlı çocukla yapılır.
   3. **Uçtan uca** (`reading-text.spec.ts`): Vitrindeki kaymasız vurgu sınaması okul harfleriyle ve dört boyutla da kelime kaydırmaz.
-- [ ] → FAIL. Uygula.
-- [ ] → PASS. `pnpm check`. `pnpm e2e e2e/reading-text.spec.ts`.
-- [ ] Commit: `feat(reading): show every reading text in the child's reading style`.
+- [x] → FAIL. Uygula.
+- [x] → PASS. `pnpm check`. `pnpm e2e e2e/reading-text.spec.ts`.
+- [x] Commit: `feat(reading): show every reading text in the child's reading style`.
 
 ### Task 11: K3 Seviye tespiti
 

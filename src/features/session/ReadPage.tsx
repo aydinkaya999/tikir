@@ -18,6 +18,7 @@ import type { ListenerOutcome } from '../../services/listener/types';
 import type { Narrator } from '../../services/narrator/Narrator';
 import { screenPageOf, screenPages } from '../reading/pages';
 import { RaceBar } from '../reading/RaceBar';
+import { ReadingStyleScope } from '../reading/ReadingStyleScope';
 import { ReadingText } from '../reading/ReadingText';
 import { useMicrophone } from '../reading/useMicrophone';
 import { useReading } from '../reading/useReading';
@@ -343,14 +344,16 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
           title={tr.page.title(data.series.title, chapter.number)}
           counter={tr.page.counter(pages.indexOf(screen) + 1, pages.length)}
         >
-          <ReadingText
-            page={screen.page}
-            firstIndex={screen.firstIndex}
-            currentIndex={view.ended === null ? view.position : null}
-            ghostIndex={reading.ghostIndex}
-            readCount={Math.max(0, position - screen.firstIndex)}
-            marks={reading.marks}
-          />
+          <ReadingStyleScope style={data.child.readingStyle}>
+            <ReadingText
+              page={screen.page}
+              firstIndex={screen.firstIndex}
+              currentIndex={view.ended === null ? view.position : null}
+              ghostIndex={reading.ghostIndex}
+              readCount={Math.max(0, position - screen.firstIndex)}
+              marks={reading.marks}
+            />
+          </ReadingStyleScope>
         </PageCard>
       )}
       <div className={styles.race}>
@@ -406,7 +409,9 @@ function UnheardReading({ attempt, data, chapter }: ReadingProps) {
     >
       {/* TODO(design): the unheard reading is not drawn; the whole chapter is one page. */}
       <PageCard className={styles.page} title={tr.page.title(data.series.title, chapter.number)}>
-        <ReadingText page={page} readCount={wordCount} />
+        <ReadingStyleScope style={data.child.readingStyle}>
+          <ReadingText page={page} readCount={wordCount} />
+        </ReadingStyleScope>
       </PageCard>
     </SessionLayout>
   );

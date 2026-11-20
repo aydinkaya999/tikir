@@ -134,3 +134,46 @@
     --reading-size-3: 33px;
   }
 }
+
+/*
+ * The child's reading style on a reading text's container (ReadingStyleScope; docs/urun.md
+ * section 7): its attributes pick the steps above.
+ */
+[data-reading-font='clear'] {
+  --reading-font: var(--font-text);
+}
+
+[data-reading-font='school'] {
+  --reading-font: var(--font-school);
+}
+
+[data-reading-size='0'] {
+  --reading-size: var(--reading-size-0);
+}
+
+[data-reading-size='1'] {
+  --reading-size: var(--reading-size-1);
+}
+
+[data-reading-size='2'] {
+  --reading-size: var(--reading-size-2);
+}
+
+[data-reading-size='3'] {
+  --reading-size: var(--reading-size-3);
+}
+
+[data-reading-spacing='0'] {
+  --reading-letter-spacing: var(--reading-letter-spacing-0);
+  --reading-word-spacing: var(--reading-word-spacing-0);
+}
+
+[data-reading-spacing='1'] {
+  --reading-letter-spacing: var(--reading-letter-spacing-1);
+  --reading-word-spacing: var(--reading-word-spacing-1);
+}
+
+[data-reading-spacing='2'] {
+  --reading-letter-spacing: var(--reading-letter-spacing-2);
+  --reading-word-spacing: var(--reading-word-spacing-2);
+}
