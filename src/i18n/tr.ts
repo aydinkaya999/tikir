@@ -331,6 +331,36 @@ export const tr = {
     empty: 'Henüz kitabın yok. Kartlarla ilk kitabını yap.',
   },
 
+  /** U2 Metinden kitap (design/ekranlar/U2-metinden-kitap-*.html). */
+  bookFromText: {
+    title: 'Metinden kitap',
+    /** Tablet and web; the name comes with its genitive suffix (withGenitiveSuffix). */
+    lead: (nameGenitive: string) => `Metni verin, ${nameGenitive} seviyesinde bir kitaba dönüşsün.`,
+    /** Phones; the name comes with its dative suffix (withNameDativeSuffix). */
+    leadShort: (nameDative: string) => `Metninizden ${nameDative} göre bir kitap.`,
+    /** The sources' group; only the text is offered in the first version (docs/ekranlar.md). */
+    source: 'Kaynak',
+    pasteText: 'Metin yapıştır',
+    text: 'Metin',
+    words: (count: number) => `${String(count)} kelime`,
+    grade: 'Sınıf düzeyi',
+    length: 'Uzunluk',
+    lengths: { short: 'Kısa', medium: 'Orta', long: 'Uzun' },
+    insertStuckWords: 'Takıldığı kelimeleri metne yerleştir',
+    addQuestions: 'Sonuna 2 anlama sorusu ekle',
+    howTo: {
+      title: 'Kitap böyle hazırlanır',
+      /** The first step's name comes with its genitive suffix. */
+      steps: (nameGenitive: string) => [
+        `${nameGenitive} seviyesine indirilir`,
+        'Sayfalara ve anlam ünitelerine bölünür',
+        'Resimlenir ve seslendirilir',
+        'Seviye denetiminden geçer',
+      ],
+    },
+    make: 'Kitabı üret',
+  },
+
   /** The wait while a book is made (docs/ekranlar.md's default; docs/planlar/faz-5.md, D18). */
   bookMaking: { writing: 'Kitabın yazılıyor', cancel: 'Vazgeç' },
 

@@ -451,6 +451,12 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
 **U3** (`shots/kitaplik-kur-demo-cocuk-sabahi-*.png`, tasarımın seçimiyle ↔ `design/png/U3-kartlarla-kitap-*.png`): kartlar, gruplar, seçim rozeti, Tıkır ve balon, "Kitabımı yap" üç genişlikte örtüşür. Düzeltilenler: telefonda Tıkır ve balon eylem çubuğuna itiliyordu (içeriğin hemen altına alındı). Webde "Kitabımı yap" sütunun dibindeydi (balonun altına alındı). Görüntü betiği düğmenin kabartısını geçiş bitmeden çekiyordu (`scripts/shots.ts` artık süreli geçişleri bekliyor). Kalan fark: webde balonla düğme arası 24 px (tasarım 20; ızgaranın satır boşluğu).
 
+**U2** (`shots/veli-kitap-demo-cocuk-sabahi-kapi-acik-*.png` ↔ `design/png/U2-metinden-kitap-*.png`): başlık, alt satır (telefonda kısa olanı, adın yönelme ekiyle), metin alanı ve sayaç, sınıf ve uzunluk seçimleri, onay kutuları, "Kitap böyle hazırlanır" ve "Kitabı üret"in yeri üç genişlikte örtüşür. Düzeltilenler: başlıkla form arası (tablet 20, web 24 px); tablette düğme kabuğun dibine indi. Farklar:
+
+1. Kaynak çubuğunda yalnız "Metin yapıştır" var (`docs/ekranlar.md`: öbür ikisi ilk sürümde gizli). Tek bölüm olduğu için telefonda da uzun adı taşır (tasarım: "Metin").
+2. Metin kutusu boş, sayaç "0 kelime", "Kitabı üret" pasif: görüntü aracında yazma adımı yok. Dolu hâli birim ve uçtan uca testlerde.
+3. Telefonun üst şeridinde Faz 4'ün Hesap ve geri düğmeleri var (kabuk; Faz 4, karar 27).
+
 **Üretim beklemesi** (tasarımı yok; `--dokun 'Kitabımı yap' --ileri 100` ile): Tıkır `think`, "Kitabın yazılıyor", "Vazgeç"; içerik alanının ortasında, yan sütun ve eylem yok.
 
 ## Kanıtlar

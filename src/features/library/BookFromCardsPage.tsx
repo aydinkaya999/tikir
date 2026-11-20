@@ -1,7 +1,6 @@
 // U3 Kartlarla kitap (docs/ekranlar.md, U3; docs/planlar/faz-5.md, kararlar 14–17): a card of each
 // group, Tıkır's sentence of the choice, then the book is made and opens ready (U4).
-import { useEffect, useId, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useId, useState } from 'react';
 import { Button } from '../../components/Button/Button';
 import { Companion } from '../../components/Companion/Companion';
 import type { IconName } from '../../components/Icon/Icon';
@@ -9,18 +8,14 @@ import { OptionCard } from '../../components/OptionCard/OptionCard';
 import { type CardChoice, cardLabel, cardsSummary } from '../../domain/books';
 import type { Id } from '../../domain/types';
 import { tr } from '../../i18n/tr';
-import {
-  useLoadSession,
-  useSession,
-  useSessionDevices,
-  useSessionStore,
-} from '../session/sessionContext';
+import { useLoadSession, useSession, useSessionDevices } from '../session/sessionContext';
 import { StatusScreen } from '../session/StatusScreen';
 import styles from './BookFromCardsPage.module.css';
 import { BookGenerating } from './BookGenerating';
 import { FocusCompanion } from './FocusCompanion';
 import { FocusLayout } from './FocusLayout';
-import { bookReadyPath, libraryPaths } from './paths';
+import { libraryPaths } from './paths';
+import { useBookMaking } from './useBookMaking';
 
 type Group = keyof CardChoice;
 
@@ -51,21 +46,10 @@ export function BookFromCardsPage() {
   useLoadSession();
   const status = useSession((state) => state.status);
   const data = useSession((state) => state.data);
-  const store = useSessionStore();
   const { books } = useSessionDevices();
-  const navigate = useNavigate();
   const [choice, setChoice] = useState<Partial<CardChoice>>({});
-  const [making, setMaking] = useState(false);
-  const making$ = useRef<AbortController | null>(null);
+  const { making, make, cancel } = useBookMaking();
   const titleIds = { hero: useId(), place: useId(), event: useId() };
-  // Leaving the page gives the book up: nothing is saved (docs/planlar/faz-5.md, review focus 3).
-  useEffect(
-    () => () => {
-      making$.current?.abort();
-      making$.current = null;
-    },
-    [],
-  );
 
   const layout = {
     title: tr.focus.bookFromCards.title,
@@ -95,40 +79,12 @@ export function BookFromCardsPage() {
   const complete = completeChoice(choice);
   const childName = data.child.name;
 
-  const cancel = () => {
-    making$.current?.abort();
-    making$.current = null;
-    setMaking(false);
-  };
-  const make = () => {
-    if (complete === null || making$.current !== null) {
-      return;
+  const makeBook = () => {
+    if (complete !== null) {
+      make((signal) =>
+        books.fromCards({ choice: complete, childName, grade: data.child.grade }, signal),
+      );
     }
-    const control = new AbortController();
-    // Read anew after each wait: the child may give up while the book is saved.
-    const givenUp = () => control.signal.aborted;
-    making$.current = control;
-    setMaking(true);
-    books
-      .fromCards({ choice: complete, childName, grade: data.child.grade }, control.signal)
-      .then(async (book) => {
-        if (givenUp()) {
-          return;
-        }
-        await store.getState().saveBook(book);
-        if (!givenUp()) {
-          void navigate(bookReadyPath(book.id));
-        }
-      })
-      // Given up ("Vazgeç", or the page was left): nothing is saved. The mock fails no other way;
-      // the backend's failures come with it (phase 6).
-      .catch(() => undefined)
-      .finally(() => {
-        if (making$.current === control) {
-          making$.current = null;
-          setMaking(false);
-        }
-      });
   };
 
   if (making) {
@@ -150,7 +106,7 @@ export function BookFromCardsPage() {
         </FocusCompanion>
       }
       action={
-        <Button size="large" icon="right" fullWidth disabled={complete === null} onClick={make}>
+        <Button size="large" icon="right" fullWidth disabled={complete === null} onClick={makeBook}>
           {tr.focus.bookFromCards.make}
         </Button>
       }

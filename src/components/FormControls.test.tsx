@@ -115,6 +115,22 @@ describe('SegmentedControl', () => {
     expect(onChange).toHaveBeenLastCalledWith('largest');
     expect(screen.getByRole('radio', { name: 'En büyük' })).toBeChecked();
   });
+
+  it('can name its group without a visible label (U2’s source)', () => {
+    render(
+      <SegmentedControl
+        label="Kaynak"
+        labelHidden
+        name="kaynak"
+        options={[{ value: 'text', label: 'Metin yapıştır', icon: 'paste' }]}
+        value="text"
+        onChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('radiogroup', { name: 'Kaynak' })).toBeInTheDocument();
+    expect(screen.queryByText('Kaynak')).toBeNull();
+  });
 });
 
 describe('OptionCard', () => {

@@ -11,6 +11,8 @@ export interface SegmentedOption<T extends string> {
 interface SegmentedControlProps<T extends string> {
   /** Visible label above the group; also the group's accessible name. */
   label: string;
+  /** The group keeps its name without the visible label (U2's "Kaynak"). */
+  labelHidden?: boolean;
   /** Radio group name, unique on the page. */
   name: string;
   options: readonly SegmentedOption<T>[];
@@ -25,6 +27,7 @@ interface SegmentedControlProps<T extends string> {
  */
 export function SegmentedControl<T extends string>({
   label,
+  labelHidden = false,
   name,
   options,
   value,
@@ -34,10 +37,17 @@ export function SegmentedControl<T extends string>({
   const labelId = useId();
   return (
     <div className={[styles.field, className ?? ''].filter(Boolean).join(' ')}>
-      <p id={labelId} className={styles.label}>
-        {label}
-      </p>
-      <div role="radiogroup" aria-labelledby={labelId} className={styles.bar}>
+      {!labelHidden && (
+        <p id={labelId} className={styles.label}>
+          {label}
+        </p>
+      )}
+      <div
+        role="radiogroup"
+        aria-labelledby={labelHidden ? undefined : labelId}
+        aria-label={labelHidden ? label : undefined}
+        className={styles.bar}
+      >
         {options.map((option) => (
           <label key={option.value} className={styles.segment}>
             <input

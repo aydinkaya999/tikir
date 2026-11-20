@@ -132,6 +132,9 @@
   --size-card-group: 17px;
   /* U3, U4: Tıkır's bubble in a focus page's side column, 15 px on phones, 18 px later. */
   --size-bubble-focus: 15px;
+  /* U2: the numbered boxes of "Kitap böyle hazırlanır" (tablet and web). */
+  --size-step-number: 15px;
+  --radius-step-number: 8px;
 }
 
 @media (min-width: 700px) {

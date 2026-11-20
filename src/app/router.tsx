@@ -1,12 +1,13 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
 import { LibraryPage } from '../features/library/LibraryPage';
 import { BookFromCardsPage } from '../features/library/BookFromCardsPage';
-import { BookFromTextPage, BookReadyPage } from '../features/library/pages';
+import { BookReadyPage } from '../features/library/pages';
 import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
 import { MeasurementPage } from '../features/measurement/MeasurementPage';
+import { BookFromTextPage } from '../features/parent/BookFromTextPage';
 import { AccountSettingsPage } from '../features/parent/AccountSettingsPage';
 import { AssessmentPage } from '../features/parent/AssessmentPage';
 import { StuckWordsPage } from '../features/parent/StuckWordsPage';

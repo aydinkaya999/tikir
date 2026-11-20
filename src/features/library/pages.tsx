@@ -14,8 +14,3 @@ export function BookReadyPage() {
     />
   );
 }
-
-/** U2 Metinden kitap (parent area). */
-export function BookFromTextPage() {
-  return null;
-}
