@@ -73,8 +73,11 @@ function Chart({
     round1(
       layout.bottom - ((value - minTick) / (maxTick - minTick)) * (layout.bottom - layout.top),
     );
+  // A single week (the level check's) stands in the middle, its value above it.
+  const single = points.length === 1;
   const step = points.length > 1 ? (layout.right - layout.left) / (points.length - 1) : 0;
-  const x = (index: number) => round1(layout.left + index * step);
+  const x = (index: number) =>
+    round1(single ? (layout.left + layout.right) / 2 : layout.left + index * step);
   const lastIndex = points.length - 1;
   const lastValue = points[lastIndex];
 
@@ -156,7 +159,12 @@ function Chart({
         </g>
       ))}
       {lastValue !== undefined && (
-        <text className={styles.value} x={x(lastIndex) - 4} y={y(lastValue) - 16} textAnchor="end">
+        <text
+          className={styles.value}
+          x={single ? x(lastIndex) : x(lastIndex) - 4}
+          y={y(lastValue) - 16}
+          textAnchor={single ? 'middle' : 'end'}
+        >
           {lastValue}
         </text>
       )}
