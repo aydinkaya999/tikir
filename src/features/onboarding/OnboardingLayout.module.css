@@ -68,6 +68,11 @@
   line-height: var(--leading-ui);
 }
 
+/* The phone's foot bar: the action fills it (K1, K2 telefon). */
+.action > * {
+  flex: 1 1 auto;
+}
+
 .action {
   position: sticky;
   bottom: 0;
@@ -141,6 +146,10 @@
     padding: calc(36px + env(safe-area-inset-top)) 44px 32px;
   }
 
+  .action > * {
+    flex: none;
+  }
+
   .action {
     position: static;
     justify-content: flex-end;
@@ -167,7 +176,9 @@
     flex: 999 1 520px;
   }
 
+  /* The web draws the action right after the content, not at the foot of the screen (K1 web). */
   .main {
+    flex: none;
     gap: 22px;
     max-width: calc(640px + 128px);
     padding: 48px 64px 44px;

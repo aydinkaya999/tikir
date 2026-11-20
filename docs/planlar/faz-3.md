@@ -336,7 +336,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 5: Kurulum koruması ve yönlendirme
 - [x] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
 - [x] Task 7: Kurulum çatısı
-- [ ] Task 8: K1 Veli hesabı
+- [x] Task 8: K1 Veli hesabı
 - [ ] Task 9: K2 Okuyucu profili
 - [ ] Task 10: Yazı ayarının okuma metinlerine uygulanması
 - [ ] Task 11: K3 Seviye tespiti
@@ -636,7 +636,7 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
 
 **Kullanır:** Task 3 (`createAccount`), Task 6 (`TextField`, `Dialog`, `Checkbox`), Task 7.
 
-- [ ] **Kırmızı** (`AccountPage.test.tsx`):
+- [x] **Kırmızı** (`AccountPage.test.tsx`):
   1. **İçerik (tasarımdan birebir):**
      - başlık "Veli hesabı" ve alt metin;
      - "E-posta" (`ad@ornek.com`), "Parola" ("En az 8 karakter");
@@ -654,11 +654,11 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
      - Veli yazılır, adres `/kurulum/okuyucu`.
      - Depodaki bütün kayıtların JSON'unda yazılan parola yok.
   6. **Onaysız:** `voiceProcessing: false`, `grantedAt` yok.
-- [ ] → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots '/kurulum/hesap?kurulum=hesap'` → K1 ile karşılaştır, farkları yaz, düzelt. Onaysız açıklama ayrıca bakılır (tasarımı yok).
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(onboarding): build the parent account (K1)`.
+- [x] → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots '/kurulum/hesap?kurulum=hesap'` → K1 ile karşılaştır, farkları yaz, düzelt. Onaysız açıklama ayrıca bakılır (tasarımı yok).
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(onboarding): build the parent account (K1)`.
 
 ### Task 9: K2 Okuyucu profili
 
@@ -910,6 +910,15 @@ Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte
 | V4 | `pnpm shots '/veli/yazi?demo=veli-haftasonu&kapi=acik'` (ve iki durumun `--dokun` adımları, Task 14) |
 
 Uygulama sırasında her ekranın fark listesi buraya eklenir.
+
+**K1** (`/kurulum/hesap?kurulum=hesap`):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| web | "Hesabı oluştur" ekranın dibindeydi; tasarımda içeriğin hemen ardından | düzeltildi (1200 px'ten içerik büyümez) |
+| üçü | Onay kutusu boş; tasarım dolu hâlini gösteriyor | kalır: kural (`docs/ekranlar.md`, K1) |
+| üçü | Kutu boşken onaysız açıklaması görünür | kalır: tasarımı yok (D16) |
+| üçü | Yer tutucu yazısı tasarımdakinden koyu | kalır: Faz 0'ın alan rengi (karşıtlığı yeterli) |
 
 ## Kanıtlar
 

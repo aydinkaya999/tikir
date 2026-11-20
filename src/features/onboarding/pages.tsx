@@ -2,11 +2,6 @@
 // step, so the shell stays whole while the screens arrive one by one.
 import { OnboardingLayout } from './OnboardingLayout';
 
-/** K1 Veli hesabı. */
-export function ParentAccountPage() {
-  return <OnboardingLayout step={1} companion={{}} />;
-}
-
 /** K2 Okuyucu profili. */
 export function ChildProfilePage() {
   return <OnboardingLayout step={2} companion={{}} />;

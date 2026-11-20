@@ -1,0 +1,86 @@
+/* K1 (design/ekranlar/K1-veli-hesabi-*.html). */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* The consent card: light cobalt, the box, its note and the voice data link. */
+.consent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-consent);
+  background: var(--color-cobalt-light);
+}
+
+.note,
+.noConsent,
+.infoBody {
+  margin: 0;
+  font-size: var(--size-small);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-body);
+}
+
+.note {
+  color: var(--color-muted);
+}
+
+.noConsent {
+  color: var(--color-ink);
+  font-weight: var(--weight-semibold);
+}
+
+.infoBody {
+  color: var(--color-ink);
+  font-size: var(--size-body);
+}
+
+.infoLink {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--touch-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-cobalt);
+  font: inherit;
+  font-size: var(--size-link);
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}

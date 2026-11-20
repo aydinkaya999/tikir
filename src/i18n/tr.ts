@@ -44,6 +44,30 @@ export const tr = {
     progressLabel: (step: number, total: number) =>
       `Kurulum adımı ${String(step)} / ${String(total)}`,
     progressCounter: (step: number, total: number) => `${String(step)} / ${String(total)}`,
+    /** K1 Veli hesabı (design/ekranlar/K1-veli-hesabi-*.html). */
+    account: {
+      bubble: 'Merhaba! Çocuğunuz okurken ben dinlerim.',
+      title: 'Veli hesabı',
+      lead: 'Önce siz kaydolun. Çocuğunuzun profilini bir sonraki adımda kurarız.',
+      email: 'E-posta',
+      emailPlaceholder: 'ad@ornek.com',
+      password: 'Parola',
+      passwordPlaceholder: 'En az 8 karakter',
+      consent: 'Çocuğumun ses kaydının okuma geri bildirimi için işlenmesine izin veriyorum.',
+      consentNote:
+        'Kayıtlar yalnızca okumayı değerlendirmek için kullanılır. İstediğiniz zaman dinleyebilir ya da silebilirsiniz.',
+      voiceInfo: 'Ses verisi nasıl kullanılır?',
+      weeklyEmail: 'Haftalık özet e-postası almak istiyorum.',
+      submit: 'Hesabı oluştur',
+      /** The states without a design (docs/kararlar.md D16). TODO(design) */
+      emailError: 'Geçerli bir e-posta adresi yazın.',
+      passwordError: 'Parola en az 8 karakter olmalı.',
+      noConsentNote: 'Onay vermezseniz Tıkır dinlemez: okumalar ölçülmez, seviye tespiti atlanır.',
+      /** A draft (D16): a legal review comes before release (docs/urun.md section 8). TODO(legal) */
+      voiceInfoBody:
+        'Tıkır, çocuğunuz okurken sesini bu cihazda işler: hangi kelimeleri doğru okuduğunu, nerede takıldığını ve okuma hızını bulur. Her günün son okuması ve seviye tespiti kaydedilir. Kayıtlar bu cihazda kalır, başka bir yere gönderilmez. Onay vermezseniz mikrofon hiç açılmaz.',
+      close: 'Kapat',
+    },
   },
 
   session: {
