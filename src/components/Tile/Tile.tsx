@@ -16,31 +16,28 @@ interface TileProps {
   state: TileState;
   /** Pattern of a done tile (design/svg/cini-1…6.svg). */
   pattern?: TilePattern;
-  /** Edge in pixels: 84 on tablet and web, 62 on phones (G1). */
+  /**
+   * Edge in pixels: 84 on tablet and web, 62 on phones (G1). Left out, the tile follows the
+   * --tile-size variable of its CSS (84 px by default), so a screen can size it per breakpoint.
+   */
   size?: number;
   className?: string;
 }
 
 /** A glazed tile. Decorative: the list it sits in names the chapter and its state. */
-export function Tile({ state, pattern = 1, size = 84, className }: TileProps) {
+export function Tile({ state, pattern = 1, size, className }: TileProps) {
   return (
     <div
       aria-hidden="true"
       className={[styles.tile, styles[state], className ?? ''].filter(Boolean).join(' ')}
-      style={{ width: size, height: size }}
+      style={size === undefined ? undefined : { width: size, height: size }}
     >
       {state === 'done' && (
         <img className={styles.fill} src={tilePatternImages[pattern]} alt="" draggable={false} />
       )}
       {state === 'today' && (
         <span className={styles.center}>
-          <img
-            src={companionImages.normal}
-            width={Math.round(size * 0.735)}
-            height={Math.round(size * 0.735)}
-            alt=""
-            draggable={false}
-          />
+          <img className={styles.face} src={companionImages.normal} alt="" draggable={false} />
         </span>
       )}
       {state === 'locked' && (

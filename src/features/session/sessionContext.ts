@@ -1,7 +1,7 @@
 // The session's store and devices for the screens (docs/planlar/faz-2b.md, Task 7). The router
 // provides them, so the screens never import src/app. A .ts file: react-refresh wants components
 // and other exports in separate files.
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand/vanilla';
 import type { Attempt } from '../../domain/types';
@@ -58,4 +58,15 @@ export function useSession<T>(selector: (state: SessionState) => T): T {
 
 export function useSessionDevices(): SessionDevices {
   return useSessionContext().devices;
+}
+
+/** Loads the session once, for the screens outside the session shell (G1, Albüm, Stüdyo). */
+export function useLoadSession(): void {
+  const status = useSession((state) => state.status);
+  const load = useSession((state) => state.load);
+  useEffect(() => {
+    if (status === 'idle') {
+      void load();
+    }
+  }, [status, load]);
 }

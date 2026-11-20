@@ -50,7 +50,7 @@
 - [x] Task 6: Geliştirme adres parametreleri
 - [x] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
 - [x] Task 8: `pnpm shots` adımları
-- [ ] Task 9: G1 Yol
+- [x] Task 9: G1 Yol
 - [ ] Task 10: G2 Isınma ve mikrofon sorunları
 - [ ] Task 11: G3 Dinle
 - [ ] Task 12: G4 Oku
@@ -929,7 +929,7 @@ export function roadView(data: SessionData): RoadView;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`views.test.ts` › `roadView`:**
     1. `cocuk-sabahi`, bugün `'2026-11-21'` → `start`, bölüm 4 "Dar Patika", seri 2, tamamlanan 3; karolar 1–3 `done`, 4 `today`, 5–12 `locked`.
     2. Süren seans → `resume`.
@@ -947,11 +947,11 @@ export function roadView(data: SessionData): RoadView;
     5. Bugün bitti: "Bugünlük bitti", "Yarın: Yıldız Tepesi", "5. bölüm yarın açılır", "Bugünlük bu kadar. Yarın görüşürüz, Deniz."; "Başla" yok.
     6. Seri bitti: "Yeni bölümler yolda." ve "Kitaplık" (`/kitaplik`).
     7. Yüklenirken "Hazırlanıyor…".
-- [ ] İki test dosyası → FAIL.
-- [ ] Uygula. Düzen G1 HTML'inden: telefonda tek sütun, tablet ve webde iki sütun.
-- [ ] `pnpm shots '/?demo=cocuk-sabahi'` → `design/png/G1-yol-*.png` ile karşılaştır; farkları "Tasarım karşılaştırması"na yaz, düzelt.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the road screen (G1)`.
+- [x] İki test dosyası → FAIL.
+- [x] Uygula. Düzen G1 HTML'inden: telefonda tek sütun, tablet ve webde iki sütun.
+- [x] `pnpm shots '/?demo=cocuk-sabahi'` → `design/png/G1-yol-*.png` ile karşılaştır; farkları "Tasarım karşılaştırması"na yaz, düzelt.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the road screen (G1)`.
 
 ### Task 10: G2 Isınma ve mikrofon sorunları
 
@@ -1343,6 +1343,17 @@ Görüntü komutları (her biri 390, 1180 ve 1440 px yazar):
 | G7 | yalnız "ağaçlarının" evcilleşir | tutarsızlık 2 |
 
 Uygulama sırasında her ekranın fark listesi buraya eklenir.
+
+**G1** (`pnpm shots '/?demo=cocuk-sabahi'`, üç genişlik):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| telefon | "Başla" 52 px'ti; tasarımda büyük düğme (60 px, yazı 18) | düzeltildi (`size="large"`) |
+| tablet | Sağ sütun 25 px genişti: kartın iç boşluğu esnek tabana ekleniyordu, tasarımda boşluk sütunun içindeki kartta | düzeltildi (seri kartı bir sütun sarmalayıcısında; ölçüm: sütunlar 476 ve 500 px) |
+| üçü | "2 gün üst üste" (tasarımda 4) | kalır: tutarsızlık 3 |
+| tablet, web | Balon D13 kalıbını söyler | kalır: yanıt 2 |
+
+Düzeltmelerden sonra üç genişlikte düzen, metin, renk ve karolar tasarımla aynı.
 
 ## Açık sorular (onayı beklemez)
 

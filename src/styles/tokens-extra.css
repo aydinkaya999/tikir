@@ -78,6 +78,12 @@
   --size-chart-compact-value: 17px;
   --size-chart-wide: 13px;
   --size-chart-wide-value: 18px;
+  /* G1: today's chapter title in its card (24 px on phones, 30 px from 700 px). */
+  --size-chapter-title: 24px;
+  /* G1: the number under each chapter tile. */
+  --size-tile-number: 13px;
+  /* G7 (and G1 when the day is done): the small locked tile of the "Yarın" card. */
+  --radius-tile-small: 10px;
 }
 
 @media (min-width: 700px) {
@@ -88,6 +94,7 @@
     --size-option-label: 17px;
     --size-stat: 34px;
     --size-stat-hero: 64px;
+    --size-chapter-title: 30px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;

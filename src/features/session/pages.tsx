@@ -3,11 +3,6 @@
 import { tr } from '../../i18n/tr';
 import { SessionLayout } from './SessionLayout';
 
-/** G1 Yol. */
-export function RoadPage() {
-  return null;
-}
-
 /** G2 Isınma. */
 export function WarmupPage() {
   return <SessionLayout title={tr.session.steps.warmup} companion={{ expression: 'listen' }} />;

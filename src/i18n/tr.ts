@@ -76,6 +76,37 @@ export const tr = {
     },
   },
 
+  /** G1 Yol (docs/ekranlar.md, G1). */
+  road: {
+    greeting: (name: string) => `Merhaba ${name}`,
+    streak: (days: number) => `${String(days)} gün üst üste`,
+    /**
+     * Tablet and web bubble: one pattern for every chapter (docs/kararlar.md D13). The design's
+     * sentence belongs to chapter 4 and the content has none (C6).
+     */
+    bubble: (number: number, title: string) =>
+      `Bugün ${String(number)}. bölümü okuyoruz: ${title}. Hazırsan başlayalım.`,
+    todayLabel: 'Bugünkü bölüm',
+    chapterMeta: (number: number, minutes: number) =>
+      `${String(number)}. bölüm, ${String(minutes)} dakika`,
+    start: 'Başla',
+    /** docs/ekranlar.md, "Günlük seans": after an exit, "Başla" becomes "Sürdür". */
+    resume: 'Sürdür',
+    /** "12 bölümün 3’ü tamam"; the count comes with its suffix (withPossessiveSuffix). */
+    completed: (total: number, countWithSuffix: string) =>
+      `${String(total)} bölümün ${countWithSuffix} tamam`,
+    chaptersLabel: 'Bölümler',
+    /** No chapter left to read (docs/ekranlar.md, "Tasarımı olmayan durumlar"). TODO(design) */
+    seriesEnd: 'Yeni bölümler yolda.',
+  },
+
+  /** G7, and G1 once the day is done (docs/ekranlar.md, G1: "G7'deki 'Yarın' kartını kullan"). */
+  done: {
+    tomorrow: (title: string) => `Yarın: ${title}`,
+    tomorrowMeta: (number: number) => `${String(number)}. bölüm yarın açılır`,
+    bubble: (name: string) => `Bugünlük bu kadar. Yarın görüşürüz, ${name}.`,
+  },
+
   /** Loading and the error notice; approved with the phase 2b plan (D15). TODO(design) */
   status: {
     loading: 'Hazırlanıyor…',

@@ -43,9 +43,10 @@ export interface TestDevicesOptions {
   random?: () => number;
 }
 
-export function testDevices(options: TestDevicesOptions = {}): SessionDevices & {
-  audio: FakeAudioCapture;
-} {
+/** The devices, with the hand-driven microphone typed as such for the tests' assertions. */
+export type TestDevices = Omit<SessionDevices, 'audio'> & { audio: FakeAudioCapture };
+
+export function testDevices(options: TestDevicesOptions = {}): TestDevices {
   const narrator = options.narrator ?? new SilentNarrator({ now: () => Date.now() });
   return {
     audio: options.audio ?? new FakeAudioCapture(),
