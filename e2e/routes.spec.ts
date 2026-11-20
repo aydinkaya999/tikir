@@ -195,7 +195,11 @@ for (const route of focusRoutes) {
         route.back,
       );
 
-      const subtitle = page.getByText(route.subtitle, { exact: true });
+      // The line under the title (U3's bubble may say the same before the picks).
+      const subtitle = page
+        .getByRole('heading', { level: 1 })
+        .locator('xpath=following-sibling::p[1]');
+      await expect(subtitle).toHaveText(route.subtitle);
       const libraryLink = page.getByRole('link', { name: 'Kitaplık' });
       if (viewport === 'telefon') {
         await expect(subtitle).toBeHidden();

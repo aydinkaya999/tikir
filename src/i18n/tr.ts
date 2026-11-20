@@ -331,10 +331,19 @@ export const tr = {
     empty: 'Henüz kitabın yok. Kartlarla ilk kitabını yap.',
   },
 
+  /** The wait while a book is made (docs/ekranlar.md's default; docs/planlar/faz-5.md, D18). */
+  bookMaking: { writing: 'Kitabın yazılıyor', cancel: 'Vazgeç' },
+
   focus: {
     /** U3, U4: back button name. */
     back: 'Geri dön',
-    bookFromCards: { title: 'Kitabını kur', subtitle: 'Her sıradan bir kart seç.' },
+    bookFromCards: {
+      title: 'Kitabını kur',
+      /** Also Tıkır's bubble until a card of each group is picked (D18). */
+      subtitle: 'Her sıradan bir kart seç.',
+      groups: { hero: 'Kahraman', place: 'Mekân', event: 'Olay' },
+      make: 'Kitabımı yap',
+    },
     bookReady: { title: 'Kitabın hazır', subtitle: 'Denetimden geçti, okunmaya hazır.' },
   },
 

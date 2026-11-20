@@ -41,7 +41,11 @@ export function FocusLayout({
           <span>{tr.nav.child.library}</span>
         </Link>
       </div>
-      <main className={styles.body}>
+      <main
+        className={[styles.body, aside === undefined && action === undefined ? styles.single : '']
+          .filter(Boolean)
+          .join(' ')}
+      >
         <div className={styles.header}>
           <IconButton className={styles.back} icon="left" label={tr.focus.back} to={backTo} />
           <div className={styles.titles}>

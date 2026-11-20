@@ -449,6 +449,10 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 1. Kitap kapaklarının desenleri: kitabın kimliğinden türetilir (karar 11). Tasarımın ikinci desenleri (açık kobalt zeminde safran yıldız, açık turkuaz zeminde kobalt yarım daireler) `design/svg`'de yok (10. soru). Bilinen fark.
 2. Kapak şeridi tasarımdan 1–2 px yüksek (desenler kare çizilir). Düzeltilmedi.
 
+**U3** (`shots/kitaplik-kur-demo-cocuk-sabahi-*.png`, tasarımın seçimiyle ↔ `design/png/U3-kartlarla-kitap-*.png`): kartlar, gruplar, seçim rozeti, Tıkır ve balon, "Kitabımı yap" üç genişlikte örtüşür. Düzeltilenler: telefonda Tıkır ve balon eylem çubuğuna itiliyordu (içeriğin hemen altına alındı). Webde "Kitabımı yap" sütunun dibindeydi (balonun altına alındı). Görüntü betiği düğmenin kabartısını geçiş bitmeden çekiyordu (`scripts/shots.ts` artık süreli geçişleri bekliyor). Kalan fark: webde balonla düğme arası 24 px (tasarım 20; ızgaranın satır boşluğu).
+
+**Üretim beklemesi** (tasarımı yok; `--dokun 'Kitabımı yap' --ileri 100` ile): Tıkır `think`, "Kitabın yazılıyor", "Vazgeç"; içerik alanının ortasında, yan sütun ve eylem yok.
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.

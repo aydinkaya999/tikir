@@ -64,6 +64,20 @@ async function runStep(page: Page, step: ShotStep): Promise<void> {
   }
 }
 
+/**
+ * A tap can start a transition (a button that turns on lifts in 80 ms): the picture waits for the
+ * finite ones, at most a second. Endless ones (the listening ring) are taken as they are.
+ */
+async function settled(page: Page): Promise<void> {
+  const finished = page.evaluate(async () => {
+    const finite = document
+      .getAnimations()
+      .filter((animation) => animation.effect?.getComputedTiming().endTime !== Infinity);
+    await Promise.all(finite.map((animation) => animation.finished.catch(() => undefined)));
+  });
+  await Promise.race([finished, new Promise((resolve) => setTimeout(resolve, 1000))]);
+}
+
 const outDir = path.resolve('shots');
 await mkdir(outDir, { recursive: true });
 
@@ -109,6 +123,7 @@ try {
       await page.evaluate(async () => {
         await document.fonts.ready;
       });
+      await settled(page);
       const file = path.join(outDir, `${fileStem(route)}-${device.name}.png`);
       await page.screenshot({ path: file, fullPage: true });
       console.log(path.relative(process.cwd(), file));

@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
 import { LibraryPage } from '../features/library/LibraryPage';
-import { BookFromCardsPage, BookFromTextPage, BookReadyPage } from '../features/library/pages';
+import { BookFromCardsPage } from '../features/library/BookFromCardsPage';
+import { BookFromTextPage, BookReadyPage } from '../features/library/pages';
 import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';

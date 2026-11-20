@@ -4,17 +4,6 @@ import { tr } from '../../i18n/tr';
 import { FocusLayout } from './FocusLayout';
 import { libraryPaths } from './paths';
 
-/** U3 Kartlarla kitap. */
-export function BookFromCardsPage() {
-  return (
-    <FocusLayout
-      title={tr.focus.bookFromCards.title}
-      subtitle={tr.focus.bookFromCards.subtitle}
-      backTo={libraryPaths.library}
-    />
-  );
-}
-
 /** U4 Kitap hazır: its way back is the library (docs/planlar/faz-5.md, karar 30). */
 export function BookReadyPage() {
   return (

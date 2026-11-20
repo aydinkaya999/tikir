@@ -128,6 +128,10 @@
   --size-book-source: 13px;
   /* U1: the parent's strip link "Veli bir metinden kitap ekleyebilir" (15/16/15 px). */
   --size-strip-link: 15px;
+  /* U3: the card groups' titles ("Kahraman", "Mekân", "Olay"), 17 px on phones, 21 px later. */
+  --size-card-group: 17px;
+  /* U3, U4: Tıkır's bubble in a focus page's side column, 15 px on phones, 18 px later. */
+  --size-bubble-focus: 15px;
 }
 
 @media (min-width: 700px) {
@@ -152,6 +156,8 @@
     --size-baseline: 84px;
     --size-trial-text: 16px;
     --size-strip-link: 16px;
+    --size-card-group: 21px;
+    --size-bubble-focus: 18px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;

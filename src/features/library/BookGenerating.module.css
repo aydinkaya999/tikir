@@ -1,0 +1,31 @@
+/* TODO(design): the wait is not drawn; Tıkır thinking over one line and the way out, centred. */
+.generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100%;
+  padding: 24px 0;
+  text-align: center;
+}
+
+.face {
+  width: 120px;
+  height: 120px;
+}
+
+.line {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+@media (min-width: 700px) {
+  .face {
+    width: 170px;
+    height: 170px;
+  }
+}
