@@ -221,8 +221,8 @@ Bunlar için tasarım bekleniyor. O gelene kadar aşağıdaki varsayılanı uygu
 | Veli kapısı | Tam ekran katman: iki basamaklı bir toplama sorusu ("47 + 38 = ?"). Üç yanlışta 30 saniye bekletir. |
 | Giriş (oturum açma) | Arka uç gelene kadar yok; hesap cihazda. |
 | Haftalık ölçüm (çocuk) | K3 ekranının kalıbı; başlık "1 dakikalık ölçüm". |
-| Mikrofon izni reddedildi | Seans kabuğunda Tıkır balonu: iznin nasıl açılacağını anlatır; "Yeniden dene" düğmesi. |
-| Mikrofon hiç yok ya da hata | Aynı kalıp, farklı metin. Seans başlatılmaz. |
+| Mikrofon izni reddedildi | Seans kabuğunda Tıkır balonu: iznin nasıl açılacağını anlatır; "Yeniden dene" düğmesi. Yeniden deneme de olmazsa "Bugün dinlemeden oku": seansın kalanı dinlemesiz yürür (`docs/kararlar.md` P14). |
+| Mikrofon hiç yok ya da hata | Aynı kalıp, farklı metin; aynı geri dönüş (P14). |
 | Yükleniyor | Tıkır `think` yüz ifadesi ve tek satır metin. İskelet ekran yok. |
 | Boş durumlar (kitap yok, ölçüm yok, takılınan kelime yok) | Kart içinde tek cümle ve bir sonraki adımın düğmesi. |
 | Hata bildirimi | Ne olduğunu ve ne yapılacağını söyleyen tek cümle; özür dilemez. |

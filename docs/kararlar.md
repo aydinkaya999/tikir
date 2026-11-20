@@ -23,6 +23,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | P11 | Veli kapısı | İki basamaklı toplama sorusu | varsayım | Faz 7'de mağaza kurallarıyla karşılaştırılacak |
 | P12 | Gelir modeli | Karar yok | açık | Ödeme ve abonelik için kodda yer açma |
 | P13 | Onaysız seans | Veli ses onayı yoksa seans dinlemesiz yürür: mikrofon hiçbir adımda açılmaz; okuma sonucu, kelime kartı ve ses kaydı yazılmaz; G5 atlanır | kesin | Ürün sahibi, 2026-11-20. Ayrıntı: `docs/planlar/faz-2b.md`, karar 10. Tasarımı yok (`TODO(design)`); Faz 3'te K1'in onaysız yoluyla birlikte gözden geçirilir. |
+| P14 | Onay var, mikrofon yok | Veli ses onayı verdiği hâlde mikrofon kullanılamıyorsa (izin reddi, mikrofon yok, hata) çocuk seansı yine bitirebilir. Sorun balonunda önce "Yeniden dene" çıkar; yeniden deneme de olmazsa "Bugün dinlemeden oku" seçeneği gelir. Seansın kalanı P13'ün dinlemesiz yolundan gider ve gün tamamlanmış sayılır (üst üste gün, sıradaki bölüm). Velinin karnesi dinlenmeden okunan günleri gösterir | kesin | Ürün sahibi, 2026-11-20 (Faz 2b son incelemesi, açık soru 7, A seçeneği). Faz 3'te yapılır; karnedeki satır Faz 4'te. Faz 3 planında kesinleşecekler: düğme ve balon metinleri (tasarımı yok, D15 gibi önerilir); seansın ortasında düşen mikrofon (dinlenen okumalar kalır, kalanı dinlemesiz; G7'nin sayısı); mikrofon izninin kurulumda veli yanındayken istenmesi (öneri). |
 
 ## Tasarım
 
@@ -123,6 +124,7 @@ Faz 0'da tasarımla belgeler karşılaştırılırken çıkanlar:
 12. G4 tasarımında 4. bölümün "1 / 2" sayfası, içerikteki 1. ve 2. sayfanın birleşimi. İçerikte bu bölüm 6 sayfa. Faz 2'deki `design` senaryosu hangisini izlesin? (Faz 2'den önce) Yanıtlandı (2026-11-19): D12.
 13. İki bölmeli kabukların alt alta dizilmiş hâli çizilmedi (içerik 720 px altında: seans ve odak kabuğunda 700–783 px, kurulum kabuğunda 700–719 px). Şimdilik bölmeler sırasını koruyarak alt alta dizilir; kurulumda kobalt pano sayfanın başına geçer (`TODO(design)`). Ayrıca kurulum kabuğunda pano tablette 420 px sabit: 768 px'lik dikey tablette form sütununa 260 px kalır. Pano bu genişliklerde daralsın mı, yoksa kurulum telefon düzenine mi geçsin? (Faz 1'den önce)
 14. Okuma metninde rakamlar kelime sayılmıyor: "Deniz 3 elma aldı." metninde "3" önceki kelimeye yapışık görünür, kelime sayısına ve dinleme beklentisine girmez; "100’ü" yalnız "ü" olarak okunur. Rakamlar okuma metinlerinde hiç olmamalı mı (içerik kuralı), yoksa okunuşlarıyla ("üç") mı eşlensin? (Faz 2'den önce) Yanıtlandı (2026-11-19): C5.
+15. Veli onay verdiği hâlde mikrofon kullanılamıyorsa çocuk seansı bitirebilsin mi? (Faz 2b son incelemesi) Yanıtlandı (2026-11-20): P14.
 
 ## Bağımlılıklar
 
@@ -165,3 +167,4 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-20: Faz 2a: `idb` ve `fake-indexeddb` bağımlılıkları; okuma kaydı (T21); seslendirme ayrıntısı (T8 notu); `docs/mimari.md` ve `docs/dinleme-hatti.md` güncellendi (tarih, ilerleme, servis klasörleri, yardım akışı, senaryo tablosu).
 - 2026-11-20: Faz 2b planı onaylandı: dinlemesiz seans (P13), G1 balonu (D13), G6'da yanlış cevap (D14), tasarımı olmayan durumların metinleri (D15), seslendirmenin geri dönüşü (T8 notu), seansın mikrofonu (T22); açık içerik soruları C6 ve C7.
 - 2026-11-20: Faz 2b: G1–G7, Albüm ve Stüdyo; seans durum makinesi ve deposu (`docs/mimari.md` → "Seans durum makinesi"); geliştirme adres parametrelerinin son hali; tasarım tutarsızlıklarına 8. ve 9. maddeler; `docs/dinleme-hatti.md` (dinlemesiz seans, elle kip, seslendirmenin geri dönüşü) ve `docs/ekranlar.md` (G1 balonu, G2 karoları, G5 dalga biçimi, G6 yanlış cevap) güncellendi.
+- 2026-11-20: Faz 2b sonrası: onay var ama mikrofon yoksa dinlemeden devam (P14); `docs/ekranlar.md`'deki mikrofon sorunu varsayılanı ve yol haritasındaki Faz 3 ve Faz 4 buna göre güncellendi.
