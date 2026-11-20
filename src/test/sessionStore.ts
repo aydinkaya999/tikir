@@ -3,9 +3,10 @@
 import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { vi } from 'vitest';
-import type { LocalDate } from '../domain/types';
-import type { DevStep } from '../features/dev/params/devParams';
+import type { LocalDate, ReadingStyle } from '../domain/types';
+import type { DevStep, SetupParam } from '../features/dev/params/devParams';
 import { prepareSessionStep } from '../features/dev/params/prepareSessionStep';
+import { prepareSetupStep } from '../features/dev/params/prepareSetupStep';
 import { type DemoMode, loadDemoProfile } from '../features/dev/demo/loadDemoProfile';
 import { createSessionStore, type SessionStoreServices } from '../features/session/sessionStore';
 import type { ScenarioName } from '../services/listener/scenarios';
@@ -20,21 +21,33 @@ export interface DemoSessionOptions {
   step?: DevStep;
   scenario?: ScenarioName;
   consent?: boolean;
+  /** The demo child's reading style (Faz 3, karar 23). */
+  readingStyle?: ReadingStyle;
   /** The store's day; testToday unless a test moves it. */
   today?: () => LocalDate;
+  /** An empty store brought to a setup step instead of the demo profile (Faz 3, karar 5). */
+  setup?: SetupParam;
 }
 
 export async function demoSessionStore(options: DemoSessionOptions = {}) {
   globalThis.indexedDB = new IDBFactory();
   const repository = await IndexedDbRepository.open();
-  await loadDemoProfile(repository, options.mode ?? 'cocuk-sabahi', testToday);
-  if (options.consent === false) {
+  if (options.setup === undefined) {
+    await loadDemoProfile(repository, options.mode ?? 'cocuk-sabahi', testToday);
+  }
+  if (options.consent === false && options.setup === undefined) {
     const parent = await repository.getParent();
     if (parent !== null) {
       await repository.saveParent({
         ...parent,
         consent: { ...parent.consent, voiceProcessing: false },
       });
+    }
+  }
+  if (options.readingStyle !== undefined && options.setup === undefined) {
+    const child = await repository.getChild();
+    if (child !== null) {
+      await repository.saveChild({ ...child, readingStyle: options.readingStyle });
     }
   }
   let id = 0;
@@ -49,6 +62,9 @@ export async function demoSessionStore(options: DemoSessionOptions = {}) {
     },
   };
   const recordings = new IndexedDbRecordingStore();
+  if (options.setup !== undefined) {
+    await prepareSetupStep(services, options.setup, { consent: options.consent !== false });
+  }
   if (options.step !== undefined) {
     await prepareSessionStep(services, options.step, options.scenario ?? 'typical', recordings);
   }

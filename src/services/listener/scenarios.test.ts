@@ -30,6 +30,24 @@ describe('scenarioSets', () => {
     expect(scenarioSets.typical.readings).toEqual(fromSeed);
   });
 
+  it("makes the typical assessment the demo profile's first measurement", () => {
+    const first = demoProfile.timeline.assessments[0];
+
+    expect(scenarioSets.typical.assessment).toEqual({
+      timed: { seconds: first?.seconds, wordsRead: first?.wordsRead },
+      miscues: first?.miscues.map(({ index, type }) => ({ index, type })),
+      hesitations: first?.hesitations.map(({ index, ms }) => ({ index, ms })),
+      prosodyScore: first?.prosodyScore,
+    });
+  });
+
+  it('gives every set a one-minute assessment', () => {
+    for (const set of Object.values(scenarioSets)) {
+      expect(set.assessment.timed?.seconds).toBe(60);
+    }
+    expect(scenarioSets.design.assessment).toEqual(scenarioSets.typical.assessment);
+  });
+
   it('opens the help of the design scenario at the moment the G4 design shows', () => {
     const design = scenarioSets.design;
     const simulation = simulateReading(chapterFourWords(), design.readings[1]);

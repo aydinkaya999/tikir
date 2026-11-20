@@ -18,7 +18,7 @@ interface ShellNavProps {
   items: readonly ShellNavItem[];
   /** Line under the wordmark on the web sidebar (V1: "Veli alanı"). */
   subtitle?: string;
-  /** Link at the foot of the web sidebar (G1: parent area, V1: child screen). */
+  /** Link at the foot of the rail and the sidebar (G1: parent area, V1: child screen). */
   footer?: { to: string; label: string; icon: IconName };
 }
 

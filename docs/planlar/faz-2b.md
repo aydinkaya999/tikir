@@ -1414,7 +1414,7 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 4. **G2'de hece karoları:** Gerçek dinleyici (Faz 6) hece zamanı verirse çocuğun okumasını izleyebilir.
 5. **iPhone:** Yardım seslendirmesi sırasında açık mikrofon ve dokunuşsuz başlayan G3 seslendirmesi cihaz denemesinde bakılır.
 6. **Yarış çubuğunda yakın imleçler:** Çocuk ve hayalet birkaç kelime arayla okurken "sen" ve "dün" etiketleri üst üste biniyor. Tasarımda bu durum yok; tasarımcıya sorulur (bileşen Faz 0'dan).
-7. **Onay var, mikrofon yok:** Veli ses onayı verdiyse ama cihazda çalışan mikrofon yoksa G4'te okuma başlamaz (karar 14); çocuk seansı bitiremez. Faz 3'te K1 ve cihaz denetimiyle birlikte ele alınır: dinlemesiz okumaya geçmek bir seçenek (son inceleme).
+7. **Onay var, mikrofon yok:** Veli ses onayı verdiyse ama cihazda çalışan mikrofon yoksa G4'te okuma başlamaz (karar 14); çocuk seansı bitiremez. Faz 3'te K1 ve cihaz denetimiyle birlikte ele alınır: dinlemesiz okumaya geçmek bir seçenek (son inceleme). **Yanıt** (ürün sahibi, 2026-11-20): dinlemeden devam, `docs/kararlar.md` P14; Faz 3'te yapılır.
 
 ## Kanıtlar
 

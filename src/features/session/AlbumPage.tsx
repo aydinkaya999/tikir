@@ -20,7 +20,7 @@ export function AlbumPage() {
     return <StatusScreen kind="error" />;
   }
   if (data === null) {
-    // TODO(phase 3): with no profile the onboarding opens (/kurulum/hesap).
+    // The setup guard opens the setup before a profile exists.
     return null;
   }
   const words = tamedWords(data.cards);

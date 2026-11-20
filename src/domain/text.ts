@@ -1,5 +1,6 @@
 // Turkish text rules: docs/mimari.md, "Türkçe metin kuralları ve sınama örnekleri".
-import type { Chapter, Page } from './types';
+import { passagePageWords } from './config';
+import type { Chapter, Page, Passage } from './types';
 
 const LOCALE = 'tr-TR';
 const VOWELS = new Set(['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü', 'â', 'î', 'û']);
@@ -362,4 +363,38 @@ export function syllabify(word: string): string[] {
 /** One syllable per vowel; the apostrophe and the spaces of a spoken form are ignored. */
 export function countSyllables(word: string): number {
   return letters(word).filter(isVowel).length;
+}
+
+/**
+ * A measurement text as a chapter (docs/planlar/faz-3.md, karar 14), so K3 reads it with the
+ * session's reading engine: each sentence one phrase unit, sentences grouped in order into pages of
+ * at most `maxWords` words; a longer sentence stands alone.
+ */
+export function passageChapter(passage: Passage, maxWords: number = passagePageWords): Chapter {
+  const pages: Page[] = [];
+  let page: Page = [];
+  let words = 0;
+  for (const sentence of passage.sentences) {
+    const count = tokenize(sentence).length;
+    if (page.length > 0 && words + count > maxWords) {
+      pages.push(page);
+      page = [];
+      words = 0;
+    }
+    page.push([sentence]);
+    words += count;
+  }
+  if (page.length > 0) {
+    pages.push(page);
+  }
+  return { number: 0, title: passage.title, pages, questions: [], chains: {} };
+}
+
+/** A name with its genitive suffix: "Deniz’in", "Ali’nin", "Umut’un" (vowel harmony, a buffer n). */
+export function withGenitiveSuffix(name: string): string {
+  const characters = letters(name.trim());
+  const lastVowel = characters.findLast(isVowel) ?? 'i';
+  const vowel = ORDINAL_VOWEL[toLowerTr(lastVowel)] ?? 'i';
+  const buffer = isVowel(characters.at(-1) ?? '') ? 'n' : '';
+  return `${name.trim()}’${buffer}${vowel}n`;
 }

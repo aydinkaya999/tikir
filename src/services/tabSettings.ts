@@ -1,9 +1,19 @@
-// Settings that last while the tab is open (sessionStorage): the developer pages' listener choice
-// (docs/planlar/faz-2b.md, karar 7). A missing or refusing storage reads nothing and never throws.
+// Settings that last while the tab is open (sessionStorage): the parent gate's wait, and the
+// developer parameters' listener choice and open gate (docs/planlar/faz-2b.md, karar 7; faz-3.md,
+// kararlar 25–26). A missing or refusing storage reads nothing and never throws.
 
+/** The parent gate waits until this time (ms since 1970) after three wrong answers. */
+export const parentGateWaitKey = 'tikir.kapi.bekleme';
+
+/** The parent gate's wrong answers since its last wait or right answer. */
+export const parentGateMissesKey = 'tikir.kapi.yanlis';
+
+/** Developer settings: read only behind an inline MODE check, so production drops them. */
 export const tabSettingKeys = {
   /** A ready scenario's name, or 'elle' for the manual listener (docs/dinleme-hatti.md, section 3). */
   listener: 'tikir.gelistirme.dinleyici',
+  /** 'acik': the parent gate stays open in this tab (`&kapi=acik`). */
+  parentGate: 'tikir.gelistirme.kapi',
 } as const;
 
 export function readTabSetting(key: string): string | null {
@@ -25,6 +35,6 @@ export function writeTabSetting(key: string, value: string | null): void {
       sessionStorage.setItem(key, value);
     }
   } catch {
-    // A blocked or full storage only loses a developer setting.
+    // A blocked or full storage only loses a developer setting, or the gate's wait.
   }
 }

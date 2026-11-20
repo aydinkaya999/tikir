@@ -8,7 +8,9 @@ const viewports = [
   { name: 'tablet', width: 1180, height: 820 },
   { name: 'web', width: 1440, height: 900 },
 ] as const;
-const variants = ['default', 'school-largest'] as const;
+// The school letters at each of the four sizes, with the widest spacing (docs/planlar/faz-3.md,
+// karar 23): the reading style may not break the rule either.
+const variants = ['default', 'school-0', 'school-1', 'school-2', 'school-3'] as const;
 
 /** Every word box relative to the paragraph, so scrolling cannot hide or fake a move. */
 async function wordBoxes(demo: Locator): Promise<number[][]> {
@@ -51,6 +53,34 @@ for (const viewport of viewports) {
       }
     });
   }
+}
+
+// The reading style reaches the text: the school letters, and a larger size at each step.
+for (const viewport of viewports) {
+  test(`the school letters grow by the four sizes (${viewport.name})`, async ({ page }) => {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto('/gelistirme/vitrin');
+    const shown: { family: string; size: number }[] = [];
+    for (const size of [0, 1, 2, 3]) {
+      const word = page.locator(
+        `[data-reading-demo="school-${String(size)}"] [data-word-index="0"]`,
+      );
+      await expect(word).toBeVisible();
+      shown.push(
+        await word.evaluate((element) => {
+          const style = getComputedStyle(element);
+          return { family: style.fontFamily, size: Number.parseFloat(style.fontSize) };
+        }),
+      );
+    }
+
+    for (const [step, each] of shown.entries()) {
+      expect(each.family, `size ${String(step)}`).toMatch(/^"?Didact Gothic/);
+      if (step > 0) {
+        expect(each.size, `size ${String(step)}`).toBeGreaterThan(shown[step - 1]?.size ?? 0);
+      }
+    }
+  });
 }
 
 /** Every line fragment of every phrase unit, relative to the paragraph. */

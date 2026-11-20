@@ -1,0 +1,236 @@
+/* Below 1000 px: K1 telefon — no panel (docs/planlar/faz-3.md, yanıt 7). */
+.layout {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.panel {
+  display: none;
+}
+
+.column {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: calc(20px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 12px
+    max(20px, env(safe-area-inset-left));
+}
+
+/* The step's heading (K1–K4 draw it alike). */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+/* Below 1000 px, when the step asks: Tıkır and his words at the head of the content (K4 telefon). */
+.phoneCompanion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.phoneFace {
+  flex: none;
+}
+
+.phoneBubble {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-top: 12px;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress > li {
+  width: 12px;
+  height: 12px;
+  border: var(--border);
+  border-radius: var(--radius-progress);
+  background: var(--color-white);
+}
+
+.progress > .done {
+  background: var(--color-turquoise);
+}
+
+.progress > .current {
+  width: 28px;
+  background: var(--color-saffron);
+}
+
+.counter {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-link);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+/* The phone's foot bar: the action fills it (K1, K2 telefon). */
+.action > * {
+  flex: 1 1 auto;
+}
+
+.action {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  padding: 12px 20px calc(22px + env(safe-area-inset-bottom));
+  border-top: var(--border);
+  background: var(--color-white);
+}
+
+/* Portrait tablets keep the phone layout with the tablet's type and room (yanıt 7). */
+@media (min-width: 700px) {
+  .main {
+    padding-right: max(32px, env(safe-area-inset-right));
+    padding-left: max(32px, env(safe-area-inset-left));
+  }
+}
+
+/* From 1000 px: K1 tablet — 420 px cobalt panel. */
+@media (min-width: 1000px) {
+  .phoneCompanion {
+    display: none;
+  }
+
+  .layout {
+    flex-direction: row;
+  }
+
+  .panel {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex: 0 0 420px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100dvh;
+    padding: calc(36px + env(safe-area-inset-top)) 32px 36px;
+    border-right: var(--border);
+    background: var(--color-cobalt);
+  }
+
+  .wordmark {
+    color: var(--color-white);
+    font-size: var(--size-wordmark-panel);
+    font-weight: var(--weight-extrabold);
+    line-height: 1;
+  }
+
+  .companion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .strip {
+    display: flex;
+    align-self: flex-start;
+    overflow: hidden;
+    border: var(--border);
+    border-radius: var(--radius-tile);
+  }
+
+  .strip .stripTile {
+    border-radius: 0;
+  }
+
+  /* Five tiles fit the tablet panel; the web panel shows six. */
+  .strip .stripTile:nth-child(6) {
+    display: none;
+  }
+
+  .main {
+    gap: 20px;
+    padding: calc(36px + env(safe-area-inset-top)) 44px 32px;
+  }
+
+  .action > * {
+    flex: none;
+  }
+
+  .action {
+    position: static;
+    justify-content: flex-end;
+    padding: 0 44px 32px;
+    border-top: 0;
+    background: transparent;
+  }
+}
+
+/* Web (from 1200 px): K1 web — 380–520 px panel, content up to 640 px wide. */
+@media (min-width: 1200px) {
+  .panel {
+    flex: 1 1 380px;
+    max-width: 520px;
+    gap: 24px;
+    padding: 44px 40px;
+  }
+
+  .strip .stripTile:nth-child(6) {
+    display: block;
+  }
+
+  .column {
+    flex: 999 1 520px;
+  }
+
+  /* The web draws the action right after the content, not at the foot of the screen (K1 web). */
+  .main {
+    flex: none;
+    gap: 22px;
+    max-width: calc(640px + 128px);
+    padding: 48px 64px 0;
+  }
+
+  /* The column's 22 px gap and the action's own 8 px margin (K1, K2 web). */
+  .action {
+    max-width: calc(640px + 128px);
+    padding: calc(22px + 8px) 64px 44px;
+  }
+}

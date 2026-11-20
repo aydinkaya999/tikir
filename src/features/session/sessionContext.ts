@@ -13,6 +13,9 @@ import type { Recorder } from '../../services/recorder/Recorder';
 import type { PageLayout } from '../reading/pages';
 import type { SessionState } from './sessionStore';
 
+/** What a listener follows: a warmup word, a session reading or K3's level check. */
+export type ListenerKind = 'warmup' | 'reading' | 'assessment';
+
 /** A listener for one reading; mark() is there in the manual mode (developer builds). */
 export interface ListenerChoice {
   listener: ReadingListener;
@@ -25,8 +28,11 @@ export interface SessionDevices {
   /** One narrator per page; the first call creates it. */
   narrator: () => Promise<Narrator>;
   recorder: Recorder;
-  /** A new listener for each warmup word and each reading (a new listener is a new reading). */
-  listener: (kind: 'warmup' | 'reading', attempt: Attempt) => ListenerChoice;
+  /**
+   * A new listener for each warmup word, each reading and the level check (a new listener is a new
+   * reading).
+   */
+  listener: (kind: ListenerKind, attempt: Attempt) => ListenerChoice;
   /** The scenario set's fixed ghost pace and page layout (the design scenario, D12). */
   scenario: { ghostWpm: number | null; layout: PageLayout };
   /** The source of G6's shuffles; tests give a fixed one. */

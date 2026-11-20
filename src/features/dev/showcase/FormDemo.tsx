@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { Button } from '../../../components/Button/Button';
 import { Checkbox } from '../../../components/Checkbox/Checkbox';
+import { ChoicePills } from '../../../components/ChoicePills/ChoicePills';
+import { Dialog } from '../../../components/Dialog/Dialog';
 import { Companion } from '../../../components/Companion/Companion';
 import { OptionCard } from '../../../components/OptionCard/OptionCard';
 import { SegmentedControl } from '../../../components/SegmentedControl/SegmentedControl';
@@ -60,8 +63,91 @@ export function TextFieldDemo() {
           autoComplete="new-password"
           value={password}
           onChange={setPassword}
+          error={
+            password.length > 0 && password.length < 8
+              ? 'Parola en az 8 karakter olmalı.'
+              : undefined
+          }
+        />
+        <TextField
+          label="Cevap"
+          inputMode="numeric"
+          value=""
+          onChange={() => undefined}
+          hint="İpucu satırı"
+          error="Hata satırı"
         />
       </div>
+    </Section>
+  );
+}
+
+const demoGrades = ['1. sınıf', '2. sınıf', '3. sınıf', '4. sınıf'].map((label) => ({
+  value: label,
+  label,
+}));
+
+const demoInterests = [
+  'Uzay',
+  'Hayvanlar',
+  'Futbol',
+  'Deniz',
+  'Dinozorlar',
+  'Robotlar',
+  'Doğa',
+  'Bilmece',
+].map((label) => ({ value: label, label }));
+
+export function ChoicePillsDemo() {
+  const [grade, setGrade] = useState<string[]>(['3. sınıf']);
+  const [interests, setInterests] = useState<string[]>(['Uzay', 'Futbol', 'Dinozorlar']);
+  return (
+    <Section name="ChoicePills">
+      <div className={styles.grid}>
+        <ChoicePills
+          label="Sınıfı"
+          options={demoGrades}
+          mode="single"
+          value={grade}
+          onChange={setGrade}
+        />
+        <ChoicePills
+          label="Nelerden hoşlanır?"
+          options={demoInterests}
+          mode="multiple"
+          max={3}
+          counter={`${String(interests.length)} / 3 seçildi`}
+          value={interests}
+          onChange={setInterests}
+        />
+      </div>
+    </Section>
+  );
+}
+
+export function DialogDemo() {
+  const [open, setOpen] = useState(false);
+  const close = () => {
+    setOpen(false);
+  };
+  return (
+    <Section name="Dialog">
+      <Button
+        variant="secondary"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        Pencereyi aç
+      </Button>
+      <Dialog
+        open={open}
+        title="Pencere başlığı"
+        onClose={close}
+        actions={<Button onClick={close}>Kapat</Button>}
+      >
+        <p>Pencerenin gövde metni.</p>
+      </Dialog>
     </Section>
   );
 }

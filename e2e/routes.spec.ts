@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { passParentGate } from './support/parentGate';
 
 // Every route of docs/ekranlar.md opens in its shell; navigation marks where you are; the
 // phone bottom bar never covers content; every navigation target is at least 44 px.
@@ -32,9 +33,21 @@ const viewports = {
   web: { width: 1440, height: 900 },
 } as const;
 
+/** Product addresses open with the demo profile: an empty store opens the setup (phase 3). */
+function withDemo(path: string): string {
+  if (path.startsWith('/gelistirme') || path.startsWith('/kurulum') || path.includes('demo=')) {
+    return path;
+  }
+  return `${path}${path.includes('?') ? '&' : '?'}demo=cocuk-sabahi`;
+}
+
 async function open(page: Page, path: string, viewport: keyof typeof viewports) {
   await page.setViewportSize(viewports[viewport]);
-  await page.goto(path);
+  await page.goto(withDemo(path));
+  // The parent area opens behind its gate, on every page load (docs/planlar/faz-3.md, karar 26).
+  if (path.startsWith('/veli')) {
+    await passParentGate(page);
+  }
   await expect(page.locator('[data-shell]')).toBeVisible();
 }
 
@@ -196,11 +209,13 @@ for (const route of focusRoutes) {
   });
 }
 
+// Each step opens with the developer parameter that prepares it: the setup opens only its
+// current step (docs/planlar/faz-3.md, karar 4).
 const onboardingSteps = [
-  { path: '/kurulum/hesap', step: 1 },
-  { path: '/kurulum/okuyucu', step: 2 },
-  { path: '/kurulum/seviye', step: 3 },
-  { path: '/kurulum/tanisma', step: 4 },
+  { path: '/kurulum/hesap?kurulum=hesap', step: 1 },
+  { path: '/kurulum/okuyucu?kurulum=okuyucu', step: 2 },
+  { path: '/kurulum/seviye?kurulum=seviye', step: 3 },
+  { path: '/kurulum/tanisma?kurulum=tanisma', step: 4 },
 ];
 
 for (const route of onboardingSteps) {
@@ -218,28 +233,64 @@ for (const route of onboardingSteps) {
       await expect(progress.getByRole('listitem')).toHaveCount(4);
       await expect(page.getByText(`${String(route.step)} / 4`, { exact: true })).toBeVisible();
 
-      // The cobalt panel with Tıkır shows from 700 px only.
-      const companion = page.getByRole('img', { name: 'Tıkır' });
+      // The cobalt panel with Tıkır shows from 1000 px only (docs/planlar/faz-3.md, yanıt 7).
+      const panelCompanion = page
+        .locator('[data-pane="panel"]')
+        .getByRole('img', { name: 'Tıkır' });
       if (viewport === 'telefon') {
-        await expect(companion).toBeHidden();
+        await expect(panelCompanion).toBeHidden();
       } else {
-        await expect(companion).toBeVisible();
+        await expect(panelCompanion).toBeVisible();
+      }
+      // K4 telefon draws Tıkır and his words at the head of the content instead.
+      const contentCompanion = page
+        .locator('[data-pane="main"]')
+        .getByRole('img', { name: 'Tıkır' });
+      if (viewport === 'telefon' && route.step === 4) {
+        await expect(contentCompanion).toBeVisible();
+      } else {
+        await expect(contentCompanion).toBeHidden();
       }
     }
   });
 }
 
-test('the way between the child and parent areas is a web-only link', async ({ page }) => {
-  await open(page, '/', 'web');
-  await expect(page.getByRole('link', { name: 'Veli alanı' })).toHaveAttribute('href', '/veli');
-  await open(page, '/veli', 'web');
-  await expect(page.getByRole('link', { name: 'Çocuk ekranı' })).toHaveAttribute('href', '/');
+test('a portrait tablet opens the setup in the phone layout, full width', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto('/kurulum/hesap?kurulum=hesap');
+  const pane = page.locator('[data-shell="onboarding"] [data-pane="main"]');
+  await expect(pane).toBeVisible();
 
-  // TODO(design): phones and tablets have no way into the parent area (docs/planlar/faz-0.md, 12).
+  await expect(page.getByRole('img', { name: 'Tıkır' })).toBeHidden();
+  expect((await pane.boundingBox())?.width).toBe(768);
+});
+
+test('the child and parent areas lead to each other at every width', async ({ page }) => {
+  // The sidebar's and the rail's foot links (docs/planlar/faz-3.md, karar 27).
+  for (const viewport of ['web', 'tablet'] as const) {
+    await open(page, '/', viewport);
+    await expect(
+      page
+        .getByRole('navigation', { name: 'Ana gezinme' })
+        .getByRole('link', { name: 'Veli alanı' }),
+    ).toHaveAttribute('href', '/veli');
+    await open(page, '/veli', viewport);
+    await expect(
+      page
+        .getByRole('navigation', { name: 'Veli gezinmesi' })
+        .getByRole('link', { name: 'Çocuk ekranı' }),
+    ).toHaveAttribute('href', '/');
+  }
+
+  // Phones: the road's lock button, then the parent strip's button back.
   await open(page, '/', 'telefon');
-  await expect(page.getByRole('link', { name: 'Veli alanı' })).toBeHidden();
-  await open(page, '/veli', 'tablet');
-  await expect(page.getByRole('link', { name: 'Çocuk ekranı' })).toBeHidden();
+  await page.getByRole('main').getByRole('link', { name: 'Veli alanı' }).click();
+  await passParentGate(page);
+  const back = page.getByRole('link', { name: 'Çocuk ekranı' });
+  await expect(back).toHaveCount(1);
+  await back.click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'child');
 });
 
 // docs/tasarim-sistemi.md, "Ek kurallar": a two-pane layout stacks when its content is narrower
@@ -258,7 +309,9 @@ for (const route of twoPaneShells) {
     }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(
-        route.path === '/seans/oku' ? `${route.path}?demo=cocuk-sabahi&adim=read-1` : route.path,
+        route.path === '/seans/oku'
+          ? `${route.path}?demo=cocuk-sabahi&adim=read-1`
+          : withDemo(route.path),
       );
       if (route.path === '/seans/oku') {
         // G4 draws its controls when Tıkır's voice is ready, in a new pane: measure that one.
@@ -279,7 +332,8 @@ for (const route of twoPaneShells) {
       });
 
       expect(overflow).toBe(0);
-      if (contentWidth < 720) {
+      // The setup has its panel from 1000 px only (docs/planlar/faz-3.md, yanıt 7).
+      if (contentWidth < 720 || (route.shell === 'onboarding' && width < 1000)) {
         expect(
           Math.abs(paneWidth - contentWidth),
           'stacked: the main pane is full width',

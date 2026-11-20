@@ -15,7 +15,7 @@ export const tr = {
       library: 'Kitaplık',
       album: 'Albüm',
       studio: 'Stüdyo',
-      /** Web sidebar only. */
+      /** The rail's and the sidebar's link, and G1's lock button on phones (karar 27). */
       parentArea: 'Veli alanı',
     },
     /** V1: parent navigation; phones and tablets use the short labels. */
@@ -27,9 +27,63 @@ export const tr = {
       assessment: 'Ölçüm',
       readingStyle: { short: 'Yazı', long: 'Yazı ayarı' },
       books: 'Kitaplar',
-      /** Web sidebar only. */
+      /** The rail's and the sidebar's link, and the strip's button on phones (karar 27). */
       childScreen: 'Çocuk ekranı',
+      /** The top strip's chip: "Deniz, 3. sınıf" (design/ekranlar/V1-*.html). */
+      childLabel: (name: string, grade: number) => `${name}, ${String(grade)}. sınıf`,
     },
+  },
+
+  /** V4 Yazı ayarı (design/ekranlar/V4-yazi-ayari-*.html). */
+  readingStyle: {
+    title: 'Yazı ayarı',
+    /** {name}: the name with its genitive suffix, "Deniz’in". */
+    lead: (name: string) => `${name} okuma metinleri bu ayarla görünür.`,
+    preview: 'Önizleme',
+    font: 'Yazı tipi',
+    fonts: {
+      clear: { label: 'Net harfler', description: 'I, l, ı ve i kolay ayrılır', sample: 'I l ı i' },
+      school: { label: 'Okul harfleri', description: 'a ve g defterdeki gibi', sample: 'a g' },
+    },
+    size: 'Harf boyutu',
+    sizes: ['Küçük', 'Orta', 'Büyük', 'En büyük'],
+    spacing: 'Harf aralığı',
+    spacings: ['Normal', 'Açık', 'Daha açık'],
+    trial: {
+      title: 'Hangi ayar daha iyi?',
+      /** {name}: the name with its genitive suffix. */
+      text: (name: string) =>
+        `Haftalık ölçümde iki ayar arka arkaya denenir. Dört ölçümden sonra ${name} daha iyi okuduğu ayar önerilir.`,
+      toggle: 'Ölçümlerde iki ayarı dene',
+      rows: 'Denenen ayarlar ve sonuçları',
+      current: 'Şu anki ayar',
+      tried: 'Denenen ayar',
+      /** "Net harfler, normal aralık": the spacing in lower case. */
+      styleName: (font: string, spacing: string) => `${font}, ${spacing} aralık`,
+      collecting: (count: number, remaining: number) =>
+        `Doğru kelime / dk, ${String(count)} ölçümün ortalaması. Fark henüz küçük; karar için ${String(remaining)} ölçüm daha gerekiyor.`,
+      /** The sentences the design does not draw (docs/kararlar.md D16). TODO(design) */
+      none: 'Henüz iki ayarla ölçüm yapılmadı. İlk ölçümlerden sonra sonuçlar burada görünür.',
+      collectingApart: (count: number, remaining: number) =>
+        `Doğru kelime / dk, ${String(count)} ölçümün ortalaması. Karar için ${String(remaining)} ölçüm daha gerekiyor.`,
+      small: (count: number) =>
+        `Doğru kelime / dk, ${String(count)} ölçümün ortalaması. Fark küçük; iki ayar da uygun.`,
+      better: (name: string, gain: number) =>
+        `${name} ile ortalama ${String(gain)} doğru kelime daha fazla okuyor.`,
+      switchTo: 'Bu ayara geçebilirsiniz.',
+    },
+  },
+
+  /** The parent gate (docs/kararlar.md D16, P11). TODO(design) */
+  parentGate: {
+    title: 'Veli alanı',
+    lead: 'Devam etmek için soruyu yanıtlayın.',
+    question: (a: number, b: number) => `${String(a)} + ${String(b)} = ?`,
+    answer: 'Cevap',
+    enter: 'Gir',
+    wrong: 'Olmadı. Bir daha deneyin.',
+    wait: (seconds: number) => `${String(seconds)} saniye sonra yeniden deneyebilirsiniz.`,
+    back: 'Çocuk ekranı',
   },
 
   focus: {
@@ -44,6 +98,96 @@ export const tr = {
     progressLabel: (step: number, total: number) =>
       `Kurulum adımı ${String(step)} / ${String(total)}`,
     progressCounter: (step: number, total: number) => `${String(step)} / ${String(total)}`,
+    /** K1 Veli hesabı (design/ekranlar/K1-veli-hesabi-*.html). */
+    account: {
+      bubble: 'Merhaba! Çocuğunuz okurken ben dinlerim.',
+      title: 'Veli hesabı',
+      lead: 'Önce siz kaydolun. Çocuğunuzun profilini bir sonraki adımda kurarız.',
+      email: 'E-posta',
+      emailPlaceholder: 'ad@ornek.com',
+      password: 'Parola',
+      passwordPlaceholder: 'En az 8 karakter',
+      consent: 'Çocuğumun ses kaydının okuma geri bildirimi için işlenmesine izin veriyorum.',
+      consentNote:
+        'Kayıtlar yalnızca okumayı değerlendirmek için kullanılır. İstediğiniz zaman dinleyebilir ya da silebilirsiniz.',
+      voiceInfo: 'Ses verisi nasıl kullanılır?',
+      weeklyEmail: 'Haftalık özet e-postası almak istiyorum.',
+      submit: 'Hesabı oluştur',
+      /** The states without a design (docs/kararlar.md D16). TODO(design) */
+      emailError: 'Geçerli bir e-posta adresi yazın.',
+      passwordError: 'Parola en az 8 karakter olmalı.',
+      noConsentNote: 'Onay vermezseniz Tıkır dinlemez: okumalar ölçülmez, seviye tespiti atlanır.',
+      /** A draft (D16): a legal review comes before release (docs/urun.md section 8). TODO(legal) */
+      voiceInfoBody:
+        'Tıkır, çocuğunuz okurken sesini bu cihazda işler: hangi kelimeleri doğru okuduğunu, nerede takıldığını ve okuma hızını bulur. Her günün son okuması ve seviye tespiti kaydedilir. Kayıtlar bu cihazda kalır, başka bir yere gönderilmez. Onay vermezseniz mikrofon hiç açılmaz.',
+      close: 'Kapat',
+    },
+    /** K2 Okuyucu profili (design/ekranlar/K2-okuyucu-*.html). */
+    reader: {
+      bubble: 'Sevdiği konuları seçin, hikâyeleri ona göre kurarım.',
+      title: 'Okuyucuyu tanıyalım',
+      lead: 'Metinleri seviyesine ve ilgisine göre seçmek için.',
+      name: 'Okuyucunun adı',
+      namePlaceholder: 'Deniz',
+      grade: 'Sınıfı',
+      gradeOption: (grade: number) => `${String(grade)}. sınıf`,
+      interests: 'Nelerden hoşlanır?',
+      interestOptions: [
+        'Uzay',
+        'Hayvanlar',
+        'Futbol',
+        'Deniz',
+        'Dinozorlar',
+        'Robotlar',
+        'Doğa',
+        'Bilmece',
+      ],
+      interestCounter: (chosen: number, limit: number) =>
+        `${String(chosen)} / ${String(limit)} seçildi`,
+      submit: 'Devam et',
+      /** The states without a design (docs/kararlar.md D16). TODO(design) */
+      nameError: 'Okuyucunun adını yazın.',
+      gradeError: 'Sınıfını seçin.',
+    },
+    /** K3 Seviye tespiti (design/ekranlar/K3-seviye-*.html). */
+    level: {
+      bubble: 'Hazır olduğunda başla. Dinliyorum.',
+      title: '1 dakikalık okuma',
+      lead: (name: string) =>
+        `${name} metni sesli okusun. Hata yapması sorun değil; başlangıç noktasını arıyoruz.`,
+      elapsed: 'Geçen süre',
+      remaining: (clock: string) => `${clock} kaldı`,
+      finish: 'Okumayı bitir',
+      /** After a retry did not help (docs/kararlar.md D16, P14). TODO(design) */
+      skip: 'Seviye tespitini atla',
+    },
+    /** K4 Tıkır ile tanışma (design/ekranlar/K4-tanisma-*.html). */
+    meet: {
+      bubble: (name: string) =>
+        `Merhaba ${name}! Sen okurken ben dinlerim, takılırsan yardım ederim.`,
+      /** Without the consent Tıkır does not listen (docs/kararlar.md D16). TODO(design) */
+      unheardBubble: (name: string) => `Merhaba ${name}! Her gün birlikte bir bölüm okuyacağız.`,
+      title: 'Tıkır ile tanış',
+      /** {name}: the name with its genitive suffix, "Deniz’in". */
+      lead: (name: string) => `${name} başlangıç noktası belli oldu.`,
+      words: 'doğru kelime',
+      perMinute: 'bir dakikada',
+      accuracy: (percent: number) => `Doğruluk %${String(percent)}`,
+      /** The frustration level has no label on K4 (docs/planlar/faz-3.md, karar 20). */
+      levels: {
+        instructional: 'Öğretim düzeyi',
+        /** docs/urun.md's name (docs/kararlar.md D16). TODO(design) */
+        independent: 'Serbest düzey',
+      },
+      goal: (weeks: number, target: number) =>
+        `İlk hedef: ${String(weeks)} haftada ${String(target)}`,
+      today: (wcpm: number) => `Bugün ${String(wcpm)}`,
+      goalWeek: (weeks: number, target: number) => `${String(weeks)}. hafta ${String(target)}`,
+      daily: (minutes: number) => `Her gün ${String(minutes)} dakikalık bir bölüm`,
+      warmup: 'Takıldığı kelimeler ertesi günün ısınmasına gelir',
+      weekly: 'Haftada bir 1 dakikalık ölçüm, sonucu size',
+      start: 'İlk bölüme başla',
+    },
   },
 
   session: {
@@ -251,6 +395,8 @@ export const tr = {
       'Mikrofonu bulamadım. Velinden bir mikrofon bağlamasını iste, sonra Yeniden dene’ye dokun.',
     error: 'Mikrofon durdu. Yeniden dene’ye dokun.',
     retry: 'Yeniden dene',
+    /** After a retry did not help: the day goes on unheard (docs/kararlar.md P14, D16). TODO(design) */
+    readUnheard: 'Bugün dinlemeden oku',
   },
 
   /** G2 Isınma (docs/ekranlar.md, G2). */

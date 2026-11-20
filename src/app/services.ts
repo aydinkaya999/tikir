@@ -90,6 +90,9 @@ export function sessionDevices(): SessionDevices {
       if (kind === 'warmup') {
         return { listener: new FakeListener() };
       }
+      if (kind === 'assessment') {
+        return { listener: new FakeListener({ kind: 'scenario', scenario: scenarios.assessment }) };
+      }
       return {
         listener: new FakeListener({ kind: 'scenario', scenario: scenarios.readings[attempt - 1] }),
       };

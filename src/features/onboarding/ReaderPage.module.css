@@ -1,0 +1,6 @@
+/* K2 (design/ekranlar/K2-okuyucu-*.html): the name, the grade and the interests, 18 px apart. */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}

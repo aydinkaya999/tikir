@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '../../test/renderApp';
 import { testSession } from '../../test/sessions';
+import { testToday } from '../../test/sessionStore';
 
 describe('RoadPage (G1)', () => {
   afterEach(() => {
@@ -63,6 +64,26 @@ describe('RoadPage (G1)', () => {
       expect(router.state.location.pathname).toBe('/seans/oku');
     });
     expect(devices.audio.start).toHaveBeenCalledTimes(1);
+  });
+
+  it('resumes a session gone on unheard without opening the microphone (P14)', async () => {
+    const user = userEvent.setup();
+    const { router, devices } = await renderApp('/', {
+      step: 'read-1',
+      before: async ({ repository }) => {
+        const session = await repository.getSession(testToday);
+        if (session !== null) {
+          await repository.saveSession({ ...session, unheard: true });
+        }
+      },
+    });
+
+    await user.click(await screen.findByRole('button', { name: 'Sürdür' }));
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/seans/oku');
+    });
+    expect(devices.audio.start).not.toHaveBeenCalled();
   });
 
   it("shows a finished day with tomorrow's chapter instead of the start", async () => {

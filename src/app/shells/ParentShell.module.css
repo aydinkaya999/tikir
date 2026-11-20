@@ -28,6 +28,17 @@
   background: var(--color-ink);
 }
 
+.stripEnd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The 44 px way out reaches into the strip's padding, so the strip keeps its 61 px (V1). */
+.exit {
+  margin-block: -5.5px;
+}
+
 .stripTitle {
   color: var(--color-white);
   font-size: var(--size-link);
@@ -45,6 +56,11 @@
 @media (min-width: 700px) {
   .shell {
     flex-direction: row;
+  }
+
+  /* From 700 px the rail's link leads back. */
+  .exit {
+    display: none;
   }
 
   .strip {

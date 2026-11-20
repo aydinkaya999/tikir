@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef } from 'react';
 import { Button } from '../../components/Button/Button';
+import { Dialog } from '../../components/Dialog/Dialog';
 import { tr } from '../../i18n/tr';
 import styles from './ExitDialog.module.css';
 
@@ -16,33 +16,21 @@ interface ExitDialogProps {
  * and goes back to the exit button when it closes. TODO(design): the dialog is not drawn.
  */
 export function ExitDialog({ open, onStay, onLeave }: ExitDialogProps) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const titleId = useId();
-
-  useEffect(() => {
-    const element = dialog.current;
-    if (element === null) {
-      return;
-    }
-    if (open && !element.open) {
-      element.showModal();
-    } else if (!open && element.open) {
-      element.close();
-    }
-  }, [open]);
-
   return (
-    <dialog ref={dialog} className={styles.dialog} aria-labelledby={titleId} onClose={onStay}>
-      <h2 id={titleId} className={styles.title}>
-        {tr.session.exitDialog.title}
-      </h2>
+    <Dialog
+      open={open}
+      title={tr.session.exitDialog.title}
+      onClose={onStay}
+      actions={
+        <>
+          <Button variant="secondary" onClick={onLeave}>
+            {tr.session.exitDialog.leave}
+          </Button>
+          <Button onClick={onStay}>{tr.session.exitDialog.stay}</Button>
+        </>
+      }
+    >
       <p className={styles.body}>{tr.session.exitDialog.body}</p>
-      <div className={styles.buttons}>
-        <Button variant="secondary" onClick={onLeave}>
-          {tr.session.exitDialog.leave}
-        </Button>
-        <Button onClick={onStay}>{tr.session.exitDialog.stay}</Button>
-      </div>
-    </dialog>
+    </Dialog>
   );
 }

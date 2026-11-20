@@ -20,11 +20,34 @@ describe('readDevParams', () => {
     });
   });
 
+  it('opens the parent gate for the tab', () => {
+    expect(readDevParams('?kapi=acik&demo=veli-haftasonu')).toEqual({
+      params: { gateOpen: true, demo: 'veli-haftasonu' },
+      rest: '',
+    });
+  });
+
   it('drops an unknown value with a warning, and the parameter with it', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
     expect(readDevParams('?adim=uc&demo=yok')).toEqual({ params: {}, rest: '' });
     expect(warn).toHaveBeenCalledTimes(2);
+  });
+
+  it('reads an empty store and the setup steps', () => {
+    expect(readDevParams('?demo=bos')).toEqual({ params: { demo: 'bos' }, rest: '' });
+    expect(readDevParams('?kurulum=seviye&x=1')).toEqual({
+      params: { setup: 'seviye' },
+      rest: '?x=1',
+    });
+    expect(readDevParams('?kurulum=tanisma&onay=kapali')).toEqual({
+      params: { setup: 'tanisma', consentOff: true },
+      rest: '',
+    });
+  });
+
+  it('drops an unknown setup step with a warning', () => {
+    expect(readDevParams('?kurulum=bitti')).toEqual({ params: {}, rest: '' });
   });
 
   it('reads nothing from an address without them', () => {

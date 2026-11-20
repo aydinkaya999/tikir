@@ -17,6 +17,13 @@
   height: 80px;
 }
 
+/* The parent area's lock at the top right of the phone's road (karar 27). TODO(design) */
+.parentArea {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-left: auto;
+}
+
 .greeting {
   display: flex;
   flex-direction: column;
@@ -178,7 +185,8 @@
     gap: 22px;
   }
 
-  .phoneFace {
+  .phoneFace,
+  .parentArea {
     display: none;
   }
 

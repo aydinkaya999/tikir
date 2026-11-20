@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Checkbox } from './Checkbox/Checkbox';
+import { ChoicePills } from './ChoicePills/ChoicePills';
 import { OptionCard } from './OptionCard/OptionCard';
 import { SegmentedControl } from './SegmentedControl/SegmentedControl';
 import { Switch } from './Switch/Switch';
@@ -132,19 +133,118 @@ describe('OptionCard', () => {
     expect(card).toHaveAttribute('aria-pressed', 'true');
   });
 
-  it('shows a description in the detailed layout', () => {
+  it('names the card by its label and describes it by its description (V4)', () => {
     render(
       <OptionCard
         layout="detail"
         label="Net harfler"
         description="I, l, ı ve i kolay ayrılır"
+        media="I l ı i"
         selected
         onSelect={vi.fn()}
       />,
     );
 
-    expect(screen.getByRole('button', { name: /Net harfler/ })).toHaveTextContent(
-      'I, l, ı ve i kolay ayrılır',
+    expect(
+      screen.getByRole('button', {
+        name: 'Net harfler',
+        description: 'I, l, ı ve i kolay ayrılır',
+      }),
+    ).toHaveTextContent('I, l, ı ve i kolay ayrılır');
+  });
+});
+
+describe('TextField errors and hints', () => {
+  it('ties its hint and its error to the field and marks it invalid', () => {
+    render(
+      <TextField
+        label="Parola"
+        type="password"
+        value="kisa"
+        onChange={() => undefined}
+        hint="En az 8 karakter"
+        error="Parola en az 8 karakter olmalı."
+      />,
     );
+
+    const field = screen.getByLabelText('Parola');
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveAccessibleDescription('En az 8 karakter Parola en az 8 karakter olmalı.');
+  });
+
+  it('is valid and undescribed without them, and takes a numeric keyboard', () => {
+    render(<TextField label="Cevap" value="" onChange={() => undefined} inputMode="numeric" />);
+
+    const field = screen.getByLabelText('Cevap');
+    expect(field).not.toHaveAttribute('aria-invalid');
+    expect(field).not.toHaveAttribute('aria-describedby');
+    expect(field).toHaveAttribute('inputmode', 'numeric');
+  });
+});
+
+const grades = [
+  { value: '1', label: '1. sınıf' },
+  { value: '2', label: '2. sınıf' },
+  { value: '3', label: '3. sınıf' },
+  { value: '4', label: '4. sınıf' },
+] as const;
+
+const interests = ['Uzay', 'Hayvanlar', 'Futbol', 'Deniz'].map((label) => ({
+  value: label,
+  label,
+}));
+
+function SingleChoice() {
+  const [value, setValue] = useState<string[]>([]);
+  return (
+    <ChoicePills label="Sınıfı" options={grades} mode="single" value={value} onChange={setValue} />
+  );
+}
+
+function ManyChoices() {
+  const [value, setValue] = useState<string[]>([]);
+  return (
+    <ChoicePills
+      label="Nelerden hoşlanır?"
+      options={interests}
+      mode="multiple"
+      max={3}
+      value={value}
+      onChange={setValue}
+    />
+  );
+}
+
+describe('ChoicePills', () => {
+  it('is a radio group in the single mode, with one choice moved by the arrow keys', async () => {
+    const user = userEvent.setup();
+    render(<SingleChoice />);
+
+    expect(screen.getByRole('radiogroup', { name: 'Sınıfı' })).toBeInTheDocument();
+    await user.click(screen.getByRole('radio', { name: '2. sınıf' }));
+    expect(screen.getByRole('radio', { name: '2. sınıf' })).toBeChecked();
+    await user.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('radio', { name: '3. sınıf' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: '2. sınıf' })).not.toBeChecked();
+  });
+
+  it('presses up to three toggles in the multiple mode and lets one go again', async () => {
+    const user = userEvent.setup();
+    render(<ManyChoices />);
+
+    expect(screen.getByRole('group', { name: 'Nelerden hoşlanır?' })).toBeInTheDocument();
+    for (const name of ['Uzay', 'Hayvanlar', 'Futbol']) {
+      await user.click(screen.getByRole('button', { name }));
+    }
+    const fourth = screen.getByRole('button', { name: 'Deniz' });
+    expect(fourth).toHaveAttribute('aria-disabled', 'true');
+    await user.click(fourth);
+    expect(fourth).toHaveAttribute('aria-pressed', 'false');
+
+    await user.click(screen.getByRole('button', { name: 'Uzay' }));
+
+    expect(screen.getByRole('button', { name: 'Uzay' })).toHaveAttribute('aria-pressed', 'false');
+    expect(fourth).not.toHaveAttribute('aria-disabled');
   });
 });

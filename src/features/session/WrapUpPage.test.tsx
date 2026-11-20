@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { companionImages } from '../../components/illustrations';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
+import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
 import { testToday } from '../../test/sessionStore';
 
 async function openWrapUp(options: RenderAppOptions = {}) {
@@ -158,6 +159,16 @@ describe('WrapUpPage (G6)', () => {
     const session = await sessionOf(app);
     expect(session?.answers).toEqual([]);
     expect(session?.step).toBe('wrapUp');
+  });
+
+  it('shows the chapter’s layer in the child’s reading style', async () => {
+    const user = userEvent.setup();
+    await openWrapUp({ readingStyle: schoolLargest });
+
+    await user.click(screen.getByRole('button', { name: 'Metne geri dön' }));
+
+    const layer = screen.getByRole('dialog', { name: 'Kayıp Fenerin İzinde, 4. bölüm' });
+    expect(shownStyle(layer.querySelector('[data-word-index]'))).toEqual(schoolLargestShown);
   });
 
   it('shuffles the options by the random source and writes the answer in the content’s order', async () => {

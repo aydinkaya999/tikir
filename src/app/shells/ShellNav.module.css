@@ -110,6 +110,24 @@
   .item {
     min-height: 76px;
   }
+
+  /* The foot link (parent area, child screen) at the rail's bottom. TODO(design) */
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    min-height: var(--touch-min);
+    margin-top: auto;
+    padding: 6px 2px;
+    color: var(--color-ink);
+    font-size: var(--size-nav-label);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-ui);
+    text-align: center;
+    text-decoration: none;
+  }
 }
 
 /* Web (from 1200 px): a 248–272 px sidebar with the wordmark and a footer link. */
@@ -183,15 +201,13 @@
   }
 
   .footer {
-    display: flex;
-    align-items: center;
+    flex-direction: row;
     gap: 12px;
+    width: auto;
     min-height: 48px;
-    margin-top: auto;
     padding: 0 14px;
-    color: var(--color-ink);
     font-size: var(--size-link);
     font-weight: var(--weight-bold);
-    text-decoration: none;
+    text-align: start;
   }
 }

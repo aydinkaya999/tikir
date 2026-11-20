@@ -1,7 +1,8 @@
 // G4 Oku (docs/ekranlar.md, G4; docs/dinleme-hatti.md; docs/planlar/faz-2b.md, karar 14): the
 // child reads the chapter three times; the listener follows, Tıkır helps at three seconds, the
 // ghost of the earlier reading races along, and the third reading is recorded. Without the
-// parent's consent the text is read unheard (docs/kararlar.md P13).
+// parent's consent, or once the microphone could not be used, the text is read unheard
+// (docs/kararlar.md P13, P14).
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
@@ -11,16 +12,18 @@ import { PageCard } from '../../components/PageCard/PageCard';
 import { readingsPerSession } from '../../domain/config';
 import { ghostPace, previousReading } from '../../domain/ghost';
 import { chapterTokens, tokenizePage } from '../../domain/text';
-import type { Attempt, Chapter, Id } from '../../domain/types';
+import type { Attempt, Chapter } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import { onKeyDown } from '../../services/keyboard';
 import type { ListenerOutcome } from '../../services/listener/types';
 import type { Narrator } from '../../services/narrator/Narrator';
 import { screenPageOf, screenPages } from '../reading/pages';
 import { RaceBar } from '../reading/RaceBar';
+import { ReadingStyleScope } from '../reading/ReadingStyleScope';
 import { ReadingText } from '../reading/ReadingText';
 import { useMicrophone } from '../reading/useMicrophone';
 import { useReading } from '../reading/useReading';
+import { useReadingRecorder } from '../reading/useReadingRecorder';
 import { useExitDialogOpen } from './exitDialogState';
 import { formatClock } from './format';
 import { MicrophoneProblem } from './MicrophoneProblem';
@@ -29,6 +32,7 @@ import { useSession, useSessionDevices, useSessionStore } from './sessionContext
 import { SessionLayout } from './SessionLayout';
 import { placeOf } from './sessionMachine';
 import type { SessionData } from './sessionStore';
+import { sessionListens } from './views';
 import { useManualKeys } from './useManualKeys';
 import { useNarrator } from './useNarrator';
 
@@ -47,7 +51,7 @@ export function ReadPage() {
   if (data === null || session === null || chapter === null || place?.step !== 'read') {
     return null;
   }
-  if (!data.parent.consent.voiceProcessing) {
+  if (!sessionListens(data)) {
     return (
       <UnheardReading
         attempt={attemptOf(session.readings.length + unheardDone + 1)}
@@ -95,22 +99,13 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
   );
   const records = attempt === readingsPerSession;
   const startedAt = useRef<string | null>(null);
-  const recording = useRef<'off' | 'on' | 'failed'>('off');
-  const saving = useRef(false);
   const pausedBeforeExit = useRef(false);
+  const [retried, setRetried] = useState(false);
 
   /** The reading ended: the third one's recording stops, and the reading is stored. */
   const finish = (outcome: ListenerOutcome) => {
-    saving.current = true;
     const save = async () => {
-      let recordingId: Id | null = null;
-      if (recording.current === 'on') {
-        recording.current = 'off';
-        recordingId = await devices.recorder.stop().then(
-          (info) => info.id,
-          () => null,
-        );
-      }
+      const recordingId = await readingRecorder.finish();
       await store.getState().saveReading(outcome, {
         startedAt: startedAt.current ?? new Date().toISOString(),
         recordingId,
@@ -132,13 +127,12 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
   const capturing = microphone.state === 'capturing';
   // The recording follows the reading's own clock: the child's pauses, the exit dialog's hold and
   // Tıkır's help are left out of it.
-  const recordingRuns =
-    capturing && !reading.paused && reading.helpIndex === null && reading.view.ended === null;
-  // The recorder starts a moment after the reading: held at once if the reading is not running.
-  const holdNewRecording = useEffectEvent(() => {
-    if (!recordingRuns) {
-      devices.recorder.pause();
-    }
+  const readingRecorder = useReadingRecorder({
+    enabled: records,
+    recorder: devices.recorder,
+    audio: devices.audio,
+    running:
+      capturing && !reading.paused && reading.helpIndex === null && reading.view.ended === null,
   });
   // The reading starts once the microphone listens; the third starts the recorder with it.
   const begin = useEffectEvent(() => {
@@ -146,17 +140,7 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
     reading
       .start()
       .then(() => {
-        if (records && recording.current === 'off' && !saving.current) {
-          recording.current = 'on';
-          devices.recorder.start(devices.audio).then(
-            () => {
-              holdNewRecording();
-            },
-            () => {
-              recording.current = 'failed';
-            },
-          );
-        }
+        readingRecorder.start();
       })
       .catch(() => undefined);
   });
@@ -165,31 +149,6 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       begin();
     }
   }, [capturing, exitOpen]);
-
-  useEffect(() => {
-    if (recording.current !== 'on') {
-      return;
-    }
-    if (recordingRuns) {
-      devices.recorder.resume();
-    } else {
-      devices.recorder.pause();
-    }
-  }, [recordingRuns, devices.recorder]);
-
-  // A reading cut short (the exit, leaving the screen) is not stored; nor is its recording.
-  useEffect(
-    () => () => {
-      if (recording.current === 'on' && !saving.current) {
-        recording.current = 'off';
-        devices.recorder
-          .stop()
-          .then((info) => devices.recorder.remove(info.id))
-          .catch(() => undefined);
-      }
-    },
-    [devices.recorder],
-  );
 
   const holdForExit = useEffectEvent((open: boolean) => {
     if (open) {
@@ -261,8 +220,23 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       <MicrophoneProblem
         kind={problem}
         onRetry={() => {
+          setRetried(true);
           microphone.start();
         }}
+        // A retry that did not help lets the day go on unheard (P14).
+        afterRetry={
+          retried
+            ? {
+                label: tr.microphoneProblem.readUnheard,
+                onChoose: () => {
+                  store
+                    .getState()
+                    .continueUnheard()
+                    .catch(() => undefined);
+                },
+              }
+            : undefined
+        }
       />
     ) : undefined;
   const pauseLabel = reading.paused ? tr.read.resume : tr.read.pause;
@@ -343,14 +317,16 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
           title={tr.page.title(data.series.title, chapter.number)}
           counter={tr.page.counter(pages.indexOf(screen) + 1, pages.length)}
         >
-          <ReadingText
-            page={screen.page}
-            firstIndex={screen.firstIndex}
-            currentIndex={view.ended === null ? view.position : null}
-            ghostIndex={reading.ghostIndex}
-            readCount={Math.max(0, position - screen.firstIndex)}
-            marks={reading.marks}
-          />
+          <ReadingStyleScope style={data.child.readingStyle}>
+            <ReadingText
+              page={screen.page}
+              firstIndex={screen.firstIndex}
+              currentIndex={view.ended === null ? view.position : null}
+              ghostIndex={reading.ghostIndex}
+              readCount={Math.max(0, position - screen.firstIndex)}
+              marks={reading.marks}
+            />
+          </ReadingStyleScope>
         </PageCard>
       )}
       <div className={styles.race}>
@@ -406,7 +382,9 @@ function UnheardReading({ attempt, data, chapter }: ReadingProps) {
     >
       {/* TODO(design): the unheard reading is not drawn; the whole chapter is one page. */}
       <PageCard className={styles.page} title={tr.page.title(data.series.title, chapter.number)}>
-        <ReadingText page={page} readCount={wordCount} />
+        <ReadingStyleScope style={data.child.readingStyle}>
+          <ReadingText page={page} readCount={wordCount} />
+        </ReadingStyleScope>
       </PageCard>
     </SessionLayout>
   );

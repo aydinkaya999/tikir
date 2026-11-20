@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addDays, daysBetween, localDateOf, weekdayOf } from './date';
+import { addDays, daysBetween, localDateOf, weekdayOf, weekStart } from './date';
 
 describe('addDays', () => {
   it('moves back and forward across months, years and leap days', () => {
@@ -39,5 +39,16 @@ describe('localDateOf', () => {
   it('reads the local calendar day of a moment', () => {
     expect(localDateOf(new Date(2026, 10, 19, 23, 59))).toBe('2026-11-19');
     expect(localDateOf(new Date(2026, 0, 5, 0, 0))).toBe('2026-01-05');
+  });
+});
+
+describe('weekStart', () => {
+  it('goes back to the week’s Monday', () => {
+    expect(weekStart('2026-11-22')).toBe('2026-11-16');
+    expect(weekStart('2026-11-18')).toBe('2026-11-16');
+  });
+
+  it('keeps a Monday', () => {
+    expect(weekStart('2026-11-16')).toBe('2026-11-16');
   });
 });

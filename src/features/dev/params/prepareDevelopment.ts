@@ -1,6 +1,7 @@
-// Runs before the first render in developer and e2e builds (docs/planlar/faz-2b.md, karar 21):
-// applies the address parameters once and removes them, and on a product address with no profile
-// sets up the demo child, Deniz (docs/mimari.md, "Depolama ve örnek veri").
+// Runs before the first render in developer and e2e builds (docs/planlar/faz-2b.md, karar 21;
+// faz-3.md, karar 5): applies the address parameters once and removes them. An empty store stays
+// empty, so the setup opens; the demo profile comes only with ?demo= (docs/mimari.md, "Depolama ve
+// örnek veri").
 import { scenarioNames } from '../../../services/listener/scenarios';
 import { currentAddress, replaceAddress } from '../../../services/address';
 import type { RecordingStore } from '../../../services/recorder/RecordingStore';
@@ -8,11 +9,9 @@ import type { Repository } from '../../../services/repository/Repository';
 import { readTabSetting, tabSettingKeys, writeTabSetting } from '../../../services/tabSettings';
 import type { SessionStoreServices } from '../../session/sessionStore';
 import { loadDemoProfile } from '../demo/loadDemoProfile';
-import { readDevParams } from './devParams';
+import { emptyStore, readDevParams } from './devParams';
+import { prepareSetupStep } from './prepareSetupStep';
 import { prepareSessionStep } from './prepareSessionStep';
-
-/** The developer pages keep an empty store until asked (the showcase's "Depo boş."). */
-const developerPagesPrefix = '/gelistirme/';
 
 export interface DevelopmentServices {
   repository: () => Promise<Repository>;
@@ -26,15 +25,16 @@ export async function prepareDevelopment(services: DevelopmentServices): Promise
   try {
     const repository = await services.repository();
     const today = services.storeServices.today();
-    if (params.demo !== undefined) {
+    if (params.demo === emptyStore || params.setup !== undefined) {
+      await repository.clearAll();
+    } else if (params.demo !== undefined) {
       await loadDemoProfile(repository, params.demo, today);
-    } else if (
-      !address.pathname.startsWith(developerPagesPrefix) &&
-      (await repository.getChild()) === null
-    ) {
-      await loadDemoProfile(repository, 'cocuk-sabahi', today);
     }
-    if (params.consentOff === true) {
+    if (params.setup !== undefined) {
+      await prepareSetupStep(services.storeServices, params.setup, {
+        consent: params.consentOff !== true,
+      });
+    } else if (params.consentOff === true) {
       const parent = await repository.getParent();
       if (parent !== null) {
         await repository.saveParent({
@@ -45,6 +45,9 @@ export async function prepareDevelopment(services: DevelopmentServices): Promise
     }
     if (params.scenario !== undefined) {
       writeTabSetting(tabSettingKeys.listener, params.scenario);
+    }
+    if (params.gateOpen === true) {
+      writeTabSetting(tabSettingKeys.parentGate, 'acik');
     }
     if (params.step !== undefined) {
       const chosen = readTabSetting(tabSettingKeys.listener);

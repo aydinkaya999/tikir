@@ -76,7 +76,8 @@ type Grade = 1 | 2 | 3 | 4;
 type Id = string;
 type LocalDate = string;           // 'YYYY-MM-DD', cihazın yerel takvimi (Faz 2a)
 
-interface Parent { id: Id; email: string; consent: { voiceProcessing: boolean; weeklyEmail: boolean; grantedAt?: string } }
+interface Parent { id: Id; email: string; consent: { voiceProcessing: boolean; weeklyEmail: boolean; grantedAt?: string };
+  setup?: 'reader' | 'level' | 'meet' }   // Faz 3: kurulumun kalan adımı; yoksa kurulum bitmiş. Parola hiçbir kayda girmez
 interface Child  { id: Id; name: string; grade: Grade; interests: string[]; readingStyle: ReadingStyle;
   narrationRate?: 'slow' | 'normal' }   // G3'teki son hız seçimi; yoksa yavaş (Faz 2b)
 
@@ -103,7 +104,8 @@ interface ReadingResult {
 type SessionStep = 'warmup' | 'listen' | 'read' | 'record' | 'wrapUp' | 'done';
 interface Session { id: Id; childId: Id; date: string; chapterRef: { bookId: Id; chapter: number };
   step: SessionStep; readings: ReadingResult[]; answers: number[]; tamedToday: string[]; startedAt: string; completedAt?: string;
-  warmup?: { words: string[]; done: number; scored: number } }   // Faz 2b: seans başında seçilen deste; scored: ilk denemesi puanlanan kart sayısı
+  warmup?: { words: string[]; done: number; scored: number };   // Faz 2b: seans başında seçilen deste; scored: ilk denemesi puanlanan kart sayısı
+  unheard?: true }   // Faz 3 (P14): mikrofon kullanılamadı, seansın kalanı dinlemeden okundu
 
 interface StuckWord { word: string; syllables: string[]; chain: string[]; misses: number;
   status: 'wild' | 'practicing' | 'tamed'; correctStreak: number; dueOn: string | null }   // evcilleşen kartta dueOn yok
@@ -288,8 +290,21 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
 - **Depo** (`sessionStore.ts`, Zustand `createStore`): ekranların okuduğu durum (`status`, `data`, `error`) ve depoya yazan eylemler. Aynı anda tek eylem çalışır; ikinci dokunuş yok sayılır. Bir eylem önce bütün yazılarını bitirir (seans, kartlar, eski kaydın silinmesi), sonra durumu yayınlar. Yayın eylemin son adımıdır ve eylemi bitirir: yeni durumla açılan bir ekran hemen bir eylem başlatabilir (G6, son cevabı yazılmış seansı açılınca bitirir). Yazı hata verirse durum `error` olur ve çağrı reddedilir.
 - **Ekranlar ve aygıtlar** (`SessionProvider`, `sessionContext.ts`): ekranlar depoyu ve `SessionDevices`'ı bağlamdan alır. `SessionDevices`: mikrofon (`AudioCapture`), seslendirici, kaydedici, her okuma için yeni bir dinleyici, geliştirme senaryosunun hayalet hızı ve sayfa düzeni, rastgelelik kaynağı (G6'nın karışık seçenekleri). Ürün derlemesinde aygıtları `src/app/services.ts` seçer: Faz 6'ya kadar dinleyici `FakeListener`'dır ve okumalar `typical` senaryosundandır (`docs/kararlar.md` T22, karar 7). Testler aynı yapıyı sahte aygıtlarla kurar.
 - **Yönlendirme** (`SessionGuard`): depo yüklenmeden adım çizilmez; her seans adresi o anki adımı açar. Bir ekran yalnız depoyu günceller, adres kendiliğinden değişir.
-- **Mikrofon kuralı** (`SessionRoot`, `paths.ts` → `listeningPaths`): mikrofon yalnız dinleyen adımlarda (G2, G4) açık kalır; adres dinlemeyen bir yere geçince kapatılır. Dinleyen adıma götüren dokunuş mikrofonu açar (G1 "Başla"/"Sürdür", G3 "Sıra sende", G5 "Baştan kaydet"); iPhone mikrofonu yalnız bir dokunuşun içinde açar. Veli onayı (`consent.voiceProcessing`) yoksa mikrofon hiçbir adımda açılmaz ve seans dinlemesiz sürer (`docs/kararlar.md` P13; `docs/dinleme-hatti.md`, bölüm 1).
-- **Okuma ve kayıt:** 3. okumada dinleyici ile kaydedici birlikte başlar ve biter; kayıt kimliği okumaya yazılır. Yarıda kalan okuma ve yarım kayıt yazılmaz. "Baştan kaydet"te eski kayıt, yeni okuma yazıldıktan sonra silinir.
+- **Mikrofon kuralı** (`SessionRoot`, `paths.ts` → `listeningPaths`): mikrofon yalnız dinleyen adımlarda (G2, G4, K3) açık kalır; adres dinlemeyen bir yere geçince kapatılır. Dinleyen adıma götüren dokunuş mikrofonu açar (G1 "Başla"/"Sürdür", G3 "Sıra sende", G5 "Baştan kaydet", K2 "Devam et"); iPhone mikrofonu yalnız bir dokunuşun içinde açar. Veli onayı (`consent.voiceProcessing`) yoksa mikrofon hiçbir adımda açılmaz ve seans dinlemesiz sürer (`docs/kararlar.md` P13; `docs/dinleme-hatti.md`, bölüm 1). Onay olduğu hâlde mikrofon kullanılamazsa ve bir yeniden deneme de işe yaramazsa G2 ve G4'ün sorun balonu "Bugün dinlemeden oku" seçeneğini verir; seans `unheard: true` olur ve günün kalanı dinlemesiz yürür (P14). Ekranlar "dinlenir mi" sorusunu tek yerden yanıtlar: `sessionListens(data)` = onay ve seans dinlemesiz değil (`src/features/session/views.ts`).
+- **Okuma ve kayıt:** 3. okumada dinleyici ile kaydedici birlikte başlar ve biter; kayıt kimliği okumaya yazılır. Yarıda kalan okuma ve yarım kayıt yazılmaz. "Baştan kaydet"te eski kayıt, yeni okuma yazıldıktan sonra silinir. G4 ve K3 kaydı aynı kancayla yapar (`useReadingRecorder`): kayıt okumanın kendi saatini izler (duraklatma, çıkış penceresi ve Tıkır'ın yardımı girmez), ekran kapanınca yarım kayıt silinir.
+
+## Kurulum ve veli alanı (Faz 3)
+
+Ayrıntılı kararlar: `docs/planlar/faz-3.md`, "Kararlar".
+
+- **Kurulum durumu:** Veli yoksa, kurulumun kalan adımı varsa (`Parent.setup`: `reader`, `level`, `meet`) ya da çocuk yoksa depo `status: 'setup'` olur ve `setup` alanında adımı, veliyi, çocuğu, seviye tespitinin metnini (`olcum-{sınıf}a`), ölçümü ve günü taşır. Eylemler: `createAccount` (K1), `saveReader` (K2; sınıfa göre yazı ayarı, onay varsa `level`, yoksa `meet`), `saveBaseline` ve `skipBaseline` (K3), `finishSetup` (K4). Parola hiçbir kayda girmez.
+- **Koruma** (`SetupGuard`, `setupRedirect`): Tek koruma çocuk, seans, odak, kurulum ve veli kabuklarını sarar. Depo yüklenirken "Hazırlanıyor…" ekranı görünür. Kurulum sürerken her adres kurulumun o anki adımına gider; kurulum bitince kurulum adresleri yola gider. Geliştirme sayfaları korumanın dışındadır.
+- **Kurulum düzeni** (`OnboardingLayout`): 1000 px'ten kobalt pano (Tıkır, balon, karo şeridi), altında telefon düzeni. Başlık, ilerleme ve eylem düzendedir. `companion.phone` Tıkır'ı ve balonunu telefonda içeriğin başına da koyar (K4; K3'ün mikrofon sorunu).
+- **Seviye tespiti** (K3): metin 25 kelimelik sayfalara bölünür (`passageChapter`), okumayla döner. Dinleyici `'assessment'` türündendir. Geri sayım okumanın etkin süresinden düşer; dakika bitince okuma 250 ms sonra durur (bitmekte olan kelime sayılır) ve süre 60 saniyeyle sınırlanır. Ölçüm, kayıt kimliğiyle `Assessment` olarak yazılır.
+- **Veli kapısı** (`ParentGate`, `parentGateState.ts`): Veli rotalarının düzen öğesidir; açılmadan veli kabuğu çizilmez. Açıklığı öğenin durumunda (bellekte) tutulur: veli alanında gezinirken açık kalır; çocuk ekranına dönünce, yenilenince ya da yeni sekmede yeniden sorar. Üç yanlıştan sonraki 30 saniyelik bekleme sekme ayarındadır (`tikir.kapi.bekleme`), yenilemeden sonra sürer. Soru `src/domain/parentGate.ts`'te, rastgelelik aygıtlardandır.
+- **Girişler ve çıkışlar:** Ray ve kenar çubuğunun altındaki bağlantı ("Veli alanı", "Çocuk ekranı"); telefonda G1'in sağ üstünde kilit düğmesi ve veli şeridinin sağında "Çocuk ekranı" düğmesi. Veli şeridindeki çocuk etiketi profilden gelir.
+- **Yazı ayarının uygulanması** (`ReadingStyleScope`): Okuma metninin kabı çocuğun ayarını `data-reading-font`, `data-reading-size`, `data-reading-spacing` öznitelikleriyle taşır; `src/styles/tokens-extra.css` bunları `--reading-*` değişkenlerine bağlar. Kaplar: G3, G4 (dinlenen ve dinlemesiz), G6'nın metin katmanı, K3, V4'ün önizlemesi.
+- **V4:** Seçim önizlemede hemen görünür, depoya sırayla yazılır (son seçim en son). Önizleme kutusu en büyük iki ayarın görünmez kopyalarıyla aynı yükseklikte kalır; denetimler hiçbir seçimde yer değiştirmez. Karşılaştırma `trialComparison(data.assessments, ayar)` ile yapılır; günün verisi ölçümleri de taşır (`SessionData.assessments`).
 
 ## Depolama ve örnek veri
 
@@ -300,12 +315,14 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
   - `cocuk-sabahi`: 4. bölüm okunmak üzere. G1–G7 tasarımlarının başlangıç durumu.
   - `veli-haftasonu`: hafta bitmiş, ölçüm yapılmış. V1–V4 tasarımlarındaki sayılar.
 - Dosyadaki günler görelidir (`day`); yükleyici kipin `anchor` gününü takvime oturtur: `cocuk-sabahi` kipinde bugüne, `veli-haftasonu` kipinde bugünden önceki en yakın pazara (hafta şeridi tasarımdaki günlere denk gelsin diye). Okumalar ve ölçümler sahte dinleyici senaryosu biçimindedir; yükleyici onları `FakeListener` ile aynı benzetimden geçirip `ReadingResult` üretir. Dosyanın `expected` alanı, ekranlarda görülmesi gereken sayıları verir; testlerde kullan.
-- Kurulum akışı yazılana kadar (Faz 3) geliştirme derlemesi, profil yoksa `cocuk-sabahi` kipini kendiliğinden yükler.
+- Faz 3'ten beri profil yoksa demo kendiliğinden kurulmaz: boş depo kuruluma gider. Demo yalnız `?demo=` ile kurulur.
 - **Geliştirme adres parametreleri** (Faz 2b, `src/features/dev/params/`) bir ekranı doğrudan istenen durumda açar. Ekran görüntüsü betiği ve uçtan uca testler bunları kullanır; üretim derlemesinde yoktur.
-  - `?demo=<kip>`: depoyu temizleyip o kipi kurar (`cocuk-sabahi`, `veli-haftasonu`).
+  - `?demo=<kip>`: depoyu temizleyip o kipi kurar (`cocuk-sabahi`, `veli-haftasonu`). `?demo=bos` depoyu boşaltır; kurulum açılır.
+  - `?kurulum=<adım>`: depoyu boşaltıp kurulumu o adımda açar (`hesap`, `okuyucu`, `seviye`, `tanisma`). Veli ve çocuk demo profilindendir (veli@example.com, Deniz, 3. sınıf); `tanisma` demo profilinin ilk ölçümünü (58 doğru kelime) yazar. `&onay=kapali` ile kurulum onaysız yürür; o zaman seviye tespiti yoktur.
   - `&adim=<adım>`: bugünün seansını o adıma getirir: `warmup`, `listen`, `read-1`, `read-2`, `read-3`, `record`, `wrapUp`, `done`. Adımlar uygulamanın kendi eylemleriyle yürünür; okumalar senaryonun okumalarıdır, `record` ve sonrası için 52 sn'lik yapay bir kayıt yazılır. Seans 12 dakika önce başlamış sayılır (G7'deki "12 dakika").
   - `&senaryo=<ad>`: o sekmede dinleyicinin senaryosu (`typical`, `design`…); `elle` sahte dinleyiciyi tuşlarla yürütür (`docs/dinleme-hatti.md`, bölüm 3). Sekme ayarıdır (`sessionStorage`, `tikir.gelistirme.dinleyici`); sekme kapanınca biter.
   - `&onay=kapali`: velinin ses onayını kaldırır. `&adim=` o zaman dinlemesiz yolu yürür: ısınma kartları puansız geçilir, okumalar dinlenmeden okunur.
+  - `&kapi=acik`: o sekmede veli kapısını açık tutar; ekran görüntüleri ve uçtan uca testler içindir. Sekme ayarıdır (`sessionStorage`, `tikir.gelistirme.kapi`); sekme kapanınca biter. Uçtan uca testlerin çoğu kapıyı soruyu okuyarak geçer (`e2e/support/parentGate.ts`).
   - Parametreler uygulama yüklenmeden önce bir kez uygulanır (`main.tsx`) ve adresten silinir; sayfa yenilenince yeniden kurulmaz. Örnek: `/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design`.
 
 ## Test
@@ -314,7 +331,7 @@ warmup → listen → read(1) → read(2) → read(3, kayıt) → record → wra
 |---|---|
 | Birim | `src/domain` tamamı; yukarıdaki sınama örnekleri birebir test olur |
 | Bileşen | Okuma metni durumları, bölmeli denetim, anahtar, mikrofon düğmesi durumları |
-| Uçtan uca | `FakeListener` ile baştan sona bir seans; kurulum akışı; yazı ayarının okuma ekranına yansıması. Chromium ve WebKit'te, `e2e` kipi derlemesine karşı (`vite preview`). Faz 0'dan beri: rotalar ve kabuklar, dış istek ve CSP, vitrin envanteri ve taşma, okuma metninde kayma |
+| Uçtan uca | `FakeListener` ile baştan sona bir seans; kurulum akışı (onaylı ve onaysız); yazı ayarının okuma ekranına yansıması ve V4'te denetimlerin yerinde kalması; veli kapısı; mikrofon kullanılamayınca dinlemesiz gün (P14). Chromium ve WebKit'te, `e2e` kipi derlemesine karşı (`vite preview`). Faz 0'dan beri: rotalar ve kabuklar, dış istek ve CSP, vitrin envanteri ve taşma, okuma metninde kayma |
 | Görsel | Her ekran 390, 1180 ve 1440 px genişlikte (`pnpm shots`); `design/png` ile yan yana karşılaştırma ve fark listesi |
 
 Piksel piksel eşitlik beklenmez (yazı tipi işleme farkları olur). Beklenen: aynı düzen, aynı metin, aynı renkler, taşma ve kırpılma yok.

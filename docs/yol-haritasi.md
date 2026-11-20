@@ -113,6 +113,7 @@ Büyük bir fazdır. Planı iki oturuma böl: **2a** alan mantığı, servisler 
 - Yönlendirme korumaları (profil yoksa kuruluma).
 - Veli kapısı.
 - V4 Yazı ayarı ve `readingStyle` alan mantığı; ayarın bütün okuma metinlerine uygulanması.
+- Onay varken mikrofon kullanılamayınca seansın dinlemeden sürmesi (`docs/kararlar.md` P14). Öneri: mikrofon izni kurulumda, veli yanındayken istenir; plan aşamasında kesinleşir.
 
 **Kabul ölçütleri**
 
@@ -124,6 +125,7 @@ Büyük bir fazdır. Planı iki oturuma böl: **2a** alan mantığı, servisler 
 6. V4 önizleme kutusunun yüksekliği dört boyut ve üç aralık kademesinde değişmez; altındaki denetimler yer değiştirmez.
 7. Veli kapısı geçilmeden `/veli/*` açılmaz; üç yanlışta bekletir.
 8. K1–K4 ve V4 (üç durumuyla) tasarımla karşılaştırıldı.
+9. Onay varken mikrofon kullanılamıyorsa çocuk "Yeniden dene"den sonra "Bugün dinlemeden oku" ile seansı G7'ye kadar bitirir ve gün tamamlanmış sayılır (P14; uçtan uca test).
 
 ---
 
@@ -136,6 +138,7 @@ Büyük bir fazdır. Planı iki oturuma böl: **2a** alan mantığı, servisler 
 - V1–V3, gerçek seans ve ölçüm verisinden.
 - Haftalık ölçüm akışı (çocuk tarafı, K3 kalıbı). Ölçerek seçme açıksa iki ayar arka arkaya.
 - "Hedefi güncelle", "Isınmaya ekle", onay bekleyen kayıtlar listesi, hesap ve veri silme sayfası.
+- Karnede dinlenmeden okunan günler (`docs/kararlar.md` P14).
 
 **Kabul ölçütleri**
 

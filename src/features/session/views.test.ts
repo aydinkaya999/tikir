@@ -3,7 +3,7 @@ import { seriesBook } from '../../services/repository/seedContent';
 import { testSession } from '../../test/sessions';
 import { demoSessionStore, testToday } from '../../test/sessionStore';
 import type { SessionData } from './sessionStore';
-import { doneView, roadView, studioRows } from './views';
+import { doneView, roadView, sessionListens, studioRows } from './views';
 
 async function dataAt(options: Parameters<typeof demoSessionStore>[0] = {}): Promise<SessionData> {
   const { store } = await demoSessionStore(options);
@@ -177,5 +177,21 @@ describe('studioRows', () => {
       { chapter: 2, title: title(2), recordingId: 'son' },
       { chapter: 4, title: 'Dar Patika', recordingId: take },
     ]);
+  });
+});
+
+describe('sessionListens', () => {
+  it('listens with the consent unless the session went on unheard (P13, P14)', async () => {
+    const data = await dataAt({ step: 'read-1' });
+    const session = data.session;
+    if (session === null) {
+      throw new Error('No session today.');
+    }
+    const without = { ...data.parent, consent: { ...data.parent.consent, voiceProcessing: false } };
+
+    expect(sessionListens(data)).toBe(true);
+    expect(sessionListens({ ...data, session: null })).toBe(true);
+    expect(sessionListens({ ...data, session: { ...session, unheard: true } })).toBe(false);
+    expect(sessionListens({ ...data, parent: without })).toBe(false);
   });
 });

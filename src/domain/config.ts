@@ -42,3 +42,33 @@ export const tamingIntervalsDays = [1, 2, 4] as const;
 
 /** Accuracy floors of the reading levels (docs/kararlar.md P7). */
 export const readingLevelFloors = { instructional: 0.9, independent: 0.99 } as const;
+
+/** K2: the reader's name is at most this long (docs/planlar/faz-3.md, karar 12). */
+export const readerNameMaxLength = 30;
+
+/** K2: the reader picks at most this many interests (docs/ekranlar.md, K2). */
+export const readerInterestLimit = 3;
+
+/** K3: the level check reads for one minute of reading time (docs/ekranlar.md, K3). */
+export const assessmentMs = 60_000;
+
+/**
+ * K3: a word the child is finishing as the minute ends still counts, as when an adult times the
+ * minute; the reading stops this long after it.
+ */
+export const assessmentGraceMs = 250;
+
+/** K3's measurement text is paged at most this many words a page (docs/planlar/faz-3.md, karar 14). */
+export const passagePageWords = 25;
+
+/** Wrong answers before the parent gate makes the next try wait (docs/kararlar.md P11). */
+export const parentGateAttempts = 3;
+
+/** The parent gate's wait after the wrong answers. */
+export const parentGateWaitMs = 30_000;
+
+/** Measurements each reading style needs before V4 recommends one (docs/urun.md section 7). */
+export const trialMeasurementsNeeded = 4;
+
+/** Under this many correct words a minute the two styles' difference is small (docs/urun.md section 7). */
+export const trialSmallDifference = 5;

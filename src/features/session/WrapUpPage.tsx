@@ -5,7 +5,7 @@ import { useEffect, useEffectEvent, useId, useState } from 'react';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
 import { Icon } from '../../components/Icon/Icon';
-import type { Chapter, Question } from '../../domain/types';
+import type { Chapter, Question, ReadingStyle } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import { useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { SessionLayout } from './SessionLayout';
@@ -110,6 +110,7 @@ export function WrapUpPage() {
       number={index + 1}
       total={questionCount}
       chapter={chapter}
+      readingStyle={data.child.readingStyle}
       pageTitle={tr.page.title(data.series.title, chapter.number)}
       held={held}
       onAnswer={answer}
@@ -123,6 +124,7 @@ interface QuestionStepProps {
   number: number;
   total: number;
   chapter: Chapter;
+  readingStyle: ReadingStyle;
   pageTitle: string;
   held: HeldAnswer | null;
   /** The chosen option's index in the content's order. */
@@ -136,6 +138,7 @@ function QuestionStep({
   number,
   total,
   chapter,
+  readingStyle,
   pageTitle,
   held,
   onAnswer,
@@ -228,6 +231,7 @@ function QuestionStep({
         open={textOpen}
         title={pageTitle}
         chapter={chapter}
+        readingStyle={readingStyle}
         onClose={() => {
           setTextOpen(false);
         }}

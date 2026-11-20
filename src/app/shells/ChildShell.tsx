@@ -12,8 +12,8 @@ const items: readonly ShellNavItem[] = [
 ];
 
 /**
- * The child's shell (G1, U1, Albüm, Stüdyo). The parent area is reached from the web sidebar
- * only. TODO(design): phones and tablets have no way into the parent area yet.
+ * The child's shell (G1, U1, Albüm, Stüdyo). The parent area is reached from the rail's and the
+ * sidebar's link, and on phones from G1's lock button (docs/planlar/faz-3.md, karar 27).
  */
 export function ChildShell() {
   return (

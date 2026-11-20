@@ -93,6 +93,17 @@ interface FakeScenario {
   | | 2 | 50 | 9 `misread` | 6: 1800, 14: 3000 (yardım) |
 
   `typical`, demo profilinin 0. günündeki okumalardır (`seed/demo-profil.json`; bir test ikisini eşit tutar). `cocuk-sabahi` kipinde `typical` ile biten seans G7'de tasarımdaki sayıları verir: 71 doğru kelime, dünden 4 fazla. Senaryo verilmezse `FakeListener` dakikada 60 kelime, hatasız okur.
+
+  **Ölçüm senaryoları** (Faz 3, K3; dinleyici türü `'assessment'`): her takımın süreli bir dakikalık okuması vardır (`ScenarioSet.assessment`).
+
+  | Ad | Süre | Okunan kelime | Hatalar (konum: tür) | Duraksamalar (konum: ms) |
+  |---|---|---|---|---|
+  | `smooth` | 60 sn | 80 | — | — |
+  | `typical`, `design` | 60 sn | 64 | 4 `misread`, 8 `suffix`, 24 `skipped`, 31 `suffix`, 43 `misread`, 49 `misread` | — |
+  | `struggling` | 60 sn | 46 | `struggling` okumalarınınki | 8, 26: 3500 (yardım) |
+
+  `typical` ölçüm, demo profilinin ilk ölçümüdür (`olcum-3a`: 58 doğru kelime, doğruluk %90,6, öğretim düzeyi; bir test ikisini eşit tutar). K4 bu ölçümle tasarımın sayılarını verir: 58 ve "İlk hedef: 6 haftada 70". Tipik ölçüm "etti."yi (23. kelime) 21,7. saniyede bitirir; ikinci sayfa o anda açılır.
+- **K3'ün dakikası** (`docs/planlar/faz-3.md`, kararlar 15–17): geri sayım okumanın etkin süresinden düşer (duraklatma, mikrofonun gidişi ve Tıkır'ın yardımı sayılmaz). Dakika bitince okuma 250 ms sonra durur; o anda bitmekte olan kelime sayılır (süre tutan bir yetişkin gibi) ve sonucun süresi 60 saniyeyle sınırlanır. Süreli senaryoda son kelime dakikanın tam sonunda biter, okumayı dinleyici "tamamlandı" diye kapatır.
 - `design` (tasarımdaki G4 anını üretir: 2. okuma; "kulaklarını" kısa duraksama, "rüzgârı" yanlış okuma, "ağaçlarının" üzerinde 3 saniyeyi aşan duraksama ve açık yardım balonu; hayalet o anda "patika" üzerinde). Tasarımdaki an gerçek veriden türemediği için bu senaryo hayalet temposunu da sabitler (dakikada 40 kelime). Ekran görüntüsü yardım balonu açıkken alınır.
 - `design` senaryosunda yardım balonu okumanın 19,19. saniyesinde açılır: "Süre 0:19", "Doğru 13", "Takılma 1"; hayalet "patika"da (12), çocuk 2 kelime önde. G3 ve G4 bu senaryoda 4. bölümün 1. ve 2. sayfasını tek sayfa gösterir (`docs/kararlar.md` D12).
 - Mikrofon gerçekten açılır ve düzey göstergesi gerçek sesle çalışır; yalnız tanıma sahtedir. Mikrofon izni yoksa sahte dinleyici de çalışmaz, böylece izin akışları gerçek gibi sınanır.

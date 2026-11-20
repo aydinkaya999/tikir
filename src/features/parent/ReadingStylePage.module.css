@@ -1,0 +1,299 @@
+/* V4 (design/ekranlar/V4-yazi-ayari-*.html): the preview beside its controls, the trial below. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+/*
+ * The preview and the controls share a row 1.12 : 1 (V4 tablet) and stack when the content is
+ * narrower than 720 px (docs/tasarim-sistemi.md): 380 + 318 + the 22 px gap.
+ */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.preview {
+  display: flex;
+  flex: 1.12 1 0;
+  flex-direction: column;
+  gap: 8px;
+  min-width: min(100%, 380px);
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-white);
+  box-shadow: var(--lift-page);
+}
+
+.previewHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.previewHead > p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+/* The shown text and the largest styles' hidden copies share one cell: it is always as tall. */
+.previewText {
+  display: grid;
+  flex: 1 1 auto;
+  align-items: start;
+}
+
+.previewText > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.sizer {
+  visibility: hidden;
+}
+
+.controls {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 14px;
+  min-width: min(100%, 318px);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-field-label);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+.fonts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.clear {
+  font-family: var(--font-text);
+}
+
+.school {
+  font-family: var(--font-school);
+}
+
+/* "Hangi ayar daha iyi?": the switch, and the two styles' averages while the trial is on. */
+.trial {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-cobalt-light);
+  color: var(--color-ink);
+}
+
+.trialIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.trialHead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trialTitle {
+  margin: 0;
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.trialText {
+  margin: 0;
+  font-size: var(--size-trial-text);
+  font-weight: var(--weight-medium);
+  line-height: 1.4;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.results:empty {
+  display: none;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 14px;
+  border: var(--border);
+  border-radius: var(--radius-segment);
+  background: var(--color-white);
+}
+
+.rowNames {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.rowStyle,
+.rowNote,
+.rowValue {
+  margin: 0;
+}
+
+.rowStyle {
+  font-size: var(--size-trial-row);
+  font-weight: var(--weight-bold);
+  line-height: 1.25;
+}
+
+.rowNote {
+  color: var(--color-muted);
+  font-size: var(--size-trial-note);
+  font-weight: var(--weight-semibold);
+  line-height: 1.25;
+}
+
+.rowValue {
+  font-size: var(--size-trial-value);
+  font-weight: var(--weight-extrabold);
+  line-height: 1;
+}
+
+.sentence {
+  margin: 0;
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+/* Tablet (700–1199 px): V4 tablet. */
+@media (min-width: 700px) {
+  .page {
+    gap: 20px;
+  }
+
+  .top {
+    gap: 22px;
+  }
+
+  .preview {
+    gap: 12px;
+    padding: 26px;
+  }
+
+  .controls {
+    gap: 18px;
+  }
+
+  .trial {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .trialIntro,
+  .results {
+    flex: 1 1 0;
+  }
+
+  /* With the trial off the intro keeps its half, as the design draws it. */
+  .results:empty {
+    display: block;
+  }
+}
+
+/* Web (from 1200 px): V4 web. */
+@media (min-width: 1200px) {
+  .page {
+    gap: 24px;
+  }
+
+  .top {
+    gap: 24px;
+  }
+
+  .preview {
+    flex: 999 1 440px;
+  }
+
+  .controls {
+    flex: 1 1 420px;
+    max-width: 540px;
+  }
+
+  .trial {
+    flex-wrap: wrap;
+    gap: 20px 28px;
+    padding: 22px;
+  }
+
+  .trialIntro {
+    flex: 1 1 320px;
+  }
+
+  .results {
+    flex: 1.1 1 340px;
+  }
+}

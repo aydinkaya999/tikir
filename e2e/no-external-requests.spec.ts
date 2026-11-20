@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { devPaths, extraPaths, screenPaths } from '../src/app/routes';
+import { enterAccountAndReader, heading, readTheMinute } from './support/onboarding';
+import { passParentGate } from './support/parentGate';
 import {
   openPaused,
   prepareSessionPage,
@@ -21,8 +23,16 @@ test('loading every route asks nothing from another origin', async ({ page, base
   const origin = new URL(baseURL ?? '').origin;
   const watcher = await watch(page, origin);
 
+  // The demo profile first, so the product addresses show their screens (phase 3: an empty store
+  // opens the setup).
+  await page.goto('/?demo=cocuk-sabahi');
+  await settle(page);
   for (const path of allPaths) {
     await page.goto(path);
+    // The parent screens open behind their gate.
+    if (path.startsWith('/veli')) {
+      await passParentGate(page);
+    }
     await settle(page);
   }
 
@@ -44,10 +54,13 @@ for (const viewport of [
 
     // Child and parent navigation: every item, client-side.
     for (const [start, navName] of [
-      ['/', 'Ana gezinme'],
+      ['/?demo=cocuk-sabahi', 'Ana gezinme'],
       ['/veli', 'Veli gezinmesi'],
     ] as const) {
       await page.goto(start);
+      if (start === '/veli') {
+        await passParentGate(page);
+      }
       await settle(page);
       const links = page.getByRole('navigation', { name: navName }).getByRole('link');
       const count = await links.count();
@@ -72,6 +85,30 @@ for (const viewport of [
     expect(watcher.violations).toEqual([]);
   });
 }
+
+test.describe('the setup', () => {
+  test.use({ permissions: ['microphone'], timezoneId: 'Europe/Istanbul' });
+
+  test('walking the setup from an empty device asks nothing from another origin', async ({
+    page,
+    baseURL,
+  }) => {
+    test.setTimeout(150_000);
+    const origin = new URL(baseURL ?? '').origin;
+    await prepareSessionPage(page);
+    const watcher = await watch(page, origin);
+
+    await openPaused(page, '/?demo=bos');
+    await enterAccountAndReader(page, { consent: true, grade: 3 });
+    await readTheMinute(page);
+    await page.getByRole('button', { name: 'İlk bölüme başla' }).click();
+    await expect(heading(page, 'Merhaba Deniz')).toBeVisible();
+    await settle(page);
+
+    expect(watcher.foreign).toEqual([]);
+    expect(watcher.violations).toEqual([]);
+  });
+});
 
 test('the build carries a content security policy that starts from self', async ({ page }) => {
   await page.goto('/');

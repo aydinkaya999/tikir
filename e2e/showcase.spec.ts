@@ -22,6 +22,8 @@ const inventory = [
   'Checkbox',
   'TextField',
   'TextArea',
+  'ChoicePills',
+  'Dialog',
   'StatCard',
   'LineChart',
   'ProgressBar',
@@ -85,16 +87,20 @@ for (const viewport of viewports) {
           (input) => input.closest('label') ?? input,
         ),
       ];
-      return targets
-        .map((target) => {
-          const box = target.getBoundingClientRect();
-          return {
-            name: target.getAttribute('aria-label') ?? target.textContent.trim().slice(0, 30),
-            width: Math.round(box.width),
-            height: Math.round(box.height),
-          };
-        })
-        .filter((target) => target.width < 44 || target.height < 44);
+      return (
+        targets
+          // A closed dialog's buttons are not there to touch.
+          .filter((target) => target.closest('dialog:not([open])') === null)
+          .map((target) => {
+            const box = target.getBoundingClientRect();
+            return {
+              name: target.getAttribute('aria-label') ?? target.textContent.trim().slice(0, 30),
+              width: Math.round(box.width),
+              height: Math.round(box.height),
+            };
+          })
+          .filter((target) => target.width < 44 || target.height < 44)
+      );
     });
 
     expect(tooSmall).toEqual([]);
@@ -113,4 +119,33 @@ test('no transition runs when reduced motion is asked for', async ({ page }) => 
   expect(await button.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe(
     '0s',
   );
+});
+
+// Phase 3: Escape closes a dialog and the focus goes back to the button that opened it; these are
+// the browser's, so they are tested here rather than in jsdom.
+test('a dialog closes with Escape and gives the focus back', async ({ page }) => {
+  await openShowcase(page);
+  const opener = page.getByRole('button', { name: 'Pencereyi aç' });
+
+  // From the keyboard: WebKit on macOS gives no focus to a clicked button, so only a keyboard
+  // user has a focus to give back.
+  await opener.focus();
+  await page.keyboard.press('Enter');
+  const dialog = page.getByRole('dialog', { name: 'Pencere başlığı' });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  await expect(dialog).toBeHidden();
+  await expect(opener).toBeFocused();
+});
+
+test('a pill’s radio takes the tap itself', async ({ page }) => {
+  await openShowcase(page);
+  const grades = page.getByRole('radiogroup', { name: 'Sınıfı' });
+
+  // The radio covers its pill: a tap on it hits the radio, not only its label.
+  await grades.getByRole('radio', { name: '1. sınıf' }).click({ timeout: 3000 });
+
+  await expect(grades.getByRole('radio', { name: '1. sınıf' })).toBeChecked();
+  await expect(grades.getByRole('radio', { name: '3. sınıf' })).not.toBeChecked();
 });

@@ -119,9 +119,10 @@ test('the microphone is released when leaving the page', async ({ page }) => {
   await openMicrophone(page);
   await expect.poll(() => microphoneTracks(page)).toEqual({ total: 1, live: 1 });
 
-  await navigateInApp(page, '/');
+  // Another page of the app; the showcase, since an empty store sends product pages to the setup.
+  await navigateInApp(page, '/gelistirme/vitrin');
 
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/gelistirme\/vitrin$/);
   await expect.poll(() => microphoneTracks(page)).toEqual({ total: 1, live: 0 });
 });
 

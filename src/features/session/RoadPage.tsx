@@ -4,18 +4,20 @@ import { useNavigate } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
 import { Companion } from '../../components/Companion/Companion';
+import { IconButton } from '../../components/IconButton/IconButton';
 import { SpeechBubble } from '../../components/SpeechBubble/SpeechBubble';
 import { Tile } from '../../components/Tile/Tile';
 import { sessionMinutes } from '../../domain/config';
 import { withPossessiveSuffix } from '../../domain/text';
 import { tr } from '../../i18n/tr';
+import { parentPaths } from '../parent/paths';
 import { useMicrophone } from '../reading/useMicrophone';
 import { childPaths, sessionPaths } from './paths';
 import styles from './RoadPage.module.css';
 import { useLoadSession, useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { StatusScreen } from './StatusScreen';
 import { TomorrowCard } from './TomorrowCard';
-import { chapterPattern, roadView } from './views';
+import { chapterPattern, roadView, sessionListens } from './views';
 
 /** How often an open road checks whether the day has changed. */
 const dayCheckMs = 60_000;
@@ -40,7 +42,7 @@ export function RoadPage() {
     };
   }, [store]);
   const { audio } = useSessionDevices();
-  const microphone = useMicrophone(audio, data?.parent.consent.voiceProcessing ?? false);
+  const microphone = useMicrophone(audio, data === null ? false : sessionListens(data));
   const navigate = useNavigate();
   const [starting, setStarting] = useState(false);
   const seriesTitleId = useId();
@@ -52,7 +54,7 @@ export function RoadPage() {
     return <StatusScreen kind="error" />;
   }
   if (data === null) {
-    // TODO(phase 3): with no profile the onboarding opens (/kurulum/hesap).
+    // The setup guard opens the setup before a profile exists.
     return null;
   }
 
@@ -98,6 +100,14 @@ export function RoadPage() {
             </Chip>
           )}
         </div>
+        {/* Phones reach the parent area here (karar 27); wider screens from the rail. TODO(design) */}
+        <IconButton
+          className={styles.parentArea}
+          to={parentPaths.summary}
+          icon="lock"
+          label={tr.nav.child.parentArea}
+          size={44}
+        />
       </div>
       <div className={styles.columns}>
         <div className={styles.today}>
