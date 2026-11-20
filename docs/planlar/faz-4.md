@@ -553,6 +553,16 @@ Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte
 
 Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
+**V1** (`shots/veli-demo-veli-haftasonu-kapi-acik-*.png`):
+
+- Düzeltilen: tablette grafik kartı ile gün kartı 1,9 : 1 oranını dış genişliklerden almıyordu (dolgu ve kenarlık oranı bozuyordu); tablette ızgara oldu. Sayı kartlarının etiketi tablette 15 px, büyük kartın etiketi tablette 16 px.
+- Bilinen farklar:
+  - tarih aralığı demo verisinin kaymasıyla "9–15 Kasım" (tasarım "10–16 Kasım");
+  - doğruluk %93 (tutarsızlık 1);
+  - "Sonraki hafta" son haftada pasif (tasarım çizmemiş; karar 11);
+  - telefonda "Hedefi güncelle" grafiğin altında (telefon tasarımında yok; karar 2);
+  - telefon şeridindeki çıkış düğmesi ve tablette raydaki "Çocuk ekranı" (Faz 3, karar 27).
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.

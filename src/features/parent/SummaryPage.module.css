@@ -1,0 +1,277 @@
+/*
+ * V1 (design/ekranlar/V1-ozet-*.html). Phones: the hero over three small numbers, then the chart
+ * card with the comment in it. From 700 px: the four numbers in a row, the chart beside the
+ * session days' card with the comment and "Hedefi güncelle".
+ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.range {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+.weeks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.small {
+  display: flex;
+  gap: 10px;
+}
+
+.stat {
+  flex: 1 1 90px;
+}
+
+.long {
+  display: none;
+}
+
+.unheard {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+.lower {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chartCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.cardTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.comment {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+/*
+ * Phones draw neither the day strip nor its card: only "Hedefi güncelle" stays, under the chart
+ * (docs/planlar/faz-4.md, karar 2). TODO(design)
+ */
+.side {
+  display: contents;
+}
+
+.days,
+.divider,
+.sideComment {
+  display: none;
+}
+
+.strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  border: 2.5px solid var(--color-line);
+  border-radius: var(--radius-day);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.day[data-mark='done'] .box {
+  border-color: var(--color-ink);
+  background: var(--color-turquoise);
+}
+
+/* A day read without listening (P14): its check on a light ground. TODO(design) */
+.day[data-mark='unheard'] .box {
+  border-color: var(--color-ink);
+  background: var(--color-turquoise-light);
+}
+
+.dayLabel {
+  color: var(--color-ink);
+  font-size: var(--size-day);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+.day[data-mark='none'] .dayLabel {
+  color: var(--color-muted);
+}
+
+.divider {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 2.5px solid var(--color-line);
+}
+
+.dialogText {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  line-height: var(--leading-body);
+}
+
+@media (min-width: 700px) {
+  .page {
+    gap: 20px;
+  }
+
+  .stats {
+    flex-flow: row wrap;
+    gap: 14px;
+  }
+
+  .hero {
+    flex: 1.5 1 240px;
+  }
+
+  .small {
+    display: contents;
+  }
+
+  .stat {
+    flex: 1 1 150px;
+  }
+
+  .long {
+    display: inline;
+  }
+
+  .short,
+  .phoneOnly {
+    display: none;
+  }
+
+  /* The design shares the row 1.9 : 1 between the cards' outer widths: a grid does the same. */
+  .lower {
+    display: grid;
+    grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+  }
+
+  .chartCard {
+    gap: 14px;
+    padding: 22px;
+  }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    padding: 22px;
+    border: var(--border);
+    border-radius: var(--radius-card);
+    background: var(--color-white);
+  }
+
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .divider,
+  .sideComment {
+    display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .page {
+    gap: 24px;
+  }
+
+  .lower {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .chartCard {
+    flex: 999 1 520px;
+  }
+
+  .side {
+    flex: 1 1 300px;
+    max-width: 400px;
+  }
+}

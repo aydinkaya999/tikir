@@ -1,10 +1,5 @@
-// Parent report card (docs/ekranlar.md, "Veli karnesi"). Phase 0 only lays out the routes: each
-// page is empty inside its shell; V1–V3 come in phase 4. V4 is ReadingStylePage.tsx.
-
-/** V1 Haftalık özet. */
-export function WeeklySummaryPage() {
-  return null;
-}
+// Parent report card (docs/ekranlar.md, "Veli karnesi"): the pages still empty inside their shell.
+// V1 is SummaryPage.tsx, V4 ReadingStylePage.tsx.
 
 /** V2 Takılınan yerler. */
 export function StuckWordsPage() {

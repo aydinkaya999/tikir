@@ -9,7 +9,8 @@ import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
-import { AssessmentPage, StuckWordsPage, WeeklySummaryPage } from '../features/parent/pages';
+import { AssessmentPage, StuckWordsPage } from '../features/parent/pages';
+import { SummaryPage } from '../features/parent/SummaryPage';
 import { ReadingStylePage } from '../features/parent/ReadingStylePage';
 import { AlbumPage } from '../features/session/AlbumPage';
 import { DonePage } from '../features/session/DonePage';
@@ -147,7 +148,7 @@ export function appRoutes(session: AppSession): RouteObject[] {
                 {
                   element: <ParentShell />,
                   children: [
-                    { path: screenPaths.V1, element: <WeeklySummaryPage /> },
+                    { path: screenPaths.V1, element: <SummaryPage /> },
                     { path: screenPaths.V2, element: <StuckWordsPage /> },
                     { path: screenPaths.V3, element: <AssessmentPage /> },
                     { path: screenPaths.V4, element: <ReadingStylePage /> },
