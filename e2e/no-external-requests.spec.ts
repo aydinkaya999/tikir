@@ -15,7 +15,10 @@ import { settle, watch } from './support/watch';
 // the app's own origin (CLAUDE.md; docs/kararlar.md T12). The build's CSP must not be violated.
 
 const allPaths = [
-  ...Object.values(screenPaths).map((path) => path.replace(':bookId', 'ornek')),
+  // U4 of the demo's sample book (a book the library does not have opens the library).
+  ...Object.values(screenPaths).map((path) =>
+    path.replace(':bookId', 'uzay-istasyonunda-gizemli-ses'),
+  ),
   ...Object.values(extraPaths),
   ...Object.values(parentExtraPaths),
   ...Object.values(devPaths),
@@ -157,6 +160,40 @@ test.describe('the weekly measurement', () => {
 
     await page.getByRole('button', { name: 'Ölçüme başla' }).click();
     await readUntil(page, page.getByText('2. okuma / 2'));
+    await settle(page);
+
+    expect(watcher.foreign).toEqual([]);
+    expect(watcher.violations).toEqual([]);
+  });
+});
+
+test.describe('a book', () => {
+  test.use({ permissions: ['microphone'], timezoneId: 'Europe/Istanbul' });
+
+  // Phase 5 (docs/planlar/faz-5.md, Task 10): a book made on the device, then read with the
+  // microphone open.
+  test('making a book and starting to read it ask nothing from another origin', async ({
+    page,
+    baseURL,
+  }) => {
+    test.setTimeout(120_000);
+    const origin = new URL(baseURL ?? '').origin;
+    const watcher = await watch(page, origin);
+    await prepareSessionPage(page);
+    await openPaused(page, '/kitaplik/kur?demo=cocuk-sabahi');
+
+    for (const card of ['Deniz ve Tıkır', 'Uzay istasyonu', 'Gizemli ses']) {
+      await page.getByRole('button', { name: card, exact: true }).click();
+    }
+    await page.getByRole('button', { name: 'Kitabımı yap' }).click();
+    // The mock's wait runs on the paused clock.
+    await runUntilVisible(page, heading(page, 'Kitabın hazır').and(page.locator(':visible')), {
+      stepMs: 500,
+      limitMs: 5000,
+    });
+    await page.getByRole('button', { name: 'Okumaya başla' }).click();
+    await expect(heading(page, 'Isınma')).toBeVisible();
+    await waitForListening(page);
     await settle(page);
 
     expect(watcher.foreign).toEqual([]);
