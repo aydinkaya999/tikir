@@ -50,7 +50,7 @@
   line-height: var(--leading-ui);
 }
 
-/* Below 1000 px, when the step asks: Tıkır and his words at the head of the content (G4's row). */
+/* Below 1000 px, when the step asks: Tıkır and his words at the head of the content (K4 telefon). */
 .phoneCompanion {
   display: flex;
   align-items: flex-start;
@@ -63,6 +63,8 @@
 
 .phoneBubble {
   flex: 1 1 auto;
+  min-width: 0;
+  margin-top: 12px;
 }
 
 .progressRow {

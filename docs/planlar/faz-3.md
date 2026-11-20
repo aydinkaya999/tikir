@@ -340,7 +340,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 9: K2 Okuyucu profili
 - [x] Task 10: Yazı ayarının okuma metinlerine uygulanması
 - [x] Task 11: K3 Seviye tespiti
-- [ ] Task 12: K4 Tıkır ile tanışma
+- [x] Task 12: K4 Tıkır ile tanışma
 - [ ] Task 13: Veli kapısı, girişler ve çıkışlar
 - [ ] Task 14: V4 Yazı ayarı
 - [ ] Task 15: P14 seansta
@@ -754,7 +754,7 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
 
 **Kullanır:** Task 3 (`finishSetup`), `firstTarget`, `LineChart`, `withGenitiveSuffix`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **Ölçümle:**
      - "58", "doğru kelime", "bir dakikada", "Doğruluk %91", "Öğretim düzeyi";
      - "İlk hedef: 6 haftada 70", grafik etiketleri "Bugün 58" ve "6. hafta 70";
@@ -768,10 +768,10 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
      - tek madde "Her gün 12 dakikalık bir bölüm".
   4. **Onaylı ama atlanmış:** Tasarımın balonu, sayı yok.
   5. **"İlk bölüme başla":** Kurulum biter, adres `/`, G1 "Merhaba Deniz".
-- [ ] → FAIL. Uygula.
-- [ ] Görüntü: `pnpm shots '/kurulum/tanisma?kurulum=tanisma'` → K4 ile karşılaştır; `'/kurulum/tanisma?kurulum=tanisma&onay=kapali'` taşma için.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(onboarding): build meeting Tıkır (K4)`.
+- [x] → FAIL. Uygula.
+- [x] Görüntü: `pnpm shots '/kurulum/tanisma?kurulum=tanisma'` → K4 ile karşılaştır; `'/kurulum/tanisma?kurulum=tanisma&onay=kapali'` taşma için.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(onboarding): build meeting Tıkır (K4)`.
 
 ### Task 13: Veli kapısı, girişler ve çıkışlar
 
@@ -936,7 +936,15 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 |---|---|---|
 | üçü | 22 sn'de ("0:38 kaldı") ikinci sayfa açık; tasarım bu anda ilk sayfayı ve "çitin"i gösteriyor | kalır: tipik ölçüm senaryosu "etti."yi 21,7 sn'de bitirir (tasarımın anı senaryonun hızına uymuyor). 11,5 sn'deki görüntüde metin tasarımla aynı ("çitin" vurgulu), sayaç "0:49 kaldı" |
 | üçü | Kelime aralıkları biraz geniş | kalır: Faz 0'ın kaymasız vurgu payı (G4'te de böyle) |
-| telefon | Mikrofon sorununda Tıkır ve balon içeriğin başında | kalır: tasarımı yok; seans kabuğunun telefon satırı (`docs/ekranlar.md`, "Mikrofon izni reddedildi") |
+| telefon | Mikrofon sorununda Tıkır ve balon içeriğin başında | kalır: tasarımı yok; K4 telefonun Tıkır satırı (`docs/ekranlar.md`, "Mikrofon izni reddedildi") |
+
+**K4** (`/kurulum/tanisma?kurulum=tanisma`; onaysız: `&onay=kapali`):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| web, tablet | Yok | — |
+| telefon | Sonuç kartı 2 px aşağıda: Tıkır satırıyla kart arası 16 px, tasarımda 14 px | kalır: satır düzenin ana sütununda durur (16 px aralık) |
+| üçü (onaysız) | Tasarımı yok: başlık, Tıkır'ın onaysız balonu, tek madde | taşma ve kırpılma yok |
 
 ## Kanıtlar
 

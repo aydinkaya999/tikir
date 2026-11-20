@@ -98,6 +98,8 @@
   --radius-consent: 18px;
   /* K3: the minute's remaining time, 16 px at every width. */
   --size-timer: 16px;
+  /* K4: the first measurement's correct words a minute; 84 px from 700 px. */
+  --size-baseline: 60px;
   /* G6: the question (22 px on phones, 30 px from 700 px) and its options (17 px, 20 px). */
   --size-question: 22px;
   --size-answer: 17px;
@@ -120,6 +122,7 @@
     --size-question: 30px;
     --size-answer: 20px;
     --size-done-number: 104px;
+    --size-baseline: 84px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;

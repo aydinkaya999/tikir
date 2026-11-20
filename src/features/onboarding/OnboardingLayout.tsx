@@ -18,7 +18,7 @@ interface OnboardingLayoutProps {
   lead?: ReactNode;
   /**
    * Tıkır's face and words on the cobalt panel. phone: below 1000 px, where the panel is hidden,
-   * Tıkır and his words come at the head of the content too (K3's microphone problem; not drawn).
+   * Tıkır and his words come at the head of the content too (K4 telefon; K3's microphone problem).
    */
   companion: { expression?: CompanionExpression; bubble?: ReactNode; phone?: boolean };
   /** The step's main action: the foot bar below 1000 px, bottom right of the content above. */
@@ -36,7 +36,7 @@ export function OnboardingLayout({
 }: OnboardingLayoutProps) {
   return (
     <div className={styles.layout}>
-      <div className={styles.panel}>
+      <div className={styles.panel} data-pane="panel">
         <span className={styles.wordmark}>{tr.appName}</span>
         <div className={styles.companion}>
           <Companion expression={companion.expression} size={220} label={tr.appName} />
@@ -87,12 +87,12 @@ export function OnboardingLayout({
             </div>
           )}
           {companion.phone === true && companion.bubble !== undefined && (
-            // TODO(design): the setup's phone layout draws no Tıkır; the session's phone row.
+            // K4 telefon draws this row; K3's microphone problem borrows it (TODO(design)).
             <div className={styles.phoneCompanion}>
               <Companion
                 className={styles.phoneFace}
                 expression={companion.expression}
-                size={72}
+                size={96}
                 label={tr.appName}
               />
               <SpeechBubble className={styles.phoneBubble} live>

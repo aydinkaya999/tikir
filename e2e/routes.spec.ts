@@ -229,11 +229,22 @@ for (const route of onboardingSteps) {
       await expect(page.getByText(`${String(route.step)} / 4`, { exact: true })).toBeVisible();
 
       // The cobalt panel with Tıkır shows from 1000 px only (docs/planlar/faz-3.md, yanıt 7).
-      const companion = page.getByRole('img', { name: 'Tıkır' });
+      const panelCompanion = page
+        .locator('[data-pane="panel"]')
+        .getByRole('img', { name: 'Tıkır' });
       if (viewport === 'telefon') {
-        await expect(companion).toBeHidden();
+        await expect(panelCompanion).toBeHidden();
       } else {
-        await expect(companion).toBeVisible();
+        await expect(panelCompanion).toBeVisible();
+      }
+      // K4 telefon draws Tıkır and his words at the head of the content instead.
+      const contentCompanion = page
+        .locator('[data-pane="main"]')
+        .getByRole('img', { name: 'Tıkır' });
+      if (viewport === 'telefon' && route.step === 4) {
+        await expect(contentCompanion).toBeVisible();
+      } else {
+        await expect(contentCompanion).toBeHidden();
       }
     }
   });

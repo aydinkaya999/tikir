@@ -107,6 +107,33 @@ export const tr = {
       /** After a retry did not help (docs/kararlar.md D16, P14). TODO(design) */
       skip: 'Seviye tespitini atla',
     },
+    /** K4 Tıkır ile tanışma (design/ekranlar/K4-tanisma-*.html). */
+    meet: {
+      bubble: (name: string) =>
+        `Merhaba ${name}! Sen okurken ben dinlerim, takılırsan yardım ederim.`,
+      /** Without the consent Tıkır does not listen (docs/kararlar.md D16). TODO(design) */
+      unheardBubble: (name: string) => `Merhaba ${name}! Her gün birlikte bir bölüm okuyacağız.`,
+      title: 'Tıkır ile tanış',
+      /** {name}: the name with its genitive suffix, "Deniz’in". */
+      lead: (name: string) => `${name} başlangıç noktası belli oldu.`,
+      words: 'doğru kelime',
+      perMinute: 'bir dakikada',
+      accuracy: (percent: number) => `Doğruluk %${String(percent)}`,
+      /** The frustration level has no label on K4 (docs/planlar/faz-3.md, karar 20). */
+      levels: {
+        instructional: 'Öğretim düzeyi',
+        /** docs/urun.md's name (docs/kararlar.md D16). TODO(design) */
+        independent: 'Serbest düzey',
+      },
+      goal: (weeks: number, target: number) =>
+        `İlk hedef: ${String(weeks)} haftada ${String(target)}`,
+      today: (wcpm: number) => `Bugün ${String(wcpm)}`,
+      goalWeek: (weeks: number, target: number) => `${String(weeks)}. hafta ${String(target)}`,
+      daily: (minutes: number) => `Her gün ${String(minutes)} dakikalık bir bölüm`,
+      warmup: 'Takıldığı kelimeler ertesi günün ısınmasına gelir',
+      weekly: 'Haftada bir 1 dakikalık ölçüm, sonucu size',
+      start: 'İlk bölüme başla',
+    },
   },
 
   session: {
