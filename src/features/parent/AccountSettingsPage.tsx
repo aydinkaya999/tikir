@@ -5,6 +5,7 @@ import { useId, useState } from 'react';
 import { Button } from '../../components/Button/Button';
 import { Dialog } from '../../components/Dialog/Dialog';
 import { Switch } from '../../components/Switch/Switch';
+import type { Id } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import { usePlayback } from '../session/playback';
 import { useSession, useSessionDevices, useSessionStore } from '../session/sessionContext';
@@ -23,6 +24,7 @@ export function AccountSettingsPage() {
   const { recordings, refresh } = useRecordings(recorder);
   const playback = usePlayback(recorder);
   const [confirming, setConfirming] = useState(false);
+  const [playingId, setPlayingId] = useState<Id | null>(null);
   const consentsId = useId();
   const removeId = useId();
 
@@ -74,10 +76,17 @@ export function AccountSettingsPage() {
           title={copy.recordings}
           rows={recordingRows(data, recordings)}
           empty={copy.noRecordings}
+          playingId={playback.playing ? playingId : null}
           onPlay={(id) => {
+            setPlayingId(id);
             playback.play(id);
           }}
+          onStop={playback.stop}
           onRemove={(id) => {
+            // A recording being deleted stops playing first.
+            if (playback.playing && playingId === id) {
+              playback.stop();
+            }
             store
               .getState()
               .deleteRecording(id)

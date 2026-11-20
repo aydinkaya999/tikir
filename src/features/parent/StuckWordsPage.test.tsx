@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { RecordingEntry } from '../../services/recorder/Recorder';
 import { renderApp, type RenderAppOptions } from '../../test/renderApp';
-import { testRecorder } from '../../test/sessionDevices';
+import { heldPlaybackRecorder, testRecorder } from '../../test/sessionDevices';
 
 /** The developer's open gate (`&kapi=acik`): these tests are about V2, not the gate. */
 beforeEach(() => {
@@ -189,6 +189,39 @@ describe('StuckWordsPage (V2)', () => {
     ]);
   });
 
+  it('stops a recording that plays, and stops it before deleting it', async () => {
+    const recorder = heldPlaybackRecorder();
+    let kept = [sent('kayit-1', '2026-11-14')];
+    recorder.list.mockImplementation(() => Promise.resolve(kept));
+    recorder.remove.mockImplementation((id) => {
+      kept = kept.filter((entry) => entry.id !== id);
+      return Promise.resolve();
+    });
+    await openStuck({ before: recordedReadings, recorder, devices: { recorder } });
+    const user = userEvent.setup();
+    const pending = await screen.findByRole('list', { name: 'Onay bekleyen kayıtlar' });
+
+    await user.click(within(pending).getByRole('button', { name: 'Dinle' }));
+    await user.click(await within(pending).findByRole('button', { name: 'Duraklat' }));
+    expect(recorder.stopPlayback).toHaveBeenCalledTimes(1);
+    expect(await within(pending).findByRole('button', { name: 'Dinle' })).toBeVisible();
+
+    await user.click(within(pending).getByRole('button', { name: 'Dinle' }));
+    await within(pending).findByRole('button', { name: 'Duraklat' });
+    await user.click(within(pending).getByRole('button', { name: 'Sil' }));
+    await user.click(
+      within(await screen.findByRole('dialog', { name: 'Kayıt silinsin mi?' })).getByRole(
+        'button',
+        { name: 'Sil' },
+      ),
+    );
+
+    await waitFor(() => {
+      expect(recorder.remove).toHaveBeenCalledWith('kayit-1');
+    });
+    expect(recorder.stopPlayback).toHaveBeenCalledTimes(2);
+  });
+
   it('says there is nothing yet before the first session', async () => {
     await renderApp('/veli/takilinan', {
       setup: 'tanisma',
@@ -199,7 +232,7 @@ describe('StuckWordsPage (V2)', () => {
       },
     });
 
-    expect(await screen.findByText('Bu hafta takılma yok.')).toBeInTheDocument();
+    expect(await screen.findByText('Bu hafta seans yapılmadı.')).toBeInTheDocument();
     expect(screen.getByText('Henüz takılınan kelime yok.')).toBeInTheDocument();
     expect(screen.queryByRole('list', { name: 'Hata türleri' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Isınmaya ekle' })).not.toBeInTheDocument();

@@ -5,6 +5,7 @@ import { useId, useState } from 'react';
 import { Button } from '../../components/Button/Button';
 import { IconButton } from '../../components/IconButton/IconButton';
 import { withGenitiveSuffix } from '../../domain/text';
+import type { Id } from '../../domain/types';
 import { tr } from '../../i18n/tr';
 import { usePlayback } from '../session/playback';
 import { useSession, useSessionDevices, useSessionStore } from '../session/sessionContext';
@@ -22,6 +23,8 @@ export function StuckWordsPage() {
   const { recordings, refresh } = useRecordings(recorder);
   const playback = usePlayback(recorder);
   const [added, setAdded] = useState<number | null>(null);
+  // Which listed recording plays: its button stops it (a word's few seconds need no stop).
+  const [playingId, setPlayingId] = useState<Id | null>(null);
   const errorsId = useId();
   const wordsId = useId();
 
@@ -76,9 +79,7 @@ export function StuckWordsPage() {
     <div className={styles.page}>
       <div className={styles.head}>
         <h1 className={styles.title}>{copy.title}</h1>
-        <p className={styles.lead}>
-          {view.totalErrors === 0 ? copy.noErrors : copy.lead(view.totalErrors, view.errorTypes)}
-        </p>
+        <p className={styles.lead}>{view.lead}</p>
       </div>
 
       <div className={styles.columns}>
@@ -128,6 +129,7 @@ export function StuckWordsPage() {
                           fromMs: 0,
                           toMs: 0,
                         };
+                        setPlayingId(null);
                         playback.play(recordingId, { fromMs, toMs });
                       }}
                     />
@@ -154,9 +156,12 @@ export function StuckWordsPage() {
         <RecordingList
           title={tr.report.recordings.pendingTitle}
           rows={view.pending}
+          playingId={playback.playing ? playingId : null}
           onPlay={(id) => {
+            setPlayingId(id);
             playback.play(id);
           }}
+          onStop={playback.stop}
           onApprove={(id) => {
             recorder
               .approve(id)
@@ -164,6 +169,10 @@ export function StuckWordsPage() {
               .finally(refresh);
           }}
           onRemove={(id) => {
+            // A recording being deleted stops playing first.
+            if (playback.playing && playingId === id) {
+              playback.stop();
+            }
             store
               .getState()
               .deleteRecording(id)

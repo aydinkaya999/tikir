@@ -281,6 +281,7 @@ describe('stuckView', () => {
     const view = stuckView(await weekendData(), []);
 
     expect(view.totalErrors).toBe(expected.V2.totalErrors);
+    expect(view.lead).toBe('Bu hafta 30 hata, 5 türde');
     expect(view.errorTypes).toBe(5);
     expect(view.errors.map((row) => row.type)).toEqual([
       'misread',
@@ -390,6 +391,52 @@ describe('stuckView', () => {
   });
 });
 
+describe('stuckView’s sentence for a week without errors', () => {
+  it('says there were no stumbles only when the week was listened to', async () => {
+    const data = await weekendData();
+    const sessions = data.sessions.map((session) => ({
+      ...session,
+      readings: session.readings.map((reading) => ({
+        ...reading,
+        words: reading.words.map((word) => ({ ...word, status: 'correct' as const })),
+      })),
+    }));
+
+    expect(stuckView({ ...data, sessions }, []).lead).toBe('Bu hafta takılma yok.');
+  });
+
+  it('says the days were read without listening (docs/kararlar.md P13, P14)', async () => {
+    const data = await weekendData();
+    const sessions = data.sessions.map((session) => ({ ...session, readings: [] }));
+
+    const view = stuckView({ ...data, sessions }, []);
+
+    expect(view.totalErrors).toBe(0);
+    expect(view.lead).toBe('5 gün dinlemeden okundu.');
+  });
+
+  it('says no session was read in a week that has only its measurement so far', async () => {
+    const data = await weekendData();
+    const monday = { ...expectedMeasurement(data), id: 'pazartesi', date: '2026-11-16' };
+
+    const view = stuckView({ ...data, assessments: [...data.assessments, monday] }, []);
+
+    expect(view.week).toBe('2026-11-16');
+    expect(view.lead).toBe('Bu hafta seans yapılmadı.');
+  });
+});
+
+/** The weekend profile's Sunday measurement (not the trial reading). */
+function expectedMeasurement(data: SessionData) {
+  const found = data.assessments.find(
+    (assessment) => assessment.date === '2026-11-15' && assessment.trial !== true,
+  );
+  if (found === undefined) {
+    throw new Error('No Sunday measurement.');
+  }
+  return found;
+}
+
 describe('assessmentView', () => {
   function resultOf(data: SessionData) {
     const state = assessmentView(data);
@@ -475,6 +522,13 @@ describe('assessmentView', () => {
       ['Endişe düzeyi: bu zorluktaki metin Deniz için şimdilik zor.', 'Endişe düzeyi'],
       ['Serbest düzey: Deniz bu zorluktaki metni yardımsız okuyabiliyor.', 'Serbest düzey'],
     ]);
+  });
+
+  it('promises no next measurement once listening is off', async () => {
+    const data = await weekendData();
+    const parent = { ...data.parent, consent: { voiceProcessing: false, weeklyEmail: true } };
+
+    expect(resultOf({ ...data, parent }).next).toBe('Dinleme kapalı olduğu için ölçüm yapılmıyor.');
   });
 
   it('says the next measurement is today once it is due', async () => {

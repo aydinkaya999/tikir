@@ -30,7 +30,11 @@ export function AssessmentPage() {
   }
   const state = assessmentView(data);
   if (state.kind === 'empty') {
-    return <EmptyReport title={copy.title} text={copy.empty} />;
+    // Without the parent's consent no measurement opens (P13): the report says why.
+    const text = data.parent.consent.voiceProcessing
+      ? copy.empty
+      : tr.report.summary.comment.listeningOff;
+    return <EmptyReport title={copy.title} text={text} />;
   }
   const { view } = state;
 
@@ -104,21 +108,33 @@ export function AssessmentPage() {
                 {copy.share}
               </Button>
             )}
-            {view.recordingId !== null && (
-              <Button
-                variant="secondary"
-                icon="play"
-                fullWidth
-                className={styles.listen}
-                onClick={() => {
-                  if (view.recordingId !== null) {
-                    playback.play(view.recordingId);
-                  }
-                }}
-              >
-                {copy.listen}
-              </Button>
-            )}
+            {view.recordingId !== null &&
+              (playback.playing ? (
+                // While it plays the button stops it, as on G5.
+                <Button
+                  variant="secondary"
+                  icon="pause"
+                  fullWidth
+                  className={styles.listen}
+                  onClick={playback.stop}
+                >
+                  {tr.record.pause}
+                </Button>
+              ) : (
+                <Button
+                  variant="secondary"
+                  icon="play"
+                  fullWidth
+                  className={styles.listen}
+                  onClick={() => {
+                    if (view.recordingId !== null) {
+                      playback.play(view.recordingId);
+                    }
+                  }}
+                >
+                  {copy.listen}
+                </Button>
+              ))}
           </div>
           {/* TODO(design): the share's outcome is not drawn (D17). */}
           <p className={styles.shareNote} role="status">

@@ -300,6 +300,11 @@ export interface StuckWordRow {
 
 export interface StuckView {
   week: LocalDate;
+  /**
+   * "Bu hafta 30 hata, 5 türde"; "Bu hafta takılma yok." only when the week was listened to;
+   * otherwise its days read without listening, or that no session was read.
+   */
+  lead: string;
   totalErrors: number;
   /** How many of the five types occurred. */
   errorTypes: number;
@@ -401,10 +406,24 @@ export function stuckView(data: SessionData, recordings: readonly RecordingEntry
     example: type === 'suffix' ? suffixExample(data, week) : null,
   }));
   const kept = new Set(recordings.map((recording) => recording.id));
+  const totalErrors = errors.reduce((sum, row) => sum + row.count, 0);
+  const errorTypes = errors.filter((row) => row.count > 0).length;
+  const heard = data.sessions.some(
+    (session) => weekStart(session.date) === week && session.readings.length > 0,
+  );
+  const unheardDays = sessionDays(data.sessions, week).filter((mark) => mark === 'unheard').length;
   return {
     week,
-    totalErrors: errors.reduce((sum, row) => sum + row.count, 0),
-    errorTypes: errors.filter((row) => row.count > 0).length,
+    lead:
+      totalErrors > 0
+        ? report.stuckWords.lead(totalErrors, errorTypes)
+        : heard
+          ? report.stuckWords.noErrors
+          : unheardDays > 0
+            ? report.summary.unheardDays(unheardDays)
+            : report.summary.noDays,
+    totalErrors,
+    errorTypes,
     errors,
     words: data.cards
       .filter((card) => card.misses > 0)
@@ -512,8 +531,12 @@ export function assessmentView(data: SessionData): AssessmentState {
       accuracyPercent,
       level,
       levelSentence: words.levelSentence[level](name),
-      next:
-        daysBetween(data.today, nextOn) <= 0 ? words.nextToday : words.next(formatLongDate(nextOn)),
+      // Without the parent's consent no measurement opens (P13): none is promised.
+      next: !data.parent.consent.voiceProcessing
+        ? report.summary.comment.listeningOff
+        : daysBetween(data.today, nextOn) <= 0
+          ? words.nextToday
+          : words.next(formatLongDate(nextOn)),
       nextInDays: daysBetween(measurement.date, nextOn),
       excerpt,
       recordingId: result.recordingId ?? null,

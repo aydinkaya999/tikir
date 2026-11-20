@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { renderApp, type RenderAppOptions } from '../../test/renderApp';
-import { testRecorder, testShare } from '../../test/sessionDevices';
+import { heldPlaybackRecorder, testRecorder, testShare } from '../../test/sessionDevices';
 import { assessmentView } from './views';
 
 /** The developer's open gate (`&kapi=acik`): these tests are about V3, not the gate. */
@@ -94,6 +94,31 @@ describe('AssessmentPage (V3)', () => {
     expect(screen.queryByRole('button', { name: 'Öğretmenle paylaş' })).not.toBeInTheDocument();
   });
 
+  it('stops the measurement’s recording while it plays', async () => {
+    const recorder = heldPlaybackRecorder();
+    await openResult({
+      devices: { recorder },
+      before: async ({ repository }) => {
+        const measured = (await repository.listAssessments()).find(
+          (assessment) => assessment.date === '2026-11-15' && assessment.trial !== true,
+        );
+        if (measured !== undefined) {
+          await repository.saveAssessment({
+            ...measured,
+            result: { ...measured.result, recordingId: 'kayit-olcum' },
+          });
+        }
+      },
+    });
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole('button', { name: 'Kaydı dinle' }));
+    await user.click(await screen.findByRole('button', { name: 'Duraklat' }));
+
+    expect(recorder.stopPlayback).toHaveBeenCalled();
+    expect(await screen.findByRole('button', { name: 'Kaydı dinle' })).toBeVisible();
+  });
+
   it('plays the measurement’s recording', async () => {
     const recorder = testRecorder();
     await openResult({
@@ -124,6 +149,22 @@ describe('AssessmentPage (V3)', () => {
   });
 
   it('shows the empty page before the first measurement', async () => {
+    // The level check was skipped: the first weekly measurement opens on the road.
+    await renderApp('/veli/olcum', {
+      setup: 'seviye',
+      before: async ({ store }) => {
+        await store.getState().load();
+        await store.getState().skipBaseline();
+        await store.getState().finishSetup();
+      },
+    });
+
+    expect(
+      await screen.findByText('Henüz ölçüm yok. Ölçüm, çocuğun yol ekranında açılır.'),
+    ).toBeInTheDocument();
+  });
+
+  it('says why there is no measurement without the parent’s consent (docs/kararlar.md P13)', async () => {
     await renderApp('/veli/olcum', {
       setup: 'tanisma',
       consent: false,
@@ -134,7 +175,10 @@ describe('AssessmentPage (V3)', () => {
     });
 
     expect(
-      await screen.findByText('Henüz ölçüm yok. Ölçüm, çocuğun yol ekranında açılır.'),
+      await screen.findByText('Dinleme kapalı olduğu için ölçüm yapılmıyor.'),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByText('Henüz ölçüm yok. Ölçüm, çocuğun yol ekranında açılır.'),
+    ).not.toBeInTheDocument();
   });
 });

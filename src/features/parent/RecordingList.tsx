@@ -19,6 +19,9 @@ interface RecordingListProps {
   onRemove: (id: Id) => void;
   /** Shown instead of the list when there is no recording. */
   empty?: string;
+  /** The recording playing now: its "Dinle" becomes "Duraklat", which stops it (G5's pair). */
+  playingId?: Id | null;
+  onStop?: () => void;
 }
 
 export function RecordingList({
@@ -28,6 +31,8 @@ export function RecordingList({
   onApprove,
   onRemove,
   empty,
+  playingId = null,
+  onStop,
 }: RecordingListProps) {
   const titleId = useId();
   const [removing, setRemoving] = useState<Id | null>(null);
@@ -45,15 +50,21 @@ export function RecordingList({
               <span className={styles.duration}>{row.duration}</span>
             </span>
             <span className={styles.actions}>
-              <Button
-                variant="secondary"
-                icon="play"
-                onClick={() => {
-                  onPlay(row.id);
-                }}
-              >
-                {copy.listen}
-              </Button>
+              {row.id === playingId ? (
+                <Button variant="secondary" icon="pause" onClick={onStop}>
+                  {tr.record.pause}
+                </Button>
+              ) : (
+                <Button
+                  variant="secondary"
+                  icon="play"
+                  onClick={() => {
+                    onPlay(row.id);
+                  }}
+                >
+                  {copy.listen}
+                </Button>
+              )}
               {onApprove !== undefined && (
                 <Button
                   icon="check"
