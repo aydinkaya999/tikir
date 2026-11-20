@@ -48,7 +48,7 @@
 - [x] Task 4: Seans durum makinesi
 - [x] Task 5: Seans deposu
 - [x] Task 6: Geliştirme adres parametreleri
-- [ ] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
+- [x] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
 - [ ] Task 8: `pnpm shots` adımları
 - [ ] Task 9: G1 Yol
 - [ ] Task 10: G2 Isınma ve mikrofon sorunları
@@ -838,11 +838,11 @@ export function sessionDevices(): SessionDevices;  // listener choice per karar 
 
 **Adımlar:**
 
-- [ ] Ses denemesinin üretim paketine sızmasını önle (2a'nın `TODO(phase 2b)`):
+- [x] Ses denemesinin üretim paketine sızmasını önle (2a'nın `TODO(phase 2b)`):
   - **Kırmızı:** Yönlendirici ürün rotaları için `src/app/services.ts`'i içe aktarır. `pnpm build` → `grep -rl "gelistirme/yanki" dist` bir dosya bulur: `audioLabServices` yankı yolunu (`devEndpoints.echo`) ve `WebSocketEchoProbe`'u pakete taşır.
   - **Yeşil:** `audioLabServices`'i `src/app/devServices.ts`'e taşı; ses denemesi rotası onu tembel yükler. `pnpm build` → aynı arama 0 dosya.
   - Commit: `refactor(app): move the audio lab services into a developer module`.
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **`useMicrophone.test.tsx`:**
      - Ekran kapanınca `audio.stop` çağrılmaz (değişen test).
      - Onay geri alınınca kapanır.
@@ -864,11 +864,11 @@ export function sessionDevices(): SessionDevices;  // listener choice per karar 
   5. **`StatusScreen`:**
      - yüklenirken "Hazırlanıyor…" ve Tıkır;
      - `RepositoryUnavailableError` → "Bilgilerin açılamadı. Sayfayı yenileyip yeniden dene.".
-- [ ] İlgili testler → FAIL.
-- [ ] Uygula.
+- [x] İlgili testler → FAIL.
+- [x] Uygula.
   - Kabuğun gövde CSS'i `SessionLayout`'a taşınır; `data-pane="main"` içerik sütununda kalır.
   - G2–G7'nin yer tutucu sayfaları Task 9–15'e kadar `SessionLayout` çizer: tasarımdaki başlık ("Isınma", "Dinle", "Oku", "Kayıt", "Kapanış", "Bugünlük bitti") ve o ekranın Tıkır'ı. Böylece kabuğun uçtan uca testleri (Tıkır görseli, iki bölme) geçmeye devam eder.
-- [ ] Uçtan uca testler:
+- [x] Uçtan uca testler:
   - `e2e/routes.spec.ts`:
     - seans adımlarını `?demo=cocuk-sabahi&adim=<adım>` ile açar;
     - kapatmanın pencereyi açtığını denetler;
@@ -876,8 +876,8 @@ export function sessionDevices(): SessionDevices;  // listener choice per karar 
   - `e2e/no-external-requests.spec.ts`: "Seanstan çık" bağlantısını izleyen test seansı `?demo=cocuk-sabahi&adim=read-1` ile açar ve pencereden "Çık"la G1'e döner.
 
   Ardından `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/routes.spec.ts e2e/no-external-requests.spec.ts` → geçer.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): guard the session steps and confirm the exit`.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): guard the session steps and confirm the exit`.
 
 ### Task 8: `pnpm shots` adımları
 

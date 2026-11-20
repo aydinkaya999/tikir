@@ -60,6 +60,26 @@ export const tr = {
       record: 'Kayıt',
       wrapUp: 'Kapanış',
     },
+    /** G2–G7, tablet and web header: "Bölüm 4: Dar Patika". */
+    chapterLabel: (number: number, title: string) => `Bölüm ${String(number)}: ${title}`,
+    /** G7 title. */
+    doneTitle: 'Bugünlük bitti',
+    /**
+     * The exit confirmation: the title is in docs/ekranlar.md, the rest was approved with the
+     * phase 2b plan (docs/kararlar.md D15). TODO(design)
+     */
+    exitDialog: {
+      title: 'Seanstan çıkılsın mı?',
+      body: 'Kaldığın yerden sürdürebilirsin.',
+      leave: 'Çık',
+      stay: 'Seansa dön',
+    },
+  },
+
+  /** Loading and the error notice; approved with the phase 2b plan (D15). TODO(design) */
+  status: {
+    loading: 'Hazırlanıyor…',
+    error: 'Bilgilerin açılamadı. Sayfayı yenileyip yeniden dene.',
   },
 
   race: {

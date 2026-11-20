@@ -1,5 +1,7 @@
-// Child-side screens of the daily session (docs/ekranlar.md). Phase 0 only lays out the routes:
-// each page is empty inside its shell; the screens are built in phase 2.
+// The session steps not built yet (docs/planlar/faz-2b.md, Tasks 9–16): each draws its body with
+// the design's title and Tıkır, so the shell is whole while the screens arrive one by one.
+import { tr } from '../../i18n/tr';
+import { SessionLayout } from './SessionLayout';
 
 /** G1 Yol. */
 export function RoadPage() {
@@ -8,32 +10,32 @@ export function RoadPage() {
 
 /** G2 Isınma. */
 export function WarmupPage() {
-  return null;
+  return <SessionLayout title={tr.session.steps.warmup} companion={{ expression: 'listen' }} />;
 }
 
 /** G3 Dinle. */
 export function ListenPage() {
-  return null;
+  return <SessionLayout title={tr.session.steps.listen} companion={{ expression: 'talk' }} />;
 }
 
 /** G4 Oku. */
 export function ReadPage() {
-  return null;
+  return <SessionLayout title={tr.session.steps.read} companion={{ expression: 'listen' }} />;
 }
 
 /** G5 Kayıt. */
 export function RecordPage() {
-  return null;
+  return <SessionLayout title={tr.session.steps.record} companion={{ expression: 'happy' }} />;
 }
 
 /** G6 Kapanış sorusu. */
 export function WrapUpPage() {
-  return null;
+  return <SessionLayout title={tr.session.steps.wrapUp} companion={{ expression: 'think' }} />;
 }
 
 /** G7 Bugünlük bitti. */
 export function DonePage() {
-  return null;
+  return <SessionLayout title={tr.session.doneTitle} companion={{ expression: 'sleep' }} />;
 }
 
 /** Albüm tab: tamed words (no design yet; minimal screen in phase 2). */

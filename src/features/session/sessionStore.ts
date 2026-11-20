@@ -73,25 +73,25 @@ export interface SessionState {
   error: Error | null;
   /** Unheard readings done on this page: they are not stored (docs/planlar/faz-2b.md, karar 3). */
   unheardDone: number;
-  load(): Promise<void>;
-  start(): Promise<void>;
+  load: () => Promise<void>;
+  start: () => Promise<void>;
   /** The current card's first attempt: the session (scored) is written first, then the card. */
-  answerWarmupCard(correct: boolean): Promise<void>;
+  answerWarmupCard: (correct: boolean) => Promise<void>;
   /** The current card is finished: after its second attempt, or unscored when unheard. */
-  nextWarmupCard(): Promise<void>;
-  skipWarmup(): Promise<void>;
-  finishListening(): Promise<void>;
-  saveReading(
+  nextWarmupCard: () => Promise<void>;
+  skipWarmup: () => Promise<void>;
+  finishListening: () => Promise<void>;
+  saveReading: (
     outcome: ReadingOutcome,
     meta: { startedAt: string; recordingId: Id | null },
-  ): Promise<void>;
-  skipUnheardReading(): Promise<void>;
-  redoRecording(): Promise<void>;
-  finishRecording(): Promise<void>;
+  ) => Promise<void>;
+  skipUnheardReading: () => Promise<void>;
+  redoRecording: () => Promise<void>;
+  finishRecording: () => Promise<void>;
   /** true when the option is correct; null when the call was ignored (wrong place, double tap). */
-  answerQuestion(option: number): Promise<boolean | null>;
-  finishSession(): Promise<void>;
-  setNarrationRate(rate: NarrationRate): Promise<void>;
+  answerQuestion: (option: number) => Promise<boolean | null>;
+  finishSession: () => Promise<void>;
+  setNarrationRate: (rate: NarrationRate) => Promise<void>;
 }
 
 /** Every date sorts after this one: the lower end of "all the sessions". */

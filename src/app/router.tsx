@@ -28,9 +28,15 @@ import {
   WarmupPage,
   WrapUpPage,
 } from '../features/session/pages';
+import type { StoreApi } from 'zustand/vanilla';
+import { SessionGuard } from '../features/session/SessionGuard';
+import type { SessionDevices } from '../features/session/sessionContext';
+import { SessionRoot } from '../features/session/SessionRoot';
+import { createSessionStore, type SessionState } from '../features/session/sessionStore';
 import { localDateOf } from '../domain/date';
 import { tr } from '../i18n/tr';
 import { devPaths, extraPaths, screenPaths } from './routes';
+import { appRepository, sessionDevices, sessionStoreServices } from './services';
 import { ChildShell } from './shells/ChildShell';
 import { FocusShell } from './shells/FocusShell';
 import { OnboardingShell } from './shells/OnboardingShell';
@@ -47,10 +53,7 @@ const devRoutes: RouteObject[] =
         {
           path: devPaths.showcase,
           lazy: async () => {
-            const [{ ShowcasePage }, { appRepository }] = await Promise.all([
-              import('../features/dev/showcase/ShowcasePage'),
-              import('./services'),
-            ]);
+            const { ShowcasePage } = await import('../features/dev/showcase/ShowcasePage');
             return {
               element: (
                 <ShowcasePage repository={appRepository} today={() => localDateOf(new Date())} />
@@ -72,71 +75,93 @@ const devRoutes: RouteObject[] =
       ]
     : [];
 
-export const appRoutes: RouteObject[] = [
-  {
-    element: <ChildShell />,
-    children: [
-      { path: screenPaths.G1, element: <RoadPage /> },
-      { path: screenPaths.U1, element: <LibraryPage /> },
-      { path: extraPaths.album, element: <AlbumPage /> },
-      { path: extraPaths.studio, element: <StudioPage /> },
-    ],
-  },
-  {
-    element: <SessionShell />,
-    children: [
-      { path: screenPaths.G2, element: <WarmupPage /> },
-      { path: screenPaths.G3, element: <ListenPage /> },
-      { path: screenPaths.G4, element: <ReadPage /> },
-      { path: screenPaths.G5, element: <RecordPage /> },
-      { path: screenPaths.G6, element: <WrapUpPage /> },
-      { path: screenPaths.G7, element: <DonePage /> },
-    ],
-  },
-  {
-    element: (
-      <FocusShell
-        title={tr.focus.bookFromCards.title}
-        subtitle={tr.focus.bookFromCards.subtitle}
-        backTo={screenPaths.U1}
-      />
-    ),
-    children: [{ path: screenPaths.U3, element: <BookFromCardsPage /> }],
-  },
-  {
-    element: (
-      <FocusShell
-        title={tr.focus.bookReady.title}
-        subtitle={tr.focus.bookReady.subtitle}
-        backTo={screenPaths.U3}
-      />
-    ),
-    children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
-  },
-  {
-    element: <OnboardingShell />,
-    children: [
-      { path: screenPaths.K1, element: <ParentAccountPage /> },
-      { path: screenPaths.K2, element: <ChildProfilePage /> },
-      { path: screenPaths.K3, element: <LevelAssessmentPage /> },
-      { path: screenPaths.K4, element: <MeetCompanionPage /> },
-    ],
-  },
-  {
-    element: <ParentShell />,
-    children: [
-      { path: screenPaths.V1, element: <WeeklySummaryPage /> },
-      { path: screenPaths.V2, element: <StuckWordsPage /> },
-      { path: screenPaths.V3, element: <AssessmentPage /> },
-      { path: screenPaths.V4, element: <ReadingStylePage /> },
-      { path: screenPaths.U2, element: <BookFromTextPage /> },
-    ],
-  },
-  ...devRoutes,
-  // No design or copy exists for "not found"; unknown addresses go to the road.
-  { path: '*', element: <Navigate to={screenPaths.G1} replace /> },
-];
+/** The session's store and devices, created once per page by createAppRouter. */
+export interface AppSession {
+  store: StoreApi<SessionState>;
+  devices: SessionDevices;
+}
+
+export function appRoutes(session: AppSession): RouteObject[] {
+  return [
+    {
+      // Every product route: the session's store and devices, and the microphone rule.
+      element: <SessionRoot store={session.store} devices={session.devices} />,
+      children: [
+        {
+          element: <ChildShell />,
+          children: [
+            { path: screenPaths.G1, element: <RoadPage /> },
+            { path: screenPaths.U1, element: <LibraryPage /> },
+            { path: extraPaths.album, element: <AlbumPage /> },
+            { path: extraPaths.studio, element: <StudioPage /> },
+          ],
+        },
+        {
+          element: <SessionShell />,
+          children: [
+            {
+              // The steps open in order (docs/ekranlar.md, "Yönlendirme kuralları").
+              element: <SessionGuard />,
+              children: [
+                { path: screenPaths.G2, element: <WarmupPage /> },
+                { path: screenPaths.G3, element: <ListenPage /> },
+                { path: screenPaths.G4, element: <ReadPage /> },
+                { path: screenPaths.G5, element: <RecordPage /> },
+                { path: screenPaths.G6, element: <WrapUpPage /> },
+                { path: screenPaths.G7, element: <DonePage /> },
+              ],
+            },
+          ],
+        },
+        {
+          element: (
+            <FocusShell
+              title={tr.focus.bookFromCards.title}
+              subtitle={tr.focus.bookFromCards.subtitle}
+              backTo={screenPaths.U1}
+            />
+          ),
+          children: [{ path: screenPaths.U3, element: <BookFromCardsPage /> }],
+        },
+        {
+          element: (
+            <FocusShell
+              title={tr.focus.bookReady.title}
+              subtitle={tr.focus.bookReady.subtitle}
+              backTo={screenPaths.U3}
+            />
+          ),
+          children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
+        },
+        {
+          element: <OnboardingShell />,
+          children: [
+            { path: screenPaths.K1, element: <ParentAccountPage /> },
+            { path: screenPaths.K2, element: <ChildProfilePage /> },
+            { path: screenPaths.K3, element: <LevelAssessmentPage /> },
+            { path: screenPaths.K4, element: <MeetCompanionPage /> },
+          ],
+        },
+        {
+          element: <ParentShell />,
+          children: [
+            { path: screenPaths.V1, element: <WeeklySummaryPage /> },
+            { path: screenPaths.V2, element: <StuckWordsPage /> },
+            { path: screenPaths.V3, element: <AssessmentPage /> },
+            { path: screenPaths.V4, element: <ReadingStylePage /> },
+            { path: screenPaths.U2, element: <BookFromTextPage /> },
+          ],
+        },
+      ],
+    },
+    ...devRoutes,
+    // No design or copy exists for "not found"; unknown addresses go to the road.
+    { path: '*', element: <Navigate to={screenPaths.G1} replace /> },
+  ];
+}
 
 export function createAppRouter() {
-  return createBrowserRouter(appRoutes);
+  return createBrowserRouter(
+    appRoutes({ store: createSessionStore(sessionStoreServices()), devices: sessionDevices() }),
+  );
 }

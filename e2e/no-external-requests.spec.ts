@@ -53,8 +53,9 @@ for (const viewport of [
     }
 
     // Leaving the session, going back from the focus shell.
-    await page.goto('/seans/oku');
-    await page.getByRole('link', { name: 'Seanstan çık' }).click();
+    await page.goto('/seans/oku?demo=cocuk-sabahi&adim=read-1');
+    await page.getByRole('button', { name: 'Seanstan çık' }).filter({ visible: true }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Çık' }).click();
     await expect(page).toHaveURL(/\/$/);
     await page.goto('/kitaplik/kur');
     await page.getByRole('link', { name: 'Geri dön' }).click();
