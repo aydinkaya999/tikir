@@ -1414,6 +1414,7 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 4. **G2'de hece karoları:** Gerçek dinleyici (Faz 6) hece zamanı verirse çocuğun okumasını izleyebilir.
 5. **iPhone:** Yardım seslendirmesi sırasında açık mikrofon ve dokunuşsuz başlayan G3 seslendirmesi cihaz denemesinde bakılır.
 6. **Yarış çubuğunda yakın imleçler:** Çocuk ve hayalet birkaç kelime arayla okurken "sen" ve "dün" etiketleri üst üste biniyor. Tasarımda bu durum yok; tasarımcıya sorulur (bileşen Faz 0'dan).
+7. **Onay var, mikrofon yok:** Veli ses onayı verdiyse ama cihazda çalışan mikrofon yoksa G4'te okuma başlamaz (karar 14); çocuk seansı bitiremez. Faz 3'te K1 ve cihaz denetimiyle birlikte ele alınır: dinlemesiz okumaya geçmek bir seçenek (son inceleme).
 
 ## Kanıtlar
 
@@ -1423,6 +1424,7 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 - Seans testleri ayrıca üç kez art arda koşuldu (`--repeat-each=3`): 60/60.
 - G1–G7 görüntüleri "Tasarım karşılaştırması"ndaki komutlarla yeniden alındı (21 dosya, `shots/`); fark listeleri yukarıda.
 - "Ölçütler ve kanıtları" tablosundaki test adları denetlendi: hepsi var (kesme işaretleri testlerdeki gibi ’).
+- **Son inceleme** (bağımsız inceleyici, bütün dal): "düzeltmelerle". Bir kritik ve iki önemli bulgu tek geçişte, her biri önce kırmızı bir testle düzeltildi: "Okumayı bitir" sıradaki okumayı boş kaydediyordu (`87391b1`), 3. okumanın kaydı duraklamaları da alıyordu (`903e698`), gece açık kalan sayfa dünde kalıyordu (`6f66e80`). Ardından `pnpm check` → **92 dosya, 724 test**; `pnpm e2e` → **172 passed**. On bir küçük bulgu ertelendi (aşağıda).
 
 ## Uygulamada verilen kararlar
 
@@ -1447,3 +1449,20 @@ Ayrıntı ve "yanlışsa bedeli" uygulama defterinde; özetleri:
 17. **G7:** "Yarın" kartı 700 px'ten 14 px iç boşluk ve 60 px kare alır (G7 tablet tasarımı); G1'in "bugün bitti" hâli de aynı kartı gösterir.
 18. **Albüm ve Stüdyo:** G7'nin evcil kartları (`TamedWords`) ve G5'in kayıt kancaları (`playback.ts`) ortak kullanılır. `tamedWords` alan mantığındadır; bir bölüm iki kez kaydedildiyse Stüdyo son kaydı gösterir.
 19. **Uçtan uca testler:** Ekranlardan sonra yazıldıkları için kırmızı adımları görülemedi. Onay testinin `getUserMedia` sayacına olumlu bir denetim eklendi. Mikrofonu açan her dokunuştan sonra saat ancak "Dinliyor" görününce ilerletilir. Ertesi gün testi ısınma destesini depodan denetler. `routes.spec.ts` G4'ün hazır bölmesini ölçer.
+20. **"Okumayı bitir"** (son inceleme): o anki okumada çocuk ilk kelimeyi geçene kadar düğme pasiftir. Pasif düğme durumu gösterir ve basılamaz.
+21. **3. okumanın kaydı** okumanın kendi saatini izler: çocuğun duraklatması, çıkış penceresi ve Tıkır'ın yardımı kayda girmez. Kayıt, yardım edilen kelimenin üstünden atlar; o kelimeyi çocuk zaten söylemedi.
+22. **Gün değişimi:** Gün, G1'de (açılışta ve dakikada bir) ve seans başlarken denetlenir. Gece yarısını açık geçen bir seans adımı, başladığı günde kalır.
+
+### Son incelemeden ertelenen küçük bulgular
+
+1. Dinlemesiz seansta çift dokunuş bir okumayı ya da kartı atlatır ("Okumayı bitir", G2'de "Sıradaki kelime").
+2. `&onay=kapali&adim=read-2|read-3` G6'ya kadar yürür (dinlemesiz seansta okuma sırası kayıtta yok).
+3. G4 dinlenen okumada `useMicrophone(audio, true)` kullanır; onay ekran açıkken değişebilir olunca (Faz 4) mikrofon kapanmaz.
+4. Kaydedicisi başlamayan bir "Baştan kaydet", sağlam ilk kaydı yine siler.
+5. G1 ya da G3'te yazı hata verirse dokunuşla açılan mikrofon açık kalır.
+6. G2'de "Kelimeyi dinle" sırasında çıkış penceresi kapanınca dinleme Tıkır okurken sürer; ikinci denemenin girişinde verilen duraklatma deneme başlayınca unutulur.
+7. G4'te Boşluk ve elle kipin tuşları, odak bir denetimde değilse çıkış penceresinin arkasında çalışır.
+8. Üretim derlemesinde `App` parçası girişten sonra yüklenir (başlangıçta ardışık indirme).
+9. G6'nın sorusunda ve seçeneklerinde `font-variant-ligatures: no-common-ligatures` yok (şimdiki seride "fi" yok).
+10. Belgeler: `docs/dinleme-hatti.md`'de T8 paragrafı yardım listesini bölüyor ve bölüm 1 hâlâ "bileşen kaldırılınca" diyor; `docs/mimari.md` dinleyici seçimi için T22'yi anıyor (karar 7 olmalı).
+11. Genişletilen test süreleri (`asyncUtilTimeout` 4000, dom `testTimeout` 15 000) nedenleri başka çıktıktan sonra kaldı; geri alınmalı ya da ölçümle gerekçelendirilmeli.
