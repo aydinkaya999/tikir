@@ -343,7 +343,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 12: K4 Tıkır ile tanışma
 - [x] Task 13: Veli kapısı, girişler ve çıkışlar
 - [x] Task 14: V4 Yazı ayarı
-- [ ] Task 15: P14 seansta
+- [x] Task 15: P14 seansta
 - [ ] Task 16: Uçtan uca testler
 - [ ] Task 17: Belgeler, karşılaştırma ve denetim
 
@@ -842,7 +842,7 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
 
 **Kullanır:** Task 3 (`continueUnheard`), Task 11 (`MicrophoneProblem.afterRetry`).
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **G4'te mikrofon reddi:**
      - "Yeniden dene" sonrası "Bugün dinlemeden oku" çıkar.
      - Dokununca seans `unheard` olur, metnin tamamı dinlemesiz görünür.
@@ -853,9 +853,9 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
      - Yazılı okuma kalır; G7'de sayı yok.
   4. **Düğmenin zamanı:** "Yeniden dene"den önce görünmez.
   5. **Yenileme:** `unheard` seans dinlemesiz açılır; mikrofon açılmaz.
-- [ ] → FAIL. Uygula. "Dinlenir mi" her yerde `consent.voiceProcessing && !session.unheard`.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(session): read on unheard when the microphone cannot be used (P14)`.
+- [x] → FAIL. Uygula. "Dinlenir mi" her yerde `consent.voiceProcessing && !session.unheard`.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(session): read on unheard when the microphone cannot be used (P14)`.
 
 ### Task 16: Uçtan uca testler
 

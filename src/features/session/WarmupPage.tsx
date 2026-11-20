@@ -27,7 +27,7 @@ import { placeOf } from './sessionMachine';
 import { SyllableTiles } from './SyllableTiles';
 import { useManualKeys } from './useManualKeys';
 import { useNarrator } from './useNarrator';
-import { chapterWarmupSource, monsterKindOf, warmupToken } from './views';
+import { chapterWarmupSource, monsterKindOf, sessionListens, warmupToken } from './views';
 import styles from './WarmupPage.module.css';
 
 const streakSlots = [0, 1, 2] as const;
@@ -56,7 +56,7 @@ export function WarmupPage() {
       card={place.card}
       total={items.length}
       secondAttempt={place.secondAttempt}
-      heard={data.parent.consent.voiceProcessing}
+      heard={sessionListens(data)}
       narrator={narrator}
       helpedFirst={helpedCard === place.card}
       onHelped={() => {
@@ -71,7 +71,7 @@ interface WarmupAttemptProps {
   card: number;
   total: number;
   secondAttempt: boolean;
-  /** The parent's consent: without it the session is unheard (docs/kararlar.md P13). */
+  /** Without the parent's consent, or after P14's choice, the session is unheard (P13, P14). */
   heard: boolean;
   narrator: Narrator;
   helpedFirst: boolean;
@@ -101,6 +101,7 @@ function WarmupAttempt({
   const narrations = useRef(0);
   // Before the second try Tıkır reads the word, unless the first try ended in his help.
   const [intro, setIntro] = useState(heard && secondAttempt && !helpedFirst);
+  const [retried, setRetried] = useState(false);
 
   const finish = (outcome: ListenerOutcome) => {
     const status = outcome.words[0]?.status;
@@ -256,8 +257,23 @@ function WarmupAttempt({
       <MicrophoneProblem
         kind={problem}
         onRetry={() => {
+          setRetried(true);
           microphone.start();
         }}
+        // A retry that did not help lets the day go on unheard (P14).
+        afterRetry={
+          retried
+            ? {
+                label: tr.microphoneProblem.readUnheard,
+                onChoose: () => {
+                  store
+                    .getState()
+                    .continueUnheard()
+                    .catch(() => undefined);
+                },
+              }
+            : undefined
+        }
       />
     ) : heard ? (
       tr.warmup.bubble

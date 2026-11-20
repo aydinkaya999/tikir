@@ -115,6 +115,14 @@ export function monsterKindOf(word: string): MonsterKind {
   return (word.match(letter)?.length ?? 0) % 2 === 0 ? 1 : 2;
 }
 
+/**
+ * Whether today's session listens to the child (docs/kararlar.md P13, P14): with the parent's
+ * consent, unless the microphone could not be used and the child went on unheard.
+ */
+export function sessionListens(data: Pick<SessionData, 'parent' | 'session'>): boolean {
+  return data.parent.consent.voiceProcessing && data.session?.unheard !== true;
+}
+
 /** G7's summary of the finished day (docs/planlar/faz-2b.md, karar 17). */
 export interface DoneView {
   minutes: number;

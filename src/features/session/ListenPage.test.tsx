@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ControlledNarrator } from '../../test/controlledNarrator';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
 import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
+import { testToday } from '../../test/sessionStore';
 
 const designPages = { ghostWpm: 40, layout: 'design' as const };
 
@@ -152,6 +153,29 @@ describe('ListenPage (G3)', () => {
   it('goes on to the reading without opening the microphone when there is no consent', async () => {
     const user = userEvent.setup();
     const app = await openWithControlledNarrator({ consent: false });
+    await finishNarration(app.narrator);
+    await waitFor(() => {
+      expect(startButtons()[0]).toBeEnabled();
+    });
+
+    await user.click(startButtons()[0] as HTMLElement);
+
+    await waitFor(() => {
+      expect(app.router.state.location.pathname).toBe('/seans/oku');
+    });
+    expect(app.devices.audio.start).not.toHaveBeenCalled();
+  });
+
+  it('goes on to the reading without opening the microphone once the day went unheard (P14)', async () => {
+    const user = userEvent.setup();
+    const app = await openWithControlledNarrator({
+      before: async ({ repository }) => {
+        const session = await repository.getSession(testToday);
+        if (session !== null) {
+          await repository.saveSession({ ...session, unheard: true });
+        }
+      },
+    });
     await finishNarration(app.narrator);
     await waitFor(() => {
       expect(startButtons()[0]).toBeEnabled();

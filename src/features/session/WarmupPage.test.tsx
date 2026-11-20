@@ -310,6 +310,31 @@ describe('WarmupPage (G2)', () => {
     expect(screen.getByText('Mikrofon durdu. Yeniden dene’ye dokun.')).toBeInTheDocument();
   });
 
+  it('offers to go on unheard once a retry did not help, and passes the cards unscored (P14)', async () => {
+    const user = userEvent.setup();
+    const app = await openWarmup();
+    const before = await app.repository.listStuckWords();
+    app.devices.audio.start.mockImplementation(() => {
+      app.devices.audio.setState('denied');
+      return Promise.resolve();
+    });
+    act(() => {
+      app.devices.audio.setState('denied');
+    });
+    expect(screen.queryByRole('button', { name: 'Bugün dinlemeden oku' })).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: 'Yeniden dene' }));
+    await user.click(await screen.findByRole('button', { name: 'Bugün dinlemeden oku' }));
+
+    expect(
+      await screen.findByText('Dinleme kapalı. Kelimeyi sesli oku, sonra sıradakine geç.'),
+    ).toBeInTheDocument();
+    await user.click(screen.getAllByRole('button', { name: 'Sıradaki kelime' })[0] as HTMLElement);
+    await screen.findByText('Canavar kelime 2 / 3');
+    expect((await app.repository.getSession('2026-11-21'))?.unheard).toBe(true);
+    expect(await app.repository.listStuckWords()).toEqual(before);
+  });
+
   it('opens a closed microphone from its button', async () => {
     const user = userEvent.setup();
     const app = await openWarmup();

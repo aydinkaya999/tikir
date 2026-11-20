@@ -12,6 +12,7 @@ import { placeOf, type SessionPlace } from '../../session/sessionMachine';
 import { createSessionStore, type SessionStoreServices } from '../../session/sessionStore';
 import { type DevStep, devSteps } from './devParams';
 import { storeSyntheticRecording } from './syntheticRecording';
+import { sessionListens } from '../../session/views';
 
 const sessionLengthMs = 12 * 60_000;
 /** More than enough actions for any step: three cards, listen, three readings, two questions. */
@@ -64,8 +65,8 @@ export async function prepareSessionStep(
     if (session === null || chapter === null) {
       throw new Error('There is no session to prepare today.');
     }
-    // Without the parent's consent the steps go as the screens take them unheard (P13).
-    const heard = data?.parent.consent.voiceProcessing ?? false;
+    // Without the parent's consent, or after P14's choice, the steps go unheard (P13, P14).
+    const heard = data === null ? false : sessionListens(data);
     const place = placeOf(session);
     const here = devSteps.indexOf(devStepOf(place));
     if (here >= target) {

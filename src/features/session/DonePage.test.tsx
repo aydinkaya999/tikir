@@ -72,6 +72,24 @@ describe('DonePage (G7)', () => {
     expect(screen.getByText('Yarın: Yıldız Tepesi')).toBeInTheDocument();
   });
 
+  it('shows no pace after a day that went on unheard after its first reading (P14)', async () => {
+    await openDone({
+      before: async ({ repository }) => {
+        const session = await repository.getSession(testToday);
+        if (session !== null) {
+          await repository.saveSession({
+            ...session,
+            readings: session.readings.slice(0, 1),
+            unheard: true,
+          });
+        }
+      },
+    });
+
+    expect(screen.queryByText('doğru kelime')).toBeNull();
+    expect(screen.queryByText(/fazla/)).toBeNull();
+  });
+
   it('says new chapters are on the way after the last written one', async () => {
     await openDone({
       before: async ({ repository }) => {

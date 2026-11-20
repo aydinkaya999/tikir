@@ -395,6 +395,8 @@ export const tr = {
       'Mikrofonu bulamadım. Velinden bir mikrofon bağlamasını iste, sonra Yeniden dene’ye dokun.',
     error: 'Mikrofon durdu. Yeniden dene’ye dokun.',
     retry: 'Yeniden dene',
+    /** After a retry did not help: the day goes on unheard (docs/kararlar.md P14, D16). TODO(design) */
+    readUnheard: 'Bugün dinlemeden oku',
   },
 
   /** G2 Isınma (docs/ekranlar.md, G2). */

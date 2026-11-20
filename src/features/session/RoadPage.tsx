@@ -17,7 +17,7 @@ import styles from './RoadPage.module.css';
 import { useLoadSession, useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { StatusScreen } from './StatusScreen';
 import { TomorrowCard } from './TomorrowCard';
-import { chapterPattern, roadView } from './views';
+import { chapterPattern, roadView, sessionListens } from './views';
 
 /** How often an open road checks whether the day has changed. */
 const dayCheckMs = 60_000;
@@ -42,7 +42,7 @@ export function RoadPage() {
     };
   }, [store]);
   const { audio } = useSessionDevices();
-  const microphone = useMicrophone(audio, data?.parent.consent.voiceProcessing ?? false);
+  const microphone = useMicrophone(audio, data === null ? false : sessionListens(data));
   const navigate = useNavigate();
   const [starting, setStarting] = useState(false);
   const seriesTitleId = useId();

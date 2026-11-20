@@ -1,7 +1,8 @@
 // G4 Oku (docs/ekranlar.md, G4; docs/dinleme-hatti.md; docs/planlar/faz-2b.md, karar 14): the
 // child reads the chapter three times; the listener follows, Tıkır helps at three seconds, the
 // ghost of the earlier reading races along, and the third reading is recorded. Without the
-// parent's consent the text is read unheard (docs/kararlar.md P13).
+// parent's consent, or once the microphone could not be used, the text is read unheard
+// (docs/kararlar.md P13, P14).
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
@@ -31,6 +32,7 @@ import { useSession, useSessionDevices, useSessionStore } from './sessionContext
 import { SessionLayout } from './SessionLayout';
 import { placeOf } from './sessionMachine';
 import type { SessionData } from './sessionStore';
+import { sessionListens } from './views';
 import { useManualKeys } from './useManualKeys';
 import { useNarrator } from './useNarrator';
 
@@ -49,7 +51,7 @@ export function ReadPage() {
   if (data === null || session === null || chapter === null || place?.step !== 'read') {
     return null;
   }
-  if (!data.parent.consent.voiceProcessing) {
+  if (!sessionListens(data)) {
     return (
       <UnheardReading
         attempt={attemptOf(session.readings.length + unheardDone + 1)}
@@ -98,6 +100,7 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
   const records = attempt === readingsPerSession;
   const startedAt = useRef<string | null>(null);
   const pausedBeforeExit = useRef(false);
+  const [retried, setRetried] = useState(false);
 
   /** The reading ended: the third one's recording stops, and the reading is stored. */
   const finish = (outcome: ListenerOutcome) => {
@@ -217,8 +220,23 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       <MicrophoneProblem
         kind={problem}
         onRetry={() => {
+          setRetried(true);
           microphone.start();
         }}
+        // A retry that did not help lets the day go on unheard (P14).
+        afterRetry={
+          retried
+            ? {
+                label: tr.microphoneProblem.readUnheard,
+                onChoose: () => {
+                  store
+                    .getState()
+                    .continueUnheard()
+                    .catch(() => undefined);
+                },
+              }
+            : undefined
+        }
       />
     ) : undefined;
   const pauseLabel = reading.paused ? tr.read.resume : tr.read.pause;

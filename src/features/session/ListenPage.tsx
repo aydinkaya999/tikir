@@ -20,6 +20,7 @@ import styles from './ListenPage.module.css';
 import { useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { SessionLayout } from './SessionLayout';
 import { useNarrator } from './useNarrator';
+import { sessionListens } from './views';
 
 const rates: readonly NarrationRate[] = ['slow', 'normal'];
 
@@ -36,7 +37,7 @@ function Listening({ narrator }: { narrator: Narrator }) {
   const store = useSessionStore();
   const devices = useSessionDevices();
   const exitOpen = useExitDialogOpen();
-  const consent = data?.parent.consent.voiceProcessing ?? false;
+  const consent = data === null ? false : sessionListens(data);
   const microphone = useMicrophone(devices.audio, consent);
   const chapter = data?.chapter ?? null;
   const pages = useMemo(

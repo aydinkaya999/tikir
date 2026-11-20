@@ -8,6 +8,7 @@ import { ControlledNarrator } from '../../test/controlledNarrator';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
 import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
 import { testRecorder } from '../../test/sessionDevices';
+import { testToday } from '../../test/sessionStore';
 import type { ListenerKind } from './sessionContext';
 
 /** Listeners of a ready scenario; the ones the screen starts are kept (StrictMode makes two). */
@@ -80,6 +81,14 @@ async function advance(ms: number) {
 
 function wordAt(index: number): Element | null {
   return document.querySelector(`[data-word-index="${String(index)}"]`);
+}
+
+/** The microphone stays refused however often the child retries. */
+function refuseMicrophone(app: ReadApp) {
+  app.devices.audio.start.mockImplementation(() => {
+    app.devices.audio.setState('denied');
+    return Promise.resolve();
+  });
 }
 
 describe('ReadPage (G4)', () => {
@@ -428,6 +437,80 @@ describe('ReadPage (G4)', () => {
     });
     expect(app.listeners.started).toHaveLength(0);
     expect(app.devices.audio.start).not.toHaveBeenCalled();
+  });
+
+  it('offers to read on unheard once a retry did not help, and reads to the wrap-up (P14)', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const app = await openRead();
+    refuseMicrophone(app);
+    await act(async () => {
+      app.devices.audio.setState('denied');
+      await Promise.resolve();
+    });
+    expect(screen.queryByRole('button', { name: 'Bugün dinlemeden oku' })).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: 'Yeniden dene' }));
+    await user.click(await screen.findByRole('button', { name: 'Bugün dinlemeden oku' }));
+
+    expect(
+      await screen.findByText('Dinleme kapalı. Metni sesli oku, bitince Okumayı bitir’e dokun.'),
+    ).toBeInTheDocument();
+    expect(document.querySelectorAll('[data-word-index]')).toHaveLength(99);
+    expect((await app.repository.getSession(testToday))?.unheard).toBe(true);
+    for (const attempt of ['2', '3']) {
+      await user.click(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0] as HTMLElement);
+      expect(await screen.findByText(`${attempt}. okuma / 3`)).toBeInTheDocument();
+    }
+    await user.click(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0] as HTMLElement);
+
+    // No recording without a heard third reading: G5 is skipped.
+    await waitFor(() => {
+      expect(app.router.state.location.pathname).toBe('/seans/kapanis');
+    });
+  });
+
+  it('keeps a heard first reading when the microphone goes and the rest is read unheard', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const app = await openRead();
+    await startListening(app);
+    await advance(95_000);
+    expect(await screen.findByText('2. okuma / 3')).toBeInTheDocument();
+
+    refuseMicrophone(app);
+    await act(async () => {
+      app.devices.audio.setState('denied');
+      await Promise.resolve();
+    });
+    await user.click(screen.getByRole('button', { name: 'Yeniden dene' }));
+    await user.click(await screen.findByRole('button', { name: 'Bugün dinlemeden oku' }));
+    expect(await screen.findByText('2. okuma / 3')).toBeInTheDocument();
+    await user.click(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0] as HTMLElement);
+    expect(await screen.findByText('3. okuma / 3')).toBeInTheDocument();
+    await user.click(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0] as HTMLElement);
+
+    await waitFor(async () => {
+      expect((await app.repository.getSession(testToday))?.step).toBe('wrapUp');
+    });
+    const session = await app.repository.getSession(testToday);
+    expect(session?.readings.map((reading) => reading.attempt)).toEqual([1]);
+    expect(session?.unheard).toBe(true);
+  });
+
+  it('opens an unheard session unheard again, with the microphone closed', async () => {
+    const app = await openRead({
+      before: async ({ repository }) => {
+        const session = await repository.getSession(testToday);
+        if (session !== null) {
+          await repository.saveSession({ ...session, unheard: true });
+        }
+      },
+    });
+
+    expect(
+      screen.getByText('Dinleme kapalı. Metni sesli oku, bitince Okumayı bitir’e dokun.'),
+    ).toBeInTheDocument();
+    expect(app.devices.audio.start).not.toHaveBeenCalled();
+    expect(app.listeners.started).toHaveLength(0);
   });
 
   it('explains a refused microphone and does not start the reading', async () => {

@@ -19,6 +19,7 @@ import { SessionLayout } from './SessionLayout';
 import { placeOf } from './sessionMachine';
 import type { SessionData } from './sessionStore';
 import { Waveform } from './Waveform';
+import { sessionListens } from './views';
 
 export function RecordPage() {
   const data = useSession((state) => state.data);
@@ -61,7 +62,7 @@ interface RecordingResultProps {
 function RecordingResult({ data, session, chapter, recordingId }: RecordingResultProps) {
   const store = useSessionStore();
   const devices = useSessionDevices();
-  const microphone = useMicrophone(devices.audio, data.parent.consent.voiceProcessing);
+  const microphone = useMicrophone(devices.audio, sessionListens(data));
   const recording = useRecording(devices.recorder, recordingId);
   const playback = usePlayback(devices.recorder);
   const [sent, setSent] = useState(false);
