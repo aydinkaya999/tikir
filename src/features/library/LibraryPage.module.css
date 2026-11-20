@@ -1,0 +1,258 @@
+/* Phone (below 700 px): U1 telefon. The child shell gives the page its padding. */
+.library {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+/* The series' card: cover and progress; "Sürdür" below on phones, beside from 700 px. */
+.series {
+  display: grid;
+  grid-template-areas:
+    'cover text'
+    'resume resume';
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px 14px;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  box-shadow: var(--lift-card);
+}
+
+.phoneCover,
+.wideCover {
+  grid-area: cover;
+}
+
+.wideCover {
+  display: none;
+}
+
+.seriesText {
+  display: flex;
+  flex-direction: column;
+  grid-area: text;
+  gap: 8px;
+  min-width: 0;
+}
+
+.seriesTitle,
+.sectionTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.progress {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+.resume {
+  grid-area: resume;
+  width: 100%;
+}
+
+.books {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 14px;
+}
+
+/* A book's card: its two patterns over its title and where it came from. */
+.book {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius-segment);
+  background: var(--color-white);
+  box-shadow: var(--lift-card);
+  color: var(--color-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.book:active:not(:disabled) {
+  box-shadow: var(--lift-tile);
+  transform: translateY(2px);
+}
+
+/* TODO(design): the passive card is not drawn; the button's disabled look (docs/ekranlar.md). */
+.book:disabled {
+  border-color: var(--color-line);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.bookBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+}
+
+.bookTitle {
+  color: var(--color-ink);
+  font-size: var(--size-book-title);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.book:disabled .bookTitle {
+  color: var(--color-muted);
+}
+
+.bookSource {
+  color: var(--color-muted);
+  font-size: var(--size-book-source);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+/* The dashed "Kartlarla kitap yap" card: tablets and the web only (U1). */
+.make {
+  display: none;
+}
+
+/* A phone's empty library: one sentence and the next step's button (docs/ekranlar.md). */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  box-shadow: var(--lift-card);
+}
+
+.emptyText {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-body);
+}
+
+.parentLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 14px;
+  border: var(--border);
+  border-radius: var(--radius-segment);
+  background: var(--color-cobalt-light);
+  color: var(--color-ink);
+  font-size: var(--size-strip-link);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+  text-decoration: none;
+}
+
+.chevron {
+  margin-left: auto;
+}
+
+/* Tablet (700–1199 px): U1 tablet. */
+@media (min-width: 700px) {
+  .library {
+    gap: 22px;
+  }
+
+  .series {
+    grid-template-areas: 'cover text resume';
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 20px;
+    padding: 22px;
+  }
+
+  .phoneCover {
+    display: none;
+  }
+
+  .wideCover {
+    display: block;
+  }
+
+  .resume {
+    width: auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 190px));
+    gap: 22px;
+  }
+
+  .book {
+    width: 190px;
+  }
+
+  .make {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 190px;
+    max-width: 100%;
+    min-height: 230px;
+    padding: 12px;
+    border: var(--border);
+    border-style: dashed;
+    border-radius: var(--radius-segment);
+    color: var(--color-ink);
+    font-size: var(--size-body);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-ui);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .empty {
+    display: none;
+  }
+}
+
+/* Web (from 1200 px): U1 web. */
+@media (min-width: 1200px) {
+  .library {
+    gap: 24px;
+  }
+}

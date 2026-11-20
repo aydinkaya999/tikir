@@ -7,6 +7,8 @@ import type {
   ListenerKind,
   SessionDevices,
 } from '../features/session/sessionContext';
+import type { BookGenerator } from '../services/books/BookGenerator';
+import { MockBookGenerator } from '../services/books/MockBookGenerator';
 import { FakeListener } from '../services/listener/FakeListener';
 import type { Narrator } from '../services/narrator/Narrator';
 import { SilentNarrator } from '../services/narrator/SilentNarrator';
@@ -96,6 +98,7 @@ export interface TestDevicesOptions {
   scenario?: SessionDevices['scenario'];
   random?: () => number;
   share?: ShareService;
+  books?: BookGenerator;
 }
 
 /** The devices, with the hand-driven microphone typed as such for the tests' assertions. */
@@ -111,5 +114,7 @@ export function testDevices(options: TestDevicesOptions = {}): TestDevices {
     scenario: options.scenario ?? { ghostWpm: null, layout: 'content' },
     random: options.random ?? (() => 0),
     share: options.share ?? testShare(),
+    // The real mock generator, without its wait.
+    books: options.books ?? new MockBookGenerator({ delayMs: 0 }),
   };
 }

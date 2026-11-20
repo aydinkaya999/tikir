@@ -1,0 +1,195 @@
+/* Phone (below 700 px): U2 telefon. The parent shell gives the page its padding. */
+.page {
+  display: grid;
+  grid-template-areas:
+    'head'
+    'form'
+    'action';
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  grid-area: head;
+  gap: 4px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+.wideLead {
+  display: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  grid-area: form;
+  gap: 12px;
+  min-width: 0;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.choice {
+  flex: 1 1 320px;
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* "Kitap böyle hazırlanır": tablets and the web only. */
+.howTo {
+  display: none;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  grid-area: action;
+}
+
+/* The wait takes the form's place. */
+.wait {
+  grid-row: 2 / -1;
+}
+
+/* Tablet (700–1199 px): U2 tablet, the side card and the action in the second column. */
+@media (min-width: 700px) {
+  .page {
+    grid-template-areas:
+      'head head'
+      'form howTo'
+      'form action';
+    grid-template-rows: auto auto 1fr;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 20px 28px;
+    /* The page fills the shell, so the action sits at its foot (U2 tablet). */
+    min-height: 100%;
+  }
+
+  .wideLead {
+    display: block;
+  }
+
+  .phoneLead {
+    display: none;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .choice {
+    flex-basis: 200px;
+  }
+
+  .howTo {
+    display: flex;
+    flex-direction: column;
+    grid-area: howTo;
+    gap: 14px;
+    padding: 22px;
+    border: var(--border);
+    border-radius: var(--radius-card);
+    background: var(--color-cobalt-light);
+  }
+
+  .howToTitle {
+    margin: 0;
+    color: var(--color-ink);
+    font-size: var(--size-h2);
+    font-weight: var(--weight-extrabold);
+    line-height: 1.2;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-ink);
+    font-size: var(--size-body);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-ui);
+  }
+
+  .stepNumber {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: var(--border);
+    border-radius: var(--radius-step-number);
+    background: var(--color-white);
+    font-size: var(--size-step-number);
+    font-weight: var(--weight-extrabold);
+  }
+
+  .action {
+    align-self: end;
+    justify-self: end;
+  }
+
+  .wait {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Web (from 1200 px): U2 web, the action under the form and a 320 px side card. */
+@media (min-width: 1200px) {
+  .page {
+    grid-template-areas:
+      'head head'
+      'form howTo'
+      'action howTo';
+    grid-template-rows: auto auto 1fr;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px 36px;
+  }
+
+  .form {
+    gap: 18px;
+  }
+
+  .howTo {
+    align-self: start;
+  }
+
+  .action {
+    align-self: start;
+    justify-self: start;
+  }
+}

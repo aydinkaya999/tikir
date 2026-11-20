@@ -82,7 +82,28 @@ export interface Book {
   source: 'series' | 'cards' | 'parentText';
   totalChapters: number;
   chapters: Chapter[];
+  /** The child's stuck words the text carries (U4's "İçine eklenen kelimeler"). */
+  insertedWords?: string[];
+  /** What a generated book was made from: "Yeniden üret" asks for it again (docs/planlar/faz-5.md). */
+  request?: BookRequest;
+  /** When the library got the book (ISO time): the newest is listed first. The series has none. */
+  createdAt?: string;
 }
+
+/** U2's "Uzunluk": short 120, medium 180, long 260 words (docs/urun.md section 6). */
+export type BookLength = 'short' | 'medium' | 'long';
+
+/** A book's request to the generator: three cards (U3) or a parent's text (U2). */
+export type BookRequest =
+  | { kind: 'cards'; hero: Id; place: Id; event: Id }
+  | {
+      kind: 'text';
+      text: string;
+      grade: Grade;
+      length: BookLength;
+      insertStuckWords: boolean;
+      addQuestions: boolean;
+    };
 
 /** A one-minute assessment text. */
 export interface Passage {

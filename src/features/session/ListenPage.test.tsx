@@ -188,4 +188,11 @@ describe('ListenPage (G3)', () => {
     });
     expect(app.devices.audio.start).not.toHaveBeenCalled();
   });
+
+  it('names the page by the library book the day is read from (karar 32)', async () => {
+    await renderApp('/seans/dinle', { step: 'listen', book: 'uzay-istasyonunda-gizemli-ses' });
+
+    expect(await screen.findByText('Uzay İstasyonunda Gizemli Ses')).toBeInTheDocument();
+    expect(screen.queryByText(/Kayıp Fenerin İzinde/)).toBeNull();
+  });
 });

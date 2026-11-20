@@ -3,6 +3,7 @@
 // screen moves on only once its step is stored. One action runs at a time; a second call while one
 // is running (a double tap) is ignored, and an action at the wrong place writes nothing.
 import { createStore, type StoreApi } from 'zustand/vanilla';
+import { nextBookChapter } from '../../domain/books';
 import { measurementReadings, type PlannedReading } from '../../domain/measurement';
 import { defaultReadingStyle, sameReadingStyle } from '../../domain/readingStyle';
 import { goalUpdate } from '../../domain/report';
@@ -83,6 +84,10 @@ export interface SessionData {
   parent: Parent;
   child: Child;
   series: Book;
+  /** The library: every book but the series, the newest first (docs/planlar/faz-5.md, karar 5). */
+  books: Book[];
+  /** Today's chapter's book: the session's (the series or a library book), else the series. */
+  book: Book;
   /** Today's chapter: the session's, else the next of the series; null when none is written. */
   chapter: Chapter | null;
   /** Every session up to today, in date order; today's included once it exists. */
@@ -174,6 +179,16 @@ export interface SessionState {
   setConsent: (consent: { voiceProcessing: boolean; weeklyEmail: boolean }) => Promise<void>;
   /** The account page's "Hesabı sil": everything stored goes, the setup opens (karar 6). */
   deleteAccount: () => Promise<void>;
+  /**
+   * A made book into the library (docs/planlar/faz-5.md, karar 6); a book made again keeps its id
+   * and its place. A book a session has read is kept as it was: its readings point into its words.
+   */
+  saveBook: (book: Book) => Promise<void>;
+  /**
+   * Starts today's session with a library book's next chapter (karar 7); like `start`, a day that
+   * has its session keeps it (docs/kararlar.md P5).
+   */
+  startWithBook: (bookId: Id) => Promise<void>;
 }
 
 /** Every date sorts after this one: the lower end of "all the sessions". */
@@ -181,6 +196,25 @@ const firstDate = '0000-01-01';
 
 function errorOf(cause: unknown): Error {
   return cause instanceof Error ? cause : new Error(String(cause));
+}
+
+/** The library: every book but the series, the newest first (karar 5). */
+function libraryOf(books: readonly Book[]): Book[] {
+  return books
+    .filter((book) => book.source !== 'series')
+    .sort((a, b) => {
+      const [first, second] = [a.createdAt ?? '', b.createdAt ?? ''];
+      return first < second ? 1 : first > second ? -1 : 0;
+    });
+}
+
+/** Today's session's book: the series or a library book (docs/kararlar.md P18). */
+function bookOfSession(books: readonly Book[], session: Session): Book {
+  const book = books.find((each) => each.id === session.chapterRef.bookId);
+  if (book === undefined) {
+    throw new Error(`The book of today's session is missing: ${session.chapterRef.bookId}.`);
+  }
+  return book;
 }
 
 function chapterOf(book: Book, number: number | null): Chapter | null {
@@ -305,10 +339,11 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
         throw new Error('The series book is missing from the content.');
       }
       const session = sessions.find((each) => each.date === today) ?? null;
+      const book = session === null ? series : bookOfSession(books, session);
       const chapter =
         session === null
           ? chapterOf(series, nextSeriesChapter(sessions, series))
-          : chapterOf(series, session.chapterRef.chapter);
+          : chapterOf(book, session.chapterRef.chapter);
       const passages = await repository.listPassages(child.grade);
       return {
         status: 'ready',
@@ -316,6 +351,8 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           parent,
           child,
           series,
+          books: libraryOf(books),
+          book,
           chapter,
           sessions,
           cards,
@@ -373,6 +410,50 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
       });
     }
 
+    /**
+     * Starts today's session with the picked book's chapter, its warmup from that chapter. On a
+     * new day the new day's data is read first; a day that has its session keeps it (P5).
+     */
+    async function begin(
+      pick: (data: SessionData) => { book: Book; chapter: Chapter | null } | null,
+    ): Promise<void> {
+      const loaded = get().data;
+      let data = loaded;
+      // A page left open past midnight: today's session is the new day's.
+      if (loaded !== null && loaded.today !== services.today()) {
+        const state = await readState();
+        if (state.data === null) {
+          publish({ ...state, unheardDone: 0 });
+          return;
+        }
+        data = state.data;
+      }
+      const picked = data === null || data.session !== null ? null : pick(data);
+      if (data === null || picked === null || picked.chapter === null) {
+        if (data !== loaded && data !== null) {
+          publish({ status: 'ready', data, setup: null, unheardDone: 0 });
+        }
+        return;
+      }
+      const { book, chapter } = picked;
+      const deck = warmupDeck(data.cards, data.today, sourceOf(chapter));
+      const session = createSession({
+        id: services.createId(),
+        childId: data.child.id,
+        date: data.today,
+        chapterRef: { bookId: book.id, chapter: chapter.number },
+        warmupWords: deck.map((item) => item.word),
+        startedAt: services.now().toISOString(),
+      });
+      await storeSession(
+        { ...data, book, chapter },
+        session,
+        null,
+        undefined,
+        data === loaded ? {} : { unheardDone: 0 },
+      );
+    }
+
     return {
       status: 'idle',
       data: null,
@@ -396,42 +477,19 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           publish({ ...(await readState()), unheardDone: 0 });
         }),
 
+      // Without a session today's chapter is the series' next one.
       start: () =>
-        act(undefined, async () => {
-          const loaded = get().data;
-          let data = loaded;
-          // A page left open past midnight: today's session is the new day's.
-          if (loaded !== null && loaded.today !== services.today()) {
-            const state = await readState();
-            if (state.data === null) {
-              publish({ ...state, unheardDone: 0 });
-              return;
-            }
-            data = state.data;
-          }
-          if (data === null || data.session !== null || data.chapter === null) {
-            if (data !== loaded && data !== null) {
-              publish({ status: 'ready', data, setup: null, unheardDone: 0 });
-            }
-            return;
-          }
-          const deck = warmupDeck(data.cards, data.today, sourceOf(data.chapter));
-          const session = createSession({
-            id: services.createId(),
-            childId: data.child.id,
-            date: data.today,
-            chapterRef: { bookId: data.series.id, chapter: data.chapter.number },
-            warmupWords: deck.map((item) => item.word),
-            startedAt: services.now().toISOString(),
-          });
-          await storeSession(
-            data,
-            session,
-            null,
-            undefined,
-            data === loaded ? {} : { unheardDone: 0 },
-          );
-        }),
+        act(undefined, () => begin((data) => ({ book: data.series, chapter: data.chapter }))),
+
+      startWithBook: (bookId) =>
+        act(undefined, () =>
+          begin((data) => {
+            const book = data.books.find((each) => each.id === bookId);
+            return book === undefined
+              ? null
+              : { book, chapter: chapterOf(book, nextBookChapter(data.sessions, book)) };
+          }),
+        ),
 
       answerWarmupCard: (correct) =>
         act(undefined, async () => {
@@ -845,6 +903,29 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           }
           await (await services.repository()).clearAll();
           publish({ ...(await readState()), unheardDone: 0 });
+        }),
+
+      saveBook: (book) =>
+        act(undefined, async () => {
+          const { data } = get();
+          const kept = data?.books.find((each) => each.id === book.id);
+          const read =
+            kept !== undefined &&
+            data?.sessions.some((session) => session.chapterRef.bookId === book.id) === true;
+          if (data === null || read) {
+            return;
+          }
+          const saved: Book = {
+            ...book,
+            createdAt: kept?.createdAt ?? services.now().toISOString(),
+          };
+          await (await services.repository()).saveBook(saved);
+          publish({
+            data: {
+              ...data,
+              books: libraryOf([saved, ...data.books.filter((each) => each.id !== saved.id)]),
+            },
+          });
         }),
     };
   });

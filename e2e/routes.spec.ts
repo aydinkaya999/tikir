@@ -177,10 +177,11 @@ const focusRoutes = [
     back: '/kitaplik',
   },
   {
-    path: '/kitaplik/ornek/hazir',
+    // The demo's sample book; a book the library does not have opens the library.
+    path: '/kitaplik/uzay-istasyonunda-gizemli-ses/hazir',
     title: 'Kitabın hazır',
     subtitle: 'Denetimden geçti, okunmaya hazır.',
-    back: '/kitaplik/kur',
+    back: '/kitaplik',
   },
 ];
 
@@ -195,7 +196,11 @@ for (const route of focusRoutes) {
         route.back,
       );
 
-      const subtitle = page.getByText(route.subtitle, { exact: true });
+      // The line under the title (U3's bubble may say the same before the picks).
+      const subtitle = page
+        .getByRole('heading', { level: 1 })
+        .locator('xpath=following-sibling::p[1]');
+      await expect(subtitle).toHaveText(route.subtitle);
       const libraryLink = page.getByRole('link', { name: 'Kitaplık' });
       if (viewport === 'telefon') {
         await expect(subtitle).toBeHidden();

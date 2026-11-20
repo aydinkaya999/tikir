@@ -1,0 +1,55 @@
+/* Phone (below 700 px): U3 telefon. */
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-card-group);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* The first hero's picture: Tıkır's face, 44 px on phones, 60 px later. */
+.heroFace {
+  width: 44px;
+  height: 44px;
+}
+
+/* Tablet (700–1199 px): U3 tablet. */
+@media (min-width: 700px) {
+  .groups {
+    gap: 18px;
+  }
+
+  .cards {
+    gap: 14px;
+  }
+
+  .heroFace {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Web (from 1200 px): U3 web. */
+@media (min-width: 1200px) {
+  .groups {
+    gap: 20px;
+  }
+}

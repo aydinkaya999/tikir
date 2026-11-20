@@ -1,0 +1,37 @@
+/* Phones: a 64 px Tıkır beside the bubble (U3 telefon). The focus pages' bubble is 18 px later. */
+.companion {
+  --size-bubble: var(--size-bubble-focus);
+
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.face {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+
+.bubble {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* From 700 px: a 170 px Tıkır above his bubble (U3 tablet, web). */
+@media (min-width: 700px) {
+  .companion {
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .face {
+    width: 170px;
+    height: 170px;
+  }
+
+  .bubble {
+    width: 100%;
+  }
+}

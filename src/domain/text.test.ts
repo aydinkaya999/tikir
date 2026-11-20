@@ -16,6 +16,7 @@ import {
   withAblativeSuffix,
   withDativeSuffix,
   withGenitiveSuffix,
+  withNameDativeSuffix,
   withPossessiveLocativeSuffix,
   withPossessiveSuffix,
 } from './text';
@@ -485,5 +486,19 @@ describe('number suffixes', () => {
     [0, '0’ında'],
   ])('gives %i the possessive and locative %s', (count, expected) => {
     expect(withPossessiveLocativeSuffix(count)).toBe(expected);
+  });
+});
+
+describe('withNameDativeSuffix (U2)', () => {
+  it.each([
+    ['Deniz', 'Deniz’e'],
+    ['Ali', 'Ali’ye'],
+    ['Umut', 'Umut’a'],
+    ['Oya', 'Oya’ya'],
+    ['Can', 'Can’a'],
+    ['Kemal', 'Kemal’e'],
+    ['Ali Kemal', 'Ali Kemal’e'],
+  ])('gives %s the dative %s', (name, expected) => {
+    expect(withNameDativeSuffix(name)).toBe(expected);
   });
 });

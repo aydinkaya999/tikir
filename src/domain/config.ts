@@ -43,6 +43,15 @@ export const nextGoalStep = 8;
  */
 export const gradeAverageWcpm: Readonly<Partial<Record<Grade, number>>> = { 3: 90, 4: 98 };
 
+/** A book made from a parent's text: at most this many sentences on a page (docs/mimari.md). */
+export const bookPageSentences = 4;
+
+/** Its title: at most this many words of its first sentence (docs/mimari.md). */
+export const bookTitleWords = 6;
+
+/** U4's reading time without a measurement: words a minute (docs/planlar/faz-5.md, karar 22). */
+export const fallbackReadingWpm = 60;
+
 /** The weekly measurement opens this many days after the last one (docs/kararlar.md P16). */
 export const measurementIntervalDays = 7;
 

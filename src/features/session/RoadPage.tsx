@@ -1,5 +1,5 @@
 // G1 Yol (docs/ekranlar.md, G1): today's chapter one tap away, and the road of the series.
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
@@ -18,10 +18,8 @@ import styles from './RoadPage.module.css';
 import { useLoadSession, useSession, useSessionDevices, useSessionStore } from './sessionContext';
 import { StatusScreen } from './StatusScreen';
 import { TomorrowCard } from './TomorrowCard';
+import { useDayRefresh } from './useDayRefresh';
 import { chapterPattern, roadView, sessionListens } from './views';
-
-/** How often an open road checks whether the day has changed. */
-const dayCheckMs = 60_000;
 
 export function RoadPage() {
   useLoadSession();
@@ -29,19 +27,7 @@ export function RoadPage() {
   const data = useSession((state) => state.data);
   const store = useSessionStore();
   // A road left open past midnight turns to the new day.
-  useEffect(() => {
-    const refresh = () => {
-      store
-        .getState()
-        .refreshDay()
-        .catch(() => undefined);
-    };
-    refresh();
-    const timer = setInterval(refresh, dayCheckMs);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [store]);
+  useDayRefresh();
   const { audio } = useSessionDevices();
   const microphone = useMicrophone(audio, data === null ? false : sessionListens(data));
   // The measurement listens whenever the parent consented, whatever today's session did (P14).
@@ -66,8 +52,27 @@ export function RoadPage() {
   const bubble =
     view.state === 'done'
       ? tr.done.bubble(view.childName)
-      : view.state !== 'seriesEnd' && view.chapter !== null
-        ? tr.road.bubble(view.chapter.number, view.chapter.title)
+      : view.libraryBook !== null
+        ? tr.road.libraryBubble(view.libraryBook.title)
+        : view.state !== 'seriesEnd' && view.chapter !== null
+          ? tr.road.bubble(view.chapter.number, view.chapter.title)
+          : null;
+  // Today's card: the series' chapter, or the library book the day is read from (P18).
+  const todayCard =
+    view.libraryBook !== null
+      ? {
+          label: tr.road.libraryLabel,
+          title: view.libraryBook.title,
+          meta: tr.road.libraryMeta(sessionMinutes),
+          pattern: view.libraryBook.pattern,
+        }
+      : view.chapter !== null
+        ? {
+            label: tr.road.todayLabel,
+            title: view.chapter.title,
+            meta: tr.road.chapterMeta(view.chapter.number, sessionMinutes),
+            pattern: chapterPattern(view.chapter.number),
+          }
         : null;
 
   const measuring = measurementDue(
@@ -141,7 +146,7 @@ export function RoadPage() {
             )}
           </div>
           <div className={styles.chapterCard}>
-            {view.state === 'seriesEnd' || view.chapter === null ? (
+            {view.state === 'seriesEnd' || todayCard === null ? (
               <>
                 {/* TODO(design): no chapter left to read. */}
                 <p className={styles.notice}>{tr.road.seriesEnd}</p>
@@ -152,21 +157,13 @@ export function RoadPage() {
             ) : (
               <>
                 <div className={styles.chapterHead}>
-                  <Tile
-                    className={styles.cover}
-                    state="done"
-                    pattern={chapterPattern(view.chapter.number)}
-                  />
+                  <Tile className={styles.cover} state="done" pattern={todayCard.pattern} />
                   <div className={styles.chapterText}>
-                    <p className={styles.label}>{tr.road.todayLabel}</p>
+                    <p className={styles.label}>{todayCard.label}</p>
                     <h2 className={styles.chapterTitle}>
-                      {view.state === 'done' ? tr.session.doneTitle : view.chapter.title}
+                      {view.state === 'done' ? tr.session.doneTitle : todayCard.title}
                     </h2>
-                    {view.state !== 'done' && (
-                      <p className={styles.meta}>
-                        {tr.road.chapterMeta(view.chapter.number, sessionMinutes)}
-                      </p>
-                    )}
+                    {view.state !== 'done' && <p className={styles.meta}>{todayCard.meta}</p>}
                   </div>
                 </div>
                 {view.state === 'done' ? (

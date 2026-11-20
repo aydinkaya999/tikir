@@ -32,7 +32,7 @@ import { useSession, useSessionDevices, useSessionStore } from './sessionContext
 import { SessionLayout } from './SessionLayout';
 import { placeOf } from './sessionMachine';
 import type { SessionData } from './sessionStore';
-import { sessionListens } from './views';
+import { pageTitle, sessionListens } from './views';
 import { useManualKeys } from './useManualKeys';
 import { useNarrator } from './useNarrator';
 
@@ -314,7 +314,7 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       {screen !== undefined && (
         <PageCard
           className={styles.page}
-          title={tr.page.title(data.series.title, chapter.number)}
+          title={pageTitle(data, chapter)}
           counter={tr.page.counter(pages.indexOf(screen) + 1, pages.length)}
         >
           <ReadingStyleScope style={data.child.readingStyle}>
@@ -381,7 +381,7 @@ function UnheardReading({ attempt, data, chapter }: ReadingProps) {
       }
     >
       {/* TODO(design): the unheard reading is not drawn; the whole chapter is one page. */}
-      <PageCard className={styles.page} title={tr.page.title(data.series.title, chapter.number)}>
+      <PageCard className={styles.page} title={pageTitle(data, chapter)}>
         <ReadingStyleScope style={data.child.readingStyle}>
           <ReadingText page={page} readCount={wordCount} />
         </ReadingStyleScope>

@@ -2,8 +2,9 @@ import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { measurementReadings } from '../../domain/measurement';
+import { stuckKey } from '../../domain/stuckWords';
 import { chapterTokens, passageChapter } from '../../domain/text';
-import type { Chapter, Passage, ReadingOutcome, StuckWord } from '../../domain/types';
+import type { Book, Chapter, Passage, ReadingOutcome, StuckWord } from '../../domain/types';
 import { type DemoMode, loadDemoProfile } from '../dev/demo/loadDemoProfile';
 import { scenarioSets } from '../../services/listener/scenarios';
 import { simulateReading, toWordResults } from '../../services/listener/simulateReading';
@@ -882,5 +883,108 @@ describe('the parent’s actions in the session store', () => {
     expect(await repository.listStuckWords()).toEqual([]);
     expect(await recordings.get('kayit-1')).toBeNull();
     expect((await repository.listPassages(3)).length).toBeGreaterThan(0);
+  });
+});
+
+describe('the library in the session store', () => {
+  beforeEach(() => {
+    globalThis.indexedDB = new IDBFactory();
+  });
+
+  const cardsBook = 'uzay-istasyonunda-gizemli-ses';
+
+  it('keeps the library apart from the series, the newest book first', async () => {
+    const { store } = storeOver(await demoRepository());
+    await store.getState().load();
+
+    const data = store.getState().data;
+    expect(data?.books.map((book) => book.id)).toEqual([cardsBook, 'dinozorlar-neden-buyuktu']);
+    expect(data?.book.id).toBe('kayip-fenerin-izinde');
+  });
+
+  it('saves a new book first, and a book made again over itself', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    const library = store.getState().data?.books ?? [];
+    const made = { ...(library[1] ?? library[0]), id: 'yeni-kitap', title: 'Yeni' } as Book;
+
+    await store.getState().saveBook(made);
+    await store.getState().saveBook({ ...made, title: 'Yeniden' });
+
+    const books = store.getState().data?.books ?? [];
+    expect(books.map((book) => [book.id, book.title])[0]).toEqual(['yeni-kitap', 'Yeniden']);
+    expect(books).toHaveLength(3);
+    expect(books[0]?.createdAt).toBe('2026-11-21T09:00:00.000Z');
+    expect((await repository.getBook('yeni-kitap'))?.title).toBe('Yeniden');
+  });
+
+  it('starts the day with a library book, once, its warmup from that chapter', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    await store.getState().startWithBook(cardsBook);
+    await store.getState().startWithBook('dinozorlar-neden-buyuktu');
+    await store.getState().start();
+
+    const session = await repository.getSession(today);
+    expect(session?.chapterRef).toEqual({ bookId: cardsBook, chapter: 1 });
+    expect(session?.step).toBe('warmup');
+    const data = store.getState().data;
+    expect(data?.book.id).toBe(cardsBook);
+    expect(data?.chapter?.title).toBe('Uzay İstasyonunda Gizemli Ses');
+    expect(data?.session?.chapterRef.bookId).toBe(cardsBook);
+  });
+
+  it('reads the library book’s chapter again when the page opens anew', async () => {
+    const repository = await demoRepository();
+    const first = storeOver(repository);
+    await first.store.getState().load();
+    await first.store.getState().startWithBook(cardsBook);
+
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    expect(store.getState().data?.book.id).toBe(cardsBook);
+    expect(store.getState().data?.chapter?.title).toBe('Uzay İstasyonunda Gizemli Ses');
+  });
+
+  it('turns a library book’s stumbles into cards, as the series’ do', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    await store.getState().startWithBook('dinozorlar-neden-buyuktu');
+    await store.getState().skipWarmup();
+    await store.getState().finishListening();
+    const chapter = store.getState().data?.chapter;
+    if (!chapter) {
+      throw new Error('no chapter');
+    }
+
+    await store
+      .getState()
+      .saveReading(typicalOutcome(chapter, 0), { startedAt, recordingId: null });
+
+    const tokens = chapterTokens(chapter);
+    const cards = await repository.listStuckWords();
+    // The first typical reading's counted errors: a suffix (15) and a skipped word (40).
+    for (const index of [15, 40]) {
+      const word = tokens[index]?.word ?? '';
+      expect(cards.find((card) => stuckKey(card.word) === stuckKey(word))).toMatchObject({
+        status: 'wild',
+        dueOn: '2026-11-22',
+      });
+    }
+  });
+
+  it('starts nothing with a book it does not know', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    await store.getState().startWithBook('yok');
+
+    expect(await repository.getSession(today)).toBeNull();
   });
 });

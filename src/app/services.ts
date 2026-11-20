@@ -5,6 +5,7 @@ import type { SessionStoreServices } from '../features/session/sessionStore';
 import { localDateOf } from '../domain/date';
 import { defaultCaptureSettings } from '../services/audio/AudioCapture';
 import { browserCaptureEnvironment } from '../services/audio/browserCaptureEnvironment';
+import { MockBookGenerator } from '../services/books/MockBookGenerator';
 import { WebAudioWavPlayer } from '../services/audio/WavPlayer';
 import { WebAudioCapture } from '../services/audio/WebAudioCapture';
 import { createId } from '../services/id';
@@ -101,5 +102,7 @@ export function sessionDevices(): SessionDevices {
     scenario: { ghostWpm: scenarios.ghostWpm ?? null, layout: scenarios.layout ?? 'content' },
     random: () => Math.random(),
     share: new BrowserShareService(),
+    // The only generator until the backend (phase 6), so it is part of the product build.
+    books: new MockBookGenerator(),
   };
 }

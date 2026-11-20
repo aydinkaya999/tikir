@@ -208,4 +208,13 @@ describe('RecordPage (G5)', () => {
       expect(app.router.state.location.pathname).toBe('/seans/oku');
     });
   });
+
+  it('keeps a library book’s recording out of the series’ audio book (P19)', async () => {
+    await openRecord({ book: 'uzay-istasyonunda-gizemli-ses' });
+
+    expect(screen.queryByText('Sesli kitabına eklendi')).toBeNull();
+    expect(screen.queryByRole('list', { name: /Kayıtlı bölümler/ })).toBeNull();
+    expect(screen.getAllByRole('button', { name: 'Baştan kaydet' }).length).toBeGreaterThan(0);
+    expect(screen.getByRole('button', { name: 'Gönder' })).toBeInTheDocument();
+  });
 });

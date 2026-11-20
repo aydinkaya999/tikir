@@ -6,6 +6,7 @@ import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand/vanilla';
 import type { Attempt } from '../../domain/types';
 import type { AudioCapture } from '../../services/audio/AudioCapture';
+import type { BookGenerator } from '../../services/books/BookGenerator';
 import type { ManualMark } from '../../services/listener/FakeListener';
 import type { ReadingListener } from '../../services/listener/types';
 import type { Narrator } from '../../services/narrator/Narrator';
@@ -40,6 +41,8 @@ export interface SessionDevices {
   random: () => number;
   /** V3's "Öğretmenle paylaş": the share sheet, else the clipboard (docs/kararlar.md T23). */
   share: ShareService;
+  /** U2's and U3's book generator (docs/mimari.md, "BookGenerator"). */
+  books: BookGenerator;
 }
 
 export interface SessionContextValue {

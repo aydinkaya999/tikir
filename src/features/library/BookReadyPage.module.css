@@ -1,0 +1,222 @@
+/* Phone (below 700 px): U4 telefon. */
+.ready {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.book {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* The cover keeps its 132 px on phones; from 700 px it gives way to the title (U4 tablet). */
+.cover {
+  flex-shrink: 0;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bookTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-book-heading);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.meta {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+/* "Seviye denetimi": light turquoise; light saffron when the text is over its grade (D18). */
+.level {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-turquoise-light);
+}
+
+.levelFailed {
+  background: var(--color-saffron-light);
+}
+
+.levelLines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verdict,
+.levelLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  line-height: var(--leading-ui);
+}
+
+.verdict {
+  font-weight: var(--weight-bold);
+}
+
+.levelLine {
+  font-weight: var(--weight-medium);
+}
+
+.inserted {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.word {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border: var(--border-chip);
+  border-radius: var(--radius-pill);
+  background: var(--color-saffron-light);
+  color: var(--color-ink);
+  font-size: var(--size-inserted-word);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+}
+
+.note {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+/* Tıkır stays off the phone's page (U4 telefon). */
+.companion {
+  display: none;
+}
+
+/* Phones: the round "Yeniden üret" beside "Okumaya başla" in the bottom bar. */
+.actions {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.phoneRemake {
+  flex-shrink: 0;
+}
+
+.start {
+  flex: 1 1 0;
+}
+
+/* Under the button, on a line of its own. */
+.tomorrow {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+  text-align: center;
+}
+
+.wideRemake {
+  display: none;
+}
+
+/* Tablet (700–1199 px): U4 tablet. */
+@media (min-width: 700px) {
+  .ready {
+    gap: 18px;
+  }
+
+  .book {
+    gap: 24px;
+  }
+
+  .cover {
+    flex-shrink: 1;
+  }
+
+  .level {
+    padding: 22px;
+  }
+
+  .companion {
+    display: flex;
+  }
+
+  .actions {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .phoneRemake {
+    display: none;
+  }
+
+  .start {
+    flex: 0 0 auto;
+  }
+
+  .tomorrow {
+    flex-basis: auto;
+  }
+
+  .wideRemake {
+    display: inline-flex;
+  }
+}
+
+/* Web (from 1200 px): U4 web. */
+@media (min-width: 1200px) {
+  .ready {
+    gap: 20px;
+  }
+}

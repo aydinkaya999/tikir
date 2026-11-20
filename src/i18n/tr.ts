@@ -230,6 +230,8 @@ export const tr = {
     /** A recording's row on V2 and the account page (D17). TODO(design) */
     recordings: {
       chapter: (chapter: number, date: string) => `${String(chapter)}. bölüm, ${date}`,
+      /** A library book's reading (docs/planlar/faz-5.md, D18). */
+      book: (title: string, date: string) => `${title}, ${date}`,
       measurement: (date: string) => `1 dakikalık ölçüm, ${date}`,
       /** V2: the recordings the child sent (docs/ekranlar.md's default; D17). */
       pendingTitle: 'Onay bekleyen kayıtlar',
@@ -313,11 +315,98 @@ export const tr = {
     back: 'Çocuk ekranı',
   },
 
+  /** U1 Kitaplık (design/ekranlar/U1-kitaplik-*.html). */
+  library: {
+    title: 'Kitaplık',
+    newBook: 'Yeni kitap',
+    progressLabel: 'Hikâyedeki ilerleme',
+    resume: 'Sürdür',
+    yourBooks: 'Senin kitapların',
+    source: { cards: 'Kartlarla yaptın', parentText: 'Velin ekledi' },
+    makeFromCards: 'Kartlarla kitap yap',
+    parentText: 'Veli bir metinden kitap ekleyebilir',
+    /** Today has its session (docs/ekranlar.md's default; docs/planlar/faz-5.md, D18). */
+    tomorrow: 'Yarın okuyabilirsin.',
+    /** A phone's empty library (D18). */
+    empty: 'Henüz kitabın yok. Kartlarla ilk kitabını yap.',
+  },
+
+  /** U2 Metinden kitap (design/ekranlar/U2-metinden-kitap-*.html). */
+  bookFromText: {
+    title: 'Metinden kitap',
+    /** Tablet and web; the name comes with its genitive suffix (withGenitiveSuffix). */
+    lead: (nameGenitive: string) => `Metni verin, ${nameGenitive} seviyesinde bir kitaba dönüşsün.`,
+    /** Phones; the name comes with its dative suffix (withNameDativeSuffix). */
+    leadShort: (nameDative: string) => `Metninizden ${nameDative} göre bir kitap.`,
+    /** The sources' group; only the text is offered in the first version (docs/ekranlar.md). */
+    source: 'Kaynak',
+    pasteText: 'Metin yapıştır',
+    text: 'Metin',
+    words: (count: number) => `${String(count)} kelime`,
+    grade: 'Sınıf düzeyi',
+    length: 'Uzunluk',
+    lengths: { short: 'Kısa', medium: 'Orta', long: 'Uzun' },
+    insertStuckWords: 'Takıldığı kelimeleri metne yerleştir',
+    addQuestions: 'Sonuna 2 anlama sorusu ekle',
+    howTo: {
+      title: 'Kitap böyle hazırlanır',
+      /** The first step's name comes with its genitive suffix. */
+      steps: (nameGenitive: string) => [
+        `${nameGenitive} seviyesine indirilir`,
+        'Sayfalara ve anlam ünitelerine bölünür',
+        'Resimlenir ve seslendirilir',
+        'Seviye denetiminden geçer',
+      ],
+    },
+    make: 'Kitabı üret',
+  },
+
+  /** The wait while a book is made (docs/ekranlar.md's default; docs/planlar/faz-5.md, D18). */
+  bookMaking: { writing: 'Kitabın yazılıyor', cancel: 'Vazgeç' },
+
   focus: {
     /** U3, U4: back button name. */
     back: 'Geri dön',
-    bookFromCards: { title: 'Kitabını kur', subtitle: 'Her sıradan bir kart seç.' },
-    bookReady: { title: 'Kitabın hazır', subtitle: 'Denetimden geçti, okunmaya hazır.' },
+    bookFromCards: {
+      title: 'Kitabını kur',
+      /** Also Tıkır's bubble until a card of each group is picked (D18). */
+      subtitle: 'Her sıradan bir kart seç.',
+      groups: { hero: 'Kahraman', place: 'Mekân', event: 'Olay' },
+      make: 'Kitabımı yap',
+    },
+    bookReady: {
+      title: 'Kitabın hazır',
+      subtitle: 'Denetimden geçti, okunmaya hazır.',
+      /** The level check failed (docs/planlar/faz-5.md, D18). */
+      subtitleFailed: 'Seviye denetiminden geçmedi.',
+      meta: (pages: number, words: number, minutes: number) =>
+        `${String(pages)} sayfa, ${String(words)} kelime, yaklaşık ${String(minutes)} dakika`,
+      questions: (count: number) => `${String(count)} soru`,
+      level: {
+        title: 'Seviye denetimi',
+        passed: (grade: number) => `${String(grade)}. sınıf düzeyine uygun`,
+        /** D18. */
+        failed: (grade: number) => `${String(grade)}. sınıf düzeyinin üstünde`,
+        /** One decimal with a comma ("2,5"); a whole number without one ("7"). */
+        syllables: (value: string) => `Kelime başına ortalama ${value} hece`,
+        words: (value: string) => `Cümle başına ortalama ${value} kelime`,
+        /** D18: the end of a line over its grade's limit. */
+        limit: (value: string) => ` (en çok ${value})`,
+      },
+      inserted: {
+        title: 'İçine eklenen kelimeler',
+        /** The name comes with its genitive suffix (withGenitiveSuffix). */
+        note: (nameGenitive: string) =>
+          `${nameGenitive} bu hafta takıldığı kelimeler hikâyede üçer kez geçiyor.`,
+      },
+      /** A parent asked the mock for stuck words or questions (D18; docs/mimari.md). */
+      backendNote: 'Kelime yerleştirme ve sorular arka uçla gelecek.',
+      bubble: 'Kitabın hazır. Önce ben okuyayım, sonra sıra sende.',
+      start: 'Okumaya başla',
+      /** The book today's unfinished session reads: G1's word for going on (D18). */
+      resume: 'Sürdür',
+      remake: 'Yeniden üret',
+    },
   },
 
   onboarding: {
@@ -458,6 +547,11 @@ export const tr = {
     bubble: (number: number, title: string) =>
       `Bugün ${String(number)}. bölümü okuyoruz: ${title}. Hazırsan başlayalım.`,
     todayLabel: 'Bugünkü bölüm',
+    /** A day read from the library (docs/kararlar.md P18; docs/planlar/faz-5.md, D18). */
+    libraryLabel: 'Bugünkü kitap',
+    libraryMeta: (minutes: number) => `Kitaplıktan, ${String(minutes)} dakika`,
+    /** The bubble's pattern of D13 for the library book. */
+    libraryBubble: (title: string) => `Bugün kitaplıktan okuyoruz: ${title}. Hazırsan başlayalım.`,
     chapterMeta: (number: number, minutes: number) =>
       `${String(number)}. bölüm, ${String(minutes)} dakika`,
     start: 'Başla',

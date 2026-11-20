@@ -40,6 +40,7 @@ import type {
   ProsodyScore,
   ReadingLevel,
   ReadingStyle,
+  Session,
   StuckWordStatus,
   WordResult,
 } from '../../domain/types';
@@ -260,7 +261,7 @@ export function recordingRows(
     const assessment = data.assessments.find((each) => each.result.recordingId === recording.id);
     const label =
       session !== undefined
-        ? report.recordings.chapter(session.chapterRef.chapter, formatDayMonth(session.date))
+        ? readingLabel(data, session)
         : assessment !== undefined
           ? report.recordings.measurement(formatDayMonth(assessment.date))
           : formatDayMonth(localDateOf(new Date(recording.createdAt)));
@@ -316,10 +317,20 @@ export interface StuckView {
   pending: RecordingRow[];
 }
 
+/** The chapter a session read: the series' or a library book's (docs/planlar/faz-5.md, karar 9). */
 function chapterOfSession(data: SessionData, bookId: Id, chapter: number) {
-  return bookId === data.series.id
-    ? data.series.chapters.find((each) => each.number === chapter)
-    : undefined;
+  const book =
+    bookId === data.series.id ? data.series : data.books.find((each) => each.id === bookId);
+  return book?.chapters.find((each) => each.number === chapter);
+}
+
+/** "3. bölüm, 18 Kasım"; a library book's reading by the book: "Dinozorlar, 9 Kasım" (D18). */
+function readingLabel(data: SessionData, session: Session): string {
+  const date = formatDayMonth(session.date);
+  const book = data.books.find((each) => each.id === session.chapterRef.bookId);
+  return book === undefined
+    ? report.recordings.chapter(session.chapterRef.chapter, date)
+    : report.recordings.book(book.title, date);
 }
 
 /** The latest suffix error of the week whose reading heard what the child said. */
