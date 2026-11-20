@@ -7,7 +7,7 @@ export interface CardsInput {
   choice: CardChoice;
   /** The first hero's name and the sample text's hero (docs/kararlar.md C9). */
   childName: string;
-  /** The book's grade: the child's. */
+  /** The child's grade, the book's level. The mock keeps its sample text's own grade. */
   grade: Grade;
 }
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { type DemoSessionOptions, demoSessionStore } from '../../test/sessionStore';
 import type { SessionData } from '../session/sessionStore';
+import { MockBookGenerator } from '../../services/books/MockBookGenerator';
 import { coverPatterns, libraryView, readyView } from './views';
 
 async function demoData(options: DemoSessionOptions = {}): Promise<SessionData> {
@@ -88,5 +89,21 @@ describe('readyView (U4)', () => {
       'ağaçlarının',
     ]);
     expect(readyView({ ...data, cards: [] }, book).inserted).toBeNull();
+  });
+});
+
+describe('readyView for a book from cards (review finding 1)', () => {
+  it('lets a first grader’s book pass the level check: it is the content’s grade 3 text', async () => {
+    const data = await demoData();
+    const book = await new MockBookGenerator({ delayMs: 0 }).fromCards({
+      choice: { hero: 'cocuk-ve-tikir', place: 'uzay-istasyonu', event: 'gizemli-ses' },
+      childName: 'Deniz',
+      grade: 1,
+    });
+
+    const view = readyView({ ...data, child: { ...data.child, grade: 1 } }, book);
+
+    expect(view.passed).toBe(true);
+    expect(view.level[0]).toEqual({ text: '3. sınıf düzeyine uygun', ok: true });
   });
 });

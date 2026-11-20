@@ -30,10 +30,11 @@ describe('MockBookGenerator', () => {
 
     const book = await books.fromCards({ choice: design, childName: 'Ali', grade: 2 });
 
+    // The sample text is a grade 3 text: a grade 2 child's book says so (the mock cannot level).
     expect(book).toMatchObject({
       id: 'kitap-1',
       title: 'Uzay İstasyonunda Gizemli Ses',
-      grade: 2,
+      grade: 3,
       source: 'cards',
       totalChapters: 1,
       insertedWords: ['kıvrılıyordu', 'belirdiğinde', 'ağaçlarının'],

@@ -10,7 +10,7 @@ import {
   withChildName,
 } from '../../domain/books';
 import { splitPhraseUnits } from '../../domain/text';
-import type { Book, Chapter, Id } from '../../domain/types';
+import type { Book, Chapter, Grade, Id } from '../../domain/types';
 import { createId as newId } from '../id';
 import type { BookGenerator, CardsInput, TextInput } from './BookGenerator';
 
@@ -41,6 +41,21 @@ function sampleInsertedWords(): string[] {
   return [...(sampleBooks.books.find((book) => book.source === 'cards')?.insertedWords ?? [])];
 }
 
+const grades: readonly Grade[] = [1, 2, 3, 4];
+
+/**
+ * The sample text's own grade: the mock cannot write it at the child's level, so the book says
+ * what it is (review of phase 5, finding 1). The backend writes for the child's grade (phase 6).
+ */
+function sampleGrade(): Grade {
+  const grade = sampleBooks.books.find((book) => book.source === 'cards')?.grade;
+  const known = grades.find((each) => each === grade);
+  if (known === undefined) {
+    throw new Error('The sample cards book has no grade in the content.');
+  }
+  return known;
+}
+
 export class MockBookGenerator implements BookGenerator {
   private readonly delayMs: number;
   private readonly createId: () => Id;
@@ -60,7 +75,7 @@ export class MockBookGenerator implements BookGenerator {
     return {
       id: this.createId(),
       title,
-      grade: input.grade,
+      grade: sampleGrade(),
       source: 'cards',
       totalChapters: 1,
       chapters: [withChildName({ ...sampleChapter(), title }, input.childName)],
