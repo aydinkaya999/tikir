@@ -162,6 +162,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D18 olarak işlenir.
 | U4, seviye denetimi geçmedi | Seviye denetiminden geçmedi. (alt satır) · {s}. sınıf düzeyinin üstünde · sınırı aşan satırın sonunda: (en çok {x}) | önerilen |
 | U4, arka uç notu | Kelime yerleştirme ve sorular arka uçla gelecek. | `docs/mimari.md` ("arka uçla gelecek" notu) |
 | U4, pasif "Okumaya başla" | Yarın okuyabilirsin. | U1 ile aynı |
+| U4, bugünün yarım seansının kitabı | Sürdür | G1'in onaylı sözü (son inceleme, 2. bulgu) |
 | G1, kitapla geçen gün | Bugünkü kitap (etiket) · Kitaplıktan, {n} dakika · Bugün kitaplıktan okuyoruz: {ad}. Hazırsan başlayalım. | önerilen; balon D13'ün kalıbından |
 | Kayıt satırı, kitaplık kitabı | {kitap}, {tarih} | önerilen |
 
@@ -483,6 +484,12 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
   5. Çocuk tarafında serbest metin kutusu yok: `e2e/library.spec.ts` › "no child screen has a free text box" (12 çocuk adresi).
   6. Tasarım karşılaştırması: yukarıdaki bölüm (U1–U4, kitapla G1, bekleme).
 - `e2e/no-external-requests.spec.ts`: bütün adresler (U4 demo kitabıyla) ve "making a book and starting to read it…": dış adrese istek yok.
+- **Son inceleme** (bağımsız inceleyici, bütün dal): "düzeltmelerle". Kritik bulgu yok; üç önemli bulgu, üçü de planın boşluğu. Tek geçişte, her biri önce kırmızı testle düzeltildi:
+  1. Sahte üreticinin kartlardan kitabı çocuğun sınıfını alıyordu. Metin 3. sınıf metni olduğu için 1. ve 2. sınıf çocuğun kitabı U4'te her seferinde "Seviye denetiminden geçmedi." diyordu (çocuk ekranı). Kitap artık içerikteki sınıfı taşır, arka uç çocuğun sınıfına göre yazacak (`e0e499f`).
+  2. Bugünün seansı bir kitaplık kitabını okurken U1 o kitabı soluk gösteriyor, U4'ü "Yarın okuyabilirsin." diyordu; G1 ise onu "Bugünkü kitap" diye sunuyordu. Bugünün yarım seansının kitabı U1'den ve U4'ten ("Sürdür") seansı sürdürür; mikrofon G1'deki gibi yalnız dinleyen adımda açılır. Öteki kitaplar yarını bekler (`d0b5c92`).
+  3. Yapıştırılan metnin satır sonları boşluk oluyordu: başlık satırı ilk cümleye karışıp kitabın kalıcı adı oluyordu ("Kırmızı Başlıklı Kız Bir varmış bir"), şiir tek uzun cümleydi. Kapanış işaretsiz bir satır, cümle gibi başlayan bir satırdan önce kendi cümlesidir; iki satıra bölünmüş cümle bütün kalır (`fbafd8c`).
+
+  Ardından `pnpm check` → **127 dosya, 1100 test**; `pnpm e2e e2e/library.spec.ts e2e/no-external-requests.spec.ts` → **24 passed**.
 
 ## Uygulamada verilen kararlar
 
@@ -514,3 +521,25 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 16. `scripts/shots.ts` görüntüden önce süreli geçişleri en çok 1 sn bekler: son dokunuşla açılan düğme kabartısız çekiliyordu.
 17. `&kitap=<kimlik>`: `prepareSessionStep(adım | null, …, kitap)`; adımsız yalnız seansı başlatır, bilinmeyen kitap hata yazar, başka kitapla başlamış gün uyarıyla kalır. Test deposu da `book` seçeneği alır.
 18. Kitaplık okumasından kart çıkması ve sorusuz kitapta G6'dan G7'ye geçiş, Task 3'ten beri doğruydu; testleri gerileme testi olarak kaldı.
+
+**Son incelemeden sonra**
+
+19. Karar 3 değişti: sahte üreticinin kartlardan kitabı içerikteki örnek metnin sınıfını taşır (3), çocuğunkini değil. Bedel: 1. ve 2. sınıf çocuğun kitabı U4'te "3. sınıf düzeyine uygun" der (doğru, ama kendi sınıfı değil). Öteki seçenekler: kartlar kitabında başarısız durumu göstermemek ya da olduğu gibi kabul etmek.
+20. Karar 12 ve 28'e ek: bugünün yarım seansının okuduğu kitap U1'de etkin kalır ve seansı sürdürür, U4'ünün düğmesi "Sürdür" olur (D18). Bitmiş günde bütün kitaplar yarını bekler.
+21. Karar 4'e ek: yapıştırılan metinde kapanış işaretsiz bir satır, büyük harf ya da rakamla başlayan bir satırdan önce kendi cümlesidir (başlık, dize, liste); küçük harfle süren satır önceki cümleye eklenir. Bedel: özel adla süren bölünmüş bir satır ("…önce\nDeniz'e…") iki cümle olur.
+
+## Son incelemeden ertelenen küçük bulgular
+
+Ürün sahibinin kararına; her biri ayrı bir iş.
+
+1. Oturum başlığı kitaplık kitabını da bölüm gibi anar ("Bölüm 1: Uzay İstasyonunda Gizemli Ses"; tablet ve web, `SessionShell`). Karar 32 yalnız sayfa kartlarını değiştirdi.
+2. Yuvarlanan ortalama sınırın içinde görünebilir: 2,42 hece 2. sınıfta "2,4 hece (en çok 2,4)" ve çarpı. Geçmeyen satırda iki ondalık gösterilmeli.
+3. Çocuğun adındaki `$` örnek metni ve kartları bozar (`replace`'in değiştirme kalıpları); `() => childName` ile düzelir.
+4. Kayıt sürerken (birkaç ms) "Vazgeç" ya da sayfadan çıkma kitabı yine kaydeder.
+5. Depo kaydı reddederse (başka bir eylem sürerken) yeni kitap sessizce kaybolur; U4 kitaplığa döner.
+6. İki test boşluğu: `useBookMaking`'in çift dokunuş koruması ve "okunmuş kitabın üstüne yazılmaz" kuralı testsiz (inceleyicinin mutasyon denemesi).
+7. U3'ün kartları `aria-pressed` düğmeler ama radyo gibi davranır: basılı karta dokunmak onu bırakmaz.
+8. Tarayıcının ya da Android'in geri tuşu U4'ten U3'e ya da U2'ye döner (karar 30 U1 der); `navigate(…, { replace: true })`.
+9. Planın kendi içinde çelişkisi: kapsam "U4 bunu söyler" diyor, ama not yalnız kelime yerleştirme ve sorular içindir; U2'nin kartı "seviyesine indirilir" der, U4 metnin indirilmediğini söylemez.
+10. Veli metninin uzunluk sınırı yok ve "Uzunluk" uygulanmıyor: 1500 kelimelik metin, üç tam okuma ve dinlemeyle uzun bir seans olur ("Seans sonludur").
+11. Başlatma başarısız olursa mikrofon U1 ya da U4'te adres değişene kadar açık kalır (G1'in "Başla"sı da öyle).
