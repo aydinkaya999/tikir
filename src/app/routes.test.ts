@@ -27,7 +27,7 @@ describe('routes', () => {
   });
 
   it('adds the album and studio tabs and the developer pages', () => {
-    expect(extraPaths).toEqual({ album: '/album', studio: '/studyo' });
+    expect(extraPaths).toEqual({ album: '/album', studio: '/studyo', measurement: '/olcum' });
     expect(devPaths).toEqual({ showcase: '/gelistirme/vitrin', audio: '/gelistirme/ses' });
   });
 

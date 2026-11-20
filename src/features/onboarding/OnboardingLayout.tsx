@@ -3,6 +3,7 @@
 // step's content and its action. Below 1000 px the phone layout: no panel, the action at the foot.
 import type { ReactNode } from 'react';
 import { Companion, type CompanionExpression } from '../../components/Companion/Companion';
+import { IconButton } from '../../components/IconButton/IconButton';
 import { SpeechBubble } from '../../components/SpeechBubble/SpeechBubble';
 import { Tile, type TilePattern } from '../../components/Tile/Tile';
 import { tr } from '../../i18n/tr';
@@ -12,7 +13,10 @@ const stepCount = 4;
 const stripPatterns: readonly TilePattern[] = [1, 2, 3, 4, 5, 6];
 
 interface OnboardingLayoutProps {
-  step: 1 | 2 | 3 | 4;
+  /** The setup's step; without one there is no progress (the weekly measurement, Faz 4). */
+  step?: 1 | 2 | 3 | 4;
+  /** A way out in place of the progress (the weekly measurement's "Geri dön"). */
+  back?: { to: string; label: string };
   /** The step's heading and the line under it: every setup step draws them alike. */
   title?: string;
   lead?: ReactNode;
@@ -28,6 +32,7 @@ interface OnboardingLayoutProps {
 
 export function OnboardingLayout({
   step,
+  back,
   title,
   lead,
   companion,
@@ -61,24 +66,31 @@ export function OnboardingLayout({
       <div className={styles.column} data-pane="main">
         <main className={styles.main}>
           <div className={styles.progressRow}>
-            <ol
-              className={styles.progress}
-              aria-label={tr.onboarding.progressLabel(step, stepCount)}
-            >
-              {Array.from({ length: stepCount }, (_, index) => (
-                <li
-                  key={index}
-                  className={
-                    index + 1 < step
-                      ? styles.done
-                      : index + 1 === step
-                        ? styles.current
-                        : styles.next
-                  }
-                />
-              ))}
-            </ol>
-            <p className={styles.counter}>{tr.onboarding.progressCounter(step, stepCount)}</p>
+            {back !== undefined && (
+              <IconButton icon="left" label={back.label} to={back.to} size={44} />
+            )}
+            {step !== undefined && (
+              <>
+                <ol
+                  className={styles.progress}
+                  aria-label={tr.onboarding.progressLabel(step, stepCount)}
+                >
+                  {Array.from({ length: stepCount }, (_, index) => (
+                    <li
+                      key={index}
+                      className={
+                        index + 1 < step
+                          ? styles.done
+                          : index + 1 === step
+                            ? styles.current
+                            : styles.next
+                      }
+                    />
+                  ))}
+                </ol>
+                <p className={styles.counter}>{tr.onboarding.progressCounter(step, stepCount)}</p>
+              </>
+            )}
           </div>
           {title !== undefined && (
             <div className={styles.head}>

@@ -8,6 +8,7 @@ import { IconButton } from '../../components/IconButton/IconButton';
 import { SpeechBubble } from '../../components/SpeechBubble/SpeechBubble';
 import { Tile } from '../../components/Tile/Tile';
 import { sessionMinutes } from '../../domain/config';
+import { measurementDue } from '../../domain/measurement';
 import { withPossessiveSuffix } from '../../domain/text';
 import { tr } from '../../i18n/tr';
 import { parentPaths } from '../parent/paths';
@@ -43,9 +44,12 @@ export function RoadPage() {
   }, [store]);
   const { audio } = useSessionDevices();
   const microphone = useMicrophone(audio, data === null ? false : sessionListens(data));
+  // The measurement listens whenever the parent consented, whatever today's session did (P14).
+  const measurementMicrophone = useMicrophone(audio, data?.parent.consent.voiceProcessing ?? false);
   const navigate = useNavigate();
   const [starting, setStarting] = useState(false);
   const seriesTitleId = useId();
+  const measurementId = useId();
 
   if (status === 'idle' || status === 'loading') {
     return <StatusScreen kind="loading" />;
@@ -65,6 +69,18 @@ export function RoadPage() {
       : view.state !== 'seriesEnd' && view.chapter !== null
         ? tr.road.bubble(view.chapter.number, view.chapter.title)
         : null;
+
+  const measuring = measurementDue(
+    data.assessments,
+    data.child.readingStyle,
+    data.today,
+    data.parent.consent.voiceProcessing,
+  );
+  // The card's tap opens the microphone, as "Başla" does for a listening step (T22).
+  const measure = () => {
+    measurementMicrophone.start();
+    void navigate(childPaths.measurement);
+  };
 
   // The tap that leads into a listening step opens the microphone (docs/kararlar.md T22).
   const start = () => {
@@ -168,6 +184,21 @@ export function RoadPage() {
               </>
             )}
           </div>
+          {measuring && (
+            // The weekly measurement while it is open, under the day's chapter: the session stays
+            // the day's main work (docs/planlar/faz-4.md, karar 29). TODO(design)
+            <section className={styles.measurement} aria-labelledby={measurementId}>
+              <div className={styles.measurementText}>
+                <h2 id={measurementId} className={styles.measurementTitle}>
+                  {tr.road.measurement.title}
+                </h2>
+                <p className={styles.measurementLead}>{tr.road.measurement.text}</p>
+              </div>
+              <Button variant="secondary" icon="mic" onClick={measure}>
+                {tr.road.measurement.start}
+              </Button>
+            </section>
+          )}
         </div>
         <div className={styles.seriesColumn}>
           <section className={styles.seriesCard} aria-labelledby={seriesTitleId}>

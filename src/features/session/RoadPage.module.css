@@ -69,6 +69,43 @@
   box-shadow: var(--lift-card);
 }
 
+/* The weekly measurement's card under the day's chapter (docs/planlar/faz-4.md, karar 29). TODO(design) */
+.measurement {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-turquoise-light);
+}
+
+.measurementText {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.measurementTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.measurementLead {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
 .chapterHead {
   display: flex;
   align-items: center;

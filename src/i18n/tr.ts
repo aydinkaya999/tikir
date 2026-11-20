@@ -469,6 +469,21 @@ export const tr = {
     chaptersLabel: 'Bölümler',
     /** No chapter left to read (docs/ekranlar.md, "Tasarımı olmayan durumlar"). TODO(design) */
     seriesEnd: 'Yeni bölümler yolda.',
+    /** The weekly measurement's card while it is open (docs/planlar/faz-4.md, D17). TODO(design) */
+    measurement: {
+      title: '1 dakikalık ölçüm',
+      text: 'Haftada bir, metni bir dakika sesli oku.',
+      start: 'Ölçüme başla',
+    },
+  },
+
+  /** The weekly measurement's screen (docs/planlar/faz-4.md, karar 32; D17). TODO(design) */
+  measurement: {
+    title: '1 dakikalık ölçüm',
+    bubble: 'Metni sesli oku. Hata yapman sorun değil.',
+    /** A trial week's second reading waits for the child's tap. */
+    nextBubble: 'Bir metin daha. Hazır olduğunda mikrofona dokun.',
+    counter: (reading: number, total: number) => `${String(reading)}. okuma / ${String(total)}`,
   },
 
   /** The page card of the reading screens (G3, G4): "Kayıp Fenerin İzinde, 4. bölüm", "1 / 2". */

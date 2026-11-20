@@ -583,6 +583,11 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
 - Üç genişlikte taşma ve kırpılma yok. Telefon şeridinde çocuk etiketi, Hesap ve çıkış düğmeleri sığıyor; rayda ve kenar çubuğunda "Hesap", "Çocuk ekranı"nın üstünde; açık sayfanın bağlantısı kalın.
 
+**G1 ölçüm kartı ve ölçüm ekranı** (`pnpm shots --ileri 86400000 --bekle 'Ölçüme başla' '/?demo=cocuk-sabahi'`; ekran için `--dokun 'Ölçüme başla' --bekle 'Okumayı bitir'`; tasarımları yok):
+
+- Kart üç genişlikte bölüm kartının altında; taşma yok.
+- Ölçüm ekranı K3'ün düzeninde (karar 32'nin uygulaması: K3'ün kalıbı, odak kabuğu yerine; "Uygulamada verilen kararlar"): geri düğmesi, başlık, "1. okuma / 2" çipi, denenen ayarla metin. Görüntü ortamında mikrofon olmadığı için okuma başlamıyor.
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.

@@ -28,10 +28,14 @@ export const screenPaths = {
 
 export type ScreenCode = keyof typeof screenPaths;
 
-/** Child tabs without a design yet (docs/ekranlar.md, "Tasarımı olmayan durumlar"). */
+/**
+ * Child pages without a design yet (docs/ekranlar.md, "Tasarımı olmayan durumlar"): the album and
+ * studio tabs, and the weekly measurement (docs/planlar/faz-4.md, karar 35).
+ */
 export const extraPaths = {
   album: childPaths.album,
   studio: childPaths.studio,
+  measurement: childPaths.measurement,
 } as const;
 
 /** Parent pages without a design yet (docs/planlar/faz-4.md, karar 36). */

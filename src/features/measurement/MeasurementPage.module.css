@@ -1,0 +1,4 @@
+/* The weekly measurement: the reading's counter over the card in a trial week. TODO(design) */
+.counter {
+  display: flex;
+}

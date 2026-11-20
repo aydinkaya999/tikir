@@ -9,6 +9,7 @@ import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
+import { MeasurementPage } from '../features/measurement/MeasurementPage';
 import { AccountSettingsPage } from '../features/parent/AccountSettingsPage';
 import { AssessmentPage } from '../features/parent/AssessmentPage';
 import { StuckWordsPage } from '../features/parent/StuckWordsPage';
@@ -133,6 +134,11 @@ export function appRoutes(session: AppSession): RouteObject[] {
                 />
               ),
               children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
+            },
+            {
+              // The weekly measurement borrows the level check's frame (Faz 4, karar 32).
+              element: <OnboardingShell name="measurement" />,
+              children: [{ path: extraPaths.measurement, element: <MeasurementPage /> }],
             },
             {
               element: <OnboardingShell />,

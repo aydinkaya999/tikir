@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { Button } from '../../components/Button/Button';
 import { OnboardingLayout } from './OnboardingLayout';
@@ -48,5 +49,21 @@ describe('OnboardingLayout', () => {
       screen.getAllByText('Mikrofon durdu.')[1] ?? null,
     );
     expect(screen.getAllByRole('img', { name: 'Tıkır' })).toHaveLength(2);
+  });
+
+  it('draws a way back instead of the progress when it has no step (the weekly measurement)', () => {
+    render(
+      <MemoryRouter>
+        <OnboardingLayout
+          title="1 dakikalık ölçüm"
+          back={{ to: '/', label: 'Geri dön' }}
+          companion={{ bubble: 'Metni sesli oku. Hata yapman sorun değil.' }}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(screen.queryByRole('list', { name: /Kurulum adımı/ })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Geri dön' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('heading', { level: 1, name: '1 dakikalık ölçüm' })).toBeVisible();
   });
 });
