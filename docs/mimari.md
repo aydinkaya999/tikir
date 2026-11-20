@@ -76,7 +76,8 @@ type Grade = 1 | 2 | 3 | 4;
 type Id = string;
 type LocalDate = string;           // 'YYYY-MM-DD', cihazın yerel takvimi (Faz 2a)
 
-interface Parent { id: Id; email: string; consent: { voiceProcessing: boolean; weeklyEmail: boolean; grantedAt?: string } }
+interface Parent { id: Id; email: string; consent: { voiceProcessing: boolean; weeklyEmail: boolean; grantedAt?: string };
+  setup?: 'reader' | 'level' | 'meet' }   // Faz 3: kurulumun kalan adımı; yoksa kurulum bitmiş. Parola hiçbir kayda girmez
 interface Child  { id: Id; name: string; grade: Grade; interests: string[]; readingStyle: ReadingStyle;
   narrationRate?: 'slow' | 'normal' }   // G3'teki son hız seçimi; yoksa yavaş (Faz 2b)
 
@@ -103,7 +104,8 @@ interface ReadingResult {
 type SessionStep = 'warmup' | 'listen' | 'read' | 'record' | 'wrapUp' | 'done';
 interface Session { id: Id; childId: Id; date: string; chapterRef: { bookId: Id; chapter: number };
   step: SessionStep; readings: ReadingResult[]; answers: number[]; tamedToday: string[]; startedAt: string; completedAt?: string;
-  warmup?: { words: string[]; done: number; scored: number } }   // Faz 2b: seans başında seçilen deste; scored: ilk denemesi puanlanan kart sayısı
+  warmup?: { words: string[]; done: number; scored: number };   // Faz 2b: seans başında seçilen deste; scored: ilk denemesi puanlanan kart sayısı
+  unheard?: true }   // Faz 3 (P14): mikrofon kullanılamadı, seansın kalanı dinlemeden okundu
 
 interface StuckWord { word: string; syllables: string[]; chain: string[]; misses: number;
   status: 'wild' | 'practicing' | 'tamed'; correctStreak: number; dueOn: string | null }   // evcilleşen kartta dueOn yok

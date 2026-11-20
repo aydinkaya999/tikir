@@ -330,7 +330,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 
 - [x] Task 0: Planı ve kararları işle
 - [x] Task 1: Yazı ayarı alan mantığı
-- [ ] Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
+- [x] Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
 - [ ] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
 - [ ] Task 4: Geliştirme parametreleri ve boş depo
 - [ ] Task 5: Kurulum koruması ve yönlendirme
@@ -430,7 +430,7 @@ export const parentGateAttempts = 3;
 export const parentGateWaitMs = 30_000;
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. `passageChapter(olcum-3a)`:
      - İlk sayfa ilk dört cümledir (23 kelime, tasarımdaki sayfa).
      - Bütün sayfaların kelime toplamı 149.
@@ -440,13 +440,13 @@ export const parentGateWaitMs = 30_000;
   3. `gateQuestion`: 200 tohumlu rastgele dizide `a` ve `b` 10–99 arası, `(a % 10) + (b % 10) >= 10`, `a + b < 100`.
   4. `isGateAnswer({ a: 47, b: 38 }, …)`: `'85'` ve `' 85 '` doğru; `'84'`, `'8 5'`, `''`, `'85a'` yanlış.
   5. Depo gidiş dönüşü: `setup`'lı veli ve `unheard`'lü seans aynen geri okunur.
-- [ ] → FAIL.
-- [ ] Uygula. `gateQuestion`'ın üretimi:
+- [x] → FAIL.
+- [x] Uygula. `gateQuestion`'ın üretimi:
   - `onesA = 1 + ⌊r·9⌋`, `onesB = (10 − onesA) + ⌊r·onesA⌋`;
   - `tensA = 1 + ⌊r·7⌋`, `tensB = 1 + ⌊r·(8 − tensA)⌋`;
   - her `r` yeni bir `random()`.
-- [ ] → PASS. `docs/mimari.md` → "Tipler". `pnpm check`.
-- [ ] Commit: `feat(domain): add the setup, gate and passage rules`.
+- [x] → PASS. `docs/mimari.md` → "Tipler". `pnpm check`.
+- [x] Commit: `feat(domain): add the setup, gate and passage rules`.
 
 ### Task 3: Seans deposunda kurulum, yazı ayarı ve P14
 

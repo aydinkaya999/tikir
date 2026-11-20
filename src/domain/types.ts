@@ -23,10 +23,14 @@ export interface Consent {
   grantedAt?: string;
 }
 
+/** The setup step still ahead (docs/planlar/faz-3.md, karar 1); none once the setup is done. */
+export type SetupStep = 'reader' | 'level' | 'meet';
+
 export interface Parent {
   id: Id;
   email: string;
   consent: Consent;
+  setup?: SetupStep;
 }
 
 export interface ReadingStyle {
@@ -150,6 +154,8 @@ export interface Session {
   tamedToday: string[];
   startedAt: string;
   completedAt?: string;
+  /** P14: the microphone could not be used and the child read on unheard (docs/kararlar.md). */
+  unheard?: true;
   /** Missing on sessions that never had a warmup deck stored (the demo profile's past days). */
   warmup?: SessionWarmup;
 }

@@ -111,6 +111,17 @@ describe('IndexedDbRepository', () => {
     });
   });
 
+  it('keeps the setup step of the parent and the unheard mark of a session', async () => {
+    const repository = await IndexedDbRepository.open();
+    const session = testSession('2026-11-21', 4, { step: 'read', unheard: true });
+
+    await repository.saveParent({ ...parent, setup: 'level' });
+    await repository.saveSession(session);
+
+    expect((await repository.getParent())?.setup).toBe('level');
+    expect((await repository.getSession('2026-11-21'))?.unheard).toBe(true);
+  });
+
   it('lists the sessions of a date range, both ends included, in date order', async () => {
     const repository = await IndexedDbRepository.open();
     for (const date of ['2026-11-21', '2026-11-15', '2026-11-16', '2026-11-19', '2026-11-22']) {

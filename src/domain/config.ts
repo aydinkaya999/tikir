@@ -43,6 +43,15 @@ export const tamingIntervalsDays = [1, 2, 4] as const;
 /** Accuracy floors of the reading levels (docs/kararlar.md P7). */
 export const readingLevelFloors = { instructional: 0.9, independent: 0.99 } as const;
 
+/** K3's measurement text is paged at most this many words a page (docs/planlar/faz-3.md, karar 14). */
+export const passagePageWords = 25;
+
+/** Wrong answers before the parent gate makes the next try wait (docs/kararlar.md P11). */
+export const parentGateAttempts = 3;
+
+/** The parent gate's wait after the wrong answers. */
+export const parentGateWaitMs = 30_000;
+
 /** Measurements each reading style needs before V4 recommends one (docs/urun.md section 7). */
 export const trialMeasurementsNeeded = 4;
 

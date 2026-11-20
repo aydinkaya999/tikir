@@ -12,9 +12,12 @@ import {
   tokenizePage,
   toLowerTr,
   toUpperTr,
+  passageChapter,
+  withGenitiveSuffix,
   withPossessiveSuffix,
 } from './text';
-import type { Chapter } from './types';
+import measurementTexts from '../../seed/olcum-metinleri.json';
+import type { Chapter, Passage } from './types';
 
 describe('syllabify', () => {
   // docs/mimari.md, "Heceleme" table, verbatim.
@@ -372,5 +375,66 @@ describe('withPossessiveSuffix', () => {
     for (const [count, expected] of table) {
       expect(withPossessiveSuffix(count)).toBe(expected);
     }
+  });
+});
+
+describe('passageChapter', () => {
+  const passage = (id: string): Passage => {
+    const found = measurementTexts.passages.find((each) => each.id === id);
+    if (found === undefined) {
+      throw new Error(`No passage ${id}.`);
+    }
+    return {
+      id: found.id,
+      grade: found.grade as Passage['grade'],
+      title: found.title,
+      sentences: found.sentences,
+    };
+  };
+
+  it('pages the measurement text as the K3 design: the first four sentences first', () => {
+    const chapter = passageChapter(passage('olcum-3a'));
+
+    expect(chapter.pages[0]).toEqual([
+      ['Sabah erkenden uyandım.'],
+      ['Pencereyi açınca serin bir rüzgâr yüzüme çarptı.'],
+      ['Bahçedeki kedi, çitin üstünde güneşleniyordu.'],
+      ['Ona sessizce yaklaştım ama beni hemen fark etti.'],
+    ]);
+    expect(tokenizePage(chapter.pages[0] ?? [])).toHaveLength(23);
+    expect(chapterTokens(chapter)).toHaveLength(149);
+    expect(chapter.title).toBe('Çitin Üstündeki Kedi');
+  });
+
+  it('keeps every page under the word limit, a longer sentence alone', () => {
+    const long = Array.from({ length: 30 }, () => 'kelime').join(' ');
+    const chapter = passageChapter(
+      {
+        id: 'deneme',
+        grade: 3,
+        title: 'Deneme',
+        sentences: ['Bir iki üç.', `${long}.`, 'Dört beş.'],
+      },
+      25,
+    );
+
+    expect(chapter.pages).toEqual([[['Bir iki üç.']], [[`${long}.`]], [['Dört beş.']]]);
+  });
+});
+
+describe('withGenitiveSuffix', () => {
+  it.each([
+    ['Deniz', 'Deniz’in'],
+    ['Ali', 'Ali’nin'],
+    ['Umut', 'Umut’un'],
+    ['Ayşe', 'Ayşe’nin'],
+    ['Gül', 'Gül’ün'],
+    ['Işık', 'Işık’ın'],
+    ['Oya', 'Oya’nın'],
+    ['Ömür', 'Ömür’ün'],
+    ['Elif', 'Elif’in'],
+    ['Can', 'Can’ın'],
+  ])('gives %s the genitive %s', (name, expected) => {
+    expect(withGenitiveSuffix(name)).toBe(expected);
   });
 });
