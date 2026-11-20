@@ -1,5 +1,5 @@
 // G1 Yol (docs/ekranlar.md, G1): today's chapter one tap away, and the road of the series.
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/Button/Button';
 import { Chip } from '../../components/Chip/Chip';
@@ -17,11 +17,28 @@ import { StatusScreen } from './StatusScreen';
 import { TomorrowCard } from './TomorrowCard';
 import { chapterPattern, roadView } from './views';
 
+/** How often an open road checks whether the day has changed. */
+const dayCheckMs = 60_000;
+
 export function RoadPage() {
   useLoadSession();
   const status = useSession((state) => state.status);
   const data = useSession((state) => state.data);
   const store = useSessionStore();
+  // A road left open past midnight turns to the new day.
+  useEffect(() => {
+    const refresh = () => {
+      store
+        .getState()
+        .refreshDay()
+        .catch(() => undefined);
+    };
+    refresh();
+    const timer = setInterval(refresh, dayCheckMs);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [store]);
   const { audio } = useSessionDevices();
   const microphone = useMicrophone(audio, data?.parent.consent.voiceProcessing ?? false);
   const navigate = useNavigate();

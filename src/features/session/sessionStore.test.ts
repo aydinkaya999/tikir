@@ -386,6 +386,47 @@ describe('the session store', () => {
     expect(session?.answers).toEqual([0, 0]);
   });
 
+  /** A store whose day the test moves, as a page left open past midnight. */
+  async function storeOnMovingDay() {
+    const repository = await demoRepository();
+    const clock = { day: today };
+    const store = createSessionStore({
+      repository: () => Promise.resolve(repository),
+      recorder: { remove: vi.fn(() => Promise.resolve()) },
+      today: () => clock.day,
+      now: () => new Date(`${clock.day}T09:00:00.000Z`),
+      createId: () => 'yeni-seans',
+    });
+    await store.getState().load();
+    return { repository, store, clock };
+  }
+
+  it('starts the new day’s session when the day changed after the store loaded', async () => {
+    const { repository, store, clock } = await storeOnMovingDay();
+    clock.day = '2026-11-22';
+
+    await store.getState().start();
+
+    expect(store.getState().data?.today).toBe('2026-11-22');
+    expect(await repository.getSession(today)).toBeNull();
+    const session = await repository.getSession('2026-11-22');
+    expect(session?.chapterRef.chapter).toBe(4);
+    expect(store.getState().data?.session?.date).toBe('2026-11-22');
+  });
+
+  it('turns to the new day when asked after midnight, and keeps the same day as it is', async () => {
+    const { store, clock } = await storeOnMovingDay();
+    const before = store.getState().data;
+
+    await store.getState().refreshDay();
+    expect(store.getState().data).toBe(before);
+
+    clock.day = '2026-11-22';
+    await store.getState().refreshDay();
+    expect(store.getState().data?.today).toBe('2026-11-22');
+    expect(store.getState().status).toBe('ready');
+  });
+
   it('rejects and reports the error when a write fails', async () => {
     const repository = await demoRepository();
     const { store } = storeOver(repository);

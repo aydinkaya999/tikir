@@ -3,6 +3,7 @@
 import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { vi } from 'vitest';
+import type { LocalDate } from '../domain/types';
 import type { DevStep } from '../features/dev/params/devParams';
 import { prepareSessionStep } from '../features/dev/params/prepareSessionStep';
 import { type DemoMode, loadDemoProfile } from '../features/dev/demo/loadDemoProfile';
@@ -19,6 +20,8 @@ export interface DemoSessionOptions {
   step?: DevStep;
   scenario?: ScenarioName;
   consent?: boolean;
+  /** The store's day; testToday unless a test moves it. */
+  today?: () => LocalDate;
 }
 
 export async function demoSessionStore(options: DemoSessionOptions = {}) {
@@ -38,7 +41,7 @@ export async function demoSessionStore(options: DemoSessionOptions = {}) {
   const services: SessionStoreServices = {
     repository: () => Promise.resolve(repository),
     recorder: { remove: vi.fn(() => Promise.resolve()) },
-    today: () => testToday,
+    today: options.today ?? (() => testToday),
     now: () => new Date('2026-11-21T09:20:00.000Z'),
     createId: () => {
       id += 1;

@@ -74,6 +74,12 @@ export interface SessionState {
   /** Unheard readings done on this page: they are not stored (docs/planlar/faz-2b.md, karar 3). */
   unheardDone: number;
   load: () => Promise<void>;
+  /**
+   * A page left open past midnight turns to the new day: the data is read again when the day has
+   * changed since it was loaded (G1 asks; a session step keeps its own day).
+   */
+  refreshDay: () => Promise<void>;
+  /** Starts today's session; on a new day it reads the new day's data first. */
   start: () => Promise<void>;
   /** The current card's first attempt: the session (scored) is written first, then the card. */
   answerWarmupCard: (correct: boolean) => Promise<void>;
@@ -174,6 +180,33 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
       set(state);
     }
 
+    /** Today's data from the database; null when there is no profile yet. */
+    async function readData(): Promise<SessionData | null> {
+      const repository = await services.repository();
+      const today = services.today();
+      const [parent, child, books, sessions, cards] = await Promise.all([
+        repository.getParent(),
+        repository.getChild(),
+        repository.listBooks(),
+        repository.listSessions(firstDate, today),
+        repository.listStuckWords(),
+      ]);
+      const series = books.find((book) => book.source === 'series');
+      if (parent === null || child === null || series === undefined) {
+        return null;
+      }
+      const session = sessions.find((each) => each.date === today) ?? null;
+      const chapter =
+        session === null
+          ? chapterOf(series, nextSeriesChapter(sessions, series))
+          : chapterOf(series, session.chapterRef.chapter);
+      return { parent, child, series, chapter, sessions, cards, today, session };
+    }
+
+    function readyState(data: SessionData | null): Pick<SessionState, 'status' | 'data'> {
+      return data === null ? { status: 'noProfile', data: null } : { status: 'ready', data };
+    }
+
     function ready(): { data: SessionData; session: Session; chapter: Chapter } | null {
       const { data } = get();
       const session = data?.session ?? null;
@@ -222,35 +255,28 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
       load: () =>
         act(undefined, async () => {
           set({ status: 'loading', error: null, unheardDone: 0 });
-          const repository = await services.repository();
-          const today = services.today();
-          const [parent, child, books, sessions, cards] = await Promise.all([
-            repository.getParent(),
-            repository.getChild(),
-            repository.listBooks(),
-            repository.listSessions(firstDate, today),
-            repository.listStuckWords(),
-          ]);
-          const series = books.find((book) => book.source === 'series');
-          if (parent === null || child === null || series === undefined) {
-            publish({ status: 'noProfile', data: null });
+          publish(readyState(await readData()));
+        }).catch(() => undefined),
+
+      refreshDay: () =>
+        act(undefined, async () => {
+          const { status, data } = get();
+          if (status !== 'ready' || data === null || data.today === services.today()) {
             return;
           }
-          const session = sessions.find((each) => each.date === today) ?? null;
-          const chapter =
-            session === null
-              ? chapterOf(series, nextSeriesChapter(sessions, series))
-              : chapterOf(series, session.chapterRef.chapter);
-          publish({
-            status: 'ready',
-            data: { parent, child, series, chapter, sessions, cards, today, session },
-          });
-        }).catch(() => undefined),
+          publish({ ...readyState(await readData()), unheardDone: 0 });
+        }),
 
       start: () =>
         act(undefined, async () => {
-          const { data } = get();
+          const loaded = get().data;
+          // A page left open past midnight: today's session is the new day's.
+          const data =
+            loaded !== null && loaded.today !== services.today() ? await readData() : loaded;
           if (data === null || data.session !== null || data.chapter === null) {
+            if (data !== loaded) {
+              publish({ ...readyState(data), unheardDone: 0 });
+            }
             return;
           }
           const deck = warmupDeck(data.cards, data.today, sourceOf(data.chapter));
@@ -262,7 +288,13 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
             warmupWords: deck.map((item) => item.word),
             startedAt: services.now().toISOString(),
           });
-          await storeSession(data, session);
+          await storeSession(
+            data,
+            session,
+            null,
+            undefined,
+            data === loaded ? {} : { unheardDone: 0 },
+          );
         }),
 
       answerWarmupCard: (correct) =>

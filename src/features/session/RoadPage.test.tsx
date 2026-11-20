@@ -1,10 +1,14 @@
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '../../test/renderApp';
 import { testSession } from '../../test/sessions';
 
 describe('RoadPage (G1)', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("greets the child with today's chapter and the road", async () => {
     await renderApp('/');
 
@@ -69,6 +73,24 @@ describe('RoadPage (G1)', () => {
     expect(screen.getByText('5. bölüm yarın açılır')).toBeInTheDocument();
     expect(screen.getByText('Bugünlük bu kadar. Yarın görüşürüz, Deniz.')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Başla' })).toBeNull();
+  });
+
+  it('turns to the new day while the road is open', async () => {
+    vi.useFakeTimers({
+      shouldAdvanceTime: true,
+      toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'],
+    });
+    const clock = { day: '2026-11-21' };
+    await renderApp('/', { step: 'done', today: () => clock.day });
+    expect(await screen.findByText('Yarın: Yıldız Tepesi')).toBeInTheDocument();
+
+    clock.day = '2026-11-22';
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(60_000);
+    });
+
+    expect(await screen.findByRole('button', { name: 'Başla' })).toBeInTheDocument();
+    expect(screen.getByText('5. bölüm, 12 dakika')).toBeInTheDocument();
   });
 
   it('points to the library when every written chapter is read', async () => {
