@@ -151,7 +151,14 @@ export function SummaryPage() {
               }
             />
           )}
-          <p className={`${styles.comment} ${styles.phoneOnly}`}>{view.comment}</p>
+          {/* Without a chart the card says why, at every width (docs/ekranlar.md, "Boş durumlar"). */}
+          <p
+            className={
+              view.chart === null ? styles.comment : `${styles.comment} ${styles.phoneOnly}`
+            }
+          >
+            {view.comment}
+          </p>
         </section>
 
         <div className={styles.side}>
@@ -171,8 +178,12 @@ export function SummaryPage() {
             </ol>
             {view.unheardDays !== null && <p className={styles.unheard}>{view.unheardDays}</p>}
           </div>
-          <hr className={styles.divider} />
-          <p className={`${styles.comment} ${styles.sideComment}`}>{view.comment}</p>
+          {view.chart !== null && (
+            <>
+              <hr className={styles.divider} />
+              <p className={`${styles.comment} ${styles.sideComment}`}>{view.comment}</p>
+            </>
+          )}
           {view.goalUpdate !== null && (
             <Button
               variant="secondary"

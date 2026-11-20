@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Grade } from '../../domain/types';
 import { renderApp, type RenderAppOptions } from '../../test/renderApp';
 import { testToday } from '../../test/sessionStore';
+import { testSession } from '../../test/sessions';
 
 /** The developer's open gate (`&kapi=acik`): these tests are about V1, not the gate. */
 beforeEach(() => {
@@ -143,6 +144,26 @@ describe('SummaryPage (V1)', () => {
       }),
     ).not.toHaveLength(0);
     expect(screen.queryAllByText(/ortalaması/)).toHaveLength(0);
+  });
+
+  it('says in the chart’s card why a week has no chart (docs/kararlar.md P13)', async () => {
+    await renderApp('/veli', {
+      setup: 'tanisma',
+      consent: false,
+      before: async ({ store, repository }) => {
+        // Without the consent no reading is stored.
+        await repository.saveSession(testSession('2026-11-20', 1, { readings: [] }));
+        await store.getState().load();
+        await store.getState().finishSetup();
+      },
+    });
+    await screen.findByRole('heading', { level: 1, name: 'Deniz’in haftası' });
+
+    const sentence = screen.getAllByText('Dinleme kapalı olduğu için ölçüm yapılmıyor.');
+    expect(sentence).toHaveLength(1);
+    expect(screen.getByRole('region', { name: 'Doğru kelime, bir dakikada' })).toContainElement(
+      sentence[0] ?? null,
+    );
   });
 
   it('shows the empty report before the first session and measurement', async () => {
