@@ -6,4 +6,6 @@ export const parentPaths = {
   assessment: '/veli/olcum',
   readingStyle: '/veli/yazi',
   books: '/veli/kitap',
+  /** The account page: consents, recordings, deleting the account (docs/planlar/faz-4.md, karar 36). */
+  account: '/veli/hesap',
 } as const;

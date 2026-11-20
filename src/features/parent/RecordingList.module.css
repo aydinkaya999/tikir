@@ -63,6 +63,14 @@
   gap: 10px;
 }
 
+.empty {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
 .dialogText {
   margin: 0;
   color: var(--color-ink);

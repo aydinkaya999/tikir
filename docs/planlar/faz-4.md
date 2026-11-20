@@ -579,6 +579,10 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
   - doğruluk %93 (tutarsızlık 1);
   - demoda ölçümün kaydı olmadığı için "Kaydı dinle" yok, "Öğretmenle paylaş" satırı tek başına kaplıyor (karar 25).
 
+**Hesap** (`shots/veli-hesap-demo-veli-haftasonu-kapi-acik-*.png`; tasarımı yok):
+
+- Üç genişlikte taşma ve kırpılma yok. Telefon şeridinde çocuk etiketi, Hesap ve çıkış düğmeleri sığıyor; rayda ve kenar çubuğunda "Hesap", "Çocuk ekranı"nın üstünde; açık sayfanın bağlantısı kalın.
+
 ## Kanıtlar
 
 Uygulama sırasında doldurulur.

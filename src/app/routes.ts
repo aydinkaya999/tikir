@@ -34,6 +34,11 @@ export const extraPaths = {
   studio: childPaths.studio,
 } as const;
 
+/** Parent pages without a design yet (docs/planlar/faz-4.md, karar 36). */
+export const parentExtraPaths = {
+  account: parentPaths.account,
+} as const;
+
 /** Developer pages; never part of the production build (src/app/router.tsx). */
 export const devPaths = {
   showcase: '/gelistirme/vitrin',

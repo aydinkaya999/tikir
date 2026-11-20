@@ -14,7 +14,7 @@
 
 .wordmark,
 .subtitle,
-.footer,
+.foot,
 .longLabel {
   display: none;
 }
@@ -111,7 +111,20 @@
     min-height: 76px;
   }
 
-  /* The foot link (parent area, child screen) at the rail's bottom. TODO(design) */
+  /* The foot links (parent area; account and child screen) at the rail's bottom. TODO(design) */
+  .foot {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    margin-top: auto;
+  }
+
+  /* The page a foot link leads to is open: its label is bolder. TODO(design) */
+  .footer[aria-current='page'] {
+    font-weight: var(--weight-extrabold);
+  }
+
   .footer {
     display: flex;
     flex-direction: column;
@@ -119,7 +132,6 @@
     gap: 4px;
     width: 100%;
     min-height: var(--touch-min);
-    margin-top: auto;
     padding: 6px 2px;
     color: var(--color-ink);
     font-size: var(--size-nav-label);

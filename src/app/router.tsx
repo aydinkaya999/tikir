@@ -9,6 +9,7 @@ import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
+import { AccountSettingsPage } from '../features/parent/AccountSettingsPage';
 import { AssessmentPage } from '../features/parent/AssessmentPage';
 import { StuckWordsPage } from '../features/parent/StuckWordsPage';
 import { SummaryPage } from '../features/parent/SummaryPage';
@@ -30,7 +31,7 @@ import { SessionRoot } from '../features/session/SessionRoot';
 import { createSessionStore, type SessionState } from '../features/session/sessionStore';
 import { localDateOf } from '../domain/date';
 import { tr } from '../i18n/tr';
-import { devPaths, extraPaths, screenPaths } from './routes';
+import { devPaths, extraPaths, parentExtraPaths, screenPaths } from './routes';
 import { appRepository, sessionDevices, sessionStoreServices } from './services';
 import { ChildShell } from './shells/ChildShell';
 import { FocusShell } from './shells/FocusShell';
@@ -153,6 +154,7 @@ export function appRoutes(session: AppSession): RouteObject[] {
                     { path: screenPaths.V2, element: <StuckWordsPage /> },
                     { path: screenPaths.V3, element: <AssessmentPage /> },
                     { path: screenPaths.V4, element: <ReadingStylePage /> },
+                    { path: parentExtraPaths.account, element: <AccountSettingsPage /> },
                     { path: screenPaths.U2, element: <BookFromTextPage /> },
                   ],
                 },

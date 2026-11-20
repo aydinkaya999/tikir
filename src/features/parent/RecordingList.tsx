@@ -17,9 +17,18 @@ interface RecordingListProps {
   /** V2 only: the parent approves a recording the child sent. */
   onApprove?: (id: Id) => void;
   onRemove: (id: Id) => void;
+  /** Shown instead of the list when there is no recording. */
+  empty?: string;
 }
 
-export function RecordingList({ title, rows, onPlay, onApprove, onRemove }: RecordingListProps) {
+export function RecordingList({
+  title,
+  rows,
+  onPlay,
+  onApprove,
+  onRemove,
+  empty,
+}: RecordingListProps) {
   const titleId = useId();
   const [removing, setRemoving] = useState<Id | null>(null);
   return (
@@ -27,7 +36,8 @@ export function RecordingList({ title, rows, onPlay, onApprove, onRemove }: Reco
       <h2 id={titleId} className={styles.title}>
         {title}
       </h2>
-      <ul className={styles.list} aria-labelledby={titleId}>
+      {rows.length === 0 && empty !== undefined && <p className={styles.empty}>{empty}</p>}
+      <ul className={styles.list} aria-labelledby={titleId} hidden={rows.length === 0}>
         {rows.map((row) => (
           <li key={row.id} className={styles.row}>
             <span className={styles.text}>

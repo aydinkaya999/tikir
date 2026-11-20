@@ -29,6 +29,8 @@ export const tr = {
       books: 'Kitaplar',
       /** The rail's and the sidebar's link, and the strip's button on phones (karar 27). */
       childScreen: 'Çocuk ekranı',
+      /** The account page's link above it, and the strip's button (Faz 4, karar 37). TODO(design) */
+      account: 'Hesap',
       /** The top strip's chip: "Deniz, 3. sınıf" (design/ekranlar/V1-*.html). */
       childLabel: (name: string, grade: number) => `${name}, ${String(grade)}. sınıf`,
     },
@@ -240,6 +242,22 @@ export const tr = {
         confirm: 'Sil',
         cancel: 'Vazgeç',
       },
+    },
+  },
+
+  /** The parent's account page (docs/planlar/faz-4.md, karar 36; D17). TODO(design) */
+  accountPage: {
+    title: 'Hesap',
+    consents: 'Onaylar',
+    recordings: 'Kayıtlar',
+    noRecordings: 'Henüz kayıt yok.',
+    remove: {
+      title: 'Hesabı sil',
+      body: 'Hesap, okuyucu, okumalar, ölçümler ve kayıtlar bu cihazdan silinir. Geri alınamaz.',
+      button: 'Hesabı sil',
+      dialog: 'Hesap silinsin mi?',
+      confirm: 'Hesabı sil',
+      cancel: 'Vazgeç',
     },
   },
 
