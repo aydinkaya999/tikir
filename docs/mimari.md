@@ -199,8 +199,11 @@ interface Narrator {
 
 // Kayıt (3. okuma). Faz 2a: dalga biçimi için levels; play() çalıcıyı ilk await'ten önce hazırlar (iPhone).
 // Faz 2b: requestApproval G5'teki "Gönder"dir; kayıt veli onayı bekler (approval: 'pending').
+// pause/resume: okuma duraklarken (çocuğun duraklatması, çıkış penceresi, Tıkır'ın yardımı) gelen
+// çerçeveler kayda girmez.
 interface Recorder {
   start(audio: AudioCapture): Promise<void>; stop(): Promise<{ id: Id; seconds: number; levels: number[] }>;
+  pause(): void; resume(): void;
   play(id: Id): Promise<void>; stopPlayback(): void; remove(id: Id): Promise<void>;
   get(id: Id): Promise<{ id: Id; seconds: number; levels: number[]; approval?: 'pending' } | null>;
   requestApproval(id: Id): Promise<void>;

@@ -130,6 +130,16 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
   useManualKeys(choice.mark);
 
   const capturing = microphone.state === 'capturing';
+  // The recording follows the reading's own clock: the child's pauses, the exit dialog's hold and
+  // Tıkır's help are left out of it.
+  const recordingRuns =
+    capturing && !reading.paused && reading.helpIndex === null && reading.view.ended === null;
+  // The recorder starts a moment after the reading: held at once if the reading is not running.
+  const holdNewRecording = useEffectEvent(() => {
+    if (!recordingRuns) {
+      devices.recorder.pause();
+    }
+  });
   // The reading starts once the microphone listens; the third starts the recorder with it.
   const begin = useEffectEvent(() => {
     startedAt.current ??= new Date().toISOString();
@@ -138,9 +148,14 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       .then(() => {
         if (records && recording.current === 'off' && !saving.current) {
           recording.current = 'on';
-          devices.recorder.start(devices.audio).catch(() => {
-            recording.current = 'failed';
-          });
+          devices.recorder.start(devices.audio).then(
+            () => {
+              holdNewRecording();
+            },
+            () => {
+              recording.current = 'failed';
+            },
+          );
         }
       })
       .catch(() => undefined);
@@ -150,6 +165,17 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
       begin();
     }
   }, [capturing, exitOpen]);
+
+  useEffect(() => {
+    if (recording.current !== 'on') {
+      return;
+    }
+    if (recordingRuns) {
+      devices.recorder.resume();
+    } else {
+      devices.recorder.pause();
+    }
+  }, [recordingRuns, devices.recorder]);
 
   // A reading cut short (the exit, leaving the screen) is not stored; nor is its recording.
   useEffect(

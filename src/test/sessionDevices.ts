@@ -12,6 +12,8 @@ import { FakeAudioCapture } from './fakeCapture';
 export interface TestRecorder extends Recorder {
   start: ReturnType<typeof vi.fn<Recorder['start']>>;
   stop: ReturnType<typeof vi.fn<Recorder['stop']>>;
+  pause: ReturnType<typeof vi.fn<Recorder['pause']>>;
+  resume: ReturnType<typeof vi.fn<Recorder['resume']>>;
   play: ReturnType<typeof vi.fn<Recorder['play']>>;
   stopPlayback: ReturnType<typeof vi.fn<Recorder['stopPlayback']>>;
   remove: ReturnType<typeof vi.fn<Recorder['remove']>>;
@@ -26,6 +28,8 @@ export function testRecorder(
   return {
     start: vi.fn<Recorder['start']>(() => Promise.resolve()),
     stop: vi.fn<Recorder['stop']>(() => Promise.resolve(recording)),
+    pause: vi.fn<Recorder['pause']>(),
+    resume: vi.fn<Recorder['resume']>(),
     play: vi.fn<Recorder['play']>(() => Promise.resolve()),
     stopPlayback: vi.fn<Recorder['stopPlayback']>(),
     remove: vi.fn<Recorder['remove']>(() => Promise.resolve()),

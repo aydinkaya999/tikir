@@ -346,6 +346,27 @@ describe('ReadPage (G4)', () => {
     expect((await app.repository.getSession('2026-11-21'))?.readings).toHaveLength(2);
   });
 
+  it('keeps the third reading’s pauses and the exit dialog out of its recording', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const app = await openRead({ step: 'read-3' });
+    await startListening(app);
+    await waitFor(() => {
+      expect(app.recorder.start).toHaveBeenCalledTimes(1);
+    });
+    await advance(5_000);
+    expect(app.recorder.pause).not.toHaveBeenCalled();
+
+    await user.click(screen.getAllByRole('button', { name: 'Duraklat' })[0] as HTMLElement);
+    expect(app.recorder.pause).toHaveBeenCalledTimes(1);
+    await user.click(screen.getAllByRole('button', { name: 'Sürdür' })[0] as HTMLElement);
+    expect(app.recorder.resume).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getAllByRole('button', { name: 'Seanstan çık' })[0] as HTMLElement);
+    expect(app.recorder.pause).toHaveBeenCalledTimes(2);
+    await user.click(screen.getByRole('button', { name: 'Seansa dön' }));
+    expect(app.recorder.resume).toHaveBeenCalledTimes(2);
+  });
+
   it('freezes the third reading while the microphone is away and keeps one recording', async () => {
     const app = await openRead({ step: 'read-3' });
     await startListening(app);

@@ -16,6 +16,9 @@ export interface Recorder {
   /** Throws if the microphone is not capturing. */
   start(audio: AudioCapture): Promise<void>;
   stop(): Promise<RecordingInfo>;
+  /** The frames that come while paused are left out: the reading's pauses are not recorded. */
+  pause(): void;
+  resume(): void;
   /** Call from the tap: it prepares the player before its first await (iPhone's gesture rule). */
   play(id: Id): Promise<void>;
   stopPlayback(): void;

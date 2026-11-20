@@ -46,6 +46,7 @@ export class PcmRecorder implements Recorder {
   private chunks: Int16Array[] = [];
   private sampleCount = 0;
   private releaseFrames: Unsubscribe | null = null;
+  private paused = false;
 
   constructor(store: RecordingStore, player: WavPlayer, limits: Partial<RecordingLimits> = {}) {
     this.store = store;
@@ -62,10 +63,19 @@ export class PcmRecorder implements Recorder {
     }
     this.chunks = [];
     this.sampleCount = 0;
+    this.paused = false;
     this.releaseFrames = audio.onFrame((pcm16) => {
       this.take(pcm16);
     });
     return Promise.resolve();
+  }
+
+  pause(): void {
+    this.paused = true;
+  }
+
+  resume(): void {
+    this.paused = false;
   }
 
   async stop(): Promise<RecordingInfo> {
@@ -133,6 +143,9 @@ export class PcmRecorder implements Recorder {
 
   /** Frames are copied: the capture may reuse its buffer. */
   private take(pcm16: Int16Array): void {
+    if (this.paused) {
+      return;
+    }
     const room = this.limits.maxSeconds * captureFormat.sampleRate - this.sampleCount;
     if (room <= 0) {
       return;

@@ -192,6 +192,33 @@ describe('PcmRecorder', () => {
     expect(info.seconds).toBe(2);
   });
 
+  it('leaves out the frames that come while it is paused', async () => {
+    const { audio, recorder, send } = setup();
+    await recorder.start(audio);
+    send(toneFrames(50));
+
+    recorder.pause();
+    send(toneFrames(100));
+    recorder.resume();
+    send(toneFrames(50));
+    const info = await recorder.stop();
+
+    expect(info.seconds).toBe(2);
+  });
+
+  it('starts every recording unpaused', async () => {
+    const { audio, recorder, send } = setup();
+    await recorder.start(audio);
+    recorder.pause();
+    await recorder.stop();
+
+    await recorder.start(audio);
+    send(toneFrames(50));
+    const info = await recorder.stop();
+
+    expect(info.seconds).toBe(1);
+  });
+
   it('keeps recordings in IndexedDB for a later page', async () => {
     const audio = new FakeAudioCapture();
     audio.setState('capturing');
