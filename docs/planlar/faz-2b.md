@@ -54,7 +54,7 @@
 - [x] Task 10: G2 Isınma ve mikrofon sorunları
 - [x] Task 11: G3 Dinle
 - [x] Task 12: G4 Oku
-- [ ] Task 13: G5 Kayıt
+- [x] Task 13: G5 Kayıt
 - [ ] Task 14: G6 Kapanış sorusu
 - [ ] Task 15: G7 Bugünlük bitti
 - [ ] Task 16: Albüm ve Stüdyo
@@ -1102,7 +1102,7 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`waveform.test.ts`:**
     - 64 düzey → 36 ve 26 çubuk; her çubuk kendi grubunun en yükseği;
     - 0 düzey → hepsi 0.
@@ -1114,7 +1114,7 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
     2. **Nötr yorum:** 3. okumanın `wcpm`'i en yüksek değilse "Kaydın hazır.".
     3. **Çalma:**
        - "Kaydı dinle" → `recorder.play(id)`, düğme "Duraklat";
-       - 23 sn'de çubukların %44'ü safran;
+       - 22,5 sn'de 36 çubuğun 16'sı, 26 çubuğun 11'i safran (23 sn, telefonda tam yuvarlama sınırıdır);
        - dokununca `stopPlayback`.
     4. **Gönder:**
        - `requestApproval(id)`; düğme pasif, "Veli onayı bekliyor";
@@ -1122,11 +1122,11 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
     5. **"Baştan kaydet":** `audio.start`, `redoRecording`, adres `/seans/oku`; G4'te "3. okuma / 3".
     6. **"Devam et":** `finishRecording`, adres `/seans/kapanis`.
     7. **Kayıt yok:** hata cümlesi görünür; iki düğme çalışır.
-- [ ] İki test dosyası → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots --dokun "Kaydı dinle" --ileri 23000 '/seans/kayit?demo=cocuk-sabahi&adim=record'` → G5 ile karşılaştır, farkları yaz, düzelt.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the recording screen (G5)`.
+- [x] İki test dosyası → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots --dokun "Kaydı dinle" --ileri 22500 '/seans/kayit?demo=cocuk-sabahi&adim=record'` → G5 ile karşılaştır, farkları yaz, düzelt.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the recording screen (G5)`.
 
 ### Task 14: G6 Kapanış sorusu
 
@@ -1326,7 +1326,7 @@ Görüntü komutları (her biri 390, 1180 ve 1440 px yazar):
 | G2 | `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --dokun "Kelimeyi dinle" --ileri 1200 '/seans/isinma?demo=cocuk-sabahi&adim=warmup'` |
 | G3 | `pnpm shots --ileri 18000 '/seans/dinle?demo=cocuk-sabahi&adim=listen&senaryo=design'` |
 | G4 | `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 19300 '/seans/oku?demo=cocuk-sabahi&adim=read-2&senaryo=design'` |
-| G5 | `pnpm shots --dokun "Kaydı dinle" --ileri 23000 '/seans/kayit?demo=cocuk-sabahi&adim=record'` |
+| G5 | `pnpm shots --dokun "Kaydı dinle" --ileri 22500 '/seans/kayit?demo=cocuk-sabahi&adim=record'` |
 | G6 | `pnpm shots --dokun "Tepenin ardında" '/seans/kapanis?demo=cocuk-sabahi&adim=wrapUp'` |
 | G7 | `pnpm shots '/seans/bitti?demo=cocuk-sabahi&adim=done'` |
 
@@ -1382,6 +1382,14 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 | üçü | Yarış imleçleri gerçek konumdan çizilir (99 kelimenin 14'ü ve 12'si) ve etiketleri üst üste biner; tasarımın %40 ve %33'ü veriden türemiyor | kalır: tutarsızlık 4. İmleçler yakınken etiketlerin yeri tasarımda yok (açık soru 6) |
 | üçü | Kelime aralıkları geniş, satırlar farklı kırılıyor | kalır: G3'teki gibi (kaymasız vurgu, Faz 0) |
 | telefon | "1 / 2" sayfası 45 kelimenin hepsini gösterir ve kayar; Tıkır ve balon, sayfa kaydırılınca yapışkan çubuğun üstünde görünür | kalır: 2a, karar 3 (tam sayfa görüntüsünde yapışkan çubuk ilk görünüm alanında kalır) |
+
+**G5** (planlanan komut, an 22,5 sn: 23 sn telefonun 26 çubuğunda tam yuvarlama sınırıdır):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | Çubuk boyları tasarımdakinden düzgün ve yüksek | kalır: düzeyler 52 sn'lik yapay kayıttan gelir (karar 21) |
+| üçü | Kayıtlı bölüm karelerinden yalnız 4.'sü dolu, "12 bölümün 1’i kayıtlı" | kalır: demo profilinin eski seanslarında ses yok (karar 15) |
+| üçü | Çalan kaydın düğmesi duraklat simgesi gösterir; tasarımın anında oynat simgesi var | kalır: karar 15 ("Kaydı dinle" çalınca düğme "Duraklat" olur) |
 
 ## Açık sorular (onayı beklemez)
 

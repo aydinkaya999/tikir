@@ -1,0 +1,31 @@
+/* G5: 26 bars of 6 px in 104 px on the phone, 36 of 8 px in 96 px from 700 px; 3 px apart. */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  height: 104px;
+}
+
+.bar {
+  flex: none;
+  width: 6px;
+  min-height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-turquoise-light);
+}
+
+.bar[data-played] {
+  background: var(--color-saffron);
+}
+
+@media (min-width: 700px) {
+  .waveform {
+    height: 96px;
+  }
+
+  .bar {
+    width: 8px;
+    min-height: 8px;
+  }
+}

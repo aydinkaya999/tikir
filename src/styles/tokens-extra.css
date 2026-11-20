@@ -90,6 +90,10 @@
   --size-syllable: 21px;
   /* G2: the growing word's chips (15 px on phones, 18 px from 700 px). */
   --size-chain: 15px;
+  /* G5: the recording card's cobalt lift, the audio book's squares and the "Ailene dinlet" card. */
+  --lift-recording: 0 6px 0 var(--color-cobalt);
+  --radius-chapter-square: 5px;
+  --radius-share: 18px;
 }
 
 @media (min-width: 700px) {

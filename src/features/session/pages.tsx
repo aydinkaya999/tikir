@@ -3,11 +3,6 @@
 import { tr } from '../../i18n/tr';
 import { SessionLayout } from './SessionLayout';
 
-/** G5 Kayıt. */
-export function RecordPage() {
-  return <SessionLayout title={tr.session.steps.record} companion={{ expression: 'happy' }} />;
-}
-
 /** G6 Kapanış sorusu. */
 export function WrapUpPage() {
   return <SessionLayout title={tr.session.steps.wrapUp} companion={{ expression: 'think' }} />;

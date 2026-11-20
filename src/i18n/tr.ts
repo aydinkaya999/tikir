@@ -142,6 +142,36 @@ export const tr = {
     unheardBubble: 'Dinleme kapalı. Metni sesli oku, bitince Okumayı bitir’e dokun.',
   },
 
+  /** G5 Kayıt (docs/ekranlar.md, G5; docs/planlar/faz-2b.md, karar 15). */
+  record: {
+    chip: 'Son okuma',
+    done: 'Kayıt bitti',
+    /** "Dar Patika, 3. okuma": the recorded reading is always the third. */
+    title: (chapterTitle: string) => `${chapterTitle}, 3. okuma`,
+    added: 'Sesli kitabına eklendi',
+    /** "12 bölümün 4’ü"; the count comes with its suffix (withPossessiveSuffix). */
+    chaptersLabel: (total: number, countWithSuffix: string) =>
+      `Kayıtlı bölümler: ${String(total)} bölümün ${countWithSuffix}`,
+    chaptersRecorded: (total: number, countWithSuffix: string) =>
+      `${String(total)} bölümün ${countWithSuffix} kayıtlı`,
+    play: 'Kaydı dinle',
+    /** The playing recording's button, named as G4's. TODO(design) */
+    pause: 'Duraklat',
+    shareTitle: 'Ailene dinlet',
+    shareNote: 'Göndermeden önce velin onaylar',
+    send: 'Gönder',
+    /** The sent recording's button (docs/ekranlar.md, G5). TODO(design) */
+    sent: 'Veli onayı bekliyor',
+    /** Only when the third reading was the day's most fluent (docs/ekranlar.md, G5). */
+    bestBubble: 'Bu, bugünkü en akıcı okuman oldu.',
+    /** Any other day (docs/ekranlar.md, G5). TODO(design) */
+    readyBubble: 'Kaydın hazır.',
+    /** No recording to play (docs/planlar/faz-2b.md, karar 15). TODO(design) */
+    missing: 'Kaydın alınamadı. Baştan kaydet’e dokunup bir daha oku.',
+    redo: 'Baştan kaydet',
+    next: 'Devam et',
+  },
+
   /** G7, and G1 once the day is done (docs/ekranlar.md, G1: "G7'deki 'Yarın' kartını kullan"). */
   done: {
     tomorrow: (title: string) => `Yarın: ${title}`,
