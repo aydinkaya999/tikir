@@ -136,7 +136,9 @@ function missedWords(chapter: Chapter, outcome: ReadingOutcome): MissedWord[] {
 }
 
 export function createSessionStore(services: SessionStoreServices): StoreApi<SessionState> {
-  let busy = false;
+  // The action that runs now. A publish ends it (see publish); an older action's end never clears
+  // a newer one.
+  let running: object | null = null;
 
   return createStore<SessionState>()((set, get) => {
     /**
@@ -144,10 +146,11 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
      * screen that awaits a write never moves on after a failed one.
      */
     async function act<T>(ignored: T, action: () => Promise<T>): Promise<T> {
-      if (busy) {
+      if (running !== null) {
         return ignored;
       }
-      busy = true;
+      const token = {};
+      running = token;
       try {
         return await action();
       } catch (cause) {
@@ -155,8 +158,20 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
         set({ status: 'error', error });
         throw error;
       } finally {
-        busy = false;
+        if (running === token) {
+          running = null;
+        }
       }
+    }
+
+    /**
+     * Publishes an action's result as its last step, so the action is over: a screen that opens on
+     * the new state may act at once, and React runs its effects inside this very call (G6 ends a
+     * session whose last answer is written as it opens).
+     */
+    function publish(state: Partial<SessionState>): void {
+      running = null;
+      set(state);
     }
 
     function ready(): { data: SessionData; session: Session; chapter: Chapter } | null {
@@ -178,6 +193,7 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
       session: Session,
       cards: StuckWord[] | null = null,
       afterWrites: () => Promise<void> = () => Promise.resolve(),
+      alongside: Partial<Pick<SessionState, 'unheardDone'>> = {},
     ): Promise<void> {
       const repository = await services.repository();
       await repository.saveSession(session);
@@ -185,7 +201,8 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
         await repository.saveStuckWords(cards);
       }
       await afterWrites();
-      set({
+      publish({
+        ...alongside,
         data: {
           ...data,
           session,
@@ -216,7 +233,7 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           ]);
           const series = books.find((book) => book.source === 'series');
           if (parent === null || child === null || series === undefined) {
-            set({ status: 'noProfile', data: null });
+            publish({ status: 'noProfile', data: null });
             return;
           }
           const session = sessions.find((each) => each.date === today) ?? null;
@@ -224,7 +241,7 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
             session === null
               ? chapterOf(series, nextSeriesChapter(sessions, series))
               : chapterOf(series, session.chapterRef.chapter);
-          set({
+          publish({
             status: 'ready',
             data: { parent, child, series, chapter, sessions, cards, today, session },
           });
@@ -343,10 +360,11 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           const done = get().unheardDone;
           const attempt = Math.min(session.readings.length + done + 1, 3);
           const next = afterUnheardReading(session, attempt === 1 ? 1 : attempt === 2 ? 2 : 3);
-          if (next !== session) {
-            await storeSession(data, next);
+          if (next === session) {
+            publish({ unheardDone: done + 1 });
+          } else {
+            await storeSession(data, next, null, undefined, { unheardDone: done + 1 });
           }
-          set({ unheardDone: done + 1 });
         }),
 
       redoRecording: () =>
@@ -406,7 +424,7 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
           }
           const child = { ...data.child, narrationRate: rate };
           await (await services.repository()).saveChild(child);
-          set({ data: { ...data, child } });
+          publish({ data: { ...data, child } });
         }),
     };
   });

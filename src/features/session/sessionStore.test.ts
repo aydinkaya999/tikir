@@ -355,6 +355,37 @@ describe('the session store', () => {
     expect(seen.every(Boolean)).toBe(true);
   });
 
+  it('takes an action that a screen starts while a step is being published', async () => {
+    // G6 opens on a session whose last answer is written and ends it at once (karar 16); React
+    // runs the screen's effect inside the store's publish, before the load call has returned.
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    await store.getState().start();
+    const started = await repository.getSession(today);
+    if (started === null) {
+      throw new Error('No session today.');
+    }
+    await repository.saveSession({ ...started, step: 'wrapUp', answers: [0, 0] });
+    const reopened = storeOver(repository).store;
+    const finishing: Promise<void>[] = [];
+    const unsubscribe = reopened.subscribe((state, previous) => {
+      if (state.status === 'ready' && previous.status !== 'ready') {
+        finishing.push(state.finishSession());
+      }
+    });
+
+    await reopened.getState().load();
+    unsubscribe();
+    // The finish is still writing: a tap now is a double tap and is refused.
+    await expect(reopened.getState().answerQuestion(1)).resolves.toBeNull();
+    await Promise.all(finishing);
+
+    const session = await repository.getSession(today);
+    expect(session?.step).toBe('done');
+    expect(session?.answers).toEqual([0, 0]);
+  });
+
   it('rejects and reports the error when a write fails', async () => {
     const repository = await demoRepository();
     const { store } = storeOver(repository);
