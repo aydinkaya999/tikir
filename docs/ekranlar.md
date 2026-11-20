@@ -130,11 +130,13 @@ Kurulum kabuğu: üstte dört adımlı ilerleme, tablet ve webde solda kobalt pa
 - **Onay kutusu varsayılan olarak işaretsizdir** (tasarımda dolu durumu görünüyor). Onay verilmeden hesap oluşturulabilir ama dinleme özellikleri kapalı kalır ve K3 atlanır; bu durumda ekranda açıklama gösterilir. Açıklamanın tasarımı yok.
 - **"Ses verisi nasıl kullanılır?"** bir bilgi katmanı açar; metni taslak.
 - Arka uç gelene kadar hesap yalnız cihazda tutulur. **Parola depoya yazılmaz:** alan yalnız biçim için doğrulanır, değeri saklanmaz ve hiçbir yere gönderilmez.
+- **Tasarımı olmayan ayrıntılar** (alan hataları, onaysız açıklama, bilgi penceresinin metni): `docs/planlar/faz-3.md`, kararlar 9–11 ve "Tasarımı olmayan durumların metinleri" (D16).
 
 ### K2 Okuyucu profili
 
 - **Alanlar:** ad, sınıf (1–4, tek seçim), ilgi alanları (8 seçenekten en çok 3).
 - Sınıf, varsayılan yazı tipini belirler (`docs/urun.md` bölüm 7).
+- **Ayrıntılar** (adın 30 karakter sınırı, hatalar, onaylı geçişte mikrofonun açılması): `docs/planlar/faz-3.md`, kararlar 12–13.
 
 ### K3 Seviye tespiti
 
@@ -142,11 +144,13 @@ Kurulum kabuğu: üstte dört adımlı ilerleme, tablet ve webde solda kobalt pa
 - **Metin:** `seed/olcum-metinleri.json` içinden çocuğun sınıfına göre seçilir. Tasarımdaki örnek `olcum-3a` metninin başıdır.
 - Okuma kaydedilir (V3'teki "Kaydı dinle" bunu çalar).
 - Bu ekran haftalık ölçümün de kalıbıdır.
+- **Ayrıntılar** (sayfalama, geri sayım, dakikanın sonunda bitmekte olan kelime, telefonda mikrofon sorunu, "Seviye tespitini atla"): `docs/planlar/faz-3.md`, kararlar 14–18.
 
 ### K4 Tıkır ile tanışma
 
 - **İçerik:** başlangıç `wcpm`, doğruluk ve okuma düzeyi; ilk hedef ve küçük hedef grafiği; programın üç maddesi.
 - **Geçiş:** "İlk bölüme başla" → G1.
+- **Ölçüm yoksa** (onay yok ya da seviye tespiti atlandı) sayı, alt başlık ve iki madde görünmez; düzey etiketi endişe düzeyinde gösterilmez: `docs/planlar/faz-3.md`, kararlar 19–21.
 
 ## Kitaplık ve kitap üretimi
 
@@ -210,6 +214,7 @@ Veli kabuğu: lacivert üst şerit ("Veli alanı" ve çocuk etiketi), gezinme (�
 - "Ölçümlerde iki ayarı dene" kapalıyken sonuç satırları gizlenir.
 - Sonuç satırları ölçüm kayıtlarından hesaplanır (`docs/urun.md` bölüm 7): her ayar için ortalama ve kaç ölçüm kaldığı.
 - Tasarımın üç durumu da var: varsayılan, `@okul-buyuk`, `@kucuk-kapali`.
+- **Ayrıntılar** (önizleme metni, sonuç cümleleri, önizleme kutusunun yüksekliği): `docs/planlar/faz-3.md`, karar 24 ve "Tasarımı olmayan durumların metinleri".
 
 ## Tasarımı olmayan durumlar
 
@@ -218,7 +223,7 @@ Bunlar için tasarım bekleniyor. O gelene kadar aşağıdaki varsayılanı uygu
 | Durum | Varsayılan |
 |---|---|
 | Albüm ve Stüdyo sekmeleri | Sekmeler görünür. Albüm: evcilleşen kelimelerin kart listesi. Stüdyo: kayıtlı bölümlerin oynatma listesi. Başka özellik ekleme. |
-| Veli kapısı | Tam ekran katman: iki basamaklı bir toplama sorusu ("47 + 38 = ?"). Üç yanlışta 30 saniye bekletir. |
+| Veli kapısı | Tam ekran katman: iki basamaklı bir toplama sorusu ("47 + 38 = ?"). Üç yanlışta 30 saniye bekletir. Faz 3'te kuruldu: girişler, çıkışlar ve açık kalma `docs/planlar/faz-3.md`, kararlar 25–27. |
 | Giriş (oturum açma) | Arka uç gelene kadar yok; hesap cihazda. |
 | Haftalık ölçüm (çocuk) | K3 ekranının kalıbı; başlık "1 dakikalık ölçüm". |
 | Mikrofon izni reddedildi | Seans kabuğunda Tıkır balonu: iznin nasıl açılacağını anlatır; "Yeniden dene" düğmesi. Yeniden deneme de olmazsa "Bugün dinlemeden oku": seansın kalanı dinlemesiz yürür (`docs/kararlar.md` P14). |

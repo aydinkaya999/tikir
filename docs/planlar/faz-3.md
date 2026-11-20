@@ -269,6 +269,8 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 | V4, ölçüm yok | Henüz iki ayarla ölçüm yapılmadı. İlk ölçümlerden sonra sonuçlar burada görünür. | önerilen |
 | V4, öneri hazır | {ayar} ile ortalama {n} doğru kelime daha fazla okuyor. Bu ayara geçebilirsiniz. | önerilen |
 | V4, fark küçük (yeterli ölçümle) | Doğru kelime / dk, {n} ölçümün ortalaması. Fark küçük; iki ayar da uygun. | tasarımın cümlesinden |
+| V4, ölçüm sürüyor ve fark büyük | Doğru kelime / dk, {n} ölçümün ortalaması. Karar için {k} ölçüm daha gerekiyor. | tasarımın cümlesinden (uygulamada eklendi) |
+| V4, şu anki ayar önde | {ayar} ile ortalama {n} doğru kelime daha fazla okuyor. | öneri cümlesinden (uygulamada eklendi) |
 
 **Tasarımdan gelen değişkenli metinler** (kalıp; sayı ve adlar veriden):
 
@@ -345,7 +347,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 14: V4 Yazı ayarı
 - [x] Task 15: P14 seansta
 - [x] Task 16: Uçtan uca testler
-- [ ] Task 17: Belgeler, karşılaştırma ve denetim
+- [x] Task 17: Belgeler, karşılaştırma ve denetim
 
 ## Görevler
 
@@ -879,7 +881,7 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
 
 **Dosyalar:** `docs/mimari.md`, `docs/ekranlar.md`, `docs/dinleme-hatti.md`, `docs/kararlar.md`, `CLAUDE.md`, bu plan.
 
-- [ ] Belgeler:
+- [x] Belgeler:
   - `docs/mimari.md`:
     - kurulum durumu ve korumalar;
     - veli kapısı;
@@ -889,13 +891,13 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
   - `docs/ekranlar.md`: K1–K4 ve V4'ün tasarımsız ayrıntılarına gönderme.
   - `docs/dinleme-hatti.md`: ölçüm senaryosu ve K3.
   - `docs/kararlar.md`: değişiklik günlüğü.
-- [ ] Tasarım karşılaştırması: K1–K4 ve V4'ün üç durumu bu plandaki komutlarla yeniden alınır; fark listeleri tamamlanır (ölçüt 8).
-- [ ] Denetim:
+- [x] Tasarım karşılaştırması: K1–K4 ve V4'ün üç durumu bu plandaki komutlarla yeniden alınır; fark listeleri tamamlanır (ölçüt 8).
+- [x] Denetim:
   - `pnpm check`.
   - `pnpm build`; `dist/` içinde şu dizgiler 0 dosyada: `demo-profil`, `veli@example.com`, `gelistirme`, `fake-indexeddb`, `kapi=acik`, `tikir.gelistirme`.
   - `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`.
   - Çıktılar "Kanıtlar"a yazılır.
-- [ ] Commit: `docs: record phase 3 decisions and evidence`.
+- [x] Commit: `docs: record phase 3 decisions and evidence`.
 
 Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte yapılır. Faz bitince dal `main`'e `--no-ff` birleştirilir ve gönderilir (ürün sahibinin kalıcı talimatı).
 
@@ -905,9 +907,10 @@ Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte
 |---|---|
 | K1 | `pnpm shots '/kurulum/hesap?kurulum=hesap'` |
 | K2 | `pnpm shots --dokun "3. sınıf" --dokun Uzay --dokun Futbol --dokun Dinozorlar '/kurulum/okuyucu?kurulum=okuyucu'` |
-| K3 | `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 22000 '/kurulum/seviye?kurulum=seviye'` |
-| K4 | `pnpm shots '/kurulum/tanisma?kurulum=tanisma'` |
-| V4 | `pnpm shots '/veli/yazi?demo=veli-haftasonu&kapi=acik'` (ve iki durumun `--dokun` adımları, Task 14) |
+| K3 | `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --ileri 22000 '/kurulum/seviye?kurulum=seviye'`; metin anı için aynısı `--ileri 11500` ile |
+| K4 | `pnpm shots '/kurulum/tanisma?kurulum=tanisma' '/kurulum/tanisma?kurulum=tanisma&onay=kapali'` |
+| V4 | `pnpm shots '/veli/yazi?demo=veli-haftasonu&kapi=acik'`; `@okul-buyuk`: `--dokun "Okul harfleri" --dokun "En büyük" --dokun "Daha açık"`; `@kucuk-kapali`: `--dokun "Küçük" --dokun "Açık" --dokun "Ölçümlerde iki ayarı dene"` |
+| Kapı, G1, V1 | `pnpm shots '/veli?demo=veli-haftasonu' '/?demo=cocuk-sabahi' '/veli?demo=veli-haftasonu&kapi=acik'` |
 
 Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
@@ -969,8 +972,34 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
 ## Kanıtlar
 
-Uygulama sırasında doldurulur.
+- `pnpm check` → tip denetimi, ESLint, Stylelint ve Prettier temiz; **108 test dosyası, 868 test geçti**.
+- `pnpm build` → temiz. `dist/` içinde şu dizgilerin hiçbiri yok (`grep -rlF`, 0 dosya): `demo-profil`, `veli@example.com`, `gelistirme`, `fake-indexeddb`, `kapi=acik`, `tikir.gelistirme`. Kapının bekleme anahtarı (`tikir.kapi.bekleme`) ürün paketinde.
+- `caffeinate -u -t 2; caffeinate -d -i pnpm e2e` → **222 passed** (Chromium ve WebKit, 1,6 dk). Faz 2b'nin 172 testine ek olanlar: onaylı ve onaysız kurulum, yazı ayarının G3, G4 ve K3'e yansıması, V4'te 24 birleşimde denetimlerin yerinde kalması (telefon ve web), veli kapısı, P14 ile dinlemesiz gün, kurulumda dış istek yokluğu, seçim düğmesinin dokunuşu, okul harfleriyle dört boyut, pencerenin Escape'le kapanması, telefonda ve tablette veli alanının girişleri ve çıkışları.
+- İlk tam koşuda ses denemesinin "sayfadan ayrılınca mikrofon bırakılır" testi düştü: test uygulamada `/`'e gidiyordu, boş depo onu kuruluma yönlendiriyor (Task 5'ten beri). Test artık vitrine gider; ardından tam koşu 222/222.
+- Ekran görüntüleri yukarıdaki komutlarla yeniden alındı (36 dosya, `shots/faz-3/`); fark listeleri "Tasarım karşılaştırması"nda.
 
 ## Uygulamada verilen kararlar
 
-Uygulama sırasında doldurulur.
+Her biri ilgili commit mesajında ve testlerde; özetleri:
+
+1. **Kurulum koruması:** Tek koruma (`SetupGuard`) ürün kabuklarını ve kurulum kabuğunu sarar, tek kural (`setupRedirect`) iki yönü de belirler. Depo yüklenirken "Hazırlanıyor…" görünür; yüklenirken hiçbir koruma karar vermez.
+2. **Demo kurulum verisi** `demoSetupSeed()` ile demo yükleyicisinin doğrulanmış JSON'undan gelir.
+3. **Kurulum düzeni:** Pano 1000 px'ten (yanıt 7); 700–999 px'te telefon düzeni 32 px yan boşlukla. Başlık ve alt metin düzende (K1–K4 aynı başlığı çiziyor). 1200 px'ten içerik büyümez ve eylem içeriğin 30 px altında durur (22 px aralık + 8 px); tablette eylem dipte; telefonda alt çubuk eylemi uzatır.
+4. **K1:** Bilgi penceresinin taslağı plan tablosundaki "(Taslak; …)" notu olmadan gösterilir; not metne değil plana ait. Kodda `TODO(legal)`.
+5. **Seçim düğmeleri** (`ChoicePills`): Radyo düğmeyi görünmez biçimde kaplar, dokunuş doğrudan radyoya gider (1 px'e kırpılmış radyoya Playwright dokunamıyordu). Üç seçim dolunca öteki düğmeler görünüşünü korur (K2 tasarımı böyle); yalnız imleç değişir.
+6. **K2:** Tasarımdaki "Deniz" adın yer tutucusudur. İlgi alanları demo profilindeki gibi adlarıyla saklanır. Yalnız sınıf eksikse odak ilk sınıfa gider; ad 30 harfle sınırlı.
+7. **T22 genişledi:** K2'nin "Devam et"i mikrofonu açar, K3 dinleyen adımdır (`docs/kararlar.md`, `docs/mimari.md`).
+8. **Yazı ayarı kabı** yalnız okuma metnini sarar; sayfa kartının başlığı arayüz metnidir. Vitrin okul harflerini dört boyutta gerçek kapla yürür; uçtan uca test yazı tipinin ve boyutların gerçekten değiştiğini de ölçer.
+9. **K3'ün metni** G4 gibi ilerler (okunan, şu anki kelime, sıradaki) ama hata ve duraksama işareti ve hayalet yoktur: tasarım bu üç kelime durumunu çiziyor, alt başlık "Hata yapması sorun değil" diyor.
+10. **K3'te telefonda mikrofon sorunu:** Kurulum telefonda Tıkır çizmez; sorun anında Tıkır ve balonu içeriğin başına gelir (K4 telefonun satırı, 96 px; `TODO(design)`). Yeniden denemeyi sayfa sayar, çünkü balon pano ve telefon satırında iki kez çizilir.
+11. **Kayıt kancası** (`useReadingRecorder`): Okumanın çalışıp çalışmadığını efektte güncellenen bir ref'ten okur. Ekran kapandıktan sonra gelen bir başlatmayı reddeder, kaydedici açık kalmaz.
+12. **K3'ün mikrofon düğmesi** tek düğmedir: 72 px, 1000 px'in altında 64 px. Böylece "Okumayı bitir" de tek düğme.
+13. **Ölçüm senaryoları:** `struggling` 46 kelime, `smooth` 80 kelime, `design` = `typical`. Geliştirme verisidir, okuma içeriği değildir.
+14. **K4:** Hedef çizimi tasarımdaki iki nokta ve kesik çizgidir, V1'in `LineChart`'ı değil. Endişe düzeyinde düzey etiketi yok, doğruluk görünür. Kurulum panosu `data-pane="panel"` taşır (rota testi panonun Tıkır'ını K4'ün telefon satırından ayırır).
+15. **Veli kapısı:** Açıklık, veli rotalarının düzen öğesinin durumundadır (bellekte). Bekleme anahtarı geliştirme anahtarlarından ayrı tutulur, ürün paketi `tikir.gelistirme` taşımaz. Yanlış cevapta soru aynı kalır, alan boşalır; yeni soru beklemenin sonunda gelir.
+16. **Veli adresleri** `src/features/parent/paths.ts`'tedir; G1'in kilit düğmesi `src/app`'i içe aktarmaz. Kilit ve şerit çıkışı bağlantı olan `IconButton`'lardır; şerit çıkışı 61 px'lik şeridi uzatmaz.
+17. **V4:** Günün verisi ölçümleri de taşır (`SessionData.assessments`). Seçim önce sayfada görünür, sonra depoya sırayla yazılır, son seçim en son: deponun `act`'i çalışan bir eylem varken yenisini yok sayıyor, hızlı iki dokunuşta ikincisi kaybolurdu. Önizleme kutusu en büyük iki ayarın yüksekliğini tutar (telefonda tasarımdan bir satır yüksek). Tasarımda olmayan iki cümle onaylı parçalardan kuruldu (D16). `OptionCard` etiketiyle adlandırılır, açıklamasıyla betimlenir. Görüntü betiği anahtarlara da dokunur; `@kucuk-kapali` "Açık"la karşılaştırıldı.
+18. **P14:** "Dinlenir mi" tek yardımcıdan sorulur (`sessionListens`): G1, G2, G3, G4, G5 ve geliştirme adımları. Seçeneği açan yeniden deneme ekran başına sayılır.
+19. **K3'ün dakikası** (P15, varsayım): Tarayıcıda dakikanın sonu, aynı anda biten kelimenin önüne geçiyordu (57/63, %90). Okuma dakikadan 250 ms sonra durur, süre 60 saniyeyle sınırlanır.
+20. **Uçtan uca testler:** K3'ün yazı ayarı 1. sınıfın varsayılanıyla sınanır, çünkü K3 veli alanından önce gelir. Kurulum adımları `e2e/support/onboarding.ts`'te.
+21. **Kırmızı adımlar:** Task 4 ve 5'in uçtan uca testleri değişiklikten sonra yazıldı; aynı davranışın birim testi önce düştü ya da değişiklik geri alınarak düşürüldü. Kapının geliştirme parametresi testi ve sayfaya sonradan eklenen testler, ilgili satır geçici olarak çıkarılınca düştü. G7'nin P14 testi baştan geçti (G7 zaten 3. okumaya bakıyor); gereksinimi sabitler.
