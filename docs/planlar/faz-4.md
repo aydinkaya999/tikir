@@ -263,19 +263,19 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D17 olarak işlenir.
 ## Görev listesi
 
 - [x] Task 0: Planı ve kararları işle
-- [ ] Task 1: Rapor alan mantığı ve iyelik eki
-- [ ] Task 2: Ölçüm planı ve ek zinciri alan mantığı
-- [ ] Task 3: Seans deposunda hedef, ölçüm, kayıt, onay ve hesap
-- [ ] Task 4: Kaydedici ve paylaşım servisleri
-- [ ] Task 5: Karne görünümleri ve tarih biçimleri
-- [ ] Task 6: V1 Haftalık özet
-- [ ] Task 7: V2 Takılınan yerler
-- [ ] Task 8: V3 Ölçüm sonucu
-- [ ] Task 9: Hesap sayfası ve girişleri
-- [ ] Task 10: Ölçüm okumasının ayrılması
-- [ ] Task 11: Haftalık ölçüm
-- [ ] Task 12: Uçtan uca testler
-- [ ] Task 13: Belgeler, karşılaştırma ve denetim
+- [x] Task 1: Rapor alan mantığı ve iyelik eki
+- [x] Task 2: Ölçüm planı ve ek zinciri alan mantığı
+- [x] Task 3: Seans deposunda hedef, ölçüm, kayıt, onay ve hesap
+- [x] Task 4: Kaydedici ve paylaşım servisleri
+- [x] Task 5: Karne görünümleri ve tarih biçimleri
+- [x] Task 6: V1 Haftalık özet
+- [x] Task 7: V2 Takılınan yerler
+- [x] Task 8: V3 Ölçüm sonucu
+- [x] Task 9: Hesap sayfası ve girişleri
+- [x] Task 10: Ölçüm okumasının ayrılması
+- [x] Task 11: Haftalık ölçüm
+- [x] Task 12: Uçtan uca testler
+- [x] Task 13: Belgeler, karşılaştırma ve denetim
 
 ## Görevler
 
@@ -324,7 +324,7 @@ withDativeSuffix(count: number): string;             // '71’e', '2’ye', '6�
 withPossessiveLocativeSuffix(count: number): string; // '5’inde', '6’sında', '3’ünde'
 ```
 
-- [ ] **Kırmızı** (`report.test.ts`, tablo testleri):
+- [x] **Kırmızı** (`report.test.ts`, tablo testleri):
   - Pazar ölçümü o haftaya girer; deneme ölçümü haftanın değeri olmaz.
   - `reportWeeks` yalnız veri olan haftaları verir; ay ve yıl geçişi.
   - `targetForWeek`: hedef yokken `firstTarget(başlangıç)`; hafta içinde konan hedef sonraki haftadan geçerli; ölçüm yoksa null.
@@ -334,8 +334,8 @@ withPossessiveLocativeSuffix(count: number): string; // '5’inde', '6’sında'
   - `goalUpdate`: geçildiyse `nextTarget`; geçilmediyse null; aynı ya da daha büyük hedef konduysa null; hafta içinde konan hedef o haftanın hedefini değiştirmez.
   - `withGenitiveSuffix`: Kemal’in, Hilal’in, Bilal’in, Meral’in; öbür adlar eskisi gibi.
   - Sayı ekleri: 58’den, 70’ten, 4’ten, 90’dan, 100’den; 71’e, 2’ye, 6’ya, 4’e, 90’a; 5’inde, 6’sında, 3’ünde, 7’sinde, 0’ında.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(domain): add the weekly report's rules`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(domain): add the weekly report's rules`.
 
 ### Task 2: Ölçüm planı ve ek zinciri alan mantığı
 
@@ -355,7 +355,7 @@ measurementReadings(passages, assessments, style, today): PlannedReading[]; // k
 drillCards(drill: DrillSuggestion, cards, chains, today): StuckWord[];   // karar 8: yalnız yeni kartlar
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - `measurementDue`: onaysız hiç; ölçümsüz hemen; son ölçümden 6 gün sonra kapalı, 7 ve 9 gün sonra açık.
   - `measurementReadings`:
     - denemesiz bir okuma; önceki metin verilmez (3. sınıf: 3a sonra 3b);
@@ -364,8 +364,8 @@ drillCards(drill: DrillSuggestion, cards, chains, today): StuckWord[];   // kara
     - önceki deneme haftalarının sayısı çiftse geçerli ayar önce, tekse denenen ayar önce;
     - yarım haftada yalnız eksik okuma.
   - `drillCards`: altı kelime, yarından başlayarak ikişer gün; kartı olan kelime atlanır; heceler ve zincir.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(domain): plan the weekly measurement and the suffix drill`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(domain): plan the weekly measurement and the suffix drill`.
 
 ### Task 3: Seans deposunda hedef, ölçüm, kayıt, onay ve hesap
 
@@ -385,15 +385,15 @@ setConsent(consent: { voiceProcessing: boolean; weeklyEmail: boolean }): Promise
 deleteAccount(): Promise<void>;
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - `setGoal` bugünün tarihiyle hedef ekler.
   - `saveMeasurement` denemeli ve denemesiz ölçüm yazar; `data.assessments` yenilenir.
   - `addDrillToWarmup` kartları yazar, öneriyi siler.
   - `deleteRecording` sesi ve göndermeleri kaldırır (ölçüt 6).
   - `setConsent` `grantedAt`'i yazar ya da siler.
   - `deleteAccount` depoyu boşaltır, durum `setup` olur.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(session): keep goals, measurements, recordings and consent in the store`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(session): keep goals, measurements, recordings and consent in the store`.
 
 ### Task 4: Kaydedici ve paylaşım servisleri
 
@@ -401,13 +401,13 @@ deleteAccount(): Promise<void>;
 
 **Üretir:** `Recorder.list(): Promise<RecordingInfo[]>`, `approve(id)`, `play(id, range?: { fromMs: number; toMs: number })`; `RecordingInfo.createdAt`, `approval?: 'pending' | 'approved'`; `ShareService { canShare(): boolean; share(content: { title: string; text: string }): Promise<'shared' | 'copied' | 'cancelled'> }`; `SessionDevices.share`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - `sliceWav` doğru başlık ve örnekleri verir.
   - `play` dilimi çalar.
   - `list` ve `approve` çalışır.
   - `ShareService`: `navigator.share` varsa onunla, yoksa panoya; ikisi de yoksa `canShare()` yanlış; kullanıcının iptali `'cancelled'`.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(services): list, approve and play part of recordings, and share text`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(services): list, approve and play part of recordings, and share text`.
 
 ### Task 5: Karne görünümleri ve tarih biçimleri
 
@@ -417,72 +417,72 @@ deleteAccount(): Promise<void>;
 
 **Üretir:** `summaryView(data, week)`, `stuckView(data, recordings)`, `assessmentView(data)`, `accountView(data, recordings)`; `formatDayMonth`, `formatLongDate`, `formatWeekRange`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - `veli-haftasonu` demo deposuyla `expected` değerleri (ölçüt 1):
     - V1: 71, +4, %93, 3 / 4, 5 / 7 (Pt Sa Pe Cu Ct), grafik 58…71, hedef 70, ortalama 90, yorum;
     - V2: 30 hata, 9/7/6/5/3;
     - V3: 76, 5, 71, %93, öğretim, 7 gün sonra.
   - 4. sınıfta ortalama 98; 1. ve 2. sınıfta yok (ölçüt 2).
   - Tarih biçimleri, ay geçişi dahil.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(parent): build the report's views from the stored data`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(parent): build the report's views from the stored data`.
 
 ### Task 6: V1 Haftalık özet
 
 **Dosyalar:** `src/features/parent/SummaryPage.tsx` (+CSS, +test), `src/features/parent/pages.tsx`, `src/app/router.tsx`, `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Demo haftasının içeriği tasarımdaki gibi.
   - Hafta okları önceki haftaya geçer, uçta pasif.
   - "Hedefi güncelle" penceresi yeni hedefi yazar ve düğme kaybolur.
   - Dinlemeden okunan gün işareti ve satırı.
   - Boş durum.
   - 1. sınıfta ortalama çizgisi yok.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/veli?demo=veli-haftasonu&kapi=acik'` → V1 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(parent): build the weekly summary (V1)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/veli?demo=veli-haftasonu&kapi=acik'` → V1 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(parent): build the weekly summary (V1)`.
 
 ### Task 7: V2 Takılınan yerler
 
 **Dosyalar:** `src/features/parent/StuckWordsPage.tsx` (+CSS, +test), `PendingRecordings.tsx` (+test), `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Hata türleri ve kelimeler tasarımdaki gibi.
   - Kayıt yoksa dinleme düğmesi gizli; kayıtlı bir okumada düğme dilimi çalar.
   - "Isınmaya ekle" kartları ekler, onay satırı görünür.
   - Onay bekleyen kayıtlar: dinle, onayla, sil (pencere).
   - Boş durumlar.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/takilinan?demo=veli-haftasonu&kapi=acik'` → V2 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(parent): build the stuck words (V2)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/takilinan?demo=veli-haftasonu&kapi=acik'` → V2 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(parent): build the stuck words (V2)`.
 
 ### Task 8: V3 Ölçüm sonucu
 
 **Dosyalar:** `src/features/parent/AssessmentPage.tsx` (+CSS, +test), `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Sayılar, bant, düzey cümlesi, alıntının işaretleri tasarımdaki gibi.
   - "Sıradaki ölçüm" tarihi; geçmişse "bugün".
   - Paylaşım: paylaşma penceresi ya da panoya ve onay satırı; paylaşma yoksa düğme gizli.
   - "Kaydı dinle" kayıt varken.
   - Boş durum.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/olcum?demo=veli-haftasonu&kapi=acik'` → V3 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(parent): build the assessment result (V3)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/olcum?demo=veli-haftasonu&kapi=acik'` → V3 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(parent): build the assessment result (V3)`.
 
 ### Task 9: Hesap sayfası ve girişleri
 
 **Dosyalar:** `src/features/parent/AccountPage.tsx` (+CSS, +test), `src/features/parent/paths.ts`, `src/app/routes.ts`, `src/app/router.tsx`, `src/app/shells/ParentShell.tsx`, `ShellNav.tsx` (birden çok alt bağlantı), `src/i18n/tr.ts`, `e2e/routes.spec.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Onay anahtarları onayı değiştirir.
   - Kayıtlar dinlenir ve silinir (pencere).
   - Hesap silinince kurulum açılır.
   - Boş kayıt listesi.
   - Girişler: rayda ve kenar çubuğunda "Hesap"; telefonda şerit düğmesi (uçtan uca, genişliklere göre).
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/hesap?demo=veli-haftasonu&kapi=acik'` (tasarımı yok; taşma ve kırpılma).
-- [ ] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts`.
-- [ ] Commit: `feat(parent): add the account page with consent, recordings and deletion`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/hesap?demo=veli-haftasonu&kapi=acik'` (tasarımı yok; taşma ve kırpılma).
+- [x] → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts`.
+- [x] Commit: `feat(parent): add the account page with consent, recordings and deletion`.
 
 ### Task 10: Ölçüm okumasının ayrılması
 
@@ -490,54 +490,54 @@ deleteAccount(): Promise<void>;
 
 **Üretir:** `MeasurementReading({ passage, style, consent, narrator, startOnTap?, onFinish(outcome, meta), render })`: K3'ün kartı, geri sayımı, denetimleri ve balonu; düzeni çağıran kurar (K3 `OnboardingLayout`, ölçüm odak kabuğu).
 
-- [ ] K3'ün testleri değişmeden geçer (taşıma); `startOnTap` için kırmızı test: mikrofon açıkken okuma dokunuşa kadar başlamaz.
-- [ ] → PASS. `pnpm check`. K3 görüntüsü değişmez.
-- [ ] Commit: `refactor(reading): share the timed reading between K3 and the weekly measurement`.
+- [x] K3'ün testleri değişmeden geçer (taşıma); `startOnTap` için kırmızı test: mikrofon açıkken okuma dokunuşa kadar başlamaz.
+- [x] → PASS. `pnpm check`. K3 görüntüsü değişmez.
+- [x] Commit: `refactor(reading): share the timed reading between K3 and the weekly measurement`.
 
 ### Task 11: Haftalık ölçüm
 
 **Dosyalar:** `src/features/measurement/MeasurementPage.tsx` (yeni, +CSS, +test), `src/features/session/RoadPage.tsx` (+CSS, +test), `src/features/session/paths.ts` (`/olcum` dinleyen adres), `src/app/routes.ts`, `src/app/router.tsx`, `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - G1'de kart yalnız ölçüm açıkken; dokunuş mikrofonu açar ve `/olcum`'a gider.
   - Ölçüm açık değilse `/olcum` G1'e gider.
   - Tek okuma: kayıt `Assessment` olur, G1'e dönülür, kart kalkar.
   - Deneme: iki okuma, ikincisi dokunuşla; sıra ve metinler; her okuma kendi ayarıyla görünür (denenen ayar `trialReadingStyle`) ve denenen ayarın okuması `trial: true` yazılır.
   - Yarıda çıkış yazmaz.
   - Mikrofon sorunu: "Yeniden dene", P14 seçeneği yok.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots --ileri 86400000 --bekle 'Ölçüme başla' '/?demo=cocuk-sabahi'` (kart) ve ölçüm ekranı (tasarımı yok; K3 ile karşılaştırma).
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(measurement): add the weekly one-minute measurement`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots --ileri 86400000 --bekle 'Ölçüme başla' '/?demo=cocuk-sabahi'` (kart) ve ölçüm ekranı (tasarımı yok; K3 ile karşılaştırma).
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(measurement): add the weekly one-minute measurement`.
 
 ### Task 12: Uçtan uca testler
 
 **Dosyalar:** `e2e/report.spec.ts`, `e2e/measurement.spec.ts`, `e2e/account.spec.ts` (yeni), `e2e/no-external-requests.spec.ts`.
 
-- [ ] Testler (Chromium ve WebKit):
+- [x] Testler (Chromium ve WebKit):
   1. **`report.spec.ts`** › "the weekend profile's report shows the expected numbers" (ölçüt 1, 2): V1–V4 değerleri, grafikte hedef ve ortalama.
   2. **`measurement.spec.ts`** › "a trial week reads both styles and reaches V3" (ölçüt 4, 5): `cocuk-sabahi` (Deniz'de deneme açık), saat bir gün ileri, G1 kartı, iki dakika (saat), G1'de kart yok, V3'te yeni ölçüm, V4'te iki ayarın ölçüm sayısı birer artar.
   3. **`measurement.spec.ts`** › "with the trial off the measurement is one reading": V4'te deneme kapatılır, saat bir gün ileri, tek okuma.
   4. **`account.spec.ts`** › "a deleted recording leaves the device" (ölçüt 6) ve "deleting the account opens the setup".
   5. **`no-external-requests.spec.ts`:** yeni sayfalar ve ölçüm akışı.
-- [ ] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/report.spec.ts e2e/measurement.spec.ts e2e/account.spec.ts e2e/no-external-requests.spec.ts` → geçer.
-- [ ] Commit: `test(e2e): run the report, the weekly measurement and the account end to end`.
+- [x] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/report.spec.ts e2e/measurement.spec.ts e2e/account.spec.ts e2e/no-external-requests.spec.ts` → geçer.
+- [x] Commit: `test(e2e): run the report, the weekly measurement and the account end to end`.
 
 ### Task 13: Belgeler, karşılaştırma ve denetim
 
 **Dosyalar:** `docs/mimari.md`, `docs/ekranlar.md`, `docs/dinleme-hatti.md`, `docs/kararlar.md`, `CLAUDE.md` (gerekirse), bu plan.
 
-- [ ] Belgeler:
+- [x] Belgeler:
   - `docs/mimari.md`: karne verisi, hedef geçmişi, ölçüm akışı, kayıt servisi, paylaşım servisi, hesap.
   - `docs/ekranlar.md`: V1–V3, haftalık ölçüm, Hesap ayrıntılarına gönderme.
   - `docs/dinleme-hatti.md`: haftalık ölçüm (deneme sırası, kayıt).
   - `docs/kararlar.md`: değişiklik günlüğü.
-- [ ] Tasarım karşılaştırması: V1–V3, G1 ölçüm kartı, ölçüm ekranı, Hesap; fark listeleri (ölçüt 8).
-- [ ] Denetim:
+- [x] Tasarım karşılaştırması: V1–V3, G1 ölçüm kartı, ölçüm ekranı, Hesap; fark listeleri (ölçüt 8).
+- [x] Denetim:
   - `pnpm check`.
   - `pnpm build`; `dist/` içinde `demo-profil`, `veli@example.com`, `gelistirme`, `fake-indexeddb`, `kapi=acik`, `tikir.gelistirme` 0 dosyada.
   - `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`.
   - Çıktılar "Kanıtlar"a yazılır.
-- [ ] Commit: `docs: record phase 4 decisions and evidence`.
+- [x] Commit: `docs: record phase 4 decisions and evidence`.
 
 Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte yapılır. Faz bitince dal `main`'e `--no-ff` birleştirilir ve gönderilir (ürün sahibinin kalıcı talimatı).
 
@@ -590,8 +590,56 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
 ## Kanıtlar
 
-Uygulama sırasında doldurulur.
+- `eval "$(mise env -s zsh)" && pnpm check`: 118 dosya, 1006 test geçti (tip denetimi, ESLint, Stylelint ve Prettier dahil).
+- `pnpm build`: temiz. `dist/` içinde `demo-profil`, `veli@example.com`, `gelistirme`, `fake-indexeddb`, `kapi=acik` ve `tikir.gelistirme` 0 dosyada.
+- `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`: Chromium ve WebKit'te 238 test geçti (1,9 dk). İlk koşuda "the next day opens the next chapter with yesterday’s words and the ghost" iki tarayıcıda düştü: ertesi gün haftalık ölçüm açık olduğu için G1'deki "Ölçüme başla", testin "Başla" aramasına da uyuyordu (Playwright adları alt dize olarak eşler). Seansı başlatan dört seçici `exact: true` oldu; ikinci koşu temiz.
+- Ölçütler:
+  1. V1–V4 `expected` değerleri: `src/features/parent/views.test.ts`, `SummaryPage.test.tsx`, `StuckWordsPage.test.tsx`, `AssessmentPage.test.tsx`; uçtan uca `e2e/report.spec.ts`.
+  2. Hedef çizgisi ve sınıf ortalaması, 1. ve 2. sınıfta ortalama yok: `views.test.ts`, `SummaryPage.test.tsx`, `e2e/report.spec.ts`.
+  3. Yorum cümlesinin beş durumu: `src/domain/report.test.ts`, `views.test.ts`.
+  4. Ölçüm `Assessment` olarak yazılır, V3'te görünür: `sessionStore.test.ts`, `MeasurementPage.test.tsx`, `e2e/measurement.spec.ts`.
+  5. Ölçerek seçme: `readingStyle.test.ts` (Faz 3), `src/domain/measurement.test.ts` (sıra, yarım hafta), `e2e/measurement.spec.ts` (iki okuma, V4'te ölçüm sayısı).
+  6. Silinen kayıt depodan kalkar: `sessionStore.test.ts`, `AccountSettingsPage.test.tsx`, `StuckWordsPage.test.tsx`, `e2e/account.spec.ts`.
+  7. Boş durumlar: V1, V2, V3 ve Hesap ekran testleri.
+  8. Tasarım karşılaştırması: yukarıdaki "Tasarım karşılaştırması" bölümü (`shots/veli-*.png`, `shots/demo-cocuk-sabahi-*.png`).
+- Bir kez görülen kararsız test: `WarmupPage.test.tsx` › "explains a refused, missing or failed microphone and tries again" Task 6'nın bir tam koşusunda düştü; tek başına 5/5 ve sonraki bütün tam koşularda geçti. Faz 4'ün kodu bu ekrana dokunmuyor; zamanlamaya bağlı eski bir kırılganlık.
 
 ## Uygulamada verilen kararlar
 
-Uygulama sırasında doldurulur.
+Ürün sahibinin gözden geçirmesi için; yanlış çıkarsa bedeli yanında.
+
+**Veri ve alan mantığı**
+
+1. `measurementDue` çocuğun yazı ayarını da alır: deneme haftası yarım kalınca eksik okuma açık kalmalı (karar 31). Yarım kalan deneme haftası yalnız o hafta bitene kadar açıktır (karşılaştırma okumaları haftaya göre eşler); deneme sırası, iki ayarın da okunduğu önceki haftaların sayısına göre döner. Bedel: terk edilen yarım hafta sonraki hafta tamamlanmaz, baştan başlar.
+2. "Isınmaya ekle" yalnız kartı olmayan kelimeleri ekler ve onları ikişer ikişer dağıtır (demoda 6 önerinin 4'ü yeni, 2 gün). Bedel: kartın "3 gün" yazısı demoda 2 güne iner.
+3. Haftanın hata sayımı bitmemiş seansın saklanmış okumalarını da sayar; veri haftası bitmemiş seansları ve yalnız deneme okuması olan haftaları saymaz; başlangıçtan önceki haftaların hedefi yoktur. Bedel: yarım okunmuş bir gün hataları seans bitmeden gösterir.
+4. Günün verisi sınıfın ölçüm metinlerini de taşır (`passages`): depo okumayı açık ölçüme karşı denetler, G1 ve ölçüm ekranı metinlere bakar.
+5. `saveMeasurement` planlanan okumayı (`PlannedReading`) alır ve yalnız şu an açık olan okumayı yazar; ikinci kez kaydetmek bir şey yazmaz. `setGoal` yalnız önerilen hedefi yazar; `addDrillToWarmup` eklediği kart sayısını döndürür.
+6. Kayıt silme önce göndermeleri, sonra sesi siler. Bedel: ses silinemezse kayıt hesap sayfasında listede kalır, yeniden silinebilir.
+7. Kayıt listesi kayıtları imleçle tek tek okur, sesi bellekte tutmaz (günde bir G5 kaydı birikir).
+
+**Ekranlar**
+
+8. V2'de eşit kaçırmada çalışılan kelime evcilleşenden önce gelir, sonra alfabe sırası: tasarım "belirdiğinde"yi "ağaçlarının"dan önce gösteriyor; plandaki salt alfabe sırası tersini verirdi. Bedel: eşit iki kelimenin yeri.
+9. V2 yalnız kaçırılmış kartları listeler (ek zincirinden gelen 0 kaçırmalı kart "takılınan" değildir).
+10. V2'nin örnek satırı ve kelime dinleme yalnız serinin bölümlerine bakar; kitaplık kitabı okunan seans (demonun pazartesisi) Faz 5'e kadar atlanır. Bedel: yalnız kitaplık kitabında geçen kelimenin dinleme düğmesi yok.
+11. V1'in yorumu iki yerde çizilir (telefonda grafik kartında, 700 px'ten gün kartında), telefonun dinlemeden okunan gün satırı küçük sayıların altında; CSS birini gösterir. Dinlemeden okunan günün kutusu açık turkuaz zeminde işaret (`TODO(design)`).
+12. Sayı kartlarında etiket telefonda ve webde 14, tablette 15 px; büyük kartın etiketi 15/16/15 px (tasarımdaki gibi).
+13. Kayıt listesi tek bileşendir (silme penceresiyle): V2'nin onay bekleyenleri ve hesap sayfası. "Dinle" kaydı baştan çalar.
+14. Ek zinciri düğmesinin adı her genişlikte "Isınmaya ekle" (telefonda görünen "Ekle" adın içinde). Ek zincirinden gelen kartın durum etiketi açık mercan (`TODO(design)`).
+15. V3'ün alıntısında işaretli kelime türünü ekran okuyucuya söyler ("(yanlış okuma)", "(takılma)"); düzey bandında geçerli düzey `aria-current`. Paylaşımın sonucu düğmelerin altındaki durum satırında; kullanılan ya da kapatılan paylaşma penceresi bir şey söylemez.
+16. Hesap sayfası `AccountSettingsPage` (K1 `AccountPage`); adresi yeni `parentExtraPaths` grubunda. Gezinmenin ayağı birden çok bağlantı alır; açık sayfanın ayak bağlantısı kalın (`TODO(design)`). Ses onayının altında K1'in notu; silme metni pencerede de yazar.
+
+**Haftalık ölçüm**
+
+17. Ölçüm ekranı odak kabuğu yerine K3'ün düzenini kullanır (`OnboardingLayout`, ilerlemesiz, "Geri dön"lü; çerçeve `OnboardingShell name="measurement"`): odak kabuğunun yan sütunu ve eylemi yönlendiriciden sabit gelir, özellikler `src/app`'i içe aktaramaz; yol haritası da ölçüme "K3 kalıbı" der. Bedel: tasarım gelene kadar ekran U3/U4'e değil K3'e benzer.
+18. K3'ün okuma gövdesi `MeasurementReading`'e taşındı: düzeni çağıran kurar (`render`), balon ve yeniden denemeden sonraki seçenek çağırandan gelir.
+19. G1 kartı için mikrofon velinin onayına bağlıdır (bugünkü seans dinlemesiz olsa da ölçüm dinler, P14).
+20. Ölçüm başlığının altında satır yok; Tıkır'ın balonu çocuğa konuşur.
+
+**Testler**
+
+21. Demo haftasının 9/7/6/5/3 sayımı görünüm testinde (dinleyici benzetimi gerekiyor; alan testleri saf kalır).
+22. Ekran testleri isterse depo ile cihazlar aynı kaydediciyi paylaşır (`demoSessionStore({ recorder })`), uygulamadaki gibi.
+23. Kayıt silmenin uçtan uca testi kaydını denemesiz bir ölçümle yapar (demoda kayıt yok).
+24. Üç koruma testi kod yazılmadan geçti (bilinmeyen adres zaten yola gidiyordu, kart yoktu); koruma olarak kaldılar.

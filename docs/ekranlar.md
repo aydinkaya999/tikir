@@ -190,6 +190,7 @@ Veli kabuğu: lacivert üst şerit ("Veli alanı" ve çocuk etiketi), gezinme (�
 - **Açılış haftası:** içinde ölçüm ya da seans bulunan en son hafta. Hafta pazartesi başlar.
 - **Yorum cümlesi** veriye göre seçilir; tasarımdaki örnek hedefin geçildiği durumdur.
 - **"Hedefi güncelle"** için ekran tasarımı yok.
+- **Ayrıntılar** (haftalar, hedef geçmişi, yorum durumları, dinlemeden okunan günler, telefon düzeni, metinler): `docs/planlar/faz-4.md`, kararlar 1–2 ve 11–16, "Tasarımı olmayan durumların metinleri".
 
 ### V2 Takılınan yerler
 
@@ -198,13 +199,21 @@ Veli kabuğu: lacivert üst şerit ("Veli alanı" ve çocuk etiketi), gezinme (�
 - **Dinleme düğmesi** o kelimenin kaydı yoksa gizlenir.
 - **Ek zinciri önerisi:** hangi kelimelerin aynı eki taşıdığını bulmak arka uç işidir. O gelene kadar kart yalnız veri hazır geldiğinde görünür (demo profilindeki `suggestedDrill`); yoksa gizlenir.
 - **"Isınmaya ekle"** önerilen kelimeleri kart olarak ekler ve sonraki günlere ikişer ikişer dağıtır. Günlük 3 kart sınırı değişmez; günü gelen eski kartlar önce gelir.
+- **Onay bekleyen kayıtlar** V2'nin altında; dinle, onayla, sil.
+- **Ayrıntılar:** `docs/planlar/faz-4.md`, kararlar 8 ve 17–21.
 
 ### V3 Ölçüm sonucu
 
 - **İçerik:** son ölçümün sayıları, okuma düzeyi bandı, ölçüm metninden hata işaretli alıntı, sıradaki ölçüm tarihi, "Öğretmenle paylaş", "Kaydı dinle".
 - **Alıntı** ölçüm metninin ilk dört cümlesidir; işaretler o okumanın kelime sonuçlarından gelir.
 - **"Kaydı dinle"** kayıt yoksa gizlenir.
-- **"Öğretmenle paylaş"** için çıktı tasarımı yok.
+- **"Öğretmenle paylaş"** için çıktı tasarımı yok. Kısa bir metin cihazın paylaşma penceresiyle ya da panoya gider (`docs/kararlar.md` T23).
+- **Ayrıntılar:** `docs/planlar/faz-4.md`, kararlar 22–27.
+
+### Haftalık ölçüm ve hesap
+
+- **Haftalık ölçüm** (`/olcum`): G1'deki kartla açılır, K3'ün kalıbındadır; deneme haftasında iki okuma (`docs/kararlar.md` P16). Tasarımı yok. Ayrıntı: `docs/planlar/faz-4.md`, kararlar 28–35.
+- **Hesap** (`/veli/hesap`): onaylar, kayıtlar, hesabı silme; veli alanının ayağından ve telefon şeridinden açılır. Tasarımı yok. Ayrıntı: `docs/planlar/faz-4.md`, kararlar 36–37.
 
 ### V4 Yazı ayarı
 
