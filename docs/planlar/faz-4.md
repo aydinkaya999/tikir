@@ -603,6 +603,14 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
   7. Boş durumlar: V1, V2, V3 ve Hesap ekran testleri.
   8. Tasarım karşılaştırması: yukarıdaki "Tasarım karşılaştırması" bölümü (`shots/veli-*.png`, `shots/demo-cocuk-sabahi-*.png`).
 - Bir kez görülen kararsız test: `WarmupPage.test.tsx` › "explains a refused, missing or failed microphone and tries again" Task 6'nın bir tam koşusunda düştü; tek başına 5/5 ve sonraki bütün tam koşularda geçti. Faz 4'ün kodu bu ekrana dokunmuyor; zamanlamaya bağlı eski bir kırılganlık.
+- **Son inceleme** (bağımsız inceleyici, bütün dal): "düzeltmelerle". Kritik bulgu yok; iki önemli bulgu. Etkiye göre yeniden derecelendirmeyle dört küçük bulgu önemliye çıktı. Altısı tek geçişte, her biri önce kırmızı testle düzeltildi:
+  1. Deneme haftasının ikinci okumasında 1000 px'in altında yönerge görünmüyordu (pano gizli); Tıkır ve sözleri o okumada içeriğin başına gelir (`0abfaf1`).
+  2. V2 dinlenmemiş haftalara "Bu hafta takılma yok." diyordu (onaysız aile, dinlemeden okunan hafta, yalnız ölçümü olan hafta); bu cümle yalnız dinlenen haftada, öteki durumlarda onaylı "{n} gün dinlemeden okundu." ya da "Bu hafta seans yapılmadı." (`3341989`).
+  3. V1'in grafik kartı, ölçülmüş hafta yokken tablette ve webde yalnız başlığıyla kalıyordu (onaysız aile her hafta); haftanın cümlesi o kartta durur (`3dc5c46`).
+  4. Tek haftalık grafik (seviye tespitinden sonraki ilk hafta) noktasını eksenin üstüne, değerini eksen yazılarının içine koyuyordu; nokta ve değer ortada (`a7d5259`).
+  5. V3 onay yokken hiç açılmayacak bir ölçümü vaat ediyordu ("Ölçüm, çocuğun yol ekranında açılır.", "Sıradaki ölçüm …"); onaylı "Dinleme kapalı olduğu için ölçüm yapılmıyor." (`3341989`).
+  6. Kayıtlar durdurulamıyordu: çalan kaydın düğmesi G5'teki gibi "Duraklat" olur (V2, Hesap, V3); silinen kayıt önce durur (`3341989`).
+  Ayrıca proje kuralı gereği T22 satırı ve ekranlar belgesinin rota tablosu güncellendi (`4c9859e`). Ardından `pnpm check` → **118 dosya, 1015 test**; `pnpm e2e` → **237 passed, 1 failed**: düşen `e2e/dev-params.spec.ts` › "?kurulum=seviye prepares the reader at the level check" Chromium'da aralıklı düşüyor, `main`'de de (8 tekrarda 1); Faz 3'ten kalma (ertelenen 9. madde).
 
 ## Uygulamada verilen kararlar
 
@@ -616,7 +624,7 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 4. Günün verisi sınıfın ölçüm metinlerini de taşır (`passages`): depo okumayı açık ölçüme karşı denetler, G1 ve ölçüm ekranı metinlere bakar.
 5. `saveMeasurement` planlanan okumayı (`PlannedReading`) alır ve yalnız şu an açık olan okumayı yazar; ikinci kez kaydetmek bir şey yazmaz. `setGoal` yalnız önerilen hedefi yazar; `addDrillToWarmup` eklediği kart sayısını döndürür.
 6. Kayıt silme önce göndermeleri, sonra sesi siler. Bedel: ses silinemezse kayıt hesap sayfasında listede kalır, yeniden silinebilir.
-7. Kayıt listesi kayıtları imleçle tek tek okur, sesi bellekte tutmaz (günde bir G5 kaydı birikir).
+7. Kayıt listesi kayıtları imleçle tek tek okur, sesleri bellekte biriktirmez (günde bir G5 kaydı birikir). Her listede sesler yine diskten okunur (ertelenen 3. madde).
 
 **Ekranlar**
 
@@ -625,7 +633,7 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 10. V2'nin örnek satırı ve kelime dinleme yalnız serinin bölümlerine bakar; kitaplık kitabı okunan seans (demonun pazartesisi) Faz 5'e kadar atlanır. Bedel: yalnız kitaplık kitabında geçen kelimenin dinleme düğmesi yok.
 11. V1'in yorumu iki yerde çizilir (telefonda grafik kartında, 700 px'ten gün kartında), telefonun dinlemeden okunan gün satırı küçük sayıların altında; CSS birini gösterir. Dinlemeden okunan günün kutusu açık turkuaz zeminde işaret (`TODO(design)`).
 12. Sayı kartlarında etiket telefonda ve webde 14, tablette 15 px; büyük kartın etiketi 15/16/15 px (tasarımdaki gibi).
-13. Kayıt listesi tek bileşendir (silme penceresiyle): V2'nin onay bekleyenleri ve hesap sayfası. "Dinle" kaydı baştan çalar.
+13. Kayıt listesi tek bileşendir (silme penceresiyle): V2'nin onay bekleyenleri ve hesap sayfası. Çalan kaydın düğmesi "Duraklat" olur (son incelemeden sonra).
 14. Ek zinciri düğmesinin adı her genişlikte "Isınmaya ekle" (telefonda görünen "Ekle" adın içinde). Ek zincirinden gelen kartın durum etiketi açık mercan (`TODO(design)`).
 15. V3'ün alıntısında işaretli kelime türünü ekran okuyucuya söyler ("(yanlış okuma)", "(takılma)"); düzey bandında geçerli düzey `aria-current`. Paylaşımın sonucu düğmelerin altındaki durum satırında; kullanılan ya da kapatılan paylaşma penceresi bir şey söylemez.
 16. Hesap sayfası `AccountSettingsPage` (K1 `AccountPage`); adresi yeni `parentExtraPaths` grubunda. Gezinmenin ayağı birden çok bağlantı alır; açık sayfanın ayak bağlantısı kalın (`TODO(design)`). Ses onayının altında K1'in notu; silme metni pencerede de yazar.
@@ -635,7 +643,7 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 17. Ölçüm ekranı odak kabuğu yerine K3'ün düzenini kullanır (`OnboardingLayout`, ilerlemesiz, "Geri dön"lü; çerçeve `OnboardingShell name="measurement"`): odak kabuğunun yan sütunu ve eylemi yönlendiriciden sabit gelir, özellikler `src/app`'i içe aktaramaz; yol haritası da ölçüme "K3 kalıbı" der. Bedel: tasarım gelene kadar ekran U3/U4'e değil K3'e benzer.
 18. K3'ün okuma gövdesi `MeasurementReading`'e taşındı: düzeni çağıran kurar (`render`), balon ve yeniden denemeden sonraki seçenek çağırandan gelir.
 19. G1 kartı için mikrofon velinin onayına bağlıdır (bugünkü seans dinlemesiz olsa da ölçüm dinler, P14).
-20. Ölçüm başlığının altında satır yok; Tıkır'ın balonu çocuğa konuşur.
+20. Ölçüm başlığının altında satır yok; Tıkır'ın balonu çocuğa konuşur. 1000 px'in altında pano gizli olduğu için ikinci okumanın balonu içeriğin başına da gelir (son incelemeden sonra).
 
 **Testler**
 
@@ -643,3 +651,15 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 22. Ekran testleri isterse depo ile cihazlar aynı kaydediciyi paylaşır (`demoSessionStore({ recorder })`), uygulamadaki gibi.
 23. Kayıt silmenin uçtan uca testi kaydını denemesiz bir ölçümle yapar (demoda kayıt yok).
 24. Üç koruma testi kod yazılmadan geçti (bilinmeyen adres zaten yola gidiyordu, kart yoktu); koruma olarak kaldılar.
+
+### Son incelemeden ertelenen küçük bulgular
+
+1. Kayıt satırlarının düğmeleri bağlamsız adlanır ("Dinle", "Onayla", "Sil"); bir deneme haftasının iki kaydı aynı etiketi taşır ("1 dakikalık ölçüm, 22 Kasım").
+2. Odak ve duyuru: "Isınmaya ekle" bir paragrafa dönüşünce, "Hedefi güncelle" onaydan sonra kaybolunca, onaylanan ya da silinen satırda odak gidecek yer bulamaz; dinlemeden okunan gün kutusu bitmiş günden yalnız zemin tonuyla ayrılır.
+3. Kayıt deposunun `list()`'i her listede bütün sesleri diskten okur (V2 ve Hesap her açılışta); kayıtlar biriktikçe yavaşlar. Üst bilgiyi sesten ayrı tutmak ya da var olanı anahtarlarla sınamak gerekir.
+4. Deneme hafta ortasında, haftanın ölçümünden sonra açılırsa aynı gün yalnız denenen okuma için kart yeniden çıkar ("Haftada bir…" ikinci kez, "2. okuma / 2"). Ürün kararı ister.
+5. "Öğretmenle paylaş"a çift dokunuş ikinci paylaşımı reddettirir; paylaşma penceresi açıkken bir an "Paylaşılamadı." görünür.
+6. Ek zinciri kartı önerinin bütün sayılarını gösterir ("6 kelime, 3 gün"), eklenenler yalnız kartı olmayanlardır ("4 kelime ısınmaya eklendi."); hepsinin kartı varsa "0 kelime ısınmaya eklendi." der.
+7. V1'de `daysTitleId` artık bir şeye bağlanmıyor; görünüm modelinin `nextInDays`'i yalnız testlerde okunuyor.
+8. Grafiği olmayan haftanın yorumu tablette yan kartta değil grafik kartında; tasarımın yorum yeri değişince yeniden bakılır.
+9. Faz 3'ten kalma kararsız test: `e2e/dev-params.spec.ts` › "?kurulum=seviye prepares the reader at the level check" Chromium'da arada bir 5 saniyede çocuk kaydını göremiyor (`main`'de de 8 tekrarda 1).
