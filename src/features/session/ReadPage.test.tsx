@@ -266,6 +266,44 @@ describe('ReadPage (G4)', () => {
     expect(session?.readings[0]?.wordsAttempted).toBeGreaterThan(0);
   });
 
+  it('does not end the next reading with a tap after the reading ended on its own', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const app = await openRead();
+    await startListening(app);
+    await advance(95_000);
+    expect(await screen.findByText('2. okuma / 3')).toBeInTheDocument();
+
+    // Done with the text, the child taps "Okumayı bitir" a moment later, on the new reading.
+    const [late] = screen.getAllByRole('button', { name: 'Okumayı bitir' });
+    expect(late).toBeDisabled();
+    await user.click(late as HTMLElement);
+    await advance(500);
+
+    expect(screen.getByText('2. okuma / 3')).toBeInTheDocument();
+    expect((await app.repository.getSession('2026-11-21'))?.readings).toHaveLength(1);
+    // Once the child reads in it, the reading can be ended.
+    await advance(3_000);
+    expect(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0]).toBeEnabled();
+  });
+
+  it('ends only the reading a double tap was meant for', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const app = await openRead();
+    await startListening(app);
+    await advance(10_000);
+
+    await user.click(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0] as HTMLElement);
+    expect(await screen.findByText('2. okuma / 3')).toBeInTheDocument();
+    // The second tap of the double tap lands on the reading that has just started.
+    await user.click(screen.getAllByRole('button', { name: 'Okumayı bitir' })[0] as HTMLElement);
+    await advance(500);
+
+    expect(screen.getByText('2. okuma / 3')).toBeInTheDocument();
+    const readings = (await app.repository.getSession('2026-11-21'))?.readings ?? [];
+    expect(readings).toHaveLength(1);
+    expect(readings[0]?.wordsAttempted).toBeGreaterThan(0);
+  });
+
   it('holds the help while the exit dialog is open, then finishes it', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const app = await openRead({

@@ -241,8 +241,14 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
     ) : undefined;
   const pauseLabel = reading.paused ? tr.read.resume : tr.read.pause;
   const pauseIcon = reading.paused ? 'play' : 'pause';
+  // The button ends a reading only once the child has read in it. The next reading starts as soon
+  // as one is stored, so a tap after the text was read to its end, or a double tap's second, lands
+  // on a reading that has just begun and would store it empty.
+  const canFinish = view.position > 0 && view.ended === null;
   const finishReading = () => {
-    reading.finish().catch(() => undefined);
+    if (canFinish) {
+      reading.finish().catch(() => undefined);
+    }
   };
   const micButton = (size: 76 | 84) => (
     <MicButton
@@ -282,6 +288,7 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
               label={tr.read.finish}
               size={52}
               raised
+              disabled={!canFinish}
               onClick={finishReading}
             />
           </div>
@@ -290,7 +297,7 @@ function HeardReading({ attempt, data, chapter, narrator }: ReadingProps & { nar
               {pauseLabel}
             </Button>
             {micButton(84)}
-            <Button variant="secondary" icon="flag" onClick={finishReading}>
+            <Button variant="secondary" icon="flag" disabled={!canFinish} onClick={finishReading}>
               {tr.read.finish}
             </Button>
           </div>
