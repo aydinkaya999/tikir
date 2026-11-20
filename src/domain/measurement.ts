@@ -11,7 +11,8 @@ export interface PlannedReading {
   trial: boolean;
 }
 
-function lastMeasurement(assessments: readonly Assessment[]): Assessment | null {
+/** The latest measurement that is not a trial reading, by day and start time (V3). */
+export function lastMeasurement(assessments: readonly Assessment[]): Assessment | null {
   return (
     assessments
       .filter((assessment) => assessment.trial !== true)

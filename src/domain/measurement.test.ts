@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { testAssessment } from '../test/sessions';
-import { measurementDue, measurementReadings, nextMeasurementOn } from './measurement';
+import {
+  lastMeasurement,
+  measurementDue,
+  measurementReadings,
+  nextMeasurementOn,
+} from './measurement';
 import { trialReadingStyle } from './readingStyle';
 import type { Assessment, Passage, ReadingStyle } from './types';
 
@@ -24,6 +29,19 @@ function on(date: string, passageId: string, trial = false): Assessment {
     ...(trial ? { trial: true, readingStyle: tried } : { readingStyle: trialOn }),
   });
 }
+
+describe('lastMeasurement', () => {
+  it('is the latest measurement that is not a trial reading, by day and start time', () => {
+    const sameDay = [
+      testAssessment('2026-11-15', 71, { startedAt: '2026-11-15T09:05:00.000Z' }),
+      testAssessment('2026-11-15', 69, { startedAt: '2026-11-15T09:00:00.000Z' }),
+      testAssessment('2026-11-15', 74, { trial: true, startedAt: '2026-11-15T09:10:00.000Z' }),
+      testAssessment('2026-11-08', 67),
+    ];
+    expect(lastMeasurement(sameDay)?.result.wcpm).toBe(71);
+    expect(lastMeasurement([])).toBeNull();
+  });
+});
 
 describe('nextMeasurementOn', () => {
   it('is seven days after the last measurement that is not a trial reading', () => {
