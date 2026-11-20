@@ -29,8 +29,10 @@ Dosya adı kalıbı: `<kod>-<ad>-<telefon|tablet|web>`. Örnek: `G4-oku-tablet.h
 | V4 | Yazı ayarı | `/veli/yazi` | veli |
 | — | Albüm | `/album` | çocuk |
 | — | Stüdyo | `/studyo` | çocuk |
+| — | Haftalık ölçüm | `/olcum` | kurulum çerçevesi (K3'ün düzeni) |
+| — | Hesap | `/veli/hesap` | veli |
 
-Albüm ve Stüdyo'nun tasarımı yok (bu belgenin sonundaki varsayılanlar); rotaları Faz 0'da açıldı, asgari ekranları Faz 2'de gelir.
+Albüm ve Stüdyo'nun tasarımı yok (bu belgenin sonundaki varsayılanlar); rotaları Faz 0'da açıldı, asgari ekranları Faz 2'de gelir. Haftalık ölçümün ve hesap sayfasının da tasarımı yok; Faz 4'te geldiler (`docs/planlar/faz-4.md`, kararlar 28–37).
 
 Geliştirme rotaları (üretim derlemesine girmez): `/gelistirme/vitrin`, `/gelistirme/ses`.
 
