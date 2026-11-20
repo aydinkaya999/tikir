@@ -68,6 +68,33 @@ export const tr = {
         'Tıkır, çocuğunuz okurken sesini bu cihazda işler: hangi kelimeleri doğru okuduğunu, nerede takıldığını ve okuma hızını bulur. Her günün son okuması ve seviye tespiti kaydedilir. Kayıtlar bu cihazda kalır, başka bir yere gönderilmez. Onay vermezseniz mikrofon hiç açılmaz.',
       close: 'Kapat',
     },
+    /** K2 Okuyucu profili (design/ekranlar/K2-okuyucu-*.html). */
+    reader: {
+      bubble: 'Sevdiği konuları seçin, hikâyeleri ona göre kurarım.',
+      title: 'Okuyucuyu tanıyalım',
+      lead: 'Metinleri seviyesine ve ilgisine göre seçmek için.',
+      name: 'Okuyucunun adı',
+      namePlaceholder: 'Deniz',
+      grade: 'Sınıfı',
+      gradeOption: (grade: number) => `${String(grade)}. sınıf`,
+      interests: 'Nelerden hoşlanır?',
+      interestOptions: [
+        'Uzay',
+        'Hayvanlar',
+        'Futbol',
+        'Deniz',
+        'Dinozorlar',
+        'Robotlar',
+        'Doğa',
+        'Bilmece',
+      ],
+      interestCounter: (chosen: number, limit: number) =>
+        `${String(chosen)} / ${String(limit)} seçildi`,
+      submit: 'Devam et',
+      /** The states without a design (docs/kararlar.md D16). TODO(design) */
+      nameError: 'Okuyucunun adını yazın.',
+      gradeError: 'Sınıfını seçin.',
+    },
   },
 
   session: {

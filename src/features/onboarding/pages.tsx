@@ -2,11 +2,6 @@
 // step, so the shell stays whole while the screens arrive one by one.
 import { OnboardingLayout } from './OnboardingLayout';
 
-/** K2 Okuyucu profili. */
-export function ChildProfilePage() {
-  return <OnboardingLayout step={2} companion={{}} />;
-}
-
 /** K3 Seviye tespiti. */
 export function LevelAssessmentPage() {
   return <OnboardingLayout step={3} companion={{}} />;

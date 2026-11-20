@@ -43,6 +43,12 @@ export const tamingIntervalsDays = [1, 2, 4] as const;
 /** Accuracy floors of the reading levels (docs/kararlar.md P7). */
 export const readingLevelFloors = { instructional: 0.9, independent: 0.99 } as const;
 
+/** K2: the reader's name is at most this long (docs/planlar/faz-3.md, karar 12). */
+export const readerNameMaxLength = 30;
+
+/** K2: the reader picks at most this many interests (docs/ekranlar.md, K2). */
+export const readerInterestLimit = 3;
+
 /** K3's measurement text is paged at most this many words a page (docs/planlar/faz-3.md, karar 14). */
 export const passagePageWords = 25;
 

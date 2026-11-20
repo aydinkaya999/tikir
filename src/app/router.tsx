@@ -5,11 +5,8 @@ import {
   BookReadyPage,
   LibraryPage,
 } from '../features/library/pages';
-import {
-  ChildProfilePage,
-  LevelAssessmentPage,
-  MeetCompanionPage,
-} from '../features/onboarding/pages';
+import { LevelAssessmentPage, MeetCompanionPage } from '../features/onboarding/pages';
+import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
 import {
   AssessmentPage,
@@ -140,7 +137,7 @@ export function appRoutes(session: AppSession): RouteObject[] {
               element: <OnboardingShell />,
               children: [
                 { path: screenPaths.K1, element: <AccountPage /> },
-                { path: screenPaths.K2, element: <ChildProfilePage /> },
+                { path: screenPaths.K2, element: <ReaderPage /> },
                 { path: screenPaths.K3, element: <LevelAssessmentPage /> },
                 { path: screenPaths.K4, element: <MeetCompanionPage /> },
               ],

@@ -8,6 +8,7 @@ interface TextFieldProps {
   type?: 'text' | 'email' | 'password';
   inputMode?: 'text' | 'email' | 'numeric';
   placeholder?: string;
+  maxLength?: number;
   autoComplete?: string;
   name?: string;
   /** A line under the field that helps fill it. */
@@ -27,6 +28,7 @@ export function TextField({
   type = 'text',
   inputMode,
   placeholder,
+  maxLength,
   autoComplete,
   name,
   hint,
@@ -55,6 +57,7 @@ export function TextField({
         name={name}
         value={value}
         placeholder={placeholder}
+        maxLength={maxLength}
         autoComplete={autoComplete}
         disabled={disabled}
         aria-invalid={error === undefined ? undefined : true}

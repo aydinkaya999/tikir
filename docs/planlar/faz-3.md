@@ -337,7 +337,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
 - [x] Task 7: Kurulum çatısı
 - [x] Task 8: K1 Veli hesabı
-- [ ] Task 9: K2 Okuyucu profili
+- [x] Task 9: K2 Okuyucu profili
 - [ ] Task 10: Yazı ayarının okuma metinlerine uygulanması
 - [ ] Task 11: K3 Seviye tespiti
 - [ ] Task 12: K4 Tıkır ile tanışma
@@ -666,7 +666,7 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
 
 **Kullanır:** Task 3 (`saveReader`), Task 6 (`ChoicePills`), Task 1.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   1. **İçerik:**
      - "Okuyucuyu tanıyalım" ve alt metni;
      - "Okuyucunun adı" (`Deniz`), "Sınıfı", dört sınıf;
@@ -681,10 +681,10 @@ OnboardingLayout({ step: 1 | 2 | 3 | 4; companion: { expression?: CompanionExpre
      - Adres `/kurulum/seviye`.
   5. **Onaysız:** `audio.start` çağrılmaz, adres `/kurulum/tanisma`.
   6. **1. sınıf:** `font: 'school'` (ölçüt 4).
-- [ ] → FAIL. Uygula.
-- [ ] Görüntü: `pnpm shots --dokun "3. sınıf" --dokun Uzay --dokun Futbol --dokun Dinozorlar '/kurulum/okuyucu?kurulum=okuyucu'` → K2 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(onboarding): build the reader profile (K2)`.
+- [x] → FAIL. Uygula.
+- [x] Görüntü: `pnpm shots --dokun "3. sınıf" --dokun Uzay --dokun Futbol --dokun Dinozorlar '/kurulum/okuyucu?kurulum=okuyucu'` → K2 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(onboarding): build the reader profile (K2)`.
 
 ### Task 10: Yazı ayarının okuma metinlerine uygulanması
 
@@ -919,6 +919,16 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 | üçü | Onay kutusu boş; tasarım dolu hâlini gösteriyor | kalır: kural (`docs/ekranlar.md`, K1) |
 | üçü | Kutu boşken onaysız açıklaması görünür | kalır: tasarımı yok (D16) |
 | üçü | Yer tutucu yazısı tasarımdakinden koyu | kalır: Faz 0'ın alan rengi (karşıtlığı yeterli) |
+| üçü | Başlık ile alt metin arası 8 px'ti; tasarımda 6 px | düzeltildi (başlık `OnboardingLayout`'a taşındı, Task 9) |
+| web | Eylem içerikten 44 px aşağıdaydı; tasarımda 30 px (22 px aralık + 8 px) | düzeltildi (Task 9) |
+
+**K2** (`/kurulum/okuyucu?kurulum=okuyucu`; "3. sınıf", Uzay, Futbol, Dinozorlar seçili):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | Üç ilgi alanı seçiliyken öteki düğmeler soluktu; tasarım onları değiştirmeden çiziyor | düzeltildi (`ChoicePills`) |
+| web | "Devam et" içerikten 44 px aşağıdaydı; tasarımda 30 px | düzeltildi |
+| üçü | Ad alanı boş, "Deniz" yer tutucu; tasarım dolu hâlini gösteriyor | kalır: görüntü komutu ad yazmaz |
 
 ## Kanıtlar
 
