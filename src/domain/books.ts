@@ -91,12 +91,43 @@ function phraseUnits(sentence: string): Sentence {
     .filter((unit) => unit !== '');
 }
 
+/** A line that closes a sentence: its last mark, perhaps inside quotes or brackets. */
+const CLOSED_LINE = /[.!?…][”"’»)]*$/u;
+/** A line that opens a sentence: a capital or a digit, perhaps after a quote or a dash. */
+const OPENING_LINE = /^[“"‘«(—–-]*\s*[\p{Lu}\p{N}]/u;
+
+/**
+ * A pasted text's sentences. A line that ends without a closing mark before a line that opens a
+ * sentence stands alone: a title, a verse, a list's item. Any other line break is a space, so a
+ * sentence wrapped over two lines stays whole (review of phase 5, finding 3).
+ */
+function textSentences(text: string): string[] {
+  const blocks: string[] = [];
+  let block = '';
+  for (const raw of text.split(/\r\n|\r|\n/u)) {
+    const line = raw.replace(/\s+/gu, ' ').trim();
+    if (line === '') {
+      continue;
+    }
+    if (block !== '' && !CLOSED_LINE.test(block) && OPENING_LINE.test(line)) {
+      blocks.push(block);
+      block = line;
+    } else {
+      block = block === '' ? line : `${block} ${line}`;
+    }
+  }
+  if (block !== '') {
+    blocks.push(block);
+  }
+  return blocks.flatMap((each) => splitSentences(each));
+}
+
 /**
  * A parent's text as a chapter (karar 4): the text is kept as written, cut into sentences, at most
  * four sentences a page, each sentence into phrase units at its commas. No questions, no chains.
  */
 export function bookChapterFromText(text: string, title: string): Chapter {
-  const sentences = splitSentences(text.replace(/\s+/gu, ' ')).map(phraseUnits);
+  const sentences = textSentences(text).map(phraseUnits);
   const pages: Page[] = [];
   for (let start = 0; start < sentences.length; start += bookPageSentences) {
     pages.push(sentences.slice(start, start + bookPageSentences));
@@ -111,7 +142,7 @@ export function chapterSentences(chapter: Chapter): string[] {
 
 /** At most six words of the first sentence, without the marks that close it (karar 4). */
 export function bookTitleFromText(text: string): string {
-  const first = splitSentences(text.replace(/\s+/gu, ' '))[0] ?? '';
+  const first = textSentences(text)[0] ?? '';
   return first
     .split(' ')
     .slice(0, bookTitleWords)

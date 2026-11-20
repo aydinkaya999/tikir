@@ -80,6 +80,26 @@ describe('bookChapterFromText (U2, MockBookGenerator.fromText)', () => {
     ]);
   });
 
+  it('ends a line without a closing mark before a new sentence: a title, a verse', () => {
+    expect(
+      bookChapterFromText(
+        'Kırmızı Başlıklı Kız\n\nBir varmış bir yokmuş. Ormanda bir kız yaşarmış.',
+        'x',
+      ).pages,
+    ).toEqual([
+      [['Kırmızı Başlıklı Kız'], ['Bir varmış bir yokmuş.'], ['Ormanda bir kız yaşarmış.']],
+    ]);
+    expect(bookChapterFromText('Ali topu at\r\nAyşe ip atla\r\n3 kedi uyur', 'x').pages).toEqual([
+      [['Ali topu at'], ['Ayşe ip atla'], ['3 kedi uyur']],
+    ]);
+  });
+
+  it('keeps a sentence wrapped over two lines whole', () => {
+    expect(
+      bookChapterFromText('Dinozorlar milyonlarca yıl önce\nyaşadı. Bazıları uzundu.', 'x').pages,
+    ).toEqual([[['Dinozorlar milyonlarca yıl önce yaşadı.'], ['Bazıları uzundu.']]]);
+  });
+
   it('gives the level check the same numbers as the text itself', () => {
     const chapter = bookChapterFromText(designText, 'Dinozorlar');
 
@@ -94,6 +114,9 @@ describe('bookTitleFromText', () => {
       bookTitleFromText('Bazıları bir otobüsten uzundu, bazıları ise bir tavuk kadar küçüktü.'),
     ).toBe('Bazıları bir otobüsten uzundu, bazıları ise');
     expect(bookTitleFromText('  Kısa bir masal, tamam mı?  ')).toBe('Kısa bir masal, tamam mı');
+    expect(bookTitleFromText('Kırmızı Başlıklı Kız\nBir varmış bir yokmuş.')).toBe(
+      'Kırmızı Başlıklı Kız',
+    );
   });
 });
 
