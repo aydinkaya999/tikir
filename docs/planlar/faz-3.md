@@ -977,6 +977,7 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 - `caffeinate -u -t 2; caffeinate -d -i pnpm e2e` → **222 passed** (Chromium ve WebKit, 1,6 dk). Faz 2b'nin 172 testine ek olanlar: onaylı ve onaysız kurulum, yazı ayarının G3, G4 ve K3'e yansıması, V4'te 24 birleşimde denetimlerin yerinde kalması (telefon ve web), veli kapısı, P14 ile dinlemesiz gün, kurulumda dış istek yokluğu, seçim düğmesinin dokunuşu, okul harfleriyle dört boyut, pencerenin Escape'le kapanması, telefonda ve tablette veli alanının girişleri ve çıkışları.
 - İlk tam koşuda ses denemesinin "sayfadan ayrılınca mikrofon bırakılır" testi düştü: test uygulamada `/`'e gidiyordu, boş depo onu kuruluma yönlendiriyor (Task 5'ten beri). Test artık vitrine gider; ardından tam koşu 222/222.
 - Ekran görüntüleri yukarıdaki komutlarla yeniden alındı (36 dosya, `shots/faz-3/`); fark listeleri "Tasarım karşılaştırması"nda.
+- **Son inceleme** (bağımsız inceleyici, bütün dal): "düzeltmelerle". Kritik bulgu yok. Bir önemli bulgu tek geçişte, önce kırmızı testlerle düzeltildi: kapının yanlış sayacı kapıdan çıkıp dönünce ya da yenileyince sıfırlanıyordu, bekleme hiç başlamıyordu (`60a0c40`). Sayaç artık beklemenin yanında, sekme ayarında. Ardından `pnpm check` → **108 dosya, 871 test**; `pnpm e2e` → **222 passed** (kapının uçtan uca testi yenilemeyi de yanlışların arasına aldı). On dört küçük madde ertelendi (aşağıda): inceleyicinin on iki küçük bulgusu ve kararlara düştüğü iki not. On üçüncü küçük bulgu geçersizdi ("Denenen ayarlar ve sonuçları" tasarımın kendi adı).
 
 ## Uygulamada verilen kararlar
 
@@ -1003,3 +1004,21 @@ Her biri ilgili commit mesajında ve testlerde; özetleri:
 19. **K3'ün dakikası** (P15, varsayım): Tarayıcıda dakikanın sonu, aynı anda biten kelimenin önüne geçiyordu (57/63, %90). Okuma dakikadan 250 ms sonra durur, süre 60 saniyeyle sınırlanır.
 20. **Uçtan uca testler:** K3'ün yazı ayarı 1. sınıfın varsayılanıyla sınanır, çünkü K3 veli alanından önce gelir. Kurulum adımları `e2e/support/onboarding.ts`'te.
 21. **Kırmızı adımlar:** Task 4 ve 5'in uçtan uca testleri değişiklikten sonra yazıldı; aynı davranışın birim testi önce düştü ya da değişiklik geri alınarak düşürüldü. Kapının geliştirme parametresi testi ve sayfaya sonradan eklenen testler, ilgili satır geçici olarak çıkarılınca düştü. G7'nin P14 testi baştan geçti (G7 zaten 3. okumaya bakıyor); gereksinimi sabitler.
+
+### Son incelemeden ertelenen küçük bulgular
+
+1. İyelik eki yalnız son ünlüye bakar; ince "l" ile biten adlarda K4 ve V4 yanlış yazar ("Hilal’ın", "Kemal’ın"; doğrusu Hilal’in, Kemal’in).
+2. K3'te Tıkır'ın heceleri yalnız panoda görünür; 1000 px'in altında takılan çocuk kelimeyi duyar ama heceleri görmez (G4 telefonda gösterir). Tasarım kararı ister.
+3. Mikrofon reddedilmişken büyük mikrofon düğmesine dokunmak yeniden dener, ama "Bugün dinlemeden oku" ve "Seviye tespitini atla"yı açan yeniden deneme sayılmaz (balonun "Yeniden dene"si sayılır).
+4. V4 "fark küçük" kararını yuvarlanmamış ortalamalarla verir, satırlar yuvarlanmışları gösterir (69 ile 74 "Fark küçük" diyebilir).
+5. V4'ün önizlemesi okuması kaydedilmiş son seansa bakar; onaysız ailelerde (P13, okuma kaydı yok) hep 1. bölümü gösterir.
+6. Kapının geri sayımı `role="status"` içinde, ekran okuyucu her saniye yeniden okur.
+7. Boş bir "Gir" yanlış cevap sayılır.
+8. Cihaz saati geri alınırsa kapının beklemesinin üst sınırı yok.
+9. Seviye tespiti iki yazıda ve yeni kimlikle kaydedilir; arada uygulama kapanırsa aynı güne iki ölçüm düşebilir.
+10. Test boşlukları: K1'in parola testi yalnız veli kaydına bakar; bitmiş seansta `continueUnheard` sınanmıyor; yükleme korumasının testi adresin yerinde kaldığını doğrulamıyor.
+11. Sınıf seçim grubu hatası görünürken `aria-invalid` ya da `aria-required` almıyor.
+12. `loadDemoProfile`'ın JSDoc'u `DemoSetupSeed`'in üstünde kaldı.
+13. P15'in payı pratikte 250–500 ms (dakikanın bitişi okuma saatinin 250 ms'lik adımında görülür, sonra 250 ms beklenir); belgeler 250 ms diyor.
+14. V4'ün kayıt döngüsü deponun yok saydığı bir kaydı yapılmış sayar ve sayfa seçimini tutar; yok sayılan bir kayıt kaydedilmemiş bir ayar gösterirdi (bugün güvenli: V4'te başka eylem yok).
+
