@@ -8,13 +8,14 @@ import { ControlledNarrator } from '../../test/controlledNarrator';
 import { type RenderAppOptions, renderApp } from '../../test/renderApp';
 import { schoolLargest, schoolLargestShown, shownStyle } from '../../test/readingStyle';
 import { testRecorder } from '../../test/sessionDevices';
+import type { ListenerKind } from './sessionContext';
 
 /** Listeners of a ready scenario; the ones the screen starts are kept (StrictMode makes two). */
 function scenarioListeners(name: ScenarioName | 'manual') {
   const started: FakeListener[] = [];
   return {
     started,
-    factory: (_kind: 'warmup' | 'reading', attempt: Attempt) => {
+    factory: (_kind: ListenerKind, attempt: Attempt) => {
       const listener =
         name === 'manual'
           ? new FakeListener({ kind: 'manual' })

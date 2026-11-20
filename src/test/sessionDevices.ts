@@ -2,7 +2,11 @@
 // calls are recorded, and listeners chosen by the test (docs/planlar/faz-2b.md, Task 7).
 import { vi } from 'vitest';
 import type { Attempt } from '../domain/types';
-import type { ListenerChoice, SessionDevices } from '../features/session/sessionContext';
+import type {
+  ListenerChoice,
+  ListenerKind,
+  SessionDevices,
+} from '../features/session/sessionContext';
 import { FakeListener } from '../services/listener/FakeListener';
 import type { Narrator } from '../services/narrator/Narrator';
 import { SilentNarrator } from '../services/narrator/SilentNarrator';
@@ -70,7 +74,7 @@ export interface TestDevicesOptions {
   audio?: FakeAudioCapture;
   narrator?: Narrator;
   recorder?: Recorder;
-  listener?: (kind: 'warmup' | 'reading', attempt: Attempt) => ListenerChoice;
+  listener?: (kind: ListenerKind, attempt: Attempt) => ListenerChoice;
   scenario?: SessionDevices['scenario'];
   random?: () => number;
 }
