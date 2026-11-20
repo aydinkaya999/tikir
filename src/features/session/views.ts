@@ -1,10 +1,13 @@
 // What the session screens show, from the session store's data (docs/ekranlar.md, G1 and G7).
 // Pure: the screens draw it.
 import type { MonsterKind, TilePattern } from '../../components/illustrations';
+import { previousReading } from '../../domain/ghost';
 import {
   chapterTileState,
   completedSeriesChapters,
+  deltaFromPrevious,
   nextSeriesChapter,
+  sessionMinutesSpent,
   streakDays,
   type TileState,
 } from '../../domain/progress';
@@ -110,4 +113,31 @@ const letter = /\p{L}/gu;
  */
 export function monsterKindOf(word: string): MonsterKind {
   return (word.match(letter)?.length ?? 0) % 2 === 0 ? 1 : 2;
+}
+
+/** G7's summary of the finished day (docs/planlar/faz-2b.md, karar 17). */
+export interface DoneView {
+  minutes: number;
+  /** The third reading's pace; null after an unheard session. */
+  wcpm: number | null;
+  /** The gain over the previous session's third reading; null unless it is positive. */
+  delta: number | null;
+  tamed: string[];
+  /** The next chapter of the series; null when none is written yet. */
+  tomorrow: ChapterLine | null;
+  childName: string;
+}
+
+export function doneView(data: SessionData): DoneView {
+  const { session, sessions, series, today } = data;
+  const wcpm = session?.readings.find((reading) => reading.attempt === 3)?.wcpm ?? null;
+  const previous = previousReading(sessions, today, 3);
+  return {
+    minutes: (session === null ? null : sessionMinutesSpent(session)) ?? 1,
+    wcpm,
+    delta: wcpm === null ? null : deltaFromPrevious(wcpm, previous?.wcpm ?? null),
+    tamed: session?.tamedToday ?? [],
+    tomorrow: chapterLine(series, nextSeriesChapter(sessions, series)),
+    childName: data.child.name,
+  };
 }

@@ -1,0 +1,140 @@
+/* Phone (below 700 px): G7 telefon. The parts are 12 px apart, 18 px from 700 px. */
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Today's pace: a saffron card, the number beside its two-line label, the gain chip after. */
+.pace {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-saffron);
+  box-shadow: var(--lift-page);
+  color: var(--color-ink);
+}
+
+.paceValue {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0;
+}
+
+.number {
+  font-size: var(--size-done-number);
+  font-weight: var(--weight-extrabold);
+  line-height: 0.9;
+}
+
+.paceLabel {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--size-body);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+}
+
+/* The words tamed today, two to a row. */
+.tamed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tamedWord {
+  display: flex;
+  flex: 1 1 150px;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 10px;
+  border: var(--border);
+  border-radius: var(--radius-button);
+  background: var(--color-white);
+}
+
+.monster {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+}
+
+.tamedText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.word {
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+.note {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+/* No chapter written after today's: the tomorrow card's place. TODO(design) */
+.seriesEnd {
+  margin: 0;
+  padding: 14px;
+  border: 2.5px dashed var(--color-muted);
+  border-radius: var(--radius-button);
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-extrabold);
+  line-height: var(--leading-ui);
+}
+
+/* The phone's bar holds one wide button; from 700 px it keeps its own width. */
+.action {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+@media (min-width: 700px) {
+  .summary {
+    gap: 18px;
+  }
+
+  .pace {
+    padding: 28px;
+  }
+
+  .tamed {
+    gap: 14px;
+  }
+
+  .tamedWord {
+    flex-basis: 200px;
+    padding: 14px;
+  }
+
+  .monster {
+    width: 64px;
+    height: 64px;
+  }
+
+  .action {
+    flex: none;
+  }
+}

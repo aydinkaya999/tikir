@@ -3,7 +3,7 @@ import { seriesBook } from '../../services/repository/seedContent';
 import { testSession } from '../../test/sessions';
 import { demoSessionStore, testToday } from '../../test/sessionStore';
 import type { SessionData } from './sessionStore';
-import { roadView } from './views';
+import { doneView, roadView } from './views';
 
 async function dataAt(options: Parameters<typeof demoSessionStore>[0] = {}): Promise<SessionData> {
   const { store } = await demoSessionStore(options);
@@ -80,5 +80,64 @@ describe('roadView', () => {
     });
 
     expect(view.streak).toBeNull();
+  });
+});
+
+describe('doneView', () => {
+  /** Today's data with every earlier session's third reading at the given pace. */
+  async function withPreviousPace(wcpm: number): Promise<SessionData> {
+    const data = await dataAt({ step: 'done' });
+    const sessions = data.sessions.map((session) =>
+      session.date === data.today
+        ? session
+        : {
+            ...session,
+            readings: session.readings.map((reading) =>
+              reading.attempt === 3 ? { ...reading, wcpm } : reading,
+            ),
+          },
+    );
+    return { ...data, sessions };
+  }
+
+  it('sums up a typical finished session', async () => {
+    expect(doneView(await dataAt({ step: 'done' }))).toEqual({
+      minutes: 12,
+      wcpm: 71,
+      delta: 4,
+      tamed: ['ağaçlarının'],
+      tomorrow: { number: 5, title: 'Yıldız Tepesi' },
+      childName: 'Deniz',
+    });
+  });
+
+  it.each([71, 80])('shows no gain over a previous third reading of %i', async (wcpm) => {
+    expect(doneView(await withPreviousPace(wcpm)).delta).toBeNull();
+  });
+
+  it('shows no gain without an earlier session', async () => {
+    const data = await dataAt({ step: 'done' });
+    const sessions = data.sessions.filter((session) => session.date === data.today);
+
+    expect(doneView({ ...data, sessions }).delta).toBeNull();
+  });
+
+  it('has no pace, no gain and no tamed words after an unheard session', async () => {
+    const view = doneView(await dataAt({ step: 'done', consent: false }));
+
+    expect(view.wcpm).toBeNull();
+    expect(view.delta).toBeNull();
+    expect(view.tamed).toEqual([]);
+  });
+
+  it('has no tomorrow after the last written chapter', async () => {
+    const data = await dataAt({ step: 'done' });
+    if (data.session === null) {
+      throw new Error('No session today.');
+    }
+    const session = { ...data.session, chapterRef: { ...data.session.chapterRef, chapter: 5 } };
+    const sessions = data.sessions.map((each) => (each.date === data.today ? session : each));
+
+    expect(doneView({ ...data, session, sessions }).tomorrow).toBeNull();
   });
 });

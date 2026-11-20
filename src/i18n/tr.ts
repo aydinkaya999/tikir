@@ -192,6 +192,17 @@ export const tr = {
     tomorrow: (title: string) => `Yarın: ${title}`,
     tomorrowMeta: (number: number) => `${String(number)}. bölüm yarın açılır`,
     bubble: (name: string) => `Bugünlük bu kadar. Yarın görüşürüz, ${name}.`,
+    /** G7's chip: the session's minutes. */
+    minutes: (count: number) => `${String(count)} dakika`,
+    /** The big number's label, on two lines as in the design. */
+    paceFirstLine: 'doğru kelime',
+    paceSecondLine: 'bir dakikada',
+    /** Only when today is ahead of the previous session (karar 17; docs/urun.md, bölüm 4). */
+    gain: (count: number) => `Dünkü senden ${String(count)} fazla`,
+    tamedLabel: 'Evcilleşen kelimeler',
+    tamed: 'evcilleşti',
+    summary: 'Seansın özeti veline gitti.',
+    close: 'Kapat',
   },
 
   /** Loading and the error notice; approved with the phase 2b plan (D15). TODO(design) */

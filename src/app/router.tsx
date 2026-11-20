@@ -17,7 +17,8 @@ import {
   StuckWordsPage,
   WeeklySummaryPage,
 } from '../features/parent/pages';
-import { AlbumPage, DonePage, StudioPage } from '../features/session/pages';
+import { DonePage } from '../features/session/DonePage';
+import { AlbumPage, StudioPage } from '../features/session/pages';
 import type { StoreApi } from 'zustand/vanilla';
 import { ListenPage } from '../features/session/ListenPage';
 import { ReadPage } from '../features/session/ReadPage';

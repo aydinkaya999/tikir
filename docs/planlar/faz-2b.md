@@ -56,7 +56,7 @@
 - [x] Task 12: G4 Oku
 - [x] Task 13: G5 Kayıt
 - [x] Task 14: G6 Kapanış sorusu
-- [ ] Task 15: G7 Bugünlük bitti
+- [x] Task 15: G7 Bugünlük bitti
 - [ ] Task 16: Albüm ve Stüdyo
 - [ ] Task 17: Uçtan uca seans testleri
 - [ ] Task 18: Belgeler, tasarım karşılaştırması ve denetim
@@ -1174,7 +1174,7 @@ export function doneView(data: SessionData): DoneView;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`views.test.ts` › `doneView`:**
     1. `typical` ile biten seans → dakika 12, `wcpm` 71, fark 4, evcil `['ağaçlarının']`, yarın 5.
     2. Fark sıfır, eksi ya da önceki yok → `null`.
@@ -1190,11 +1190,11 @@ export function doneView(data: SessionData): DoneView;
     3. **Dinlemesiz:** büyük sayı ve fark yok.
     4. **Seri bitti:** "Yeni bölümler yolda.".
     5. **Kapatma:** "Kapat" → `/`; kabuğun kapat düğmesi pencere açmaz.
-- [ ] İki test dosyası → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots '/seans/bitti?demo=cocuk-sabahi&adim=done'` → G7 ile karşılaştır, farkları yaz, düzelt.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the done screen (G7)`.
+- [x] İki test dosyası → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots '/seans/bitti?demo=cocuk-sabahi&adim=done'` → G7 ile karşılaştır, farkları yaz, düzelt.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the done screen (G7)`.
 
 ### Task 16: Albüm ve Stüdyo
 
@@ -1396,6 +1396,13 @@ Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde bö
 | Genişlik | Fark | Sonuç |
 |---|---|---|
 | üçü | Seçeneklerin sırası tasarımdakinden farklı | kalır: sıra her gösterimde karışır (karar 16) |
+
+**G7** (planlanan komut):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| tablet, web | "Yarın" kartı 10 px iç boşluk ve 52 px kareyle alçaktı (82 px; tasarımda 90 px) | düzeltildi (700 px'ten 14 px ve 60 px; G1'deki aynı kart da) |
+| üçü | Evcilleşen kelime yalnız "ağaçlarının"; tek kart satırı doldurur | kalır: demo profilinde `typical` yalnız bu kelimeyi evcilleştirir (karar 21); iki kelimede kartlar tasarımdaki gibi yan yanadır |
 
 ## Açık sorular (onayı beklemez)
 

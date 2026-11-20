@@ -38,7 +38,12 @@
   font-weight: var(--weight-semibold);
 }
 
-@media (min-width: 1200px) {
+/* G7 tablet and web: 14 px around a 60 px tile. */
+@media (min-width: 700px) {
+  .card {
+    padding: 14px;
+  }
+
   .tile {
     --tile-size: 60px;
   }
