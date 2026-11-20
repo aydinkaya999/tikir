@@ -35,56 +35,11 @@
   text-align: right;
 }
 
-.body {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.content {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  padding: 12px max(20px, env(safe-area-inset-right)) 14px max(20px, env(safe-area-inset-left));
-}
-
-/* Tıkır sits at the end of the content on phones (72 px) and heads the side column later. */
-.companion {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 0 20px 14px;
-}
-
 .header .close {
   flex-shrink: 0;
 }
 
-.companion .face {
-  width: 72px;
-  height: 72px;
-}
-
-.bubble {
-  flex: 1 1 auto;
-}
-
-.controls {
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 12px 20px calc(22px + env(safe-area-inset-bottom));
-  border-top: var(--border);
-  background: var(--color-white);
-}
-
-/* Tablet (700–1199 px): G4 tablet — two columns, Tıkır and the controls on the right. */
+/* Tablet (700–1199 px): G4 tablet. */
 @media (min-width: 700px) {
   .header {
     justify-content: space-between;
@@ -125,68 +80,9 @@
     font-weight: var(--weight-bold);
     line-height: var(--leading-ui);
   }
-
-  .body {
-    display: grid;
-    grid-template-areas:
-      'content companion'
-      'content controls';
-    grid-template-rows: auto 1fr;
-    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
-    gap: 16px 28px;
-    padding: 0 32px 30px;
-  }
-
-  .content {
-    grid-area: content;
-    padding: 0;
-  }
-
-  .companion {
-    flex-direction: column;
-    grid-area: companion;
-    align-items: center;
-    gap: 14px;
-    padding: 0;
-  }
-
-  .companion .face {
-    width: 190px;
-    height: 190px;
-  }
-
-  .bubble {
-    width: 100%;
-  }
-
-  .controls {
-    position: static;
-    flex-direction: column;
-    grid-area: controls;
-    align-self: end;
-    padding: 0;
-    border-top: 0;
-    background: transparent;
-  }
 }
 
-/*
- * Two panes stack when the content is narrower than 720 px (docs/tasarim-sistemi.md): with 32 px
- * of padding on each side, below 784 px. TODO(design): the stacked tablet layout is not drawn;
- * Tıkır and the controls follow the content.
- */
-@media (min-width: 700px) and (max-width: 783.98px) {
-  .body {
-    grid-template-areas:
-      'content'
-      'companion'
-      'controls';
-    grid-template-rows: 1fr auto auto;
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Web (from 1200 px): G4 web — white top bar with wordmark, steps and the exit link. */
+/* Web (from 1200 px): G4 web — white top bar with wordmark, steps and the exit. */
 @media (min-width: 1200px) {
   .header {
     flex-wrap: wrap;
@@ -219,18 +115,14 @@
     align-items: center;
     gap: 8px;
     min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: var(--color-ink);
+    font: inherit;
     font-size: var(--size-link);
     font-weight: var(--weight-bold);
     text-decoration: none;
-  }
-
-  .body {
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: 20px 40px;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 28px 40px 40px;
+    cursor: pointer;
   }
 }

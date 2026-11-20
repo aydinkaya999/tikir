@@ -2,11 +2,11 @@ import type { ReactNode } from 'react';
 import { Icon, type IconName } from '../Icon/Icon';
 import styles from './Chip.module.css';
 
-export type ChipTone = 'white' | 'saffron' | 'saffronLight' | 'turquoiseLight';
+export type ChipTone = 'white' | 'saffron' | 'saffronLight' | 'turquoise' | 'turquoiseLight';
 
 interface ChipProps {
   icon?: IconName;
-  /** The tones the design uses: white (V1, G4), saffron (G1), light saffron and turquoise (G4). */
+  /** The design's tones: white (V1, G4), saffron (G1), light saffron and turquoise (G4), turquoise (G5). */
   tone?: ChipTone;
   className?: string;
   children: ReactNode;

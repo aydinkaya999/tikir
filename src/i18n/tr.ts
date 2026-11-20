@@ -60,6 +60,167 @@ export const tr = {
       record: 'Kayıt',
       wrapUp: 'Kapanış',
     },
+    /** G2–G7, tablet and web header: "Bölüm 4: Dar Patika". */
+    chapterLabel: (number: number, title: string) => `Bölüm ${String(number)}: ${title}`,
+    /** G7 title. */
+    doneTitle: 'Bugünlük bitti',
+    /**
+     * The exit confirmation: the title is in docs/ekranlar.md, the rest was approved with the
+     * phase 2b plan (docs/kararlar.md D15). TODO(design)
+     */
+    exitDialog: {
+      title: 'Seanstan çıkılsın mı?',
+      body: 'Kaldığın yerden sürdürebilirsin.',
+      leave: 'Çık',
+      stay: 'Seansa dön',
+    },
+  },
+
+  /** G1 Yol (docs/ekranlar.md, G1). */
+  road: {
+    greeting: (name: string) => `Merhaba ${name}`,
+    streak: (days: number) => `${String(days)} gün üst üste`,
+    /**
+     * Tablet and web bubble: one pattern for every chapter (docs/kararlar.md D13). The design's
+     * sentence belongs to chapter 4 and the content has none (C6).
+     */
+    bubble: (number: number, title: string) =>
+      `Bugün ${String(number)}. bölümü okuyoruz: ${title}. Hazırsan başlayalım.`,
+    todayLabel: 'Bugünkü bölüm',
+    chapterMeta: (number: number, minutes: number) =>
+      `${String(number)}. bölüm, ${String(minutes)} dakika`,
+    start: 'Başla',
+    /** docs/ekranlar.md, "Günlük seans": after an exit, "Başla" becomes "Sürdür". */
+    resume: 'Sürdür',
+    /** "12 bölümün 3’ü tamam"; the count comes with its suffix (withPossessiveSuffix). */
+    completed: (total: number, countWithSuffix: string) =>
+      `${String(total)} bölümün ${countWithSuffix} tamam`,
+    chaptersLabel: 'Bölümler',
+    /** No chapter left to read (docs/ekranlar.md, "Tasarımı olmayan durumlar"). TODO(design) */
+    seriesEnd: 'Yeni bölümler yolda.',
+  },
+
+  /** The page card of the reading screens (G3, G4): "Kayıp Fenerin İzinde, 4. bölüm", "1 / 2". */
+  page: {
+    title: (book: string, chapter: number) => `${book}, ${String(chapter)}. bölüm`,
+    counter: (page: number, total: number) => `${String(page)} / ${String(total)}`,
+  },
+
+  /** G3 Dinle (docs/ekranlar.md, G3). */
+  listen: {
+    chip: 'Tıkır okuyor',
+    pause: 'Seslendirmeyi duraklat',
+    /** The paused narration's button; approved with the phase 2b plan (D15). TODO(design) */
+    resume: 'Seslendirmeyi sürdür',
+    progressLabel: 'Seslendirme',
+    time: (elapsed: string, total: string) => `${elapsed} / ${total}`,
+    rateLabel: 'Okuma hızı',
+    slow: 'Yavaş',
+    normal: 'Normal',
+    bubble: 'Ben okurken parmağınla takip et.',
+    restart: 'Baştan dinle',
+    start: 'Sıra sende',
+  },
+
+  /** G4 Oku (docs/ekranlar.md, G4). */
+  read: {
+    attemptChip: (attempt: number, total: number) => `${String(attempt)}. okuma / ${String(total)}`,
+    /** Only when the child is ahead; a negative difference is never shown (rule 7). */
+    raceLead: (words: number) => `Dünkü senin ${String(words)} kelime önündesin.`,
+    helpLead: 'Takıldın mı? Hecele:',
+    elapsed: (time: string) => `Süre ${time}`,
+    correct: (count: number) => `Doğru ${String(count)}`,
+    stuck: (count: number) => `Takılma ${String(count)}`,
+    spaceHint: 'Boşluk tuşu: duraklat ve devam et',
+    pause: 'Duraklat',
+    /** The paused reading's button; "Sürdür" as on G1. TODO(design) */
+    resume: 'Sürdür',
+    finish: 'Okumayı bitir',
+    /** Above the page while the third reading is recorded (docs/ekranlar.md, G4). TODO(design) */
+    recording: 'Kayıt',
+    /** The unheard session (P13, D15). TODO(design) */
+    unheardBubble: 'Dinleme kapalı. Metni sesli oku, bitince Okumayı bitir’e dokun.',
+  },
+
+  /** G5 Kayıt (docs/ekranlar.md, G5; docs/planlar/faz-2b.md, karar 15). */
+  record: {
+    chip: 'Son okuma',
+    done: 'Kayıt bitti',
+    /** "Dar Patika, 3. okuma": the recorded reading is always the third. */
+    title: (chapterTitle: string) => `${chapterTitle}, 3. okuma`,
+    added: 'Sesli kitabına eklendi',
+    /** "12 bölümün 4’ü"; the count comes with its suffix (withPossessiveSuffix). */
+    chaptersLabel: (total: number, countWithSuffix: string) =>
+      `Kayıtlı bölümler: ${String(total)} bölümün ${countWithSuffix}`,
+    chaptersRecorded: (total: number, countWithSuffix: string) =>
+      `${String(total)} bölümün ${countWithSuffix} kayıtlı`,
+    play: 'Kaydı dinle',
+    /** The playing recording's button, named as G4's. TODO(design) */
+    pause: 'Duraklat',
+    shareTitle: 'Ailene dinlet',
+    shareNote: 'Göndermeden önce velin onaylar',
+    send: 'Gönder',
+    /** The sent recording's button (docs/ekranlar.md, G5). TODO(design) */
+    sent: 'Veli onayı bekliyor',
+    /** Only when the third reading was the day's most fluent (docs/ekranlar.md, G5). */
+    bestBubble: 'Bu, bugünkü en akıcı okuman oldu.',
+    /** Any other day (docs/ekranlar.md, G5). TODO(design) */
+    readyBubble: 'Kaydın hazır.',
+    /** No recording to play (docs/planlar/faz-2b.md, karar 15). TODO(design) */
+    missing: 'Kaydın alınamadı. Baştan kaydet’e dokunup bir daha oku.',
+    redo: 'Baştan kaydet',
+    next: 'Devam et',
+  },
+
+  /** G6 Kapanış (docs/ekranlar.md, G6; docs/planlar/faz-2b.md, karar 16). */
+  wrapUp: {
+    questionCount: (count: number) => `${String(count)} soru`,
+    counter: (question: number, total: number) => `Soru ${String(question)} / ${String(total)}`,
+    bubble: 'Emin değilsen metne geri dönebilirsin.',
+    backToText: 'Metne geri dön',
+    submit: 'Cevabı gönder',
+    /** After a wrong answer only the right option is marked; nothing says "wrong". TODO(design) */
+    correctLabel: 'Doğru cevap',
+    correctBubble: 'Doğru cevabı işaretledim.',
+    next: 'Devam et',
+    /** The chapter's read-only layer, titled as the page card. TODO(design) */
+    close: 'Kapat',
+  },
+
+  /** G7, and G1 once the day is done (docs/ekranlar.md, G1: "G7'deki 'Yarın' kartını kullan"). */
+  done: {
+    tomorrow: (title: string) => `Yarın: ${title}`,
+    tomorrowMeta: (number: number) => `${String(number)}. bölüm yarın açılır`,
+    bubble: (name: string) => `Bugünlük bu kadar. Yarın görüşürüz, ${name}.`,
+    /** G7's chip: the session's minutes. */
+    minutes: (count: number) => `${String(count)} dakika`,
+    /** The big number's label, on two lines as in the design. */
+    paceFirstLine: 'doğru kelime',
+    paceSecondLine: 'bir dakikada',
+    /** Only when today is ahead of the previous session (karar 17; docs/urun.md, bölüm 4). */
+    gain: (count: number) => `Dünkü senden ${String(count)} fazla`,
+    tamedLabel: 'Evcilleşen kelimeler',
+    tamed: 'evcilleşti',
+    summary: 'Seansın özeti veline gitti.',
+    close: 'Kapat',
+  },
+
+  /** The album tab (docs/planlar/faz-2b.md, karar 18). TODO(design) */
+  album: {
+    empty: 'Evcilleşen kelimelerin burada toplanır.',
+    back: 'Yola dön',
+  },
+
+  /** The studio tab (docs/planlar/faz-2b.md, karar 18). TODO(design) */
+  studio: {
+    empty: 'Kaydettiğin bölümler burada sesli kitabın olur.',
+    back: 'Yola dön',
+  },
+
+  /** Loading and the error notice; approved with the phase 2b plan (D15). TODO(design) */
+  status: {
+    loading: 'Hazırlanıyor…',
+    error: 'Bilgilerin açılamadı. Sayfayı yenileyip yeniden dene.',
   },
 
   race: {
@@ -75,5 +236,39 @@ export const tr = {
     paused: 'Duraklatıldı. Sürdürmek için dokun',
     /** Not drawn; copy approved with the phase 0 plan (decision 5). TODO(design) */
     denied: 'Mikrofon izni yok',
+    /** The unheard session (docs/kararlar.md P13, D15). TODO(design) */
+    listeningOff: 'Dinleme kapalı',
+  },
+
+  /**
+   * Tıkır's bubble when the microphone cannot listen (docs/ekranlar.md, "Tasarımı olmayan
+   * durumlar"); the texts were approved with the phase 2b plan (D15). TODO(design)
+   */
+  microphoneProblem: {
+    denied:
+      'Seni duyamıyorum, mikrofon izni kapalı. Velinden izni açmasını iste, sonra Yeniden dene’ye dokun.',
+    unavailable:
+      'Mikrofonu bulamadım. Velinden bir mikrofon bağlamasını iste, sonra Yeniden dene’ye dokun.',
+    error: 'Mikrofon durdu. Yeniden dene’ye dokun.',
+    retry: 'Yeniden dene',
+  },
+
+  /** G2 Isınma (docs/ekranlar.md, G2). */
+  warmup: {
+    wordCount: (count: number) => `${String(count)} kelime`,
+    cardCounter: (card: number, total: number) =>
+      `Canavar kelime ${String(card)} / ${String(total)}`,
+    remaining: (count: number) => `Evcilleşmesine ${String(count)} doğru okuma kaldı`,
+    syllablesLabel: 'Heceler',
+    chainLabel: 'Büyüyen kelime',
+    bubble: 'Önce hecele, sonra bir nefeste söyle.',
+    listen: 'Kelimeyi dinle',
+    /** Tablet and web: the button's text. */
+    next: 'Dinle adımına geç',
+    /** Phones: the round button's name. */
+    nextShort: 'Sıradaki adım: Dinle',
+    /** The unheard session (P13, D15). TODO(design) */
+    unheardBubble: 'Dinleme kapalı. Kelimeyi sesli oku, sonra sıradakine geç.',
+    nextWord: 'Sıradaki kelime',
   },
 } as const;

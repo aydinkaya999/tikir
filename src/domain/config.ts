@@ -22,6 +22,9 @@ export const hesitationMarkMs = 1000;
 
 export const readingsPerSession = 3;
 
+/** The daily session's length in minutes, shown on G1 (docs/urun.md section 3). */
+export const sessionMinutes = 12;
+
 /** Cards due for the warmup are capped at this many. */
 export const warmupCardLimit = 3;
 

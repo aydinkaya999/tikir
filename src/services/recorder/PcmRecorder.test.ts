@@ -156,6 +156,69 @@ describe('PcmRecorder', () => {
     expect((await recorder.stop()).seconds).toBeCloseTo(0.2, 6);
   });
 
+  it('marks a recording as waiting for the parent when the child sends it', async () => {
+    const { audio, recorder, send } = setup();
+    await recorder.start(audio);
+    send(toneFrames(10));
+    const info = await recorder.stop();
+    expect(info.approval).toBeUndefined();
+
+    await recorder.requestApproval(info.id);
+
+    expect((await recorder.get(info.id))?.approval).toBe('pending');
+    await expect(recorder.requestApproval('yok')).rejects.toThrow('No recording yok');
+  });
+
+  it('keeps an empty recording when no frame came: no seconds and flat bars', async () => {
+    const { audio, recorder } = setup();
+
+    await recorder.start(audio);
+    const info = await recorder.stop();
+
+    expect(info.seconds).toBe(0);
+    expect(info.levels).toEqual(Array.from({ length: 64 }, () => 0));
+  });
+
+  it('records on when the microphone goes away and comes back, leaving the gap out', async () => {
+    const { audio, recorder, send } = setup();
+    await recorder.start(audio);
+    send(toneFrames(50));
+
+    audio.setState('idle');
+    audio.setState('capturing');
+    send(toneFrames(50));
+    const info = await recorder.stop();
+
+    expect(info.seconds).toBe(2);
+  });
+
+  it('leaves out the frames that come while it is paused', async () => {
+    const { audio, recorder, send } = setup();
+    await recorder.start(audio);
+    send(toneFrames(50));
+
+    recorder.pause();
+    send(toneFrames(100));
+    recorder.resume();
+    send(toneFrames(50));
+    const info = await recorder.stop();
+
+    expect(info.seconds).toBe(2);
+  });
+
+  it('starts every recording unpaused', async () => {
+    const { audio, recorder, send } = setup();
+    await recorder.start(audio);
+    recorder.pause();
+    await recorder.stop();
+
+    await recorder.start(audio);
+    send(toneFrames(50));
+    const info = await recorder.stop();
+
+    expect(info.seconds).toBe(1);
+  });
+
   it('keeps recordings in IndexedDB for a later page', async () => {
     const audio = new FakeAudioCapture();
     audio.setState('capturing');

@@ -1,0 +1,276 @@
+/* Phone (below 700 px): G1 telefon. */
+.road {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.greetingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.phoneFace {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.today {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Tıkır and the bubble head the left column from 700 px; phones show Tıkır by the greeting. */
+.intro {
+  display: none;
+}
+
+.chapterCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-white);
+  box-shadow: var(--lift-card);
+}
+
+.chapterHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cover {
+  --tile-size: 64px;
+}
+
+.chapterText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.label,
+.meta {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  line-height: var(--leading-ui);
+}
+
+.label {
+  font-weight: var(--weight-bold);
+}
+
+.meta {
+  font-weight: var(--weight-semibold);
+}
+
+.chapterTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-chapter-title);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.notice {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-body);
+}
+
+.seriesColumn {
+  min-width: 0;
+}
+
+.seriesCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seriesHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.seriesTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.2;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tileItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.tile {
+  --tile-size: 62px;
+}
+
+.tileNumber {
+  color: var(--color-ink);
+  font-size: var(--size-tile-number);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+.tileItem[data-state='today'] .tileNumber {
+  font-weight: var(--weight-extrabold);
+}
+
+.tileItem[data-state='locked'] .tileNumber {
+  color: var(--color-muted);
+}
+
+/* Tablet (700–1199 px): G1 tablet — two columns. */
+@media (min-width: 700px) {
+  .road {
+    gap: 22px;
+  }
+
+  .phoneFace {
+    display: none;
+  }
+
+  .greeting {
+    flex: 1 1 auto;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .columns {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .today {
+    flex: 1 1 0;
+    gap: 22px;
+  }
+
+  .intro {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .wideFace {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
+  }
+
+  .bubble {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .chapterCard {
+    padding: 24px;
+  }
+
+  .cover {
+    --tile-size: 76px;
+  }
+
+  /* The padding sits on the card inside the column, so the columns split 1 : 1.05 as drawn. */
+  .seriesColumn {
+    flex: 1.05 1 0;
+    min-width: 0;
+  }
+
+  .seriesCard {
+    gap: 18px;
+    padding: 24px;
+    border: var(--border);
+    border-radius: var(--radius-page);
+    background: var(--color-white);
+  }
+
+  .tiles {
+    gap: 18px;
+  }
+
+  .tile {
+    --tile-size: 84px;
+  }
+}
+
+/* Web (from 1200 px): G1 web. */
+@media (min-width: 1200px) {
+  .road {
+    gap: 24px;
+  }
+
+  .columns {
+    flex-wrap: wrap;
+    gap: 28px 36px;
+  }
+
+  .today {
+    flex: 1 1 380px;
+    gap: 24px;
+  }
+
+  .seriesColumn {
+    flex: 1 1 420px;
+    max-width: 560px;
+  }
+
+  .seriesCard {
+    padding: 28px;
+  }
+}

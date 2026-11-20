@@ -1,5 +1,5 @@
 // The reading listener (docs/dinleme-hatti.md, sections 2 and 3; docs/mimari.md, "Servisler").
-// FakeListener is the first implementation; speech recognition comes in phase 3 behind the
+// FakeListener is the first implementation; speech recognition comes in phase 6 behind the
 // same interface.
 import type { MiscueType, ProsodyScore, ReadingOutcome, WordResult } from '../../domain/types';
 import type { AudioCapture } from '../audio/AudioCapture';

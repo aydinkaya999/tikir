@@ -97,19 +97,22 @@ for (const viewport of Object.keys(viewports) as (keyof typeof viewports)[]) {
   });
 }
 
+// Each step opens with the developer parameters: the demo profile and today's session at that step
+// (the steps open in order, docs/ekranlar.md, "Yönlendirme kuralları").
 const sessionSteps = [
-  { path: '/seans/isinma', current: 'Isınma', counter: '1 / 5' },
-  { path: '/seans/dinle', current: 'Dinle', counter: '2 / 5' },
-  { path: '/seans/oku', current: 'Oku', counter: '3 / 5' },
-  { path: '/seans/kayit', current: 'Kayıt', counter: '4 / 5' },
-  { path: '/seans/kapanis', current: 'Kapanış', counter: '5 / 5' },
-  { path: '/seans/bitti', current: null, counter: '5 / 5' },
+  { path: '/seans/isinma', step: 'warmup', current: 'Isınma', counter: '1 / 5' },
+  { path: '/seans/dinle', step: 'listen', current: 'Dinle', counter: '2 / 5' },
+  { path: '/seans/oku', step: 'read-1', current: 'Oku', counter: '3 / 5' },
+  { path: '/seans/kayit', step: 'record', current: 'Kayıt', counter: '4 / 5' },
+  { path: '/seans/kapanis', step: 'wrapUp', current: 'Kapanış', counter: '5 / 5' },
+  { path: '/seans/bitti', step: 'done', current: null, counter: '5 / 5' },
 ];
 
 for (const step of sessionSteps) {
   test(`${step.path} opens in the session shell at its step`, async ({ page }) => {
     for (const viewport of ['telefon', 'tablet', 'web'] as const) {
-      await open(page, step.path, viewport);
+      await open(page, `${step.path}?demo=cocuk-sabahi&adim=${step.step}`, viewport);
+      await expect(page).toHaveURL(new RegExp(`${step.path}$`));
       await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'session');
       await expect(page.getByRole('main')).toHaveCount(1);
       await expect(page.getByRole('navigation')).toHaveCount(0);
@@ -131,11 +134,22 @@ for (const step of sessionSteps) {
         await expect(counter).toBeHidden();
       }
 
-      // TODO(design): the exit asks for confirmation from phase 2 on.
-      const exit = page.getByRole('link', { name: 'Seanstan çık' });
-      await expect(exit).toHaveCount(1);
-      await expect(exit).toHaveAttribute('href', '/');
       await expect(page.getByRole('img', { name: 'Tıkır' })).toBeVisible();
+      if (step.current === null) {
+        // G7: the session is over, the exit leaves without asking.
+        const exit = page.getByRole('link', { name: 'Seanstan çık' }).filter({ visible: true });
+        await expect(exit).toHaveCount(1);
+        await expect(exit).toHaveAttribute('href', '/');
+      } else {
+        // The exit asks first (docs/ekranlar.md, "Günlük seans").
+        const exit = page.getByRole('button', { name: 'Seanstan çık' }).filter({ visible: true });
+        await expect(exit).toHaveCount(1);
+        await exit.click();
+        const dialog = page.getByRole('dialog', { name: 'Seanstan çıkılsın mı?' });
+        await expect(dialog).toBeVisible();
+        await dialog.getByRole('button', { name: 'Seansa dön' }).click();
+        await expect(dialog).toBeHidden();
+      }
     }
   });
 }
@@ -243,7 +257,13 @@ for (const route of twoPaneShells) {
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto(route.path);
+      await page.goto(
+        route.path === '/seans/oku' ? `${route.path}?demo=cocuk-sabahi&adim=read-1` : route.path,
+      );
+      if (route.path === '/seans/oku') {
+        // G4 draws its controls when Tıkır's voice is ready, in a new pane: measure that one.
+        await expect(page.getByText('1. okuma / 3')).toBeVisible();
+      }
       const pane = page.locator(`[data-shell="${route.shell}"] [data-pane="main"]`);
       await expect(pane).toBeAttached();
 

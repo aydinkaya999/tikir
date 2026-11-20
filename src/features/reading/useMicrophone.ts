@@ -16,19 +16,14 @@ export function useMicrophone(audio: AudioCapture, consent: boolean): Microphone
   const subscribe = useCallback((onChange: () => void) => audio.onStateChange(onChange), [audio]);
   const captureState: CaptureState = useSyncExternalStore(subscribe, () => audio.state);
 
-  // A withdrawn consent closes the microphone at once; leaving the screen closes it too.
+  // A withdrawn consent closes the microphone at once. Leaving the screen does not: the address
+  // rule closes it (SessionRoot, docs/kararlar.md T22), so a microphone opened by the tap that led
+  // here survives this screen's mounts, StrictMode's second one included.
   useEffect(() => {
     if (!consent) {
       void audio.stop();
     }
   }, [audio, consent]);
-
-  useEffect(
-    () => () => {
-      void audio.stop();
-    },
-    [audio],
-  );
 
   const start = useCallback(() => {
     if (consent) {

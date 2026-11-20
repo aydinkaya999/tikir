@@ -1,7 +1,8 @@
 // Narration with the device's Turkish voice (docs/kararlar.md T8; docs/planlar/faz-2a.md, karar
 // 11). One utterance per phrase unit. A pause cancels and later speaks the unit again, because
 // speechSynthesis.pause() is unreliable on Android. A unit whose speech does not start in time,
-// or fails, is timed silently, so G3 never hangs.
+// or fails, is timed silently together with the rest of its page, so G3 never hangs and never
+// waits 1.5 s per unit; the next page and every word try the voice again (docs/kararlar.md T8).
 import type { Unsubscribe } from '../types';
 import { narrationTiming, unitDurationMs } from './Narrator';
 import { type NarrationJob, SilentNarrator } from './SilentNarrator';
@@ -91,6 +92,8 @@ export class SpeechSynthesisNarrator extends SilentNarrator {
   private speech: CurrentSpeech | null = null;
   /** The held unit was being spoken: resume() speaks it again. */
   private heldSpeech = false;
+  /** Narrations whose voice failed: their remaining units are timed silently. */
+  private readonly silentJobs = new WeakSet<NarrationJob>();
 
   constructor(
     port: SpeechPort,
@@ -103,12 +106,17 @@ export class SpeechSynthesisNarrator extends SilentNarrator {
   }
 
   protected override playUnit(job: NarrationJob): void {
+    if (this.silentJobs.has(job)) {
+      this.playSilently(job);
+      return;
+    }
     this.utterance += 1;
     const token = this.utterance;
     const current = () => token === this.utterance && this.job === job;
     const startTimer = setTimeout(() => {
       if (current()) {
         this.quiet();
+        this.silentJobs.add(job);
         this.playSilently(job);
       }
     }, narrationTiming.startTimeoutMs);
@@ -145,6 +153,7 @@ export class SpeechSynthesisNarrator extends SilentNarrator {
         onError: () => {
           if (current()) {
             this.release();
+            this.silentJobs.add(job);
             this.playSilently(job);
           }
         },

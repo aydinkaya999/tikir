@@ -27,3 +27,9 @@
 .turquoiseLight {
   background: var(--color-turquoise-light);
 }
+
+/* G5's "Kayıt bitti" on the dark recording card: no outline. */
+.turquoise {
+  border-color: transparent;
+  background: var(--color-turquoise);
+}

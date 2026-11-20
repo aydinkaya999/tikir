@@ -4,9 +4,12 @@ import demoProfile from '../../seed/demo-profil.json';
 import { addDays } from './date';
 import {
   applyWarmupResult,
+  isWarmupCorrect,
   recordMisses,
   remainingToTame,
+  tamedWords,
   warmupDeck,
+  warmupItems,
   type WarmupSource,
 } from './stuckWords';
 import { chapterTokens, splitPhraseUnits, syllabify } from './text';
@@ -229,5 +232,93 @@ describe('warmupDeck', () => {
     const deck = warmupDeck([card('1923', { dueOn: today })], today, chapterFourSource());
 
     expect(deck[0]?.spoken).toBe('bin dokuz yüz yirmi üç');
+  });
+});
+
+describe('isWarmupCorrect', () => {
+  it('takes a word read without a counted error as correct', () => {
+    expect(isWarmupCorrect('correct')).toBe(true);
+    expect(isWarmupCorrect('repeated')).toBe(true);
+    expect(isWarmupCorrect('inserted')).toBe(true);
+    expect(isWarmupCorrect('selfCorrected')).toBe(true);
+    expect(isWarmupCorrect('misread')).toBe(false);
+    expect(isWarmupCorrect('suffix')).toBe(false);
+    expect(isWarmupCorrect('skipped')).toBe(false);
+    expect(isWarmupCorrect('helped')).toBe(false);
+  });
+});
+
+describe('warmupItems', () => {
+  function demoCards(): StuckWord[] {
+    const chains = chapterFour().chains;
+    return demoProfile.modes['cocuk-sabahi'].stuckWords.map((seedCard) =>
+      card(seedCard.word, {
+        chain: chains[seedCard.word] ?? [],
+        misses: seedCard.misses,
+        status: asStatus(seedCard.status),
+        correctStreak: seedCard.correctStreak,
+        dueOn: addDays(today, seedCard.dueDay),
+      }),
+    );
+  }
+
+  const deckWords = ['kıvrılıyordu', 'ağaçlarının', 'belirdiğinde'];
+
+  it('rebuilds the stored deck as the deck dealt it', () => {
+    const cards = demoCards();
+
+    const items = warmupItems(deckWords, cards, chapterFourSource());
+
+    expect(items).toEqual(warmupDeck(cards, today, chapterFourSource()));
+    expect(items[0]?.syllables).toEqual(['kıv', 'rı', 'lı', 'yor', 'du']);
+    expect(items[0]?.card?.correctStreak).toBe(1);
+  });
+
+  it('keeps the whole deck after its first card is answered, with the card as it is now', () => {
+    const cards = demoCards();
+    const answered = cards.map((each) =>
+      each.word === 'kıvrılıyordu' ? applyWarmupResult(each, true, today) : each,
+    );
+
+    const items = warmupItems(deckWords, answered, chapterFourSource());
+
+    expect(items.map((item) => item.word)).toEqual(deckWords);
+    expect(items[0]?.card?.correctStreak).toBe(2);
+    expect(items[0]?.card?.dueOn).toBe('2026-11-25');
+  });
+
+  it('rebuilds a word of the text as an item without a card', () => {
+    const items = warmupItems(['belirdiğinde'], [], chapterFourSource());
+
+    expect(items).toEqual([
+      {
+        word: 'belirdiğinde',
+        spoken: 'belirdiğinde',
+        syllables: ['be', 'lir', 'di', 'ğin', 'de'],
+        chain: ['belir', 'belirdi', 'belirdiğinde'],
+        card: null,
+      },
+    ]);
+  });
+});
+
+describe('tamedWords', () => {
+  it('lists the tamed cards in the Turkish alphabet’s order', () => {
+    const cards = [
+      card('kıvrılıyordu', { status: 'tamed' }),
+      card('çam', { status: 'practicing' }),
+      card('ışık', { status: 'tamed' }),
+      card('ağaçlarının', { status: 'tamed' }),
+      card('İkisi', { status: 'tamed' }),
+      card('ceviz', { status: 'tamed' }),
+      card('patika', { status: 'wild' }),
+    ];
+
+    // c < ç, ı < i, and İ is i's capital (docs/mimari.md, Türkçe metin).
+    expect(tamedWords(cards)).toEqual(['ağaçlarının', 'ceviz', 'ışık', 'İkisi', 'kıvrılıyordu']);
+  });
+
+  it('is empty without a tamed card', () => {
+    expect(tamedWords([card('patika', { status: 'practicing' })])).toEqual([]);
   });
 });

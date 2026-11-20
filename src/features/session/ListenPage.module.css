@@ -1,0 +1,83 @@
+/* Phone (below 700 px): G3 telefon. */
+.page {
+  flex: 1 1 auto;
+}
+
+/* The player sits at the foot of the page card. */
+.player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.progress {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.time {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-link);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+  white-space: nowrap;
+}
+
+/* The pace is chosen on tablets and the web only (G3). */
+.rates {
+  display: none;
+}
+
+.rate {
+  min-height: var(--touch-min);
+  padding: 0 14px;
+  border: var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--size-link);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}
+
+.rate[aria-pressed='true'] {
+  background: var(--color-saffron);
+}
+
+.phoneControls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.grow {
+  flex: 1 1 auto;
+}
+
+.wideControls {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .rates {
+    display: flex;
+    gap: 8px;
+  }
+
+  .phoneControls {
+    display: none;
+  }
+
+  .wideControls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+}

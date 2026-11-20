@@ -36,12 +36,17 @@ export interface ReadingStyle {
   trialEnabled: boolean;
 }
 
+/** Tıkır's reading pace on G3. */
+export type NarrationRate = 'slow' | 'normal';
+
 export interface Child {
   id: Id;
   name: string;
   grade: Grade;
   interests: string[];
   readingStyle: ReadingStyle;
+  /** The child's last choice on G3; slow when missing (docs/ekranlar.md, G3). */
+  narrationRate?: NarrationRate;
 }
 
 export interface Question {
@@ -123,6 +128,17 @@ export interface ReadingResult {
 
 export type SessionStep = 'warmup' | 'listen' | 'read' | 'record' | 'wrapUp' | 'done';
 
+/**
+ * The warmup deck chosen when the session started, as shown (docs/planlar/faz-2b.md, karar 2):
+ * done cards are finished; scored cards had their first attempt scored (done ≤ scored ≤ done + 1),
+ * so a reload in the second attempt never scores the card again.
+ */
+export interface SessionWarmup {
+  words: string[];
+  done: number;
+  scored: number;
+}
+
 export interface Session {
   id: Id;
   childId: Id;
@@ -134,6 +150,8 @@ export interface Session {
   tamedToday: string[];
   startedAt: string;
   completedAt?: string;
+  /** Missing on sessions that never had a warmup deck stored (the demo profile's past days). */
+  warmup?: SessionWarmup;
 }
 
 export type StuckWordStatus = 'wild' | 'practicing' | 'tamed';

@@ -19,6 +19,7 @@
 - Sekme gizlenince, adım değişince ve bileşen kaldırılınca mikrofon bırakılır (`track.stop()`); mikrofon ışığı gereksiz yanmaz.
 - iPhone'da mikrofon açıkken hoparlör sesi kısılır. Bu yüzden Dinle adımında mikrofon kapalıdır ve kelime seslendirmesi sırasında dinleme duraklatılır.
 - Veli onayı yoksa `start()` çağrılmaz; bu denetim servisin içinde değil, onu çağıran katmandadır ve testlidir.
+- **Dinlemesiz seans** (Faz 2b; `docs/kararlar.md` P13): onay yokken seans yine G1'den G7'ye yürür, mikrofon hiçbir adımda açılmaz. G2'de kartlar puansız geçilir ("Sıradaki kelime"), G4'te metnin tamamı gösterilir ve çocuk her okumayı "Okumayı bitir" ile kendisi bitirir. Okuma sonucu, kart ve ses kaydı yazılmaz; G5 atlanır, G7'de doğru kelime sayısı ve fark yoktur. Mikrofon düğmesi "izin yok" görünümünde, adı "Dinleme kapalı", basılamaz. Uçtan uca test `getUserMedia`'nın hiç çağrılmadığını sınar (`e2e/session-consent.spec.ts`).
 
 Birim testleri: örnekleme hızı dönüştürücü (48 kHz ve 44,1 kHz girişten 16 kHz çıkış uzunluğu ve basit bir sinüsün korunması), çerçeveleyici (rastgele uzunlukta girdiden tam 320 örneklik çerçeveler).
 
@@ -47,6 +48,8 @@ Tipler `docs/mimari.md` içinde. Davranış sözleşmesi:
 2. Arayüz `help(i)` çağırır (`useReading`), Tıkır kelimeyi seslendirir (`narrator.speakWord(söyleyiş)`).
 3. Seslendirme bitince arayüz `resume()` çağırır; dinleyici `word {i, helped, hesitationMs: 3000}` ve sonraki `position` olayını gönderir. Yardım alınan kelime bu yüzden seslendirme bitince sayılır (G4'te balon açıkken "Takılma 1").
 4. Seslendirme ve duraklatma süresince okuma saati ve hayalet durur; yardım alınan kelimeye okuma süresi verilmez.
+
+**Seslendirmenin geri dönüşü** (Faz 2b; `docs/kararlar.md` T8 notu): G3'te bir anlam ünitesi başlamaz ya da hata verirse sayfanın kalanı beklemeden sessiz zamanlanır; vurgu aynı hızla ilerler. Sonraki sayfa ve her kelime seslendirmesi (G2, G4'teki yardım) sesi yeniden dener. Sayfada konuşma sentezi hiç yoksa (ekran görüntüleri, uçtan uca testler) seslendirme baştan sessizdir ve saate göre zamanlanır.
 5. Yardım sırasında `stop()`: `help(i)` çağrıldıysa kelime sonuçta bir kez `helped` olarak yer alır.
 
 Çocuğa gösterilen işaretler: yanlış okuma, ek hatası ve atlama dalgalı mercan çizgi; 1 saniye ve üstü duraksama ile yardım noktalı kehribar çizgi. Tekrar, ekleme ve kendini düzeltme yalnız veli karnesinde görünür. G4'teki "Takılma" sayacı noktalı çizgili kelimeleri sayar (`src/features/reading/readingState.ts`).
@@ -95,7 +98,10 @@ interface FakeScenario {
 - Mikrofon gerçekten açılır ve düzey göstergesi gerçek sesle çalışır; yalnız tanıma sahtedir. Mikrofon izni yoksa sahte dinleyici de çalışmaz, böylece izin akışları gerçek gibi sınanır.
 - **Mikrofona bağlılık (Faz 2a planı, karar 14):** `start()` mikrofon dinlemiyorsa hata fırlatır. Mikrofon dinlemeyi bırakırsa (sekme gizlendi, kesinti) okuma donar; yeniden dinleyince kaldığı yerden sürer. Kullanıcı ayrıca duraklattıysa `resume()` beklenir. Veli onayı denetimi `start()`'ı çağıran katmandadır: `useMicrophone(audio, consent)` onay yokken `audio.start()`'ı hiç çağırmaz, onay geri alınınca mikrofonu kapatır.
 
-**Elle kip** (yalnız geliştirme derlemesinde, `/gelistirme` ayarından açılır): Boşluk = kelime doğru, `E` = yanlış okuma, `S` = atlama, `H` = 3 saniye duraksama. Gerçek bir çocukla tanıtım yaparken dinleyiciyi bir yetişkin oynar. Faz 2a'da dinleyici tarafı hazır (`new FakeListener({ kind: 'manual' })`, `mark('correct' | 'misread' | 'skipped' | 'hesitate')`); klavye bağlantısı 2b'de gelir.
+**Elle kip** (yalnız geliştirme derlemesinde): Boşluk = kelime doğru, `E` = yanlış okuma, `S` = atlama, `H` = 3 saniye duraksama. Gerçek bir çocukla tanıtım yaparken dinleyiciyi bir yetişkin oynar. Dinleyici tarafı Faz 2a'dan (`new FakeListener({ kind: 'manual' })`, `mark('correct' | 'misread' | 'skipped' | 'hesitate')`).
+
+- **Açmak** (Faz 2b): adreste `&senaryo=elle`. Sekme ayarıdır (`tikir.gelistirme.dinleyici`); sekme kapanınca biter (`docs/mimari.md` → "Depolama ve örnek veri").
+- **Tuşlar** (`useManualKeys`) G2 ve G4'te çalışır. Odak bir düğmede ya da alandayken tuşlar o denetimindir. G4'te Boşluk elle kipte kelimeyi işaretler; öteki kiplerde okumayı duraklatır ve sürdürür.
 
 ## 4. Gerçek dinleyici (Faz 6 planı)
 

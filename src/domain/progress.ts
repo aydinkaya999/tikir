@@ -58,3 +58,28 @@ export function chapterTileState(
   }
   return chapter === today ? 'today' : 'locked';
 }
+
+/**
+ * Chapters of a book whose session has a recorded third reading: the child's audio book (G5's
+ * "12 bölümün 4’ü kayıtlı", Stüdyo). Ascending, each once.
+ */
+export function recordedChapters(sessions: readonly Session[], bookId: Id): number[] {
+  const chapters = new Set<number>();
+  for (const session of sessions) {
+    if (session.chapterRef.bookId === bookId && session.readings[2]?.recordingId !== undefined) {
+      chapters.add(session.chapterRef.chapter);
+    }
+  }
+  return [...chapters].sort((a, b) => a - b);
+}
+
+const minuteMs = 60_000;
+
+/** G7's minutes: start to completion, rounded, at least one. null until the session is done. */
+export function sessionMinutesSpent(session: Session): number | null {
+  if (session.completedAt === undefined) {
+    return null;
+  }
+  const spentMs = Date.parse(session.completedAt) - Date.parse(session.startedAt);
+  return Math.max(1, Math.round(spentMs / minuteMs));
+}

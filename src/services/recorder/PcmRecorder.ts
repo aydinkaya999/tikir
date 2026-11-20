@@ -18,7 +18,7 @@ export const recordingLimits = { maxSeconds: 300, levelBars: 64 } as const;
 type RecordingLimits = { maxSeconds: number; levelBars: number };
 
 /** The loudness of each of `bars` equal parts, scaled so the loudest is 1. */
-function waveform(samples: Int16Array, bars: number): number[] {
+export function waveformLevels(samples: Int16Array, bars: number): number[] {
   const floats = toFloat32(samples);
   const levels = Array.from({ length: bars }, (_, bar) => {
     const start = Math.floor((bar * floats.length) / bars);
@@ -46,6 +46,7 @@ export class PcmRecorder implements Recorder {
   private chunks: Int16Array[] = [];
   private sampleCount = 0;
   private releaseFrames: Unsubscribe | null = null;
+  private paused = false;
 
   constructor(store: RecordingStore, player: WavPlayer, limits: Partial<RecordingLimits> = {}) {
     this.store = store;
@@ -62,10 +63,19 @@ export class PcmRecorder implements Recorder {
     }
     this.chunks = [];
     this.sampleCount = 0;
+    this.paused = false;
     this.releaseFrames = audio.onFrame((pcm16) => {
       this.take(pcm16);
     });
     return Promise.resolve();
+  }
+
+  pause(): void {
+    this.paused = true;
+  }
+
+  resume(): void {
+    this.paused = false;
   }
 
   async stop(): Promise<RecordingInfo> {
@@ -79,7 +89,7 @@ export class PcmRecorder implements Recorder {
     const info: RecordingInfo = {
       id: createId(),
       seconds: samples.length / captureFormat.sampleRate,
-      levels: waveform(samples, this.limits.levelBars),
+      levels: waveformLevels(samples, this.limits.levelBars),
     };
     await this.store.put({
       ...info,
@@ -109,13 +119,33 @@ export class PcmRecorder implements Recorder {
 
   async get(id: Id): Promise<RecordingInfo | null> {
     const recording = await this.store.get(id);
-    return recording === null
-      ? null
-      : { id: recording.id, seconds: recording.seconds, levels: recording.levels };
+    if (recording === null) {
+      return null;
+    }
+    const info: RecordingInfo = {
+      id: recording.id,
+      seconds: recording.seconds,
+      levels: recording.levels,
+    };
+    if (recording.approval !== undefined) {
+      info.approval = recording.approval;
+    }
+    return info;
+  }
+
+  async requestApproval(id: Id): Promise<void> {
+    const recording = await this.store.get(id);
+    if (recording === null) {
+      throw new Error(`No recording ${id}.`);
+    }
+    await this.store.put({ ...recording, approval: 'pending' });
   }
 
   /** Frames are copied: the capture may reuse its buffer. */
   private take(pcm16: Int16Array): void {
+    if (this.paused) {
+      return;
+    }
     const room = this.limits.maxSeconds * captureFormat.sampleRate - this.sampleCount;
     if (room <= 0) {
       return;

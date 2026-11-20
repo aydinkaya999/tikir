@@ -1,0 +1,211 @@
+/* Phone (below 700 px): G5 telefon. The two cards are 12 px apart, 18 px from 700 px. */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* The recording: a dark card with a cobalt lift. */
+.recording {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-ink);
+  box-shadow: var(--lift-recording);
+}
+
+.recordingHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.time {
+  margin: 0;
+  color: var(--color-white);
+  font-size: var(--size-h2);
+  font-weight: var(--weight-extrabold);
+  line-height: 1;
+}
+
+.wideWave {
+  display: none;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.playerText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.recordingTitle {
+  margin: 0;
+  color: var(--color-white);
+  font-size: var(--size-body);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+.added {
+  margin: 0;
+  color: var(--color-turquoise-light);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+/* The audio book: a square per chapter, the recorded ones saffron. */
+.book {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.squares {
+  display: flex;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.square {
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--color-white);
+  border-radius: var(--radius-chapter-square);
+}
+
+.square[data-recorded] {
+  background: var(--color-saffron);
+}
+
+.bookCount {
+  margin: 0;
+  color: var(--color-white);
+  font-size: var(--size-small);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+/* "Ailene dinlet": the button goes under the text when the line is too short (phone). */
+.share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border: var(--border);
+  border-radius: var(--radius-share);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.shareText {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.shareLines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shareTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-ui);
+}
+
+.shareNote {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+/* No recording: the sentence stands in the card's place. TODO(design) */
+.missing {
+  margin: 0;
+  padding: 14px;
+  border: var(--border);
+  border-radius: var(--radius-share);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-body);
+}
+
+.phoneControls {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.phoneNext {
+  flex: 1 1 auto;
+}
+
+.wideControls {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .cards {
+    gap: 18px;
+  }
+
+  .recording {
+    gap: 20px;
+    padding: 28px;
+  }
+
+  .share,
+  .missing {
+    padding: 20px;
+  }
+
+  .phoneWave {
+    display: none;
+  }
+
+  .wideWave {
+    display: block;
+  }
+
+  .phoneControls {
+    display: none;
+  }
+
+  .wideControls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+}

@@ -2,8 +2,9 @@
 // karar 7. A word the child stumbles on becomes a card; correct warmups on spaced days tame it.
 import { tamingIntervalsDays, warmupCardLimit } from './config';
 import { addDays, daysBetween } from './date';
+import { isCountedError } from './scoring';
 import { syllabify, toLowerTr, tokenize } from './text';
-import type { LocalDate, StuckWord } from './types';
+import type { LocalDate, StuckWord, WordStatus } from './types';
 
 const LETTER = /\p{L}/gu;
 const tamingStreak = tamingIntervalsDays.length;
@@ -129,6 +130,14 @@ function byTurkishKey(a: string, b: string): number {
   return stuckKey(a).localeCompare(stuckKey(b), 'tr');
 }
 
+/** The album's words: the tamed cards, in the Turkish alphabet's order. */
+export function tamedWords(cards: readonly StuckWord[]): string[] {
+  return cards
+    .filter((card) => card.status === 'tamed')
+    .map((card) => card.word)
+    .sort(byTurkishKey);
+}
+
 function spokenOfWord(word: string): string {
   const tokens = tokenize(word);
   return tokens.length === 1 ? (tokens[0]?.spoken ?? word) : word;
@@ -186,4 +195,42 @@ export function warmupDeck(
     chain: card.chain,
     card,
   }));
+}
+
+/** A warmup word counts as read when its result is not a counted error (docs/urun.md section 2). */
+export function isWarmupCorrect(status: WordStatus): boolean {
+  return !isCountedError(status);
+}
+
+/**
+ * The deck stored when the session started (Session.warmup.words), rebuilt with the cards as they
+ * are now: a card is matched by its key, so an answered card keeps its place in the deck; a word
+ * without a card is a word of today's text.
+ */
+export function warmupItems(
+  words: readonly string[],
+  cards: readonly StuckWord[],
+  source: WarmupSource,
+): WarmupItem[] {
+  const byKey = new Map(cards.map((card) => [stuckKey(card.word), card]));
+  return words.map((word) => {
+    const card = byKey.get(stuckKey(word));
+    if (card !== undefined) {
+      return {
+        word: card.word,
+        spoken: spokenOfWord(card.word),
+        syllables: card.syllables,
+        chain: card.chain,
+        card,
+      };
+    }
+    const spoken = source.words.find((each) => each.word === word)?.spoken ?? spokenOfWord(word);
+    return {
+      word,
+      spoken,
+      syllables: syllabify(spoken),
+      chain: [...(source.chains[word] ?? source.chains[stuckKey(word)] ?? [])],
+      card: null,
+    };
+  });
 }

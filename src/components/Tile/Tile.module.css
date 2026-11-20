@@ -1,5 +1,7 @@
 .tile {
   position: relative;
+  width: var(--tile-size, 84px);
+  height: var(--tile-size, 84px);
   flex-shrink: 0;
   overflow: hidden;
   border: var(--border);
@@ -34,6 +36,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Tıkır fills about three quarters of today's tile. */
+.face {
+  width: 73.5%;
+  height: 73.5%;
 }
 
 .lock {

@@ -1,0 +1,161 @@
+/* Phone (below 700 px): G2 telefon. */
+.card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+  border: var(--border);
+  border-radius: var(--radius-page);
+  background: var(--color-white);
+  box-shadow: var(--lift-page);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.monster {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.counter,
+.remaining {
+  margin: 0;
+  font-size: var(--size-small);
+  line-height: var(--leading-ui);
+}
+
+.counter {
+  color: var(--color-muted);
+  font-weight: var(--weight-bold);
+}
+
+.remaining {
+  color: var(--color-ink);
+  font-weight: var(--weight-semibold);
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border: var(--border);
+  border-radius: 50%;
+  background: var(--color-white);
+}
+
+.dot[data-filled] {
+  background: var(--color-saffron);
+}
+
+.word {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-warmup-word);
+  font-weight: var(--weight-extrabold);
+  font-variant-ligatures: no-common-ligatures;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+}
+
+.chain {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chainList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chainItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink);
+}
+
+.chainChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: var(--border-chip);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  font-size: var(--size-chain);
+  font-weight: var(--weight-bold);
+  font-variant-ligatures: no-common-ligatures;
+}
+
+.chainChip[data-known] {
+  background: var(--color-turquoise-light);
+}
+
+/* The phone's bar: the round "Kelimeyi dinle", the microphone and the round forward button. */
+.phoneControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.wideControls {
+  display: none;
+}
+
+.mic {
+  margin: 0 10px;
+}
+
+/* Tablet and web (from 700 px): G2 tablet, G2 web. */
+@media (min-width: 700px) {
+  .card {
+    gap: 22px;
+    padding: 30px;
+  }
+
+  .monster {
+    width: 92px;
+    height: 92px;
+  }
+
+  .phoneControls {
+    display: none;
+  }
+
+  .wideControls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+}

@@ -8,15 +8,22 @@ export interface RecordingInfo {
   seconds: number;
   /** The waveform on G5: 0 to 1, the loudest bar 1. */
   levels: number[];
+  /** 'pending' once the child sent it from G5; the parent approves it in phase 4. */
+  approval?: 'pending';
 }
 
 export interface Recorder {
   /** Throws if the microphone is not capturing. */
   start(audio: AudioCapture): Promise<void>;
   stop(): Promise<RecordingInfo>;
+  /** The frames that come while paused are left out: the reading's pauses are not recorded. */
+  pause(): void;
+  resume(): void;
   /** Call from the tap: it prepares the player before its first await (iPhone's gesture rule). */
   play(id: Id): Promise<void>;
   stopPlayback(): void;
   remove(id: Id): Promise<void>;
   get(id: Id): Promise<RecordingInfo | null>;
+  /** G5's "Gönder": the recording waits for the parent's approval. Rejects for an unknown id. */
+  requestApproval(id: Id): Promise<void>;
 }
