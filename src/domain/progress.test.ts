@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { testSession } from '../test/sessions';
+import { testReading, testSession } from '../test/sessions';
 import {
   chapterTileState,
   completedSeriesChapters,
   deltaFromPrevious,
   nextSeriesChapter,
+  recordedChapters,
+  sessionMinutesSpent,
   streakDays,
 } from './progress';
 import type { Book } from './types';
@@ -85,5 +87,39 @@ describe('chapterTileState', () => {
     expect(chapterTileState(4, [1, 2, 3], 4)).toBe('today');
     expect(chapterTileState(5, [1, 2, 3], 4)).toBe('locked');
     expect(chapterTileState(4, [1, 2, 3], null)).toBe('locked');
+  });
+});
+
+describe('recordedChapters', () => {
+  it('lists the chapters of a book whose third reading has a recording, once each', () => {
+    const recorded = [testReading(1), testReading(2), testReading(3, { recordingId: 'kayit' })];
+    const sessions = [
+      testSession('2026-11-17', 1, { readings: recorded }),
+      testSession('2026-11-18', 2),
+      testSession('2026-11-19', 3, { readings: recorded }),
+      testSession('2026-11-20', 3, { readings: recorded }),
+      testSession('2026-11-16', 1, { readings: recorded }, 'uzay-istasyonunda-gizemli-ses'),
+    ];
+
+    expect(recordedChapters(sessions, seriesId)).toEqual([1, 3]);
+  });
+});
+
+describe('sessionMinutesSpent', () => {
+  it('rounds the time from start to completion to whole minutes, at least one', () => {
+    const at = (time: string) => `2026-11-21T${time}.000Z`;
+    const table: [string, string | undefined, number | null][] = [
+      ['09:00:00', '09:12:00', 12],
+      ['09:00:00', '09:12:31', 13],
+      ['09:00:00', '09:00:20', 1],
+      ['09:00:00', undefined, null],
+    ];
+    for (const [start, end, expected] of table) {
+      const session = testSession('2026-11-21', 4, {
+        startedAt: at(start),
+        completedAt: end === undefined ? undefined : at(end),
+      });
+      expect(sessionMinutesSpent(session)).toBe(expected);
+    }
   });
 });

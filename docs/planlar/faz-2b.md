@@ -43,7 +43,7 @@
 
 - [x] Task 0: Plan dosyası, dal ve ürün sahibinin yanıtları
 - [x] Task 1: Seslendirmede sayfanın kalanı sessiz
-- [ ] Task 2: Seans ekranlarının alan kuralları
+- [x] Task 2: Seans ekranlarının alan kuralları
 - [ ] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
 - [ ] Task 4: Seans durum makinesi
 - [ ] Task 5: Seans deposu
@@ -502,7 +502,7 @@ export function sessionMinutesSpent(session: Session): number | null;  // null u
 
 **Adımlar:**
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - **`withPossessiveSuffix`:**
 
     | Sayı | Sonuç | Sayı | Sonuç | Sayı | Sonuç |
@@ -528,9 +528,9 @@ export function sessionMinutesSpent(session: Session): number | null;  // null u
     | 09:00 | 09:12:31 | 13 |
     | 09:00 | 09:00:20 | 1 |
     | 09:00 | yok | `null` |
-- [ ] Üç test dosyası → FAIL.
-- [ ] Uygula. `withPossessiveSuffix`, `readCardinal`'ın okunuşundan son ünlüyü bulur. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(domain): add the counts and rules of the session screens`.
+- [x] Üç test dosyası → FAIL.
+- [x] Uygula. `withPossessiveSuffix`, `readCardinal`'ın okunuşundan son ünlüyü bulur. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(domain): add the counts and rules of the session screens`.
 
 ### Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
 

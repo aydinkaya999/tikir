@@ -12,6 +12,7 @@ import {
   tokenizePage,
   toLowerTr,
   toUpperTr,
+  withPossessiveSuffix,
 } from './text';
 import type { Chapter } from './types';
 
@@ -340,5 +341,36 @@ describe('Turkish casing', () => {
 
   it('lower-cases İ to i and I to ı', () => {
     expect(toLowerTr('İSTANBUL IŞIK')).toBe('istanbul ışık');
+  });
+});
+
+describe('withPossessiveSuffix', () => {
+  it('adds the possessive suffix that follows the last vowel of the spoken number', () => {
+    const table: [number, string][] = [
+      [0, '0’ı'],
+      [1, '1’i'],
+      [2, '2’si'],
+      [3, '3’ü'],
+      [4, '4’ü'],
+      [5, '5’i'],
+      [6, '6’sı'],
+      [7, '7’si'],
+      [8, '8’i'],
+      [9, '9’u'],
+      [10, '10’u'],
+      [11, '11’i'],
+      [12, '12’si'],
+      [20, '20’si'],
+      [30, '30’u'],
+      [40, '40’ı'],
+      [50, '50’si'],
+      [60, '60’ı'],
+      [90, '90’ı'],
+      [100, '100’ü'],
+      [1000, '1000’i'],
+    ];
+    for (const [count, expected] of table) {
+      expect(withPossessiveSuffix(count)).toBe(expected);
+    }
   });
 });

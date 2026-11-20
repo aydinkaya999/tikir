@@ -40,7 +40,7 @@ const TENS_NAMES = [
 const SCALE_NAMES = ['', 'bin', 'milyon', 'milyar'];
 /** Longer runs (and runs with a leading zero) are read digit by digit, like a phone number. */
 const MAX_NUMBER_DIGITS = 12;
-/** The vowel of the ordinal suffix, from the word's last vowel (four-way vowel harmony). */
+/** The vowel of a high-vowel suffix (ordinal, possessive) after a word's last vowel: four-way harmony. */
 const ORDINAL_VOWEL: Readonly<Record<string, string>> = {
   a: 'ı',
   ı: 'ı',
@@ -168,6 +168,19 @@ export function readOrdinal(digits: string): string {
   const words = readCardinal(digits).split(' ');
   const last = words.pop() ?? '';
   return [...words, ordinalOf(last)].join(' ');
+}
+
+/**
+ * A count with its possessive suffix, as in "12 bölümün 3’ü" (G1, G5): the suffix follows the last
+ * vowel of the spoken number, with a buffer s after a final vowel ('2’si', '6’sı', '40’ı').
+ */
+export function withPossessiveSuffix(count: number): string {
+  const digits = String(count);
+  const characters = letters(readCardinal(digits));
+  const lastVowel = characters.findLast(isVowel) ?? 'i';
+  const vowel = ORDINAL_VOWEL[toLowerTr(lastVowel)] ?? 'i';
+  const buffer = isVowel(characters.at(-1) ?? '') ? 's' : '';
+  return `${digits}’${buffer}${vowel}`;
 }
 
 type WrittenToken = Omit<Token, 'spoken'>;
