@@ -109,9 +109,26 @@ export class PcmRecorder implements Recorder {
 
   async get(id: Id): Promise<RecordingInfo | null> {
     const recording = await this.store.get(id);
-    return recording === null
-      ? null
-      : { id: recording.id, seconds: recording.seconds, levels: recording.levels };
+    if (recording === null) {
+      return null;
+    }
+    const info: RecordingInfo = {
+      id: recording.id,
+      seconds: recording.seconds,
+      levels: recording.levels,
+    };
+    if (recording.approval !== undefined) {
+      info.approval = recording.approval;
+    }
+    return info;
+  }
+
+  async requestApproval(id: Id): Promise<void> {
+    const recording = await this.store.get(id);
+    if (recording === null) {
+      throw new Error(`No recording ${id}.`);
+    }
+    await this.store.put({ ...recording, approval: 'pending' });
   }
 
   /** Frames are copied: the capture may reuse its buffer. */

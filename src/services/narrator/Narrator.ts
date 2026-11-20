@@ -1,9 +1,9 @@
 // Tıkır's reading voice (docs/mimari.md, "Servisler"; docs/kararlar.md T8; docs/planlar/faz-2a.md,
 // karar 11). A page is read phrase unit by phrase unit; the screen follows the units.
 import { countSyllables, tokenize } from '../../domain/text';
-import type { Page } from '../../domain/types';
+import type { NarrationRate, Page } from '../../domain/types';
 
-export type NarrationRate = 'slow' | 'normal';
+export type { NarrationRate } from '../../domain/types';
 
 /** completed: the whole text was read; stopped: stop() or a new narration cut it short. */
 export type NarrationEnd = 'completed' | 'stopped';

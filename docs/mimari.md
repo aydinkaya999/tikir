@@ -76,7 +76,8 @@ type Id = string;
 type LocalDate = string;           // 'YYYY-MM-DD', cihazın yerel takvimi (Faz 2a)
 
 interface Parent { id: Id; email: string; consent: { voiceProcessing: boolean; weeklyEmail: boolean; grantedAt?: string } }
-interface Child  { id: Id; name: string; grade: Grade; interests: string[]; readingStyle: ReadingStyle }
+interface Child  { id: Id; name: string; grade: Grade; interests: string[]; readingStyle: ReadingStyle;
+  narrationRate?: 'slow' | 'normal' }   // G3'teki son hız seçimi; yoksa yavaş (Faz 2b)
 
 interface ReadingStyle { font: 'clear' | 'school'; sizeStep: 0 | 1 | 2 | 3; spacingStep: 0 | 1 | 2; trialEnabled: boolean }
 
@@ -100,7 +101,8 @@ interface ReadingResult {
 
 type SessionStep = 'warmup' | 'listen' | 'read' | 'record' | 'wrapUp' | 'done';
 interface Session { id: Id; childId: Id; date: string; chapterRef: { bookId: Id; chapter: number };
-  step: SessionStep; readings: ReadingResult[]; answers: number[]; tamedToday: string[]; startedAt: string; completedAt?: string }
+  step: SessionStep; readings: ReadingResult[]; answers: number[]; tamedToday: string[]; startedAt: string; completedAt?: string;
+  warmup?: { words: string[]; done: number; scored: number } }   // Faz 2b: seans başında seçilen deste; scored: ilk denemesi puanlanan kart sayısı
 
 interface StuckWord { word: string; syllables: string[]; chain: string[]; misses: number;
   status: 'wild' | 'practicing' | 'tamed'; correctStreak: number; dueOn: string | null }   // evcilleşen kartta dueOn yok
@@ -194,11 +196,13 @@ interface Narrator {
   estimateSeconds(page: Page): number;
 }
 
-// Kayıt (3. okuma). Faz 2a: dalga biçimi için levels; play() çalıcıyı ilk await'ten önce hazırlar (iPhone)
+// Kayıt (3. okuma). Faz 2a: dalga biçimi için levels; play() çalıcıyı ilk await'ten önce hazırlar (iPhone).
+// Faz 2b: requestApproval G5'teki "Gönder"dir; kayıt veli onayı bekler (approval: 'pending').
 interface Recorder {
   start(audio: AudioCapture): Promise<void>; stop(): Promise<{ id: Id; seconds: number; levels: number[] }>;
   play(id: Id): Promise<void>; stopPlayback(): void; remove(id: Id): Promise<void>;
-  get(id: Id): Promise<{ id: Id; seconds: number; levels: number[] } | null>;
+  get(id: Id): Promise<{ id: Id; seconds: number; levels: number[]; approval?: 'pending' } | null>;
+  requestApproval(id: Id): Promise<void>;
 }
 
 // Depo

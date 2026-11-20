@@ -44,7 +44,7 @@
 - [x] Task 0: Plan dosyası, dal ve ürün sahibinin yanıtları
 - [x] Task 1: Seslendirmede sayfanın kalanı sessiz
 - [x] Task 2: Seans ekranlarının alan kuralları
-- [ ] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
+- [x] Task 3: Isınma destesi, seslendirme hızı ve kayıt onayı alanları
 - [ ] Task 4: Seans durum makinesi
 - [ ] Task 5: Seans deposu
 - [ ] Task 6: Geliştirme adres parametreleri
@@ -551,13 +551,13 @@ export interface RecordingInfo { id: Id; seconds: number; levels: number[]; appr
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `PcmRecorder.test.ts`:
+- [x] **Kırmızı:** `PcmRecorder.test.ts`:
   1. `requestApproval(id)` → `get(id)` `approval: 'pending'` verir. Olmayan kimlik "No recording" ile reddeder. Yeni kayıtta `approval` yok.
   2. Hiç çerçeve gelmeden `stop()` → `seconds` 0 ve 64 sıfır düzey (`NaN` yok). Uçtan uca testlerde hızlandırılmış okuma bu yoldan geçer.
   3. Kayıt sürerken mikrofon `idle` olup yeniden `capturing` olur: öncesi ve sonrasının çerçeveleri tek kayıtta, aradaki boşluk yok (karar 14).
-- [ ] `pnpm test src/services/recorder/PcmRecorder.test.ts` → FAIL. Yeni tip alanları için kırmızı test yok: IndexedDB her alanı saklar, Vitest tip denetlemez; alanları `pnpm typecheck` denetler.
-- [ ] Uygula. `IndexedDbRepository.test.ts`'e `warmup` ve `narrationRate` alanlı kayıtların gidiş dönüşü gerileme testi olarak eklenir. `docs/mimari.md` → "Tipler" ve `Recorder` arayüzü. → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): keep the warmup deck, the narration rate and the share request`.
+- [x] `pnpm test src/services/recorder/PcmRecorder.test.ts` → FAIL. Yeni tip alanları için kırmızı test yok: IndexedDB her alanı saklar, Vitest tip denetlemez; alanları `pnpm typecheck` denetler.
+- [x] Uygula. `IndexedDbRepository.test.ts`'e `warmup` ve `narrationRate` alanlı kayıtların gidiş dönüşü gerileme testi olarak eklenir. `docs/mimari.md` → "Tipler" ve `Recorder` arayüzü. → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): keep the warmup deck, the narration rate and the share request`.
 
 ### Task 4: Seans durum makinesi
 

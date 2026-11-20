@@ -8,6 +8,8 @@ export interface RecordingInfo {
   seconds: number;
   /** The waveform on G5: 0 to 1, the loudest bar 1. */
   levels: number[];
+  /** 'pending' once the child sent it from G5; the parent approves it in phase 4. */
+  approval?: 'pending';
 }
 
 export interface Recorder {
@@ -19,4 +21,6 @@ export interface Recorder {
   stopPlayback(): void;
   remove(id: Id): Promise<void>;
   get(id: Id): Promise<RecordingInfo | null>;
+  /** G5's "Gönder": the recording waits for the parent's approval. Rejects for an unknown id. */
+  requestApproval(id: Id): Promise<void>;
 }

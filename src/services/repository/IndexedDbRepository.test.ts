@@ -93,6 +93,24 @@ describe('IndexedDbRepository', () => {
     expect(await repository.getDrillSuggestion()).toBeNull();
   });
 
+  it('keeps the warmup deck of a session and the narration rate of the child', async () => {
+    const repository = await IndexedDbRepository.open();
+    const session = testSession('2026-11-21', 4, {
+      step: 'warmup',
+      warmup: { words: ['kıvrılıyordu', 'ağaçlarının'], done: 1, scored: 2 },
+    });
+
+    await repository.saveChild({ ...child, narrationRate: 'normal' });
+    await repository.saveSession(session);
+
+    expect((await repository.getChild())?.narrationRate).toBe('normal');
+    expect((await repository.getSession('2026-11-21'))?.warmup).toEqual({
+      words: ['kıvrılıyordu', 'ağaçlarının'],
+      done: 1,
+      scored: 2,
+    });
+  });
+
   it('lists the sessions of a date range, both ends included, in date order', async () => {
     const repository = await IndexedDbRepository.open();
     for (const date of ['2026-11-21', '2026-11-15', '2026-11-16', '2026-11-19', '2026-11-22']) {
