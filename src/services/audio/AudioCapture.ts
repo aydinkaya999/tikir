@@ -52,7 +52,10 @@ export interface AudioCapture {
   readonly state: CaptureState;
   /** Called from a user gesture. Never rejects: a failure becomes a state. */
   start(): Promise<void>;
-  /** Safe in any state and when repeated. */
+  /**
+   * Safe in any state and when repeated. Keeps a failure state (denied, unavailable, error); from
+   * starting or capturing it goes to idle.
+   */
   stop(): Promise<void>;
   /** 16 kHz mono 16-bit PCM, 320 samples (20 ms) per frame. */
   onFrame(callback: (pcm16: Int16Array) => void): Unsubscribe;

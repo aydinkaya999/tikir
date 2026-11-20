@@ -162,3 +162,11 @@ describe('levelCheck', () => {
     expect(result.ok).toBe(false);
   });
 });
+
+describe('textStats with digits', () => {
+  it('counts a written number as one word and its syllables from the reading', () => {
+    const stats = textStats(['Deniz 3 elma aldı.']);
+    expect(stats.words).toBe(4);
+    expect(stats.syllables).toBe(7);
+  });
+});

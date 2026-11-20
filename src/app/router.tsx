@@ -28,6 +28,7 @@ import {
   WarmupPage,
   WrapUpPage,
 } from '../features/session/pages';
+import { localDateOf } from '../domain/date';
 import { tr } from '../i18n/tr';
 import { devPaths, extraPaths, screenPaths } from './routes';
 import { ChildShell } from './shells/ChildShell';
@@ -45,9 +46,17 @@ const devRoutes: RouteObject[] =
     ? [
         {
           path: devPaths.showcase,
-          lazy: async () => ({
-            Component: (await import('../features/dev/showcase/ShowcasePage')).ShowcasePage,
-          }),
+          lazy: async () => {
+            const [{ ShowcasePage }, { appRepository }] = await Promise.all([
+              import('../features/dev/showcase/ShowcasePage'),
+              import('./services'),
+            ]);
+            return {
+              element: (
+                <ShowcasePage repository={appRepository} today={() => localDateOf(new Date())} />
+              ),
+            };
+          },
         },
         {
           path: devPaths.audio,

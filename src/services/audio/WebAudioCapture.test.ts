@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   defaultCaptureSettings,
   type AppliedTrackSettings,
@@ -110,6 +110,25 @@ describe('classifyCaptureError', () => {
 });
 
 describe('WebAudioCapture', () => {
+  it('keeps starting and notifying when a state listener throws', async () => {
+    const reportError = vi.fn();
+    vi.stubGlobal('reportError', reportError);
+    const environment = new FakeEnvironment();
+    const capture = new WebAudioCapture(defaultCaptureSettings, environment);
+    capture.onStateChange(() => {
+      throw new Error('listener failed');
+    });
+    const states: CaptureState[] = [];
+    capture.onStateChange((state) => states.push(state));
+
+    await expect(capture.start()).resolves.toBeUndefined();
+
+    expect(capture.state).toBe('capturing');
+    expect(states).toEqual(['starting', 'capturing']);
+    expect(reportError).toHaveBeenCalledTimes(2);
+    vi.unstubAllGlobals();
+  });
+
   it('announces starting, then capturing, and reports the device', async () => {
     const { capture, states } = setup();
 

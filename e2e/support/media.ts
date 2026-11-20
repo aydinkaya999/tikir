@@ -6,6 +6,7 @@ import type { Page } from '@playwright/test';
 interface MediaTestWindow {
   __getUserMediaCalls: number;
   __tikirStreams: MediaStream[];
+  __tikirAudioContexts: AudioContext[];
 }
 
 /** getUserMedia rejects with a DOMException of this name; calls are counted. */
@@ -47,6 +48,40 @@ export async function trackStreams(page: Page): Promise<void> {
       return stream;
     };
   });
+}
+
+/** Keeps every AudioContext the page creates, so a test can suspend it. */
+export async function trackAudioContexts(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const test = window as unknown as MediaTestWindow;
+    test.__tikirAudioContexts = [];
+    const Original = window.AudioContext;
+    window.AudioContext = class extends Original {
+      constructor(options?: AudioContextOptions) {
+        super(options);
+        test.__tikirAudioContexts.push(this);
+      }
+    };
+  });
+}
+
+/** What the system does when another app takes the audio: the contexts suspend themselves. */
+export async function suspendAudioContexts(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    const contexts = (window as unknown as MediaTestWindow).__tikirAudioContexts;
+    await Promise.all(contexts.map((context) => context.suspend()));
+  });
+}
+
+/** The track events a muted microphone gives (the muted field itself cannot be set). */
+export async function sendTrackEvent(page: Page, type: 'mute' | 'unmute'): Promise<void> {
+  await page.evaluate((name) => {
+    for (const stream of (window as unknown as MediaTestWindow).__tikirStreams) {
+      for (const track of stream.getAudioTracks()) {
+        track.dispatchEvent(new Event(name));
+      }
+    }
+  }, type);
 }
 
 export async function microphoneTracks(page: Page): Promise<{ total: number; live: number }> {

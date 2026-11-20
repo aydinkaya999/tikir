@@ -11,6 +11,9 @@ import {
   navigateInApp,
   refuseMicrophone,
   removeMediaDevices,
+  sendTrackEvent,
+  suspendAudioContexts,
+  trackAudioContexts,
   trackStreams,
 } from './support/media';
 import { toneHz } from './support/tone';
@@ -120,6 +123,40 @@ test('the microphone is released when leaving the page', async ({ page }) => {
 
   await expect(page).toHaveURL(/\/$/);
   await expect.poll(() => microphoneTracks(page)).toEqual({ total: 1, live: 0 });
+});
+
+test('a muted microphone is reported after a second', async ({ page }) => {
+  await trackStreams(page);
+  await openMicrophone(page);
+
+  await sendTrackEvent(page, 'mute');
+
+  await expect(fact(page, 'Durum')).toHaveText('Hata', { timeout: 1500 });
+  await expect(page.getByText('Ayrıntı: TrackMuted:', { exact: false })).toBeVisible();
+  await expect.poll(() => microphoneTracks(page)).toEqual({ total: 1, live: 0 });
+});
+
+test('a short mute is ignored', async ({ page }) => {
+  await trackStreams(page);
+  await openMicrophone(page);
+
+  await sendTrackEvent(page, 'mute');
+  await page.waitForTimeout(300);
+  await sendTrackEvent(page, 'unmute');
+  await page.waitForTimeout(2000);
+
+  await expect(fact(page, 'Durum')).toHaveText('Açık');
+  expect(await microphoneTracks(page)).toEqual({ total: 1, live: 1 });
+});
+
+test('a suspended audio context is reported', async ({ page }) => {
+  await trackAudioContexts(page);
+  await openMicrophone(page);
+
+  await suspendAudioContexts(page);
+
+  await expect(fact(page, 'Durum')).toHaveText('Hata');
+  await expect(page.getByText('Ayrıntı: ContextSuspended:', { exact: false })).toBeVisible();
 });
 
 test('ten seconds are recorded as 16 kHz WAV and played back', async ({ page, browserName }) => {

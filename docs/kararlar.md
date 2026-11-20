@@ -38,6 +38,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | D9 | Hareket | Tasarımda tanımlanmadı | varsayım | `docs/tasarim-sistemi.md` → "Hareket" |
 | D10 | Token'da olmayan tasarım değerleri | `src/styles/tokens-extra.css`, rol adıyla ve tasarımdaki kaynağıyla | varsayım | Tasarım HTML'i `tokens.css` dosyasının tanımlamadığı yazı boyutları, köşeler ve halka gölgeleri kullanıyor. Sabit değer yalnız `tokens.css` (birebir kopya), `tokens-extra.css` ve `fonts.css` içinde; Stylelint denetler. |
 | D11 | MicButton'ın çizilmemiş durumları | Duraklatıldı: beyaz zemin, halka yok, ad "Duraklatıldı. Sürdürmek için dokun". İzin yok: soluk ikon, kesik kenarlık, ad "Mikrofon izni yok". | varsayım | Faz 0 planıyla onaylandı; kodda `TODO(design)`. |
+| D12 | `design` senaryosunun sayfaları | `design` senaryosunda G3 ve G4, içeriğin 1–2. sayfasını tek sayfa gösterir ("1 / 2") | kesin | Ürün sahibi, 2026-11-19 (12. soru). Öteki senaryolarda her içerik sayfası bir sayfadır. Ayrıntı: `docs/planlar/faz-2a.md`, karar 3. |
 
 ## Teknik
 
@@ -50,7 +51,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T5 | Arka uç zamanı | Faz 0–5 arka uçsuz; veri cihazda (IndexedDB) | varsayım | Hesap o cihazda kalır. Parola saklanmaz ve gönderilmez. |
 | T6 | Arka uç yığını | Python + FastAPI + PostgreSQL | varsayım | Faz 6 ayrı tasarım belgesiyle başlar |
 | T7 | Konuşma tanıma | Sağlayıcı ve yaklaşım | açık | `FakeListener`. Karar, değerlendirme düzeneğinin ölçümüyle verilir (`docs/dinleme-hatti.md` bölüm 4). |
-| T8 | Model okuma sesi | Tıkır'ın sesi nereden gelecek | açık | Tarayıcının konuşma sentezi; cihazda Türkçe ses yoksa sessiz, zamanlı vurgu |
+| T8 | Model okuma sesi | Tıkır'ın sesi nereden gelecek | açık | Tarayıcının konuşma sentezi; cihazda Türkçe ses yoksa sessiz, zamanlı vurgu. Faz 2a'dan beri: her anlam ünitesi ayrı bir konuşma, duraklatma iptal edip üniteyi yeniden başlatır, 1,5 sn içinde başlamayan ya da hata veren ünite sessiz zamanlanır; sessiz zamanlama yavaşta saniyede 2,8, normalde 3,5 hece ve ünite başına 250 ms (`docs/planlar/faz-2a.md`, karar 11). Yalnız cihazdaki Türkçe ses kullanılır (`localService`); çevrimiçi ses metni üçüncü tarafa gönderdiği için seçilmez (T12), öyle bir cihazda sessiz zamanlama çalışır. Başlayıp bitmeyen ünite, yavaş hece süresinin iki katı artı 2 sn sonra bitmiş sayılır. |
 | T9 | Ses biçimi | 16 kHz, tek kanal, 16 bit PCM, 20 ms çerçeve | varsayım | Faz 6'da seçilen tanıma yoluna göre gözden geçirilir |
 | T10 | Dil | Kod, yorum ve commit İngilizce; arayüz Türkçe ve tek dilli | varsayım | Çeviri kütüphanesi yok; metinler `src/i18n/tr.ts` |
 | T11 | Araçlar | pnpm, Node LTS, Vitest, Testing Library, Playwright | varsayım | Faz 0'da Node 26 LTS (`.nvmrc`, `engines`) ve pnpm 12 (`packageManager`) seçildi. Güncel `react-router`, `jsdom` ve `stylelint` en az Node 22.22 istiyor. |
@@ -63,6 +64,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | T18 | Ses yakalama ayarları ve açılış sırası | Varsayılan: yankı giderme, gürültü bastırma ve otomatik kazanç açık (tarayıcıların varsayılanı). Sıra: `getUserMedia` → `AudioContext` → AudioWorklet → `resume()`; tek kanala tarayıcı indirger | varsayım | Ses denemesinin ayar setleri (`docs/ses-denemesi-sonuclari.md`) gelince gözden geçirilecek. Chromium'da gürültü bastırma sabit bir tonu ~19 dB bastırıyor (Faz 1'de ölçüldü). |
 | T19 | Capacitor deneme yapılandırması | appId `com.tikir.app`; webDir `dist-cap`; `cap` derleme kipi (geliştirme sayfaları dahil, CSP aynı); uygulama `/gelistirme/ses` ile açılır (`cap` kipinde `src/appShellStart.ts` yönlendirir, `main.tsx`'in ilk içe aktarması; `server.appStartPath` iOS'ta dosya yolu sayılıp uygulamayı kapattığı için kullanılmaz, ürün sahibi 2026-11-19); iOS mikrofon izni metni "Tıkır, sesli okumayı dinlemek için mikrofonu kullanır."; Android `RECORD_AUDIO` ve `MODIFY_AUDIO_SETTINGS`; Capacitor CLI'ın kullanım verisi kapalı | varsayım | Yalnız Faz 1 ses denemesi için. Uygulama kimliği, izin metinleri ve başlangıç yolu Faz 7'de kesinleşir. Kullanım verisi ayarı makineye kaydedilir: her makinede bir kez `pnpm exec cap telemetry off`. Uygulama içinden yankı testi yok: aynı köken yok, CSP, iOS ATS ve Android ağ güvenliği ayarı gerekirdi. |
 | T20 | Yankı ölçümü ve cihaz denemesi yolu | Yankı sunucusu `scripts/echo-server.ts` (`ws`, yalnız `127.0.0.1:4318`). Vite'in geliştirme ve önizleme sunucusu `/gelistirme/yanki` adresini ona aktarır; sayfa kendi kökenine bağlanır, CSP değişmez. Gerçek cihaz için `pnpm audio-trial` mkcert sertifikasıyla HTTPS açar | varsayım | Chromium ve WebKit'te `default-src 'self'` aynı kökenli `ws:` bağlantısını engellemiyor (Faz 1'de ölçüldü). Uygulama kabuğunda aynı köken olmadığı için kabuktan yankı testi kapsam dışı. |
+| T21 | Okuma kaydı | `PcmRecorder`: `AudioCapture` çerçeveleri 16 kHz, tek kanal, 16 bit WAV'a çevrilir, IndexedDB'nin `recordings` deposunda `ArrayBuffer` olarak durur ve Faz 1'in `WavPlayer`'ıyla çalınır. En çok 5 dakika; G5'in dalga biçimi için 64 düzey kayıtla saklanır | varsayım | `docs/mimari.md`'deki `MediaRecorderRecorder` yerine: `AudioCapture` akışı değil çerçeveyi verir, CSP'ye `media-src` gerekmez, yol Faz 1'de cihaz denemesine hazırlandı. Boyut saniyede 32 KB, iki dakikalık okuma yaklaşık 3,8 MB. Faz 2a planı, karar 10. |
 
 ## İçerik
 
@@ -72,6 +74,7 @@ Neyin kesinleştiğini, neyin varsayım olduğunu ve neyin hâlâ açık olduğu
 | C2 | Ölçüm metinleri | Her sınıf için eş güçlükte en az 6 metin | açık | 5 örnek metin var (3. sınıf için 2, diğerleri için 1) |
 | C3 | Örnek kitaplar | Sahte üreticinin döndürdüğü kitap ve velinin eklediği örnek | varsayım | `seed/ornek-kitaplar.json` |
 | C4 | İçerik sorumlusu | Metinleri kimin yazacağı ve denetleyeceği | açık | Kod içerik uydurmaz; eksik içerik için dur ve sor |
+| C5 | Okuma metnindeki rakamlar | Okuma metnindeki rakamlar okunuşlarıyla eşlenir; yazılı sayı tek kelimedir | kesin | Ürün sahibi, 2026-11-19 (14. soru). Ayrıntı: `docs/planlar/faz-2a.md`, karar 2. Ondalık, yüzde, saat ve binlik ayracı henüz yok. |
 
 ## Hukuk ve mağaza
 
@@ -108,9 +111,9 @@ Faz 0'da tasarımla belgeler karşılaştırılırken çıkanlar:
 9. K2 (sınıf, ilgi alanları) ve U2'deki ("Sınıf düzeyi", "Uzunluk") 48 px yuvarlak seçim düğmeleri bileşen envanterinde yok. Envanter K2 için OptionCard diyor, ama K2'de seçim kartı yok. Envantere bir bileşen olarak eklensin mi? (Faz 3'ten önce)
 10. U1 ve U4 kapaklarında `design/svg` içinde olmayan bir çini deseni var (açık kobalt zeminde safran yıldız). Şimdilik kapaklar mevcut altı desenle kuruluyor. (Faz 5'ten önce)
 11. Telefon ve tablette çocuk ekranından veli alanına giden yol yok; "Veli alanı" bağlantısı yalnız webde. (Faz 3'ten önce)
-12. G4 tasarımında 4. bölümün "1 / 2" sayfası, içerikteki 1. ve 2. sayfanın birleşimi. İçerikte bu bölüm 6 sayfa. Faz 2'deki `design` senaryosu hangisini izlesin? (Faz 2'den önce)
+12. G4 tasarımında 4. bölümün "1 / 2" sayfası, içerikteki 1. ve 2. sayfanın birleşimi. İçerikte bu bölüm 6 sayfa. Faz 2'deki `design` senaryosu hangisini izlesin? (Faz 2'den önce) Yanıtlandı (2026-11-19): D12.
 13. İki bölmeli kabukların alt alta dizilmiş hâli çizilmedi (içerik 720 px altında: seans ve odak kabuğunda 700–783 px, kurulum kabuğunda 700–719 px). Şimdilik bölmeler sırasını koruyarak alt alta dizilir; kurulumda kobalt pano sayfanın başına geçer (`TODO(design)`). Ayrıca kurulum kabuğunda pano tablette 420 px sabit: 768 px'lik dikey tablette form sütununa 260 px kalır. Pano bu genişliklerde daralsın mı, yoksa kurulum telefon düzenine mi geçsin? (Faz 1'den önce)
-14. Okuma metninde rakamlar kelime sayılmıyor: "Deniz 3 elma aldı." metninde "3" önceki kelimeye yapışık görünür, kelime sayısına ve dinleme beklentisine girmez; "100’ü" yalnız "ü" olarak okunur. Rakamlar okuma metinlerinde hiç olmamalı mı (içerik kuralı), yoksa okunuşlarıyla ("üç") mı eşlensin? (Faz 2'den önce)
+14. Okuma metninde rakamlar kelime sayılmıyor: "Deniz 3 elma aldı." metninde "3" önceki kelimeye yapışık görünür, kelime sayısına ve dinleme beklentisine girmez; "100’ü" yalnız "ü" olarak okunur. Rakamlar okuma metinlerinde hiç olmamalı mı (içerik kuralı), yoksa okunuşlarıyla ("üç") mı eşlensin? (Faz 2'den önce) Yanıtlandı (2026-11-19): C5.
 
 ## Bağımlılıklar
 
@@ -136,6 +139,8 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 | `@fontsource/didact-gothic` | Okul harfleri yer tutucusu (D3). Türkçe harflerin hepsi bu yazı tipinden çiziliyor (Faz 0'da denetlendi) | 0 |
 | `@capacitor/core`, `@capacitor/ios`, `@capacitor/android`, `@capacitor/cli` | Uygulama kabuğu (T1, T19): aynı web kodu iOS ve Android uygulamasında. Faz 1'de yalnız ses denemesi için; CLI geliştirme bağımlılığı, `@capacitor/core` CLI'ın istediği çekirdek | 1 |
 | `ws`, `@types/ws` | Yerel yankı sunucusu (`scripts/echo-server.ts`, T20): çerçeveleri olduğu gibi geri gönderir. Node'da yerleşik WebSocket sunucusu yok; protokolü elle yazmak yerine yaygın, bağımlılıksız paket. Yalnız geliştirme bağımlılığı, uygulamaya girmez | 1 |
+| `idb` | IndexedDB'yi söz (promise) arayüzüyle saran küçük, bağımlılıksız paket; `IndexedDbRepository` ve kayıt deposu bunun üstünde (`docs/mimari.md`, "Yığın"; Faz 2a planı, karar 12) | 2 |
+| `fake-indexeddb` | Vitest'te IndexedDB: depo ve kayıt testleri bellekte çalışan gerçek bir IndexedDB uygulamasına karşı koşar. Yalnız geliştirme bağımlılığı | 2 |
 
 ## Değişiklik günlüğü
 
@@ -146,3 +151,5 @@ Faz 0'da doldurulur. Sonradan eklenen her paket için bir satır yaz.
 - 2026-11-19: Faz 1: ses denemesi sayfasında onay istisnası (T16), geliştirme sayfası metinleri (T17), ses yakalama ayarları ve açılış sırası (T18).
 - 2026-11-19: Faz 1: yankı ölçümü ve cihaz denemesi yolu (T20), `ws` bağımlılığı, sonuç şablonu (`docs/ses-denemesi-sonuclari.md`).
 - 2026-11-19: Faz 1: Capacitor deneme yapılandırması (T19) ve dört Capacitor paketi; `server.appStartPath` yerine `cap` kipinde açılış yönlendirmesi (ürün sahibinin onayıyla).
+- 2026-11-20: Faz 2a planı onaylandı: rakamların okunuşu (C5) ve `design` senaryosunun sayfaları (D12); 12. ve 14. sorular yanıtlandı.
+- 2026-11-20: Faz 2a: `idb` ve `fake-indexeddb` bağımlılıkları; okuma kaydı (T21); seslendirme ayrıntısı (T8 notu); `docs/mimari.md` ve `docs/dinleme-hatti.md` güncellendi (tarih, ilerleme, servis klasörleri, yardım akışı, senaryo tablosu).

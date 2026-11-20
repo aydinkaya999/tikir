@@ -61,3 +61,13 @@ describe('ReadingText', () => {
     }
   });
 });
+
+describe('ReadingText with digits', () => {
+  it('gives a digit run its own word cell instead of gluing it to the word before', () => {
+    const { container } = render(<ReadingText page={[['Deniz 3 elma aldı.']]} />);
+    const spans = words(container);
+
+    expect(spans.map((span) => visibleText(span))).toEqual(['Deniz', '3', 'elma', 'aldı.']);
+    expect(spans[1]).toHaveAttribute('data-word-index', '1');
+  });
+});
