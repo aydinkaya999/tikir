@@ -72,7 +72,10 @@ describe('appRoutes', () => {
     await waitFor(() => {
       expect(router.state.location.pathname).toBe('/seans/oku');
     });
-    expect(await screen.findByRole('heading', { level: 1, name: 'Oku' })).toBeInTheDocument();
+    // The step's title is drawn again once Tıkır's voice is ready: wait for the one that stays.
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 1, name: 'Oku' })).toBeInTheDocument();
+    });
   });
 
   it('shows Tıkır thinking while the session loads', async () => {

@@ -53,6 +53,8 @@ async function openRead(options: OpenReadOptions = {}) {
     devices: { listener: listeners.factory, narrator, recorder, ...options.devices },
   });
   await screen.findByRole('heading', { level: 1, name: 'Oku' });
+  // The controls come with Tıkır's voice, a moment after the title.
+  await screen.findAllByRole('button', { name: 'Okumayı bitir' });
   return { ...app, listeners, narrator, recorder };
 }
 
