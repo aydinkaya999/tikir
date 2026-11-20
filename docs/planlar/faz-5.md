@@ -205,17 +205,17 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D18 olarak işlenir.
 ## Görev listesi
 
 - [x] Task 0: Planı ve kararları işle
-- [ ] Task 1: Kitap alan mantığı ve ad yönelme eki
-- [ ] Task 2: Kitap üreticisi
-- [ ] Task 3: Seans deposunda kitaplık ve kitapla seans
-- [ ] Task 4: Odak düzeninin ayrılması
-- [ ] Task 5: U1 Kitaplık
-- [ ] Task 6: U3 Kartlarla kitap ve üretim beklemesi
-- [ ] Task 7: U2 Metinden kitap
-- [ ] Task 8: U4 Kitap hazır
-- [ ] Task 9: Kitaplık kitabıyla seans ekranları
-- [ ] Task 10: Uçtan uca testler
-- [ ] Task 11: Belgeler, karşılaştırma ve denetim
+- [x] Task 1: Kitap alan mantığı ve ad yönelme eki
+- [x] Task 2: Kitap üreticisi
+- [x] Task 3: Seans deposunda kitaplık ve kitapla seans
+- [x] Task 4: Odak düzeninin ayrılması
+- [x] Task 5: U1 Kitaplık
+- [x] Task 6: U3 Kartlarla kitap ve üretim beklemesi
+- [x] Task 7: U2 Metinden kitap
+- [x] Task 8: U4 Kitap hazır
+- [x] Task 9: Kitaplık kitabıyla seans ekranları
+- [x] Task 10: Uçtan uca testler
+- [x] Task 11: Belgeler, karşılaştırma ve denetim
 
 ## Görevler
 
@@ -261,7 +261,7 @@ nextBookChapter(sessions, book): number;                            // karar 7
 withNameDativeSuffix(name: string): string;
 ```
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Tasarımın seçimi: "Uzay İstasyonunda Gizemli Ses" ve "Deniz ve Tıkır, uzay istasyonunda gizemli bir sesin peşine düşüyor." Başka bir seçim başka cümle; çocuğun adı kahramanda.
   - Metin bölme:
     - U2 tasarımının metni üç cümle, bir sayfa;
@@ -275,8 +275,8 @@ withNameDativeSuffix(name: string): string;
   - Süre: 176 ve 71 → 3; ölçüm yoksa 176 ÷ 60 → 3; en az 1.
   - Sıradaki bölüm: tek bölümlü kitap okunduysa 1.
   - Yönelme: Deniz’e, Ali’ye, Umut’a, Oya’ya, Kemal’e.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(domain): split a text into a book and build the card sentences`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(domain): split a text into a book and build the card sentences`.
 
 ### Task 2: Kitap üreticisi
 
@@ -286,7 +286,7 @@ withNameDativeSuffix(name: string): string;
 
 **Üretir:** `BookGenerator { cards(): CardSet; fromCards(input: { choice: CardChoice; childName: string; grade: Grade }, signal?: AbortSignal): Promise<Book>; fromText(input: Extract<BookRequest, { kind: 'text' }>, signal?: AbortSignal): Promise<Book> }`; `SessionDevices.books: BookGenerator`. `CardSet` ve `CardChoice` tipleri `src/domain/books.ts`'te (Task 1).
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Kartlar:
     - başlık ve istek;
     - "Deniz" yerine çocuğun adı;
@@ -298,8 +298,8 @@ withNameDativeSuffix(name: string): string;
     - soru yok;
     - istek saklı.
   - `signal` iptal edilince söz `AbortError` ile reddedilir, kitap dönmez.
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(services): generate a book from cards or from a parent's text`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(services): generate a book from cards or from a parent's text`.
 
 ### Task 3: Seans deposunda kitaplık ve kitapla seans
 
@@ -309,7 +309,7 @@ withNameDativeSuffix(name: string): string;
 
 **Üretir:** `SessionData.books: Book[]`, `SessionData.book: Book`; `saveBook(book): Promise<void>`, `startWithBook(bookId): Promise<void>`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Demo kitaplığı iki kitap, yeniden eskiye.
   - `saveBook` yeni kitabı ekler, aynı kimlikle üstüne yazar.
   - `startWithBook`:
@@ -317,64 +317,64 @@ withNameDativeSuffix(name: string): string;
     - bugün seans varsa bir şey yazmaz.
   - Yeniden yükleme: kitapla başlamış seansın bölümü kitaptan gelir; seri ilerlemez, üst üste gün sayılır.
   - V2'nin örnek satırı kitaplık seansından da gelir; kayıt satırı "{kitap}, {tarih}".
-- [ ] → FAIL. Uygula. → PASS. `pnpm check`.
-- [ ] Commit: `feat(session): keep the library and start the day with a book`.
+- [x] → FAIL. Uygula. → PASS. `pnpm check`.
+- [x] Commit: `feat(session): keep the library and start the day with a book`.
 
 ### Task 4: Odak düzeninin ayrılması
 
 **Dosyalar:** `src/app/shells/FocusShell.tsx` (+CSS), `src/features/library/FocusLayout.tsx` (yeni, +CSS, +test), `src/app/router.tsx`.
 
-- [ ] Kırmızı: `FocusLayout` başlığı, alt satırı, geri bağlantısını, yan sütunu ve eylemi çizer; web üst çubuğunda "Kitaplık". `FocusShell` yalnız çerçevedir.
-- [ ] → FAIL. Uygula; U3 ve U4'ün yer tutucuları düzeni kendileri kurar. → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts` (odak kabuğu adresleri).
-- [ ] Commit: `refactor(library): let the focus pages lay out their own side column and action`.
+- [x] Kırmızı: `FocusLayout` başlığı, alt satırı, geri bağlantısını, yan sütunu ve eylemi çizer; web üst çubuğunda "Kitaplık". `FocusShell` yalnız çerçevedir.
+- [x] → FAIL. Uygula; U3 ve U4'ün yer tutucuları düzeni kendileri kurar. → PASS. `pnpm check`. `pnpm e2e e2e/routes.spec.ts` (odak kabuğu adresleri).
+- [x] Commit: `refactor(library): let the focus pages lay out their own side column and action`.
 
 ### Task 5: U1 Kitaplık
 
 **Dosyalar:** `src/features/library/LibraryPage.tsx` (+CSS, +test), `src/features/library/views.ts` (+test), `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Demo kitaplığı tasarımdaki gibi: seri kartı ve ilerleme, iki kitap ve kaynakları, "Kartlarla kitap yap", veli bağlantısı.
   - Kitap kartına dokunuş seansı başlatır ve ısınmayı açar, mikrofon dokunuşta.
   - Bugün seans varken kart pasif, "Yarın okuyabilirsin.".
   - Telefonda boş kitaplık cümlesi.
   - Kapak desenleri kitaptan hep aynı.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/kitaplik?demo=cocuk-sabahi'` → U1 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(library): build the library (U1)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/kitaplik?demo=cocuk-sabahi'` → U1 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(library): build the library (U1)`.
 
 ### Task 6: U3 Kartlarla kitap ve üretim beklemesi
 
 **Dosyalar:** `src/features/library/BookFromCardsPage.tsx` (+CSS, +test), `src/features/library/BookGenerating.tsx` (+CSS), `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Kartlar ve gruplar; tek seçim.
   - Balon önce "Her sıradan bir kart seç.", üç seçimde özet.
   - Düğme üç seçime kadar pasif.
   - Üretim: bekleme ve "Vazgeç" (bir şey yazmaz); bitince kitap kaydedilir, U4 açılır.
   - Çift dokunuş tek kitap.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots --dokun 'Deniz ve Tıkır' --dokun 'Uzay istasyonu' --dokun 'Gizemli ses' '/kitaplik/kur?demo=cocuk-sabahi'` → U3 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(library): build a book from cards (U3)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots --dokun 'Deniz ve Tıkır' --dokun 'Uzay istasyonu' --dokun 'Gizemli ses' '/kitaplik/kur?demo=cocuk-sabahi'` → U3 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(library): build a book from cards (U3)`.
 
 ### Task 7: U2 Metinden kitap
 
 **Dosyalar:** `src/features/parent/BookFromTextPage.tsx` (+CSS, +test), `src/i18n/tr.ts`, `src/app/router.tsx`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Biçim tasarımdaki gibi.
   - Sayaç yazdıkça değişir.
   - 1. sınıf çocukta "1" seçili.
   - Boş metinde düğme pasif.
   - Üretim kitabı kaydeder ve U4'ü açar; istek saklı.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/kitap?demo=cocuk-sabahi&kapi=acik'` → U2 ile karşılaştır (metin kutusu boş: bilinen fark).
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(parent): build a book from a parent's text (U2)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/veli/kitap?demo=cocuk-sabahi&kapi=acik'` → U2 ile karşılaştır (metin kutusu boş: bilinen fark).
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(parent): build a book from a parent's text (U2)`.
 
 ### Task 8: U4 Kitap hazır
 
 **Dosyalar:** `src/features/library/BookReadyPage.tsx` (+CSS, +test), `src/features/library/views.ts`, `src/i18n/tr.ts`.
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - Örnek kitap tasarımdaki gibi; sayılar gerçek hesap: 176 kelime, 2,5 hece, 5,9 kelime, yaklaşık 3 dakika.
   - Eşiği aşan metin uyarısı, "Okumaya başla" açık.
   - Eklenen kelimeler yalnız çocuğun kartlarından.
@@ -382,53 +382,53 @@ withNameDativeSuffix(name: string): string;
   - "Okumaya başla" seansı başlatır; bugün seans varken pasif.
   - "Yeniden üret" aynı kimlikle; isteksiz kitapta yok.
   - Geri U1.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/kitaplik/uzay-istasyonunda-gizemli-ses/hazir?demo=cocuk-sabahi'` → U4 ile karşılaştır.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(library): show the ready book (U4)`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/kitaplik/uzay-istasyonunda-gizemli-ses/hazir?demo=cocuk-sabahi'` → U4 ile karşılaştır.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(library): show the ready book (U4)`.
 
 ### Task 9: Kitaplık kitabıyla seans ekranları
 
 **Dosyalar:** `src/features/session/RoadPage.tsx` (+CSS, +test), `src/features/session/views.ts` (+test), `ListenPage.tsx`, `ReadPage.tsx`, `WrapUpPage.tsx`, `RecordPage.tsx` (+testler), `src/i18n/tr.ts`, `src/features/dev/params/` (`&kitap=<kimlik>`, +test), `CLAUDE.md` ve `docs/mimari.md` (geliştirme parametresi).
 
-- [ ] **Kırmızı:**
+- [x] **Kırmızı:**
   - G1'de kitapla geçen günün kartı ve balonu; seri yolu değişmez.
   - G3, G4, G6'da sayfa başlığı kitabın adı.
   - G5'te serinin şeridi yok.
   - Sorusuz kitapta G6'dan G7'ye.
   - Takılan kelimeler kitabın bölümünden.
   - Geliştirme parametresi `&kitap=<kimlik>`: bugünün seansını o kitapla başlatır (`&adim=` ile birlikte o adıma getirir); yalnız geliştirme ve `e2e` derlemesinde.
-- [ ] → FAIL. Uygula. Görüntü: `pnpm shots '/?demo=cocuk-sabahi&kitap=uzay-istasyonunda-gizemli-ses'` üç genişlikte.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(session): read a library book through the day's session`.
+- [x] → FAIL. Uygula. Görüntü: `pnpm shots '/?demo=cocuk-sabahi&kitap=uzay-istasyonunda-gizemli-ses'` üç genişlikte.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(session): read a library book through the day's session`.
 
 ### Task 10: Uçtan uca testler
 
 **Dosyalar:** `e2e/library.spec.ts` (yeni), `e2e/no-external-requests.spec.ts`, `e2e/routes.spec.ts`.
 
-- [ ] Testler (Chromium ve WebKit):
+- [x] Testler (Chromium ve WebKit):
   1. "a book made from cards opens ready" (ölçüt 1): U3 tasarımın seçimi, düğme, başlık ve özet, U4.
   2. "a parent's text becomes a book with its real level check" (ölçüt 2, 3): U2'ye metin, sayaç, U4'ün sayıları; eşiği aşan metin uyarısı.
   3. "reading a library book is the day's session up to G7" (ölçüt 4): U4'ten "Okumaya başla", ısınma, dinle, üç okuma, kayıt, kapanış, G7; G1 kitabı gösterir; ertesi gün seri sürer.
   4. "no child screen has a free text box" (ölçüt 5).
   5. `no-external-requests`: üretim ve kitapla seans.
-- [ ] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/library.spec.ts e2e/no-external-requests.spec.ts e2e/routes.spec.ts` → geçer.
-- [ ] Commit: `test(e2e): run the library, the book generation and a book's session end to end`.
+- [x] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/library.spec.ts e2e/no-external-requests.spec.ts e2e/routes.spec.ts` → geçer.
+- [x] Commit: `test(e2e): run the library, the book generation and a book's session end to end`.
 
 ### Task 11: Belgeler, karşılaştırma ve denetim
 
 **Dosyalar:** `docs/mimari.md`, `docs/ekranlar.md`, `docs/kararlar.md`, `CLAUDE.md` (gerekirse), bu plan.
 
-- [ ] Belgeler:
+- [x] Belgeler:
   - `docs/mimari.md`: kitap üretimi (`BookGenerator`, `MockBookGenerator`), kitapla seans, odak düzeni.
   - `docs/ekranlar.md`: U1–U4 ayrıntılarına gönderme.
   - `docs/kararlar.md`: değişiklik günlüğü.
-- [ ] Tasarım karşılaştırması: U1–U4 ve kitapla G1; fark listeleri (ölçüt 6).
-- [ ] Denetim:
+- [x] Tasarım karşılaştırması: U1–U4 ve kitapla G1; fark listeleri (ölçüt 6).
+- [x] Denetim:
   - `pnpm check`;
   - `pnpm build` ve `dist/` taraması;
   - `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`;
   - çıktılar "Kanıtlar"a.
-- [ ] Commit: `docs: record phase 5 decisions and evidence`.
+- [x] Commit: `docs: record phase 5 decisions and evidence`.
 
 Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte yapılır. Faz bitince dal `main`'e `--no-ff` birleştirilir ve gönderilir (ürün sahibinin kalıcı talimatı).
 
@@ -438,7 +438,7 @@ Sonra bütün dal bağımsız bir incelemeden geçer; düzeltmeler tek geçişte
 |---|---|
 | U1 | `pnpm shots '/kitaplik?demo=cocuk-sabahi'` |
 | U3 | `pnpm shots --dokun 'Deniz ve Tıkır' --dokun 'Uzay istasyonu' --dokun 'Gizemli ses' '/kitaplik/kur?demo=cocuk-sabahi'` |
-| U4 | `pnpm shots '/kitaplik/uzay-istasyonunda-gizemli-ses/hazir?demo=cocuk-sabahi'` |
+| U4 | `pnpm shots --dokun 'Deniz ve Tıkır' --dokun 'Uzay istasyonu' --dokun 'Gizemli ses' --dokun 'Kitabımı yap' --bekle 'Okumaya başla' '/kitaplik/kur?demo=cocuk-sabahi'` (U3'te üretilen kitap); içerikten gelen kitap: `pnpm shots '/kitaplik/uzay-istasyonunda-gizemli-ses/hazir?demo=cocuk-sabahi'` |
 | U2 | `pnpm shots '/veli/kitap?demo=cocuk-sabahi&kapi=acik'` |
 | G1, kitapla geçen gün | `pnpm shots '/?demo=cocuk-sabahi&kitap=uzay-istasyonunda-gizemli-ses'` |
 
@@ -472,8 +472,45 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 
 ## Kanıtlar
 
-Uygulama sırasında doldurulur.
+- `eval "$(mise env -s zsh)" && pnpm check`: 127 dosya, 1092 test geçti (tip denetimi, ESLint, Stylelint ve Prettier dahil).
+- `pnpm build`: temiz. `dist/` içinde `demo-profil`, `veli@example.com`, `gelistirme`, `fake-indexeddb`, `kapi=acik` ve `tikir.gelistirme` 0 dosyada. Örnek kitap metni (`seed/ornek-kitaplar.json`) 1 dosyada: sahte üretici arka uç gelene kadar tek üreticidir (karar 2).
+- `caffeinate -u -t 2; caffeinate -d -i pnpm e2e`: Chromium ve WebKit'te 247 test geçti, 1 test düştü (2,1 dk). Düşen `e2e/dev-params.spec.ts` › "?kurulum=seviye prepares the reader at the level check" Chromium'da aralıklı düşüyor (Faz 4'ün ertelenen 9. maddesi). Tek başına 10 tekrarda `main`'de 1 kez düştü, bu dalda hiç düşmedi; Faz 5'in kodu bu yola dokunmuyor.
+- Ölçütler:
+  1. U3: `src/domain/books.test.ts` (şablonlar), `BookFromCardsPage.test.tsx` (pasif düğme, balon, tasarımın seçimi), `e2e/library.spec.ts` › "a book made from cards opens ready…".
+  2. U2'nin sayacı ve U4'ün ortalamaları: `BookFromTextPage.test.tsx`, `BookReadyPage.test.tsx`, `e2e/library.spec.ts` › "a parent’s text becomes a book…" (tasarımın metni: 24 kelime, 3,1 hece, 8 kelime).
+  3. Eşiği aşan metnin uyarısı: `BookReadyPage.test.tsx` (2. sınıf), aynı uçtan uca test (tasarımın metni 3. sınıfın hece sınırını aşar).
+  4. "Okumaya başla"dan G7'ye: `sessionStore.test.ts` (`startWithBook`), `BookReadyPage.test.tsx`, `e2e/library.spec.ts` › "reading a library book is the day’s session up to G7…" (ısınma, dinle, üç okuma, kayıt, iki soru, G7; ertesi gün seri 4. bölümle sürer, gün üst üste sayılır).
+  5. Çocuk tarafında serbest metin kutusu yok: `e2e/library.spec.ts` › "no child screen has a free text box" (12 çocuk adresi).
+  6. Tasarım karşılaştırması: yukarıdaki bölüm (U1–U4, kitapla G1, bekleme).
+- `e2e/no-external-requests.spec.ts`: bütün adresler (U4 demo kitabıyla) ve "making a book and starting to read it…": dış adrese istek yok.
 
 ## Uygulamada verilen kararlar
 
-Uygulama sırasında doldurulur.
+Ürün sahibinin gözden geçirmesi için; yanlış çıkarsa bedeli yanında.
+
+**Veri ve depo**
+
+1. `Book.createdAt` eklendi: kitaplık "yeniden eskiye" sıralanır, içerikte tarih yok. Depo ilk kayıtta yazar, yeniden üretilen kitap korur. Demo yükleyici örnek kitapları zaman çizelgesinin ilk seansından önceye tarihler, içerikteki ilk kitap en yenisi olur (U1'in sırası). Bedel: demo kitaplığının sırası uydurulmuş bir üst veridir, çocuğun okuduğu içerik değildir.
+2. Bir seansın okuduğu kitabın üstüne yazılmaz (`saveBook` yok sayar), U4'te "Yeniden üret" görünmez: okumalar kelime sıralarıyla o metne bağlıdır (V2'nin örneği, kelime dinleme). Bedel: veli, çocuğun okuduğu kitabı yeniden üretemez.
+3. Kitabı bulunmayan seans yüklenirken hata verir (eksik seri gibi); bu fazda kitap silinemez. Bedel: bozuk veride hata ekranı.
+4. Örnek metinde yalnız eksiz "Deniz" değişir ("Deniz’in", "Denizaltı" kalır). Bedel: gelecekteki örnek metinde ekli "Deniz" örnek adı taşır.
+5. Sahte üretici örnek kitapları üretim derlemesinde okur (karar 2); test cihazları gerçek sahte üreticiyi beklemesiz kullanır.
+
+**Ekranlar**
+
+6. U3'ün kartları projenin `OptionCard`'ıdır: grubun başlığıyla adlanan `role="group"` içinde `aria-pressed` düğmeler (tasarım ve V4 gibi). Plan "radyo düğmeleri" diyordu (karar 14). Bedel: ekran okuyucu "1 / 3 radyo" yerine "basılı düğme" der.
+7. Üretim beklemesi sayfanın içeriğinin yerine geçen bir paneldir (`BookGenerating`); U3, U2 ve U4'ün "Yeniden üret"i paylaşır. Yan sütun ve eylem yokken odak düzeni tek sütundur; "Vazgeç" açılınca odağı alır.
+8. Vazgeçme dışındaki üretim hatası sessizce kartlara döner: sahte üretici başka türlü reddetmez, arka ucun hataları Faz 6'da gelir. Bedel: Faz 6'da bir hata cümlesi gerekir.
+9. Kitap kartı, adıyla adlanan ve kaynağıyla (gerekirse "Yarın okuyabilirsin." ile) açıklanan bir düğmedir.
+10. Kapaklar: kimliğin FNV-1a özetiyle `cini-2…6` arasından iki farklı desen (`cini-1` serinin kapağı). Demo kitaplarının desenleri tasarımdakilerden farklı (10. soru). Bedel: görünüş.
+11. U1 ve U4, G1 gibi günü denetler (`useDayRefresh`): gece yarısını geçen sayfada kitaplar yeniden açılır.
+12. U2'nin tek kaynak bölümü her genişlikte "Metin yapıştır"tır (telefondaki "Metin" üç bölüm için kısaltmaydı). `SegmentedControl` görünür etiketsiz ad alabilir (`labelHidden`).
+13. U4: eklenen kelimelerin "üçer kez" cümlesi yalnız gösterilen her kelime metinde tam üç kez geçiyorsa görünür. Sınırı aşan satırda `x` ikonu (sette uyarı ikonu yok), kart açık safran. Sayılar kitabın bütün bölümlerinden; süre son denemesiz ölçümden. Bilinmeyen kitap kimliği kitaplığa yönlenir.
+14. G1'in kitaplık kartı, karo olarak kitabın ilk kapak desenini kullanır (G1'in kart biçimi).
+15. Odak sayfalarının balonu 15/18 px (`--size-bubble-focus`, U3 ve U4 tasarımları); telefonda yan sütun içeriğin hemen ardından gelir, webde eylem yan sütunun ardından.
+
+**Geliştirme**
+
+16. `scripts/shots.ts` görüntüden önce süreli geçişleri en çok 1 sn bekler: son dokunuşla açılan düğme kabartısız çekiliyordu.
+17. `&kitap=<kimlik>`: `prepareSessionStep(adım | null, …, kitap)`; adımsız yalnız seansı başlatır, bilinmeyen kitap hata yazar, başka kitapla başlamış gün uyarıyla kalır. Test deposu da `book` seçeneği alır.
+18. Kitaplık okumasından kart çıkması ve sorusuz kitapta G6'dan G7'ye geçiş, Task 3'ten beri doğruydu; testleri gerileme testi olarak kaldı.

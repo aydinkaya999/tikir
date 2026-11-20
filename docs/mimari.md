@@ -234,10 +234,11 @@ interface Repository {
   clearAll(): Promise<void>;
 }
 
-// Kitap üretimi
+// Kitap üretimi (Faz 5; arka uç çocuğun takıldığı kelimeleri de isteyecek, Faz 6)
 interface BookGenerator {
-  fromCards(input: { hero: string; place: string; event: string; grade: Grade; stuckWords: string[] }): Promise<Book>;
-  fromText(input: { text: string; grade: Grade; length: 'short' | 'medium' | 'long'; insertStuckWords: boolean; addQuestions: boolean; stuckWords: string[] }): Promise<Book>;
+  cards(): CardSet;                                   // U3'ün kartları ve şablonları
+  fromCards(input: { choice: CardChoice; childName: string; grade: Grade }, signal?: AbortSignal): Promise<Book>;
+  fromText(input: { kind: 'text'; text: string; grade: Grade; length: 'short' | 'medium' | 'long'; insertStuckWords: boolean; addQuestions: boolean }, signal?: AbortSignal): Promise<Book>;
 }
 
 // Kullanım ölçümü: varsayılan uygulama hiçbir şey yapmaz
@@ -275,11 +276,12 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 - `id.ts`: `createId()`, `crypto.getRandomValues` ile RFC 4122 v4 (güvenli olmayan bağlamda `randomUUID` yok). `notify.ts`: `notifyAll()`, dinleyicileri sırayla çağırır; fırlatan dinleyiciyi `reportError` ile bildirir, ötekiler yine çağrılır.
 - Süre ölçen servisler ve hook'lar `now?: () => number` seçeneği alır (varsayılan `performance.now`); testler sahte saatle verir.
 
-**`MockBookGenerator`:**
+**`MockBookGenerator`** (`src/services/books`; arka uç gelene kadar tek üretici olduğu için üretim derlemesindedir):
 
-- `fromCards`: `seed/ornek-kitaplar.json` içindeki `cards` kaynaklı kitabı döndürür. Metin hangi kart seçilirse seçilsin aynıdır; başlık `cards.titleTemplate` ile kurulur. Kısa bir bekleme taklit edilir (1–2 saniye).
-- `fromText`: metni değiştirmez (seviyeye indirmek arka uç işidir). Cümlelere ayırır, sayfa başına en çok 4 cümle koyar, cümleyi virgüllerden anlam ünitelerine böler. Başlık metnin ilk cümlesidir (en çok 6 kelime). Soru ve kelime yerleştirme üretmez; ilgili seçenekler seçiliyse U4'te "arka uçla gelecek" notu görünür.
-- İkisi de `levelCheck` sonucunu gerçekten hesaplar.
+- Her üretim 1,5 saniye bekletir; `AbortSignal` iptal edilince söz `AbortError` ile reddedilir ("Vazgeç", sayfadan çıkma).
+- `fromCards`: `seed/ornek-kitaplar.json` içindeki `cards` kaynaklı kitabı döndürür. Metin hangi kart seçilirse seçilsin aynıdır; metindeki "Deniz" çocuğun adı olur (`docs/kararlar.md` C9). Başlık `cards.titleTemplate` ile kurulur; sınıfı çocuğun sınıfı, eklenen kelimeleri içerikteki gibidir.
+- `fromText`: metni değiştirmez (seviyeye indirmek arka uç işidir). Cümlelere ayırır, sayfa başına en çok 4 cümle koyar, cümleyi virgüllerden anlam ünitelerine böler (virgül önceki ünitede kalır). Başlık ilk cümlenin ilk en çok 6 kelimesidir, sondaki noktalama atılır. Uzunluk, soru ve kelime yerleştirme uygulanmaz; son ikisi seçiliyse U4'te "Kelime yerleştirme ve sorular arka uçla gelecek." görünür.
+- Üretilen kitap isteğini taşır (`Book.request`); U4'ün "Yeniden üret"i onu yeniden ister. Seviye denetimi U4'te kitabın cümlelerinden gerçekten hesaplanır (`levelCheck`).
 
 ## Zaman
 
@@ -323,13 +325,25 @@ Ayrıntılı kararlar: `docs/planlar/faz-3.md`, "Kararlar".
 Ayrıntılı kararlar: `docs/planlar/faz-4.md`, "Kararlar" ve "Uygulamada verilen kararlar".
 
 - **Karnenin kuralları** (`src/domain/report.ts`): Hafta pazartesi başlar. Haftanın değeri, haftadaki denemesiz son ölçümdür; başlangıç ilk denemesiz ölçümdür (seviye tespiti ya da ilk haftalık ölçüm). Hedef geçmişi çocuk kaydındadır (`Child.goals`, `GoalChange { targetWcpm, setOn }`): bir haftanın hedefi o haftanın pazartesisinden önce konan son hedeftir, yoksa `firstTarget(başlangıç)`; başlangıçtan önceki haftaların hedefi yoktur. `sessionDays` günleri bitmiş, dinlemeden okunmuş (`unheard` ya da saklanmış okuması yok; bugünkü onaya bakmaz) ve boş diye işaretler; `weekErrors` seans okumalarındaki beş hata türünü sayar (yardım ve kendini düzeltme sayılmaz); `weekComment` beş durumdan birini seçer; `goalUpdate` "Hedefi güncelle"nin önereceği hedefi verir. Sınıf ortalaması `gradeAverageWcpm` (3. sınıf 90, 4. sınıf 98; 1. ve 2. sınıfta çizgi yok).
-- **Görünümler** (`src/features/parent/views.ts`): `summaryView` (V1), `stuckView` (V2), `assessmentView` (V3), `recordingRows` (kayıt satırları). Sayılar sayı, cümleler hazır metindir; tarih biçimleri `format.ts`'te ("16 Kasım", "16 Kasım Pazar", "10–16 Kasım"). Grafiğin ve gün şeridinin erişilebilir adları sayıları ekleriyle yazar (`withAblativeSuffix`, `withDativeSuffix`, `withPossessiveLocativeSuffix`). V2 kelimenin okunuşunu, kelimenin geçtiği son kayıtlı seans okumasından ve kelimenin süresinin 200 ms önünden ve arkasından çalar; kitaplık kitabı okunan seanslara bakılmaz (Faz 5).
+- **Görünümler** (`src/features/parent/views.ts`): `summaryView` (V1), `stuckView` (V2), `assessmentView` (V3), `recordingRows` (kayıt satırları). Sayılar sayı, cümleler hazır metindir; tarih biçimleri `format.ts`'te ("16 Kasım", "16 Kasım Pazar", "10–16 Kasım"). Grafiğin ve gün şeridinin erişilebilir adları sayıları ekleriyle yazar (`withAblativeSuffix`, `withDativeSuffix`, `withPossessiveLocativeSuffix`). V2 kelimenin okunuşunu, kelimenin geçtiği son kayıtlı seans okumasından ve kelimenin süresinin 200 ms önünden ve arkasından çalar; kitaplık kitabı okunan seanslara da bakar, o seansın kaydı kitabın adıyla anılır (Faz 5).
 - **Telefon tasarımları kısaltır:** V1'de gün şeridi yok ("Hedefi güncelle" ve dinlemeden okunan gün satırı telefonda da görünür), V2'de üç kelime ve kısa ek zinciri kartı, V3'te alıntı yok. Bir öğenin iki biçimi (kısa ve uzun etiket, iki yerde yorum) DOM'da birlikte durur, CSS birini gösterir.
 - **Haftalık ölçüm** (`src/domain/measurement.ts`, `/olcum`): `measurementDue(ölçümler, ayar, bugün, onay)` ve `measurementReadings(metinler, ölçümler, ayar, bugün)`. Ölçüm, son denemesiz ölçümden 7 gün sonra (hiç yoksa hemen) ve yalnız onayla açılır, yapılana kadar açık kalır. Metinler kimlik sırasıyla, bir öncekinden sonraki; denemede ikinci metin onun ardından (tek metinli sınıfta aynı metin). Deneme sırası önceki deneme haftalarının sayısına göre döner; yarım kalan deneme haftasının eksik okuması hafta bitene kadar açık kalır. G1'de bölüm kartının altındaki kartın dokunuşu mikrofonu açar (T22); `/olcum` dinleyen adreslerdedir. Ekran K3'ün düzenini (`OnboardingLayout`, ilerlemesiz, "Geri dön"lü) ve okuma gövdesini (`MeasurementReading`) kullanır; çerçevesi `OnboardingShell name="measurement"`. Her okuma `saveMeasurement` ile yazılır; depo yalnız şu an açık olan okumayı ve yalnız onayla yazar. Son okuma yazılınca yol açılır; yarıda çıkılırsa okuma ve kaydı yazılmaz.
 - **Ortak zamanlı okuma** (`src/features/reading/MeasurementReading.tsx`): K3 ve haftalık ölçüm. Dinleyici, yardım, dakika ve payı (P15), kayıt, mikrofon ve "Okumayı bitir" buradadır; düzeni çağıran kurar (`render`). `startOnTap` okumayı açık mikrofonda bile dokunuşa kadar bekletir (deneme haftasının ikinci okuması).
 - **Depo eylemleri:** `setGoal` (yalnız önerilen hedef), `saveMeasurement`, `addDrillToWarmup` (öneriden yeni kartlar, yarından başlayarak günde iki; öneri silinir), `deleteRecording` (önce okumalardaki ve ölçümlerdeki göndermeler, sonra ses), `setConsent` (onay yeni verilince tarih yazılır, geri alınınca silinir), `deleteAccount` (`clearAll`, kayıtlar dahil; kurulum açılır). Günün verisi sınıfın ölçüm metinlerini (`passages`) ve ek zinciri önerisini (`drill`) de taşır.
 - **Hesap sayfası** (`/veli/hesap`, `parentExtraPaths`): onaylar (K1'in metinleriyle), kayıtlar (dinle, sil), hesabı silme. Ray ve kenar çubuğunun altında "Çocuk ekranı"nın üstünde "Hesap"; telefonda veli şeridinde düğme.
 - **Paylaşım** (`ShareService`, T23): V3'ün "Öğretmenle paylaş"ı yalnız metin gönderir (ad, sınıf, tarih, sayılar, düzey); panoya düşünce bir satır bunu söyler.
+
+## Kitaplık ve kitap üretimi (Faz 5)
+
+Ayrıntılı kararlar: `docs/planlar/faz-5.md`, "Kararlar" ve "Uygulamada verilen kararlar"; `docs/kararlar.md` P18–P20, C9, D18.
+
+- **Kitap tipleri:** `Book.request` (`BookRequest`: üç kart ya da veli metni ve seçenekleri), `Book.insertedWords`, `Book.createdAt` (kitaplığa giriş zamanı; seride yok). Demo yükleyici örnek kitapları zaman çizelgesinin ilk seansından önceye tarihler, içerikteki ilk kitap en yenisi olur (U1'in sırası).
+- **Alan mantığı** (`src/domain/books.ts`): `cardsTitle`, `cardsSummary`, `cardLabel` (U3'ün şablonları), `bookChapterFromText`, `bookTitleFromText`, `chapterSentences`, `withChildName` (yalnız eksiz "Deniz"), `readingMinutes` (kelime ÷ son denemesiz ölçümün dakikadaki doğru kelimesi, yukarı; ölçüm yoksa 60), `nextBookChapter` (okunmuş kitap baştan). `text.ts` → `withNameDativeSuffix` (U2'nin telefon alt satırı).
+- **Depo:** Günün verisi kitaplığı (`books`, yeniden eskiye) ve bugünün bölümünün kitabını (`book`) taşır; bugünün bölümü seansın kitabından okunur, seans yokken serinin sıradakidir. `saveBook` kitaplığa giriş zamanını ilk kayıtta yazar; aynı kimlikle yeniden üretilen kitap yerini korur; bir seansın okuduğu kitabın üstüne yazılmaz (okumalar kelime sıralarıyla o metne bağlı). `startWithBook` günün seansını kitabın sıradaki bölümüyle başlatır, ısınma destesi o bölümden kurulur; bugün seans varsa bir şey yapmaz (P5). Seri ilerlemez, gün üst üste sayılır.
+- **Ekranlar** (`src/features/library`): `LibraryPage` (U1), `BookFromCardsPage` (U3), `BookReadyPage` (U4); U2 veli alanındadır (`src/features/parent/BookFromTextPage.tsx`). Odak kabuğu yalnız çerçevedir; `FocusLayout` başlığı, geri bağlantısını, yan sütunu, eylemi ve webin üst çubuğunu çizer, `FocusCompanion` yan sütundaki Tıkır'dır (odak sayfalarının balonu 15/18 px). Ortak parçalar: `BookGenerating` (bekleme), `useBookMaking` (üret, kaydet, U4'ü aç; iptal ve sayfadan çıkma bir şey yazmaz), `useReadBook` (dokunuşta mikrofon, `startWithBook`, seansın adımı), `views.ts` (`libraryView`, `readyView`, `coverPatterns`: kapağın iki deseni kimlikten, `cini-2…6` arasından), `paths.ts`.
+- **Kitapla seans:** G1'in kartı kitabı gösterir ("Bugünkü kitap"), seri yolu ve "Yarın" serinindir (`roadView.libraryBook`). Sayfa başlığı kitabın adıdır (`pageTitle`). G5 serinin sesli kitap şeridini göstermez (P19). Sorusuz kitapta G6 kendiliğinden biter. Takılan kelimeler kitabın bölümünden kart olur.
+- **Karnede:** V2 kitaplık seanslarının okumalarına da bakar; kayıt satırı "{kitap}, {tarih}".
+- **Geliştirme:** `&kitap=<kimlik>` (aşağıda); `scripts/shots.ts` görüntüden önce süreli geçişleri bekler (en çok 1 sn).
 
 ## Depolama ve örnek veri
 

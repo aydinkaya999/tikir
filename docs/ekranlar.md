@@ -161,25 +161,28 @@ Kurulum kabuğu: üstte dört adımlı ilerleme, tablet ve webde solda kobalt pa
 - **İçerik:** süren seri kitap ve ilerleme çubuğu, çocuğun kitapları (kaynağı: "Kartlarla yaptın" ya da "Velin ekledi"), "Yeni kitap", veli için metinden kitap bağlantısı.
 - **Geçişler:** Sürdür → G1; Yeni kitap → U3; veli bağlantısı → veli kapısı → U2; kitap kartı → günün seansı o kitapla başlar.
 - Kitaplıktan başlayan seans da aynı akıştır (`docs/urun.md` bölüm 3): günü gelen kart varsa ısınma, sonra dinle. Bugünün seansı başlamış ya da bitmişse kitap kartları pasiftir (varsayılanı bu belgenin sonunda).
+- **Ayrıntılar** (kitapların sırası, kapak desenleri, telefonda boş kitaplık, kitapla geçen günün G1'i, G5'te serinin şeridi): `docs/planlar/faz-5.md`, kararlar 5, 10–13 ve 31–35; `docs/kararlar.md` P18, P19.
 
 ### U3 Kartlarla kitap
 
 - **İçerik:** üç grup (kahraman, mekân, olay), her grupta üç kart, grup başına tek seçim. Tıkır seçimi tek cümleyle özetler.
 - Kartlar, başlık ve özet cümlesi `seed/ornek-kitaplar.json` → `cards` içindeki parçalardan kurulur. İlk kahraman kartı çocuğun adını taşır.
 - Üç seçim tamamlanmadan "Kitabımı yap" pasiftir.
-- **Geçiş:** → üretim → U4. Üretim beklemesinin tasarımı yok.
+- **Geçiş:** → üretim → U4. Üretim beklemesinin tasarımı yok: Tıkır `think`, "Kitabın yazılıyor" ve "Vazgeç" (bu belgenin sonundaki varsayılan; `docs/planlar/faz-5.md`, kararlar 14–17).
 
 ### U2 Metinden kitap (veli)
 
 - **Sekmeler:** Metin, Fotoğraf, Konu. Yalnız Metin tasarlandı; diğer ikisi ilk sürümde gizlenir.
 - **Alanlar:** metin (kelime sayacı canlı), sınıf düzeyi (2, 3, 4), uzunluk (kısa, orta, uzun), "Takıldığı kelimeleri metne yerleştir", "Sonuna 2 anlama sorusu ekle".
 - **Geçiş:** Kitabı üret → U4.
+- **Ayrıntılar** (kelime sayacının kuralı, 1. sınıf, telefonun kısa alt satırı, sahte üreticinin uygulamadığı seçenekler): `docs/planlar/faz-5.md`, kararlar 4 ve 18–20.
 
 ### U4 Kitap hazır
 
 - **İçerik:** kapak, ad, sayfa ve kelime sayısı, tahmini süre, seviye denetimi sonucu (kelime başına hece, cümle başına kelime), içine eklenen kelimeler.
 - **Seviye denetimi sayıları gerçek hesaptan gelir** (`docs/mimari.md`).
 - **Denetimler:** yeniden üret, "Okumaya başla" → günün seansı bu kitapla başlar. Tasarımdaki bağlantı doğrudan G3'e gider; günü gelen kart varsa araya ısınma girer.
+- **Ayrıntılar** (okuma süresi, gizli çipler, eşiği aşan metnin uyarısı, eklenen kelimeler ve "üçer kez" cümlesi, arka uç notu, "Yeniden üret"in ne zaman görünmediği, bilinmeyen kitap): `docs/planlar/faz-5.md`, kararlar 1 ve 21–30, "Uygulamada verilen kararlar"; `docs/kararlar.md` P20.
 
 ## Veli karnesi
 
