@@ -1,5 +1,12 @@
 // Session fixtures for domain and service tests.
-import type { Attempt, LocalDate, ReadingResult, ReadingStyle, Session } from '../domain/types';
+import type {
+  Assessment,
+  Attempt,
+  LocalDate,
+  ReadingResult,
+  ReadingStyle,
+  Session,
+} from '../domain/types';
 
 export const testReadingStyle: ReadingStyle = {
   font: 'clear',
@@ -42,5 +49,32 @@ export function testSession(
     startedAt: `${date}T08:00:00.000Z`,
     completedAt: `${date}T08:20:00.000Z`,
     ...fields,
+  };
+}
+
+/** A measurement on a day at 09:00 with its pace; a trial one is read in the tried style. */
+export function testAssessment(
+  date: LocalDate,
+  wcpm: number,
+  fields: Partial<Assessment> & { startedAt?: string; readingStyle?: ReadingStyle } = {},
+): Assessment {
+  const { startedAt, readingStyle, ...rest } = fields;
+  return {
+    id: `olcum-${date}-${String(wcpm)}${rest.trial === true ? '-deneme' : ''}`,
+    childId: 'cocuk',
+    date,
+    passageId: 'olcum-3a',
+    level: 'instructional',
+    result: {
+      startedAt: startedAt ?? `${date}T09:00:00.000Z`,
+      seconds: 60,
+      words: [],
+      wordsAttempted: wcpm + 5,
+      correctWords: wcpm,
+      wcpm,
+      accuracy: wcpm / (wcpm + 5),
+      readingStyle: readingStyle ?? testReadingStyle,
+    },
+    ...rest,
   };
 }
