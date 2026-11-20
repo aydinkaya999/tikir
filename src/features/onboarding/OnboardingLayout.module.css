@@ -27,6 +27,29 @@
     max(20px, env(safe-area-inset-left));
 }
 
+/* The step's heading (K1–K4 draw it alike). */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--size-body);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
 .progressRow {
   display: flex;
   align-items: center;
@@ -181,11 +204,12 @@
     flex: none;
     gap: 22px;
     max-width: calc(640px + 128px);
-    padding: 48px 64px 44px;
+    padding: 48px 64px 0;
   }
 
+  /* The column's 22 px gap and the action's own 8 px margin (K1, K2 web). */
   .action {
     max-width: calc(640px + 128px);
-    padding: 0 64px 44px;
+    padding: calc(22px + 8px) 64px 44px;
   }
 }

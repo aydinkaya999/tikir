@@ -9,9 +9,11 @@ describe('OnboardingLayout', () => {
       <OnboardingLayout
         step={2}
         companion={{ bubble: 'Sevdiği konuları seçin, hikâyeleri ona göre kurarım.' }}
+        title="Okuyucuyu tanıyalım"
+        lead="Metinleri seviyesine ve ilgisine göre seçmek için."
         action={<Button>Devam et</Button>}
       >
-        <h1>Okuyucuyu tanıyalım</h1>
+        <p>Alanlar</p>
       </OnboardingLayout>,
     );
 
@@ -21,9 +23,14 @@ describe('OnboardingLayout', () => {
     expect(
       screen.getByText('Sevdiği konuları seçin, hikâyeleri ona göre kurarım.'),
     ).toBeInTheDocument();
-    expect(screen.getByRole('main')).toContainElement(
-      screen.getByRole('heading', { name: 'Okuyucuyu tanıyalım' }),
+    const main = screen.getByRole('main');
+    expect(main).toContainElement(
+      screen.getByRole('heading', { level: 1, name: 'Okuyucuyu tanıyalım' }),
     );
+    expect(main).toContainElement(
+      screen.getByText('Metinleri seviyesine ve ilgisine göre seçmek için.'),
+    );
+    expect(main).toContainElement(screen.getByText('Alanlar'));
     expect(screen.getByRole('button', { name: 'Devam et' })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Tıkır' })).toBeInTheDocument();
   });

@@ -52,6 +52,8 @@ export function AccountPage() {
   return (
     <OnboardingLayout
       step={1}
+      title={copy.title}
+      lead={copy.lead}
       companion={{ bubble: copy.bubble }}
       action={
         <Button type="submit" form={formId} size="large" icon="right">
@@ -59,10 +61,6 @@ export function AccountPage() {
         </Button>
       }
     >
-      <div className={styles.head}>
-        <h1 className={styles.title}>{copy.title}</h1>
-        <p className={styles.lead}>{copy.lead}</p>
-      </div>
       <form id={formId} className={styles.form} noValidate onSubmit={submit}>
         <div className={styles.fields}>
           <TextField

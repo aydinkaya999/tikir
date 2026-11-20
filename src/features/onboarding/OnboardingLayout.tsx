@@ -13,6 +13,9 @@ const stripPatterns: readonly TilePattern[] = [1, 2, 3, 4, 5, 6];
 
 interface OnboardingLayoutProps {
   step: 1 | 2 | 3 | 4;
+  /** The step's heading and the line under it: every setup step draws them alike. */
+  title?: string;
+  lead?: ReactNode;
   /** Tıkır's face and words on the cobalt panel. */
   companion: { expression?: CompanionExpression; bubble?: ReactNode };
   /** The step's main action: the foot bar below 1000 px, bottom right of the content above. */
@@ -20,7 +23,14 @@ interface OnboardingLayoutProps {
   children?: ReactNode;
 }
 
-export function OnboardingLayout({ step, companion, action, children }: OnboardingLayoutProps) {
+export function OnboardingLayout({
+  step,
+  title,
+  lead,
+  companion,
+  action,
+  children,
+}: OnboardingLayoutProps) {
   return (
     <div className={styles.layout}>
       <div className={styles.panel}>
@@ -65,6 +75,12 @@ export function OnboardingLayout({ step, companion, action, children }: Onboardi
             </ol>
             <p className={styles.counter}>{tr.onboarding.progressCounter(step, stepCount)}</p>
           </div>
+          {title !== undefined && (
+            <div className={styles.head}>
+              <h1 className={styles.title}>{title}</h1>
+              {lead !== undefined && <p className={styles.lead}>{lead}</p>}
+            </div>
+          )}
           {children}
         </main>
         {action !== undefined && <div className={styles.action}>{action}</div>}
