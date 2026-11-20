@@ -344,7 +344,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 13: Veli kapısı, girişler ve çıkışlar
 - [x] Task 14: V4 Yazı ayarı
 - [x] Task 15: P14 seansta
-- [ ] Task 16: Uçtan uca testler
+- [x] Task 16: Uçtan uca testler
 - [ ] Task 17: Belgeler, karşılaştırma ve denetim
 
 ## Görevler
@@ -861,7 +861,7 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
 
 **Dosyalar:** `e2e/onboarding.spec.ts`, `e2e/reading-style.spec.ts`, `e2e/parent-gate.spec.ts`, `e2e/session-p14.spec.ts`, `e2e/no-external-requests.spec.ts`.
 
-- [ ] Testler (Chromium ve WebKit):
+- [x] Testler (Chromium ve WebKit):
   1. **`onboarding.spec.ts` › "an empty device sets up the parent and the reader, measures the level and opens the first chapter"** (ölçüt 1, 3, 4):
      - `?demo=bos` ile K1, K2 (3. sınıf), K3 (saat 60 sn), K4.
      - K4'te "58" ve "6. haftada 70".
@@ -872,8 +872,8 @@ MicrophoneProblem({ kind; onRetry; afterRetry?: { label: string; onChoose: () =>
   5. **`parent-gate.spec.ts` › "the parent area opens only through the gate"** (ölçüt 7): yanlış, bekleme (saat), doğru, gezinme, çıkış ve yeniden sorma.
   6. **`session-p14.spec.ts` › "a refused microphone lets the child read on unheard to the end of the day"** (ölçüt 9): onaylı demo, reddedilen `getUserMedia`, G7'de "71" yok, G1 "Bugünlük bitti".
   7. **`no-external-requests.spec.ts`:** kurulumun baştan sona yürünmesi.
-- [ ] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/onboarding.spec.ts e2e/reading-style.spec.ts e2e/parent-gate.spec.ts e2e/session-p14.spec.ts e2e/no-external-requests.spec.ts` → geçer.
-- [ ] Commit: `test(e2e): run the setup, the reading style, the gate and P14 end to end`.
+- [x] `caffeinate -u -t 2; caffeinate -d -i pnpm e2e e2e/onboarding.spec.ts e2e/reading-style.spec.ts e2e/parent-gate.spec.ts e2e/session-p14.spec.ts e2e/no-external-requests.spec.ts` → geçer.
+- [x] Commit: `test(e2e): run the setup, the reading style, the gate and P14 end to end`.
 
 ### Task 17: Belgeler, karşılaştırma ve denetim
 

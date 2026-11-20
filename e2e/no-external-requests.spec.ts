@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { devPaths, extraPaths, screenPaths } from '../src/app/routes';
+import { enterAccountAndReader, heading, readTheMinute } from './support/onboarding';
 import { passParentGate } from './support/parentGate';
 import {
   openPaused,
@@ -84,6 +85,30 @@ for (const viewport of [
     expect(watcher.violations).toEqual([]);
   });
 }
+
+test.describe('the setup', () => {
+  test.use({ permissions: ['microphone'], timezoneId: 'Europe/Istanbul' });
+
+  test('walking the setup from an empty device asks nothing from another origin', async ({
+    page,
+    baseURL,
+  }) => {
+    test.setTimeout(150_000);
+    const origin = new URL(baseURL ?? '').origin;
+    await prepareSessionPage(page);
+    const watcher = await watch(page, origin);
+
+    await openPaused(page, '/?demo=bos');
+    await enterAccountAndReader(page, { consent: true, grade: 3 });
+    await readTheMinute(page);
+    await page.getByRole('button', { name: 'İlk bölüme başla' }).click();
+    await expect(heading(page, 'Merhaba Deniz')).toBeVisible();
+    await settle(page);
+
+    expect(watcher.foreign).toEqual([]);
+    expect(watcher.violations).toEqual([]);
+  });
+});
 
 test('the build carries a content security policy that starts from self', async ({ page }) => {
   await page.goto('/');
