@@ -331,7 +331,7 @@ Hepsi `TODO(design)`; onayla `docs/kararlar.md`'ye D16 olarak işlenir.
 - [x] Task 0: Planı ve kararları işle
 - [x] Task 1: Yazı ayarı alan mantığı
 - [x] Task 2: Kurulum ve kapı için alan mantığı, yeni alanlar
-- [ ] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
+- [x] Task 3: Seans deposunda kurulum, yazı ayarı ve P14
 - [ ] Task 4: Geliştirme parametreleri ve boş depo
 - [ ] Task 5: Kurulum koruması ve yönlendirme
 - [ ] Task 6: Ortak bileşenler: alan hatası, pencere, seçim düğmesi
@@ -475,7 +475,7 @@ setReadingStyle(style: ReadingStyle): Promise<void>;
 continueUnheard(): Promise<void>;
 ```
 
-- [ ] **Kırmızı** (`sessionStore.test.ts`):
+- [x] **Kırmızı** (`sessionStore.test.ts`):
   1. Boş depo → `status: 'setup'`, `step: 'account'`.
   2. `createAccount`:
      - Veli `{ email, consent: { voiceProcessing, weeklyEmail, grantedAt }, setup: 'reader' }` olarak yazılır. `grantedAt` yalnız onayda.
@@ -496,14 +496,14 @@ continueUnheard(): Promise<void>;
      - Süren seansa `unheard: true` yazılır.
      - Ardından okumada `skipUnheardReading` ilerletir.
      - Seans yoksa ya da bittiyse hiçbir şey yapmaz.
-- [ ] → FAIL.
-- [ ] Uygula. `readData` ya hazır veriyi ya kurulum verisini döner:
+- [x] → FAIL.
+- [x] Uygula. `readData` ya hazır veriyi ya kurulum verisini döner:
   - veli yoksa `'account'`;
   - velide `setup` varsa o adım;
   - `'level'`de metin `listPassages(grade)[0]`;
   - `'meet'`de `baseline` son ölçüm.
-- [ ] → PASS. `pnpm check`.
-- [ ] Commit: `feat(session): carry the setup, the reading style and P14 in the store`.
+- [x] → PASS. `pnpm check`.
+- [x] Commit: `feat(session): carry the setup, the reading style and P14 in the store`.
 
 ### Task 4: Geliştirme parametreleri ve boş depo
 

@@ -24,7 +24,7 @@ export function SessionGuard() {
   if (status === 'error') {
     return <StatusScreen kind="error" as="main" />;
   }
-  if (status === 'noProfile') {
+  if (status === 'setup') {
     // TODO(phase 3): no profile goes to the onboarding (/kurulum/hesap).
     return <main />;
   }

@@ -1,8 +1,8 @@
 import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { chapterTokens } from '../../domain/text';
-import type { Chapter, ReadingOutcome, StuckWord } from '../../domain/types';
+import { chapterTokens, passageChapter } from '../../domain/text';
+import type { Chapter, Passage, ReadingOutcome, StuckWord } from '../../domain/types';
 import { loadDemoProfile } from '../dev/demo/loadDemoProfile';
 import { scenarioSets } from '../../services/listener/scenarios';
 import { simulateReading, toWordResults } from '../../services/listener/simulateReading';
@@ -71,7 +71,8 @@ describe('the session store', () => {
   it('reports a store without a profile and a store that cannot open', async () => {
     const empty = storeOver(await IndexedDbRepository.open()).store;
     await empty.getState().load();
-    expect(empty.getState().status).toBe('noProfile');
+    expect(empty.getState().status).toBe('setup');
+    expect(empty.getState().setup?.step).toBe('account');
 
     const broken = createSessionStore({
       repository: () => Promise.reject(new RepositoryUnavailableError('IndexedDB is missing.')),
@@ -437,5 +438,178 @@ describe('the session store', () => {
 
     expect(store.getState().status).toBe('error');
     expect(store.getState().error?.message).toBe('The disk is full.');
+  });
+});
+
+describe('the setup in the session store', () => {
+  beforeEach(() => {
+    globalThis.indexedDB = new IDBFactory();
+  });
+
+  async function emptyStore() {
+    const repository = await IndexedDbRepository.open();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    return { repository, store };
+  }
+
+  /** The demo profile's first measurement: 64 words in a minute, six counted errors. */
+  function firstMeasurement(passage: Passage): ReadingOutcome {
+    const words = chapterTokens(passageChapter(passage)).map((token) => token.spoken);
+    const simulation = simulateReading(words, {
+      timed: { seconds: 60, wordsRead: 64 },
+      miscues: [
+        { index: 4, type: 'misread' },
+        { index: 8, type: 'suffix' },
+        { index: 24, type: 'skipped' },
+        { index: 31, type: 'suffix' },
+        { index: 43, type: 'misread' },
+        { index: 49, type: 'misread' },
+      ],
+      hesitations: [],
+    });
+    return { words: toWordResults(simulation), seconds: simulation.seconds };
+  }
+
+  async function atLevel(voiceProcessing = true) {
+    const { repository, store } = await emptyStore();
+    await store
+      .getState()
+      .createAccount({ email: 'veli@ornek.com', voiceProcessing, weeklyEmail: false });
+    await store.getState().saveReader({ name: 'Deniz', grade: 3, interests: ['Uzay'] });
+    return { repository, store };
+  }
+
+  it('creates the parent account with the consent and moves on to the reader', async () => {
+    const { repository, store } = await emptyStore();
+
+    await Promise.all([
+      store
+        .getState()
+        .createAccount({ email: ' veli@ornek.com ', voiceProcessing: true, weeklyEmail: true }),
+      store
+        .getState()
+        .createAccount({ email: 'ikinci@ornek.com', voiceProcessing: true, weeklyEmail: true }),
+    ]);
+
+    const parent = await repository.getParent();
+    expect(parent).toMatchObject({
+      email: 'veli@ornek.com',
+      consent: { voiceProcessing: true, weeklyEmail: true, grantedAt: '2026-11-21T09:00:00.000Z' },
+      setup: 'reader',
+    });
+    expect(store.getState().setup?.step).toBe('reader');
+  });
+
+  it('writes no consent date without the consent', async () => {
+    const { repository, store } = await emptyStore();
+
+    await store
+      .getState()
+      .createAccount({ email: 'veli@ornek.com', voiceProcessing: false, weeklyEmail: false });
+
+    expect((await repository.getParent())?.consent).toEqual({
+      voiceProcessing: false,
+      weeklyEmail: false,
+    });
+  });
+
+  it('writes the reader with the grade’s reading style and opens the level check with its text', async () => {
+    const { repository, store } = await atLevel();
+
+    expect(await repository.getChild()).toMatchObject({
+      name: 'Deniz',
+      grade: 3,
+      interests: ['Uzay'],
+      readingStyle: { font: 'clear', sizeStep: 1, spacingStep: 0, trialEnabled: false },
+    });
+    expect(store.getState().setup).toMatchObject({ step: 'level' });
+    expect(store.getState().setup?.passage?.id).toBe('olcum-3a');
+  });
+
+  it('gives a first grader school letters and skips the level check without the consent', async () => {
+    const { repository, store } = await emptyStore();
+    await store
+      .getState()
+      .createAccount({ email: 'veli@ornek.com', voiceProcessing: false, weeklyEmail: false });
+
+    await store.getState().saveReader({ name: ' Ali ', grade: 1, interests: [] });
+
+    expect((await repository.getChild())?.name).toBe('Ali');
+    expect((await repository.getChild())?.readingStyle.font).toBe('school');
+    expect(store.getState().setup?.step).toBe('meet');
+  });
+
+  it('stores the level check as the first measurement and moves on to meeting Tıkır', async () => {
+    const { repository, store } = await atLevel();
+    const passage = store.getState().setup?.passage;
+    if (!passage) {
+      throw new Error('No measurement text.');
+    }
+
+    await store.getState().saveBaseline(firstMeasurement(passage), {
+      startedAt: '2026-11-21T09:00:00.000Z',
+      recordingId: 'kayit-1',
+    });
+
+    const [assessment] = await repository.listAssessments();
+    expect(assessment).toMatchObject({
+      date: today,
+      passageId: 'olcum-3a',
+      level: 'instructional',
+      result: { wcpm: 58, recordingId: 'kayit-1', readingStyle: { font: 'clear' } },
+    });
+    expect(assessment?.result.accuracy).toBeCloseTo(0.906, 3);
+    expect(store.getState().setup).toMatchObject({
+      step: 'meet',
+      baseline: { passageId: 'olcum-3a' },
+    });
+  });
+
+  it('skips the level check without a measurement', async () => {
+    const { repository, store } = await atLevel();
+
+    await store.getState().skipBaseline();
+
+    expect(await repository.listAssessments()).toEqual([]);
+    expect(store.getState().setup).toMatchObject({ step: 'meet', baseline: null });
+  });
+
+  it('finishes the setup and opens today’s road', async () => {
+    const { repository, store } = await atLevel();
+    await store.getState().skipBaseline();
+
+    await store.getState().finishSetup();
+
+    expect((await repository.getParent())?.setup).toBeUndefined();
+    expect(store.getState().status).toBe('ready');
+    expect(store.getState().data?.child.name).toBe('Deniz');
+    expect(store.getState().data?.chapter?.number).toBe(1);
+  });
+
+  it('keeps the reading style the parent chooses', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    const style = { font: 'school', sizeStep: 3, spacingStep: 2, trialEnabled: true } as const;
+
+    await store.getState().setReadingStyle(style);
+
+    expect((await repository.getChild())?.readingStyle).toEqual(style);
+    expect(store.getState().data?.child.readingStyle).toEqual(style);
+  });
+
+  it('marks a session in progress as read on unheard, and nothing else', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    await store.getState().continueUnheard();
+    expect(await repository.getSession(today)).toBeNull();
+
+    await store.getState().start();
+    await store.getState().continueUnheard();
+
+    expect((await repository.getSession(today))?.unheard).toBe(true);
+    expect(store.getState().data?.session?.unheard).toBe(true);
   });
 });
