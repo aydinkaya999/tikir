@@ -8,11 +8,15 @@ import { appRoutes } from '../app/router';
 import { type TestDevicesOptions, testDevices } from './sessionDevices';
 import { type DemoSessionOptions, demoSessionStore } from './sessionStore';
 
-export async function renderApp(
-  path: string,
-  options: DemoSessionOptions & { devices?: TestDevicesOptions } = {},
-) {
+export interface RenderAppOptions extends DemoSessionOptions {
+  devices?: TestDevicesOptions;
+  /** Changes the stored data before the app starts (a session in its second warmup try…). */
+  before?: (session: Awaited<ReturnType<typeof demoSessionStore>>) => Promise<void>;
+}
+
+export async function renderApp(path: string, options: RenderAppOptions = {}) {
   const session = await demoSessionStore(options);
+  await options.before?.(session);
   const devices = testDevices(options.devices);
   const router = createMemoryRouter(appRoutes({ store: session.store, devices }), {
     initialEntries: [path],

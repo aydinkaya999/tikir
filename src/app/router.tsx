@@ -24,12 +24,12 @@ import {
   ReadPage,
   RecordPage,
   StudioPage,
-  WarmupPage,
   WrapUpPage,
 } from '../features/session/pages';
 import type { StoreApi } from 'zustand/vanilla';
 import { RoadPage } from '../features/session/RoadPage';
 import { SessionGuard } from '../features/session/SessionGuard';
+import { WarmupPage } from '../features/session/WarmupPage';
 import type { SessionDevices } from '../features/session/sessionContext';
 import { SessionRoot } from '../features/session/SessionRoot';
 import { createSessionStore, type SessionState } from '../features/session/sessionStore';

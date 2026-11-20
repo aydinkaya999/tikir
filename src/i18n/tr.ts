@@ -126,5 +126,39 @@ export const tr = {
     paused: 'Duraklatıldı. Sürdürmek için dokun',
     /** Not drawn; copy approved with the phase 0 plan (decision 5). TODO(design) */
     denied: 'Mikrofon izni yok',
+    /** The unheard session (docs/kararlar.md P13, D15). TODO(design) */
+    listeningOff: 'Dinleme kapalı',
+  },
+
+  /**
+   * Tıkır's bubble when the microphone cannot listen (docs/ekranlar.md, "Tasarımı olmayan
+   * durumlar"); the texts were approved with the phase 2b plan (D15). TODO(design)
+   */
+  microphoneProblem: {
+    denied:
+      'Seni duyamıyorum, mikrofon izni kapalı. Velinden izni açmasını iste, sonra Yeniden dene’ye dokun.',
+    unavailable:
+      'Mikrofonu bulamadım. Velinden bir mikrofon bağlamasını iste, sonra Yeniden dene’ye dokun.',
+    error: 'Mikrofon durdu. Yeniden dene’ye dokun.',
+    retry: 'Yeniden dene',
+  },
+
+  /** G2 Isınma (docs/ekranlar.md, G2). */
+  warmup: {
+    wordCount: (count: number) => `${String(count)} kelime`,
+    cardCounter: (card: number, total: number) =>
+      `Canavar kelime ${String(card)} / ${String(total)}`,
+    remaining: (count: number) => `Evcilleşmesine ${String(count)} doğru okuma kaldı`,
+    syllablesLabel: 'Heceler',
+    chainLabel: 'Büyüyen kelime',
+    bubble: 'Önce hecele, sonra bir nefeste söyle.',
+    listen: 'Kelimeyi dinle',
+    /** Tablet and web: the button's text. */
+    next: 'Dinle adımına geç',
+    /** Phones: the round button's name. */
+    nextShort: 'Sıradaki adım: Dinle',
+    /** The unheard session (P13, D15). TODO(design) */
+    unheardBubble: 'Dinleme kapalı. Kelimeyi sesli oku, sonra sıradakine geç.',
+    nextWord: 'Sıradaki kelime',
   },
 } as const;

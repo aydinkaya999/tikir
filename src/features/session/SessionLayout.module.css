@@ -137,4 +137,9 @@
   .content {
     gap: 18px;
   }
+
+  /* On the web the controls follow Tıkır's bubble (G2, G3 and G4 web); tablets keep them low. */
+  .controls {
+    align-self: start;
+  }
 }

@@ -51,7 +51,7 @@
 - [x] Task 7: Servisler, kabuk, adım koruması ve mikrofon kuralı
 - [x] Task 8: `pnpm shots` adımları
 - [x] Task 9: G1 Yol
-- [ ] Task 10: G2 Isınma ve mikrofon sorunları
+- [x] Task 10: G2 Isınma ve mikrofon sorunları
 - [ ] Task 11: G3 Dinle
 - [ ] Task 12: G4 Oku
 - [ ] Task 13: G5 Kayıt
@@ -969,7 +969,7 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
 
 **Adımlar:**
 
-- [ ] **Kırmızı:** `WarmupPage.test.tsx` (StrictMode, sahte zaman):
+- [x] **Kırmızı:** `WarmupPage.test.tsx` (StrictMode, sahte zaman):
   1. **Tasarımdaki kart:**
      - "Canavar kelime 1 / 3", "kıvrılıyordu";
      - heceler `kıv rı lı yor du` ("Heceler" listesi);
@@ -1002,11 +1002,11 @@ export function onKeyDown(callback: (press: KeyPress) => void): Unsubscribe;
   10. **Elle kip tuşları:** Boşluk doğru, `E` yanlış işaretler; elle kip yoksa tuşlar bir şey yapmaz.
   11. **İkinci denemede yenileme:** İlk deneme yanlış yazılmış bir seansla açılan ekran Tıkır'a kelimeyi yeniden okutur, ikinci denemeyi başlatır ve kartı yeniden puanlamaz.
   - **`keyboard.test.ts`:** `onKeyDown` tuşu ve odağın bir denetimde olup olmadığını verir; aboneliği bırakınca çağrı gelmez.
-- [ ] `pnpm test src/features/session/WarmupPage.test.tsx` ve `pnpm test src/services/keyboard.test.ts` → FAIL.
-- [ ] Uygula.
-- [ ] Görüntü: `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --dokun "Kelimeyi dinle" --ileri 1200 '/seans/isinma?demo=cocuk-sabahi&adim=warmup'` → G2 ile karşılaştır, farkları yaz, düzelt.
-- [ ] → PASS. `pnpm check` → geçer.
-- [ ] Commit: `feat(session): build the warmup screen (G2) and the microphone problems`.
+- [x] `pnpm test src/features/session/WarmupPage.test.tsx` ve `pnpm test src/services/keyboard.test.ts` → FAIL.
+- [x] Uygula.
+- [x] Görüntü: `pnpm shots --dokun "Duraklatıldı. Sürdürmek için dokun" --bekle "Dinliyor. Duraklatmak için dokun" --dokun "Kelimeyi dinle" --ileri 1200 '/seans/isinma?demo=cocuk-sabahi&adim=warmup'` → G2 ile karşılaştır, farkları yaz, düzelt.
+- [x] → PASS. `pnpm check` → geçer.
+- [x] Commit: `feat(session): build the warmup screen (G2) and the microphone problems`.
 
 ### Task 11: G3 Dinle
 
@@ -1354,6 +1354,14 @@ Uygulama sırasında her ekranın fark listesi buraya eklenir.
 | tablet, web | Balon D13 kalıbını söyler | kalır: yanıt 2 |
 
 Düzeltmelerden sonra üç genişlikte düzen, metin, renk ve karolar tasarımla aynı.
+
+**G2** (planlanan komut: mikrofon açılır, "Kelimeyi dinle", saat 1200 ms ilerler):
+
+| Genişlik | Fark | Sonuç |
+|---|---|---|
+| üçü | yok: kart, heceler ("yor" o anki), zincir, Tıkır, balon ve denetimler tasarımla aynı yerde | — |
+
+Web düzeninde denetimler balonun hemen altına alındı (G2, G3 ve G4 webde böyle); tablette sütunun dibinde kalır.
 
 ## Açık sorular (onayı beklemez)
 

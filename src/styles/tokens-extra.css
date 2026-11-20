@@ -84,6 +84,12 @@
   --size-tile-number: 13px;
   /* G7 (and G1 when the day is done): the small locked tile of the "Yarın" card. */
   --radius-tile-small: 10px;
+  /* G2: the warmup word (33 px on phones, 50 px from 700 px). */
+  --size-warmup-word: 33px;
+  /* G2: the syllable tiles (21 px on phones, 28 px from 700 px). */
+  --size-syllable: 21px;
+  /* G2: the growing word's chips (15 px on phones, 18 px from 700 px). */
+  --size-chain: 15px;
 }
 
 @media (min-width: 700px) {
@@ -95,6 +101,9 @@
     --size-stat: 34px;
     --size-stat-hero: 64px;
     --size-chapter-title: 30px;
+    --size-warmup-word: 50px;
+    --size-syllable: 28px;
+    --size-chain: 18px;
     --reading-size-0: 24px;
     --reading-size-1: 27px;
     --reading-size-2: 31px;

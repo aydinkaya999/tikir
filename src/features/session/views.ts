@@ -1,6 +1,6 @@
 // What the session screens show, from the session store's data (docs/ekranlar.md, G1 and G7).
 // Pure: the screens draw it.
-import type { TilePattern } from '../../components/illustrations';
+import type { MonsterKind, TilePattern } from '../../components/illustrations';
 import {
   chapterTileState,
   completedSeriesChapters,
@@ -8,7 +8,10 @@ import {
   streakDays,
   type TileState,
 } from '../../domain/progress';
-import type { Book } from '../../domain/types';
+import type { WarmupItem, WarmupSource } from '../../domain/stuckWords';
+import type { ChapterToken } from '../../domain/text';
+import { chapterTokens } from '../../domain/text';
+import type { Book, Chapter } from '../../domain/types';
 import type { SessionData } from './sessionStore';
 
 export interface ChapterLine {
@@ -76,4 +79,35 @@ export function roadView(data: SessionData): RoadView {
       };
     }),
   };
+}
+
+/** Today's words and chains, where the warmup finds a word of the text and its chain. */
+export function chapterWarmupSource(chapter: Chapter): WarmupSource {
+  return {
+    words: chapterTokens(chapter).map((token) => ({ word: token.word, spoken: token.spoken })),
+    chains: chapter.chains,
+  };
+}
+
+/** A warmup word as the one token of a single-word reading. */
+export function warmupToken(item: WarmupItem): ChapterToken {
+  return {
+    word: item.word,
+    spoken: item.spoken,
+    leading: '',
+    trailing: '',
+    spaceAfter: false,
+    index: 0,
+    page: 0,
+  };
+}
+
+const letter = /\p{L}/gu;
+
+/**
+ * Which of the two monsters a word gets, the same on every screen: by its letter count, so the
+ * designs' "kıvrılıyordu" (12) and "ağaçlarının" (11) get the two kinds they show.
+ */
+export function monsterKindOf(word: string): MonsterKind {
+  return (word.match(letter)?.length ?? 0) % 2 === 0 ? 1 : 2;
 }
