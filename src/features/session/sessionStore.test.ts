@@ -329,6 +329,32 @@ describe('the session store', () => {
     expect(session ? placeOf(session) : null).toEqual({ step: 'read', attempt: 1, redo: false });
   });
 
+  it('moves the screen on only once every write of the step is done', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository);
+    await store.getState().load();
+    await store.getState().start();
+    let cardsWritten = false;
+    const saveStuckWords = repository.saveStuckWords.bind(repository);
+    vi.spyOn(repository, 'saveStuckWords').mockImplementation(async (cards) => {
+      await saveStuckWords(cards);
+      cardsWritten = true;
+    });
+    const seen: boolean[] = [];
+    store.subscribe((state) => {
+      if (state.data?.session?.warmup?.done === 1) {
+        seen.push(cardsWritten);
+      }
+    });
+
+    await store.getState().answerWarmupCard(true);
+
+    // The next card shows only after its card is stored, so its reading is never refused as a
+    // double tap of the one still writing.
+    expect(seen.length).toBeGreaterThan(0);
+    expect(seen.every(Boolean)).toBe(true);
+  });
+
   it('rejects and reports the error when a write fails', async () => {
     const repository = await demoRepository();
     const { store } = storeOver(repository);

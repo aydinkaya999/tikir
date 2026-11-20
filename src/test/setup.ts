@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach } from 'vitest';
+
+// Screen tests run the whole app over IndexedDB; with every test file running at once a screen can
+// take more than the default second to update.
+configure({ asyncUtilTimeout: 4000 });
 
 // Vitest runs without globals, so Testing Library cannot register its own cleanup.
 afterEach(() => {

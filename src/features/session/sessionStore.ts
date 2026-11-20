@@ -168,9 +168,31 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
         : null;
     }
 
-    async function storeSession(data: SessionData, session: Session): Promise<void> {
-      await (await services.repository()).saveSession(session);
-      set({ data: { ...data, session, sessions: withSession(data.sessions, session) } });
+    /**
+     * Writes the step (the session first, then the cards) and publishes it only once every write
+     * is done: a screen moves on when the action is over, so its next action is never refused as
+     * a double tap of this one.
+     */
+    async function storeSession(
+      data: SessionData,
+      session: Session,
+      cards: StuckWord[] | null = null,
+      afterWrites: () => Promise<void> = () => Promise.resolve(),
+    ): Promise<void> {
+      const repository = await services.repository();
+      await repository.saveSession(session);
+      if (cards !== null) {
+        await repository.saveStuckWords(cards);
+      }
+      await afterWrites();
+      set({
+        data: {
+          ...data,
+          session,
+          sessions: withSession(data.sessions, session),
+          cards: cards ?? data.cards,
+        },
+      });
     }
 
     return {
@@ -247,15 +269,11 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
               ? [...session.tamedToday, scored.word]
               : session.tamedToday;
           const next = { ...afterWarmupScore(session, correct), tamedToday: tamed };
-          await storeSession(data, next);
-          if (card !== null && scored !== null) {
-            const cards = data.cards.map((each) => (each.word === card.word ? scored : each));
-            await (await services.repository()).saveStuckWords(cards);
-            const latest = get().data;
-            if (latest !== null) {
-              set({ data: { ...latest, cards } });
-            }
-          }
+          const cards =
+            card === null || scored === null
+              ? null
+              : data.cards.map((each) => (each.word === card.word ? scored : each));
+          await storeSession(data, next, cards);
         }),
 
       nextWarmupCard: () =>
@@ -304,20 +322,15 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
             readingStyle: data.child.readingStyle,
             ...(meta.recordingId === null ? {} : { recordingId: meta.recordingId }),
           });
-          await storeSession(data, afterReading(session, reading));
           const missed = missedWords(chapter, outcome);
-          if (missed.length > 0) {
-            const cards = recordMisses(data.cards, missed, data.today);
-            await (await services.repository()).saveStuckWords(cards);
-            const latest = get().data;
-            if (latest !== null) {
-              set({ data: { ...latest, cards } });
-            }
-          }
+          const cards = missed.length > 0 ? recordMisses(data.cards, missed, data.today) : null;
           const oldRecording = firstTake?.recordingId;
-          if (oldRecording !== undefined && oldRecording !== meta.recordingId) {
-            await services.recorder.remove(oldRecording);
-          }
+          await storeSession(data, afterReading(session, reading), cards, async () => {
+            // The first take goes only once the new third reading is stored.
+            if (oldRecording !== undefined && oldRecording !== meta.recordingId) {
+              await services.recorder.remove(oldRecording);
+            }
+          });
         }),
 
       skipUnheardReading: () =>
