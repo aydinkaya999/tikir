@@ -11,6 +11,7 @@ import { FakeListener } from '../services/listener/FakeListener';
 import type { Narrator } from '../services/narrator/Narrator';
 import { SilentNarrator } from '../services/narrator/SilentNarrator';
 import type { Recorder, RecordingInfo } from '../services/recorder/Recorder';
+import type { ShareService } from '../services/share/ShareService';
 import { FakeAudioCapture } from './fakeCapture';
 
 export interface TestRecorder extends Recorder {
@@ -23,6 +24,8 @@ export interface TestRecorder extends Recorder {
   remove: ReturnType<typeof vi.fn<Recorder['remove']>>;
   get: ReturnType<typeof vi.fn<Recorder['get']>>;
   requestApproval: ReturnType<typeof vi.fn<Recorder['requestApproval']>>;
+  approve: ReturnType<typeof vi.fn<Recorder['approve']>>;
+  list: ReturnType<typeof vi.fn<Recorder['list']>>;
 }
 
 /** A recorder that keeps nothing: stop() hands out the given recording. */
@@ -39,6 +42,21 @@ export function testRecorder(
     remove: vi.fn<Recorder['remove']>(() => Promise.resolve()),
     get: vi.fn<Recorder['get']>(() => Promise.resolve(recording)),
     requestApproval: vi.fn<Recorder['requestApproval']>(() => Promise.resolve()),
+    approve: vi.fn<Recorder['approve']>(() => Promise.resolve()),
+    list: vi.fn<Recorder['list']>(() => Promise.resolve([])),
+  };
+}
+
+export interface TestShare extends ShareService {
+  canShare: ReturnType<typeof vi.fn<ShareService['canShare']>>;
+  share: ReturnType<typeof vi.fn<ShareService['share']>>;
+}
+
+/** A share service whose calls are recorded; it shares unless the test says otherwise. */
+export function testShare(): TestShare {
+  return {
+    canShare: vi.fn<ShareService['canShare']>(() => true),
+    share: vi.fn<ShareService['share']>(() => Promise.resolve('shared')),
   };
 }
 
@@ -77,6 +95,7 @@ export interface TestDevicesOptions {
   listener?: (kind: ListenerKind, attempt: Attempt) => ListenerChoice;
   scenario?: SessionDevices['scenario'];
   random?: () => number;
+  share?: ShareService;
 }
 
 /** The devices, with the hand-driven microphone typed as such for the tests' assertions. */
@@ -91,5 +110,6 @@ export function testDevices(options: TestDevicesOptions = {}): TestDevices {
     listener: options.listener ?? (() => ({ listener: new FakeListener() })),
     scenario: options.scenario ?? { ghostWpm: null, layout: 'content' },
     random: options.random ?? (() => 0),
+    share: options.share ?? testShare(),
   };
 }

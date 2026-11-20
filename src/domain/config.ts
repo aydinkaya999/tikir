@@ -37,6 +37,18 @@ export const goalWeeks = 6;
 /** Once a goal is reached, the next one is this much higher. */
 export const nextGoalStep = 8;
 
+/**
+ * The grade average line on V1's chart (docs/urun.md section 2; docs/kararlar.md P8, to be checked
+ * against a source). Grades 1 and 2 have none and draw no line.
+ */
+export const gradeAverageWcpm: Readonly<Partial<Record<Grade, number>>> = { 3: 90, 4: 98 };
+
+/** The weekly measurement opens this many days after the last one (docs/kararlar.md P16). */
+export const measurementIntervalDays = 7;
+
+/** "Isınmaya ekle" spreads the suggested words over the next days, this many a day (V2). */
+export const drillCardsPerDay = 2;
+
 /** Days until a card is due again after one, two and three correct warmups in a row. */
 export const tamingIntervalsDays = [1, 2, 4] as const;
 

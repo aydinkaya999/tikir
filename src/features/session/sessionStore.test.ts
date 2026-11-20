@@ -1,11 +1,13 @@
 import 'fake-indexeddb/auto';
 import { IDBFactory } from 'fake-indexeddb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { measurementReadings } from '../../domain/measurement';
 import { chapterTokens, passageChapter } from '../../domain/text';
 import type { Chapter, Passage, ReadingOutcome, StuckWord } from '../../domain/types';
-import { loadDemoProfile } from '../dev/demo/loadDemoProfile';
+import { type DemoMode, loadDemoProfile } from '../dev/demo/loadDemoProfile';
 import { scenarioSets } from '../../services/listener/scenarios';
 import { simulateReading, toWordResults } from '../../services/listener/simulateReading';
+import { IndexedDbRecordingStore } from '../../services/recorder/RecordingStore';
 import { IndexedDbRepository } from '../../services/repository/IndexedDbRepository';
 import { type Repository, RepositoryUnavailableError } from '../../services/repository/Repository';
 import { placeOf } from './sessionMachine';
@@ -13,19 +15,19 @@ import { createSessionStore } from './sessionStore';
 
 const today = '2026-11-21';
 
-async function demoRepository(): Promise<Repository> {
+async function demoRepository(mode: DemoMode = 'cocuk-sabahi'): Promise<Repository> {
   const repository = await IndexedDbRepository.open();
-  await loadDemoProfile(repository, 'cocuk-sabahi', today);
+  await loadDemoProfile(repository, mode, today);
   return repository;
 }
 
-function storeOver(repository: Repository) {
+function storeOver(repository: Repository, day = today) {
   const remove = vi.fn(() => Promise.resolve());
   let id = 0;
   const store = createSessionStore({
     repository: () => Promise.resolve(repository),
     recorder: { remove },
-    today: () => today,
+    today: () => day,
     now: () => new Date('2026-11-21T09:00:00.000Z'),
     createId: () => {
       id += 1;
@@ -611,5 +613,274 @@ describe('the setup in the session store', () => {
 
     expect((await repository.getSession(today))?.unheard).toBe(true);
     expect(store.getState().data?.session?.unheard).toBe(true);
+  });
+});
+
+/** A minute's reading of `correct` words without a slip. */
+function minuteOutcome(correct: number): ReadingOutcome {
+  return {
+    words: Array.from({ length: correct }, (_, index) => ({
+      index,
+      status: 'correct' as const,
+      tStart: index * 900,
+      tEnd: index * 900 + 700,
+    })),
+    seconds: 60,
+  };
+}
+
+describe('the parent’s actions in the session store', () => {
+  beforeEach(() => {
+    globalThis.indexedDB = new IDBFactory();
+  });
+
+  it('loads the grade’s measurement texts and the suggested drill', async () => {
+    const { store } = storeOver(await demoRepository('veli-haftasonu'));
+    await store.getState().load();
+
+    const data = store.getState().data;
+    expect(data?.passages.map((passage) => passage.id).sort()).toEqual(['olcum-3a', 'olcum-3b']);
+    expect(data?.drill?.words).toHaveLength(6);
+  });
+
+  it('sets the offered goal once, from today', async () => {
+    const repository = await demoRepository('veli-haftasonu');
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    await store.getState().setGoal(80);
+    expect((await repository.getChild())?.goals).toBeUndefined();
+    await store.getState().setGoal(78);
+    await store.getState().setGoal(78);
+
+    const goals = [{ targetWcpm: 78, setOn: today }];
+    expect((await repository.getChild())?.goals).toEqual(goals);
+    expect(store.getState().data?.child.goals).toEqual(goals);
+  });
+
+  it('stores each reading of a trial week’s measurement once, in its style', async () => {
+    const repository = await demoRepository();
+    const { store } = storeOver(repository, '2026-11-22');
+    await store.getState().load();
+    const data = store.getState().data;
+    if (data === null) {
+      throw new Error('The demo profile did not load.');
+    }
+    const [first, second] = measurementReadings(
+      data.passages,
+      data.assessments,
+      data.child.readingStyle,
+      data.today,
+    );
+    if (first === undefined || second === undefined) {
+      throw new Error('No trial week.');
+    }
+    // The demo's last week read both styles, so the tried one goes first this week.
+    expect(first).toMatchObject({ passageId: 'olcum-3a', trial: true });
+
+    const meta = { startedAt: '2026-11-22T09:00:00.000Z', recordingId: 'kayit-1' };
+    await store.getState().saveMeasurement(minuteOutcome(72), { ...meta, reading: first });
+    await store.getState().saveMeasurement(minuteOutcome(72), { ...meta, reading: first });
+    await store.getState().saveMeasurement(minuteOutcome(69), {
+      startedAt: '2026-11-22T09:02:00.000Z',
+      recordingId: 'kayit-2',
+      reading: second,
+    });
+
+    const stored = (await repository.listAssessments()).filter(
+      (assessment) => assessment.date === '2026-11-22',
+    );
+    expect(stored).toHaveLength(2);
+    expect(stored).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          passageId: 'olcum-3a',
+          trial: true,
+          result: expect.objectContaining({
+            wcpm: 72,
+            recordingId: 'kayit-1',
+            readingStyle: expect.objectContaining({ spacingStep: 1 }) as unknown,
+          }) as unknown,
+        }),
+        expect.objectContaining({
+          passageId: 'olcum-3b',
+          level: 'independent',
+          result: expect.objectContaining({
+            wcpm: 69,
+            recordingId: 'kayit-2',
+            readingStyle: expect.objectContaining({ spacingStep: 0 }) as unknown,
+          }) as unknown,
+        }),
+      ]),
+    );
+    expect(stored.find((assessment) => assessment.passageId === 'olcum-3b')?.trial).toBeUndefined();
+    const after = store.getState().data;
+    expect(
+      after?.assessments.filter((assessment) => assessment.date === '2026-11-22'),
+    ).toHaveLength(2);
+    expect(
+      after === null
+        ? null
+        : measurementReadings(
+            after.passages,
+            after.assessments,
+            after.child.readingStyle,
+            after.today,
+          ),
+    ).toEqual([]);
+  });
+
+  it('stores no measurement without the parent’s consent', async () => {
+    const repository = await demoRepository();
+    const parent = await repository.getParent();
+    if (parent === null) {
+      throw new Error('No parent.');
+    }
+    await repository.saveParent({
+      ...parent,
+      consent: { ...parent.consent, voiceProcessing: false },
+    });
+    const { store } = storeOver(repository, '2026-11-22');
+    await store.getState().load();
+    const data = store.getState().data;
+    const [first] =
+      data === null
+        ? []
+        : measurementReadings(data.passages, data.assessments, data.child.readingStyle, data.today);
+    if (first === undefined) {
+      throw new Error('No reading planned.');
+    }
+
+    await store.getState().saveMeasurement(minuteOutcome(70), {
+      startedAt: '2026-11-22T09:00:00.000Z',
+      recordingId: null,
+      reading: first,
+    });
+
+    expect((await repository.listAssessments()).map((assessment) => assessment.date)).not.toContain(
+      '2026-11-22',
+    );
+  });
+
+  it('adds the suggested drill to the warmup once and drops the suggestion', async () => {
+    const repository = await demoRepository('veli-haftasonu');
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    expect(await store.getState().addDrillToWarmup()).toBe(4);
+    expect(await store.getState().addDrillToWarmup()).toBeNull();
+
+    expect(await repository.getDrillSuggestion()).toBeNull();
+    expect(store.getState().data?.drill).toBeNull();
+    const cards = await repository.listStuckWords();
+    expect(cards.find((card) => card.word === 'geldiğinde')).toMatchObject({
+      status: 'wild',
+      misses: 0,
+      dueOn: '2026-11-23',
+    });
+    expect(cards.find((card) => card.word === 'kıvrılıyordu')).toMatchObject({ status: 'tamed' });
+    expect(store.getState().data?.cards).toHaveLength(cards.length);
+  });
+
+  it('deletes a recording and every reference to it', async () => {
+    const repository = await demoRepository();
+    const [session] = await repository.listSessions('2026-11-01', today);
+    const [assessment] = await repository.listAssessments();
+    if (session === undefined || assessment === undefined) {
+      throw new Error('The demo profile has no session or measurement.');
+    }
+    await repository.saveSession({
+      ...session,
+      readings: session.readings.map((reading) =>
+        reading.attempt === 3 ? { ...reading, recordingId: 'kayit-1' } : reading,
+      ),
+    });
+    await repository.saveAssessment({
+      ...assessment,
+      result: { ...assessment.result, recordingId: 'kayit-2' },
+    });
+    const { store, remove } = storeOver(repository);
+    await store.getState().load();
+
+    await store.getState().deleteRecording('kayit-1');
+    await store.getState().deleteRecording('kayit-2');
+
+    expect(remove.mock.calls).toEqual([['kayit-1'], ['kayit-2']]);
+    const stored = await repository.getSession(session.date);
+    expect(stored?.readings.map((reading) => reading.recordingId)).toEqual([
+      undefined,
+      undefined,
+      undefined,
+    ]);
+    expect(
+      (await repository.listAssessments()).find((each) => each.id === assessment.id)?.result
+        .recordingId,
+    ).toBeUndefined();
+    const data = store.getState().data;
+    expect(
+      data?.sessions.find((each) => each.date === session.date)?.readings.at(2)?.recordingId,
+    ).toBeUndefined();
+    expect(
+      data?.assessments.find((each) => each.id === assessment.id)?.result.recordingId,
+    ).toBeUndefined();
+  });
+
+  it('changes the consent, writing its date only when it is newly given', async () => {
+    const repository = await demoRepository();
+    const parent = await repository.getParent();
+    if (parent === null) {
+      throw new Error('No parent.');
+    }
+    await repository.saveParent({
+      ...parent,
+      consent: { voiceProcessing: true, weeklyEmail: true, grantedAt: '2026-10-01T08:00:00.000Z' },
+    });
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    await store.getState().setConsent({ voiceProcessing: true, weeklyEmail: false });
+    expect((await repository.getParent())?.consent).toEqual({
+      voiceProcessing: true,
+      weeklyEmail: false,
+      grantedAt: '2026-10-01T08:00:00.000Z',
+    });
+    await store.getState().setConsent({ voiceProcessing: false, weeklyEmail: false });
+    expect((await repository.getParent())?.consent).toEqual({
+      voiceProcessing: false,
+      weeklyEmail: false,
+    });
+    await store.getState().setConsent({ voiceProcessing: true, weeklyEmail: false });
+    expect((await repository.getParent())?.consent).toEqual({
+      voiceProcessing: true,
+      weeklyEmail: false,
+      grantedAt: '2026-11-21T09:00:00.000Z',
+    });
+    expect(store.getState().data?.parent.consent.grantedAt).toBe('2026-11-21T09:00:00.000Z');
+  });
+
+  it('deletes the account with everything stored and opens the setup', async () => {
+    const repository = await demoRepository();
+    const recordings = new IndexedDbRecordingStore();
+    await recordings.put({
+      id: 'kayit-1',
+      createdAt: '2026-11-20T08:10:00.000Z',
+      seconds: 2,
+      levels: [0.5],
+      wav: new ArrayBuffer(8),
+    });
+    const { store } = storeOver(repository);
+    await store.getState().load();
+
+    await store.getState().deleteAccount();
+
+    expect(store.getState().status).toBe('setup');
+    expect(store.getState().setup?.step).toBe('account');
+    expect(store.getState().data).toBeNull();
+    expect(await repository.getParent()).toBeNull();
+    expect(await repository.getChild()).toBeNull();
+    expect(await repository.listAssessments()).toEqual([]);
+    expect(await repository.listStuckWords()).toEqual([]);
+    expect(await recordings.get('kayit-1')).toBeNull();
+    expect((await repository.listPassages(3)).length).toBeGreaterThan(0);
   });
 });

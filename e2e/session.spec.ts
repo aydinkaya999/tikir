@@ -44,7 +44,7 @@ test('a typical session runs from G1 to G7 with the demo profile’s numbers', a
   await expect(page.getByText('4. bölüm, 12 dakika')).toBeVisible();
   await expect(page.getByText('12 bölümün 3’ü tamam')).toBeVisible();
   await expect(page.getByText('2 gün üst üste')).toBeVisible();
-  await page.getByRole('button', { name: 'Başla' }).click();
+  await page.getByRole('button', { name: 'Başla', exact: true }).click();
 
   // G2: the three cards in order, each read right at the first try.
   await expect(heading(page, 'Isınma')).toBeVisible();
@@ -145,7 +145,7 @@ test('the next day opens the next chapter with yesterday’s words and the ghost
 
   await expect(page.getByText('Yıldız Tepesi', { exact: true }).first()).toBeVisible();
   await expect(page.getByText('5. bölüm, 12 dakika')).toBeVisible();
-  await page.getByRole('button', { name: 'Başla' }).click();
+  await page.getByRole('button', { name: 'Başla', exact: true }).click();
   await expect(heading(page, 'Isınma')).toBeVisible();
   // Yesterday's misses come back as cards, after the new chapter's word.
   const deck = (await todaysSession(page, '2026-11-22'))?.warmup?.words;

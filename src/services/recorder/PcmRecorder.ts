@@ -6,10 +6,10 @@ import type { AudioCapture } from '../audio/AudioCapture';
 import { captureFormat } from '../audio/captureChain';
 import { rms, toFloat32 } from '../audio/pcm';
 import type { WavPlayer } from '../audio/WavPlayer';
-import { encodeWav } from '../audio/wav';
+import { encodeWav, sliceWav } from '../audio/wav';
 import { createId } from '../id';
 import type { Unsubscribe } from '../types';
-import type { Recorder, RecordingInfo } from './Recorder';
+import type { PlaybackRange, Recorder, RecordingEntry, RecordingInfo } from './Recorder';
 import type { RecordingStore } from './RecordingStore';
 
 /** Five minutes at 32 KB a second is about 9.6 MB. */
@@ -99,13 +99,15 @@ export class PcmRecorder implements Recorder {
     return info;
   }
 
-  play(id: Id): Promise<void> {
+  play(id: Id, range?: PlaybackRange): Promise<void> {
     this.player.prepare();
     return this.store.get(id).then((recording) => {
       if (recording === null) {
         throw new Error(`No recording ${id}.`);
       }
-      return this.player.play(recording.wav);
+      return this.player.play(
+        range === undefined ? recording.wav : sliceWav(recording.wav, range.fromMs, range.toMs),
+      );
     });
   }
 
@@ -139,6 +141,18 @@ export class PcmRecorder implements Recorder {
       throw new Error(`No recording ${id}.`);
     }
     await this.store.put({ ...recording, approval: 'pending' });
+  }
+
+  async approve(id: Id): Promise<void> {
+    const recording = await this.store.get(id);
+    if (recording === null) {
+      throw new Error(`No recording ${id}.`);
+    }
+    await this.store.put({ ...recording, approval: 'approved' });
+  }
+
+  async list(): Promise<RecordingEntry[]> {
+    return (await this.store.list()).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 
   /** Frames are copied: the capture may reuse its buffer. */

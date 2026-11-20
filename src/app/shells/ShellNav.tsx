@@ -12,14 +12,23 @@ export interface ShellNavItem {
   icon: IconName;
 }
 
+export interface ShellNavLink {
+  to: string;
+  label: string;
+  icon: IconName;
+}
+
 interface ShellNavProps {
   /** Accessible name of the navigation landmark. */
   label: string;
   items: readonly ShellNavItem[];
   /** Line under the wordmark on the web sidebar (V1: "Veli alanı"). */
   subtitle?: string;
-  /** Link at the foot of the rail and the sidebar (G1: parent area, V1: child screen). */
-  footer?: { to: string; label: string; icon: IconName };
+  /**
+   * Links at the foot of the rail and the sidebar (G1: parent area; V1: the account page and the
+   * child screen).
+   */
+  footer?: readonly ShellNavLink[];
 }
 
 /**
@@ -44,11 +53,15 @@ export function ShellNav({ label, items, subtitle, footer }: ShellNavProps) {
           </li>
         ))}
       </ul>
-      {footer && (
-        <NavLink to={footer.to} end className={styles.footer}>
-          <Icon name={footer.icon} size={20} />
-          <span>{footer.label}</span>
-        </NavLink>
+      {footer !== undefined && footer.length > 0 && (
+        <div className={styles.foot}>
+          {footer.map((link) => (
+            <NavLink key={link.to} to={link.to} end className={styles.footer}>
+              <Icon name={link.icon} size={20} />
+              <span>{link.label}</span>
+            </NavLink>
+          ))}
+        </div>
       )}
     </nav>
   );

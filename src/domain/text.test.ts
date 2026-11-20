@@ -13,7 +13,10 @@ import {
   toLowerTr,
   toUpperTr,
   passageChapter,
+  withAblativeSuffix,
+  withDativeSuffix,
   withGenitiveSuffix,
+  withPossessiveLocativeSuffix,
   withPossessiveSuffix,
 } from './text';
 import measurementTexts from '../../seed/olcum-metinleri.json';
@@ -436,5 +439,51 @@ describe('withGenitiveSuffix', () => {
     ['Can', 'Can’ın'],
   ])('gives %s the genitive %s', (name, expected) => {
     expect(withGenitiveSuffix(name)).toBe(expected);
+  });
+
+  // A soft (palatal) l takes a front-vowel suffix in these names (docs/planlar/faz-4.md, karar 38).
+  it.each([
+    ['Kemal', 'Kemal’in'],
+    ['Hilal', 'Hilal’in'],
+    ['Bilal', 'Bilal’in'],
+    ['Meral', 'Meral’in'],
+    ['Ali Kemal', 'Ali Kemal’in'],
+    ['Anıl', 'Anıl’ın'],
+    ['Nural', 'Nural’ın'],
+  ])('gives %s, whose last letter is l, the genitive %s', (name, expected) => {
+    expect(withGenitiveSuffix(name)).toBe(expected);
+  });
+});
+
+describe('number suffixes', () => {
+  // The suffix follows the spoken number (V1's chart and day strip, docs/planlar/faz-4.md).
+  it.each([
+    [58, '58’den'],
+    [70, '70’ten'],
+    [4, '4’ten'],
+    [90, '90’dan'],
+    [100, '100’den'],
+  ])('gives %i the ablative %s', (count, expected) => {
+    expect(withAblativeSuffix(count)).toBe(expected);
+  });
+
+  it.each([
+    [71, '71’e'],
+    [2, '2’ye'],
+    [6, '6’ya'],
+    [4, '4’e'],
+    [90, '90’a'],
+  ])('gives %i the dative %s', (count, expected) => {
+    expect(withDativeSuffix(count)).toBe(expected);
+  });
+
+  it.each([
+    [5, '5’inde'],
+    [6, '6’sında'],
+    [3, '3’ünde'],
+    [7, '7’sinde'],
+    [0, '0’ında'],
+  ])('gives %i the possessive and locative %s', (count, expected) => {
+    expect(withPossessiveLocativeSuffix(count)).toBe(expected);
   });
 });

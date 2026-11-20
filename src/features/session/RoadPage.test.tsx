@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderApp } from '../../test/renderApp';
@@ -127,5 +127,32 @@ describe('RoadPage (G1)', () => {
         .some((link) => link.getAttribute('href') === '/kitaplik'),
     ).toBe(true);
     expect(screen.queryByRole('button', { name: 'Başla' })).toBeNull();
+  });
+
+  it('shows the measurement card only while the weekly measurement is open', async () => {
+    // The demo's last measurement was on 2026-11-15: the next opens on 2026-11-22.
+    await renderApp('/');
+    await screen.findByRole('heading', { level: 1, name: 'Merhaba Deniz' });
+    expect(screen.queryByRole('button', { name: 'Ölçüme başla' })).not.toBeInTheDocument();
+  });
+
+  it('never shows the measurement card without the parent’s consent', async () => {
+    await renderApp('/', { consent: false, today: () => '2026-11-22' });
+    await screen.findByRole('heading', { level: 1, name: 'Merhaba Deniz' });
+    expect(screen.queryByRole('button', { name: 'Ölçüme başla' })).not.toBeInTheDocument();
+  });
+
+  it('opens the microphone from the measurement card and goes to the measurement', async () => {
+    const user = userEvent.setup();
+    const { router, devices } = await renderApp('/', { today: () => '2026-11-22' });
+
+    const card = await screen.findByRole('region', { name: '1 dakikalık ölçüm' });
+    expect(within(card).getByText('Haftada bir, metni bir dakika sesli oku.')).toBeVisible();
+    await user.click(within(card).getByRole('button', { name: 'Ölçüme başla' }));
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/olcum');
+    });
+    expect(devices.audio.start).toHaveBeenCalledTimes(1);
   });
 });

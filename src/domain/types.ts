@@ -51,6 +51,14 @@ export interface Child {
   readingStyle: ReadingStyle;
   /** The child's last choice on G3; slow when missing (docs/ekranlar.md, G3). */
   narrationRate?: NarrationRate;
+  /** The targets the parent confirmed on V1, oldest first; none before the first update. */
+  goals?: GoalChange[];
+}
+
+/** A target the parent confirmed on V1; it holds from the week after setOn (Faz 4, karar 1). */
+export interface GoalChange {
+  targetWcpm: number;
+  setOn: LocalDate;
 }
 
 export interface Question {
@@ -182,7 +190,7 @@ export interface DrillSuggestion {
 
 export type ReadingLevel = 'frustration' | 'instructional' | 'independent';
 
-/** trial: the second reading, made with the reading style being tried. */
+/** trial: the reading made in the style being tried, read first or second (docs/kararlar.md P16). */
 export interface Assessment {
   id: Id;
   childId: Id;

@@ -17,7 +17,7 @@ test('a refused microphone lets the child read on unheard to the end of the day'
   await prepareSessionPage(page);
   await refuseMicrophone(page, 'NotAllowedError');
   await openPaused(page, '/?demo=cocuk-sabahi');
-  await page.getByRole('button', { name: 'Başla' }).click();
+  await page.getByRole('button', { name: 'Başla', exact: true }).click();
 
   // G2: the microphone is refused; only after a retry that does not help comes the way on.
   await expect(heading(page, 'Isınma')).toBeVisible();

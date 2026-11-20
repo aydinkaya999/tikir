@@ -29,8 +29,235 @@ export const tr = {
       books: 'Kitaplar',
       /** The rail's and the sidebar's link, and the strip's button on phones (karar 27). */
       childScreen: 'Çocuk ekranı',
+      /** The account page's link above it, and the strip's button (Faz 4, karar 37). TODO(design) */
+      account: 'Hesap',
       /** The top strip's chip: "Deniz, 3. sınıf" (design/ekranlar/V1-*.html). */
       childLabel: (name: string, grade: number) => `${name}, ${String(grade)}. sınıf`,
+    },
+  },
+
+  /** Calendar names (docs/planlar/faz-4.md, karar 39); the short weekdays are V1's strip. */
+  dates: {
+    months: [
+      'Ocak',
+      'Şubat',
+      'Mart',
+      'Nisan',
+      'Mayıs',
+      'Haziran',
+      'Temmuz',
+      'Ağustos',
+      'Eylül',
+      'Ekim',
+      'Kasım',
+      'Aralık',
+    ],
+    /** Monday first. */
+    weekdays: ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'],
+    weekdaysShort: ['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pz'],
+    dayMonth: (day: number, month: string) => `${String(day)} ${month}`,
+    longDate: (dayMonth: string, weekday: string) => `${dayMonth} ${weekday}`,
+    /** "10–16 Kasım" (V1). */
+    rangeInMonth: (first: number, last: number, month: string) =>
+      `${String(first)}–${String(last)} ${month}`,
+    /** "27 Ekim – 2 Kasım". */
+    rangeAcross: (first: string, last: string) => `${first} – ${last}`,
+  },
+
+  /** The parent's report: V1–V3 (design/ekranlar/V1…V3-*.html; docs/planlar/faz-4.md, D17). */
+  report: {
+    summary: {
+      /** {name}: the name with its genitive suffix, "Deniz’in". */
+      title: (name: string) => `${name} haftası`,
+      previousWeek: 'Önceki hafta',
+      nextWeek: 'Sonraki hafta',
+      wcpm: { firstLine: 'doğru kelime', secondLine: 'bir dakikada', short: 'doğru kelime / dk' },
+      gain: (count: number) => `Geçen haftadan ${String(count)} fazla`,
+      accuracy: { value: (percent: number) => `%${String(percent)}`, label: 'doğruluk' },
+      prosody: {
+        value: (score: number) => `${String(score)} / 4`,
+        long: 'tonlama puanı',
+        short: 'tonlama',
+      },
+      sessionDays: {
+        value: (days: number) => `${String(days)} / 7`,
+        long: 'gün seans',
+        short: 'gün',
+      },
+      /** A number the week does not have. TODO(design) */
+      missing: '–',
+      chartTitle: 'Doğru kelime, bir dakikada',
+      weekLabel: (week: number) => `${String(week)}. hafta`,
+      target: (wcpm: number) => `Hedef ${String(wcpm)}`,
+      average: (grade: number, wcpm: number) =>
+        `${String(grade)}. sınıf ortalaması ${String(wcpm)}`,
+      /**
+       * The chart's accessible name: the design's sentence, with the other directions (D17).
+       * {weeks}: the number of weeks in words, capitalized; {from}, {to}: counts with suffixes.
+       */
+      chartLabel: {
+        rose: (weeks: string, from: string, to: string) =>
+          `${weeks} haftada doğru kelime sayısı ${from} ${to} çıktı`,
+        fell: (weeks: string, from: string, to: string) =>
+          `${weeks} haftada doğru kelime sayısı ${from} ${to} düştü`,
+        same: (weeks: string, wcpm: number) =>
+          `${weeks} haftada doğru kelime sayısı değişmedi: ${String(wcpm)}`,
+        single: (wcpm: number) => `Doğru kelime sayısı ${String(wcpm)}`,
+        target: (wcpm: number) => `hedef ${String(wcpm)}`,
+        average: (grade: number, wcpm: number) =>
+          `${String(grade)}. sınıf ortalaması ${String(wcpm)}`,
+      },
+      daysTitle: 'Seans günleri',
+      /** {count}: the count with its suffixes, "5’inde". */
+      daysLabel: (count: string) => `Bu hafta 7 günün ${count} seans yapıldı`,
+      /** D17. TODO(design) */
+      noDays: 'Bu hafta seans yapılmadı.',
+      /** P14's days on the report (D17). TODO(design) */
+      unheardDays: (count: number) => `${String(count)} gün dinlemeden okundu.`,
+      comment: {
+        passed: (name: string, next: number) =>
+          `${name} bu hafta hedef çizgisini geçti. Sıradaki hedef ${String(next)}.`,
+        /** D17. TODO(design) */
+        below: (name: string, gap: number) => `${name} hedefe ${String(gap)} kelime uzakta.`,
+        /** D17. TODO(design) */
+        baseline: (name: string, target: number) =>
+          `${name} bu hafta ilk ölçümünü yaptı. İlk hedef ${String(target)}.`,
+        /** D17. TODO(design) */
+        noMeasurement: 'Bu hafta ölçüm yapılmadı.',
+        /** D17. TODO(design) */
+        listeningOff: 'Dinleme kapalı olduğu için ölçüm yapılmıyor.',
+      },
+      updateGoal: 'Hedefi güncelle',
+      /** "Hedefi güncelle"'s dialog (D17). TODO(design) */
+      goalDialog: {
+        title: 'Hedefi güncelle',
+        body: (wcpm: number) => `Yeni hedef: bir dakikada ${String(wcpm)} doğru kelime.`,
+        confirm: 'Güncelle',
+        cancel: 'Vazgeç',
+      },
+      /** D17. TODO(design) */
+      empty: 'Henüz seans ya da ölçüm yok. İlk seanstan sonra özet burada görünür.',
+    },
+    stuckWords: {
+      title: 'Takılınan yerler',
+      lead: (errors: number, types: number) =>
+        `Bu hafta ${String(errors)} hata, ${String(types)} türde`,
+      errorsTitle: 'Hata türleri',
+      errorTypes: {
+        misread: 'Yanlış okuma',
+        suffix: 'Ek hatası',
+        skipped: 'Atlama',
+        repeated: 'Tekrar',
+        inserted: 'Ekleme',
+      },
+      example: (written: string, heard: string) => `${written} yerine ${heard}`,
+      /** D17. TODO(design) */
+      noErrors: 'Bu hafta takılma yok.',
+      drill: {
+        lead: 'Önerilen çalışma: ek zinciri',
+        /** {suffixes}: "‑yordu ve ‑diğinde". */
+        body: (suffixes: string, words: number, days: number) =>
+          `${suffixes} ile biten ${String(words)} kelime, ${String(days)} gün boyunca ısınmaya gelir.`,
+        and: 've',
+        add: 'Isınmaya ekle',
+        /** Phones. */
+        shortTitle: 'Ek zinciri ısınması',
+        shortBody: (words: number, days: number) =>
+          `Önerilen: ${String(words)} kelime, ${String(days)} gün`,
+        shortAdd: 'Ekle',
+        /** D17. TODO(design) */
+        added: (count: number) => `${String(count)} kelime ısınmaya eklendi.`,
+      },
+      wordsTitle: 'En çok takıldığı kelimeler',
+      wordLine: (syllables: string, misses: number) => `${syllables}, ${String(misses)} kez`,
+      /** docs/urun.md section 3; "Yeni" has no design (D17). */
+      status: { wild: 'Yeni', practicing: 'Çalışılıyor', tamed: 'Evcilleşti' },
+      /** {name}: the name with its genitive suffix. */
+      listen: (word: string, name: string) => `${word} kelimesinde ${name} okuyuşunu dinle`,
+      /** D17. TODO(design) */
+      noWords: 'Henüz takılınan kelime yok.',
+    },
+    assessment: {
+      title: '1 dakikalık ölçüm',
+      wcpm: { firstLine: 'doğru kelime', secondLine: 'bir dakikada' },
+      wordsRead: (words: number) => `${String(words)} kelime okudu`,
+      errors: (errors: number) => `${String(errors)} hata`,
+      accuracy: (percent: number) => `Doğruluk %${String(percent)}`,
+      levelTitle: 'Okuma düzeyi',
+      /** {level}: the level's name in lower case. */
+      levelLabel: (level: string) => `Okuma düzeyi: ${level}`,
+      levels: {
+        frustration: { name: 'Endişe', range: '%90 altı' },
+        instructional: { name: 'Öğretim', range: '%90–98' },
+        independent: { name: 'Serbest', range: '%99 ve üstü' },
+      },
+      levelSentence: {
+        /** D17. TODO(design) */
+        frustration: (name: string) =>
+          `Endişe düzeyi: bu zorluktaki metin ${name} için şimdilik zor.`,
+        instructional: (name: string) =>
+          `Öğretim düzeyi: ${name} bu zorluktaki metni biraz yardımla okuyabiliyor.`,
+        /** D17. TODO(design) */
+        independent: (name: string) =>
+          `Serbest düzey: ${name} bu zorluktaki metni yardımsız okuyabiliyor.`,
+      },
+      /** The level in the shared summary (D17). */
+      levelNames: {
+        frustration: 'Endişe düzeyi',
+        instructional: 'Öğretim düzeyi',
+        independent: 'Serbest düzey',
+      },
+      next: (date: string) => `Sıradaki ölçüm ${date}`,
+      /** D17. TODO(design) */
+      nextToday: 'Sıradaki ölçüm bugün',
+      share: 'Öğretmenle paylaş',
+      listen: 'Kaydı dinle',
+      excerptTitle: 'Ölçüm metninden',
+      marks: { error: 'yanlış okuma', stumble: 'takılma' },
+      /** D17. TODO(design) */
+      empty: 'Henüz ölçüm yok. Ölçüm, çocuğun yol ekranında açılır.',
+      /** The text "Öğretmenle paylaş" sends, line by line (D17). TODO(design) */
+      shared: {
+        title: (name: string) => `${name} için ölçüm sonucu`,
+        measured: (date: string) => `1 dakikalık ölçüm, ${date}`,
+        pace: (wcpm: number) => `${String(wcpm)} doğru kelime bir dakikada`,
+        counts: (words: number, errors: number, percent: number) =>
+          `${String(words)} kelime okudu, ${String(errors)} hata, doğruluk %${String(percent)}`,
+        copied: 'Özet panoya kopyalandı.',
+        failed: 'Paylaşılamadı. Bir daha deneyin.',
+      },
+    },
+    /** A recording's row on V2 and the account page (D17). TODO(design) */
+    recordings: {
+      chapter: (chapter: number, date: string) => `${String(chapter)}. bölüm, ${date}`,
+      measurement: (date: string) => `1 dakikalık ölçüm, ${date}`,
+      /** V2: the recordings the child sent (docs/ekranlar.md's default; D17). */
+      pendingTitle: 'Onay bekleyen kayıtlar',
+      listen: 'Dinle',
+      approve: 'Onayla',
+      remove: 'Sil',
+      removeDialog: {
+        title: 'Kayıt silinsin mi?',
+        body: 'Kayıt bu cihazdan silinir, geri alınamaz.',
+        confirm: 'Sil',
+        cancel: 'Vazgeç',
+      },
+    },
+  },
+
+  /** The parent's account page (docs/planlar/faz-4.md, karar 36; D17). TODO(design) */
+  accountPage: {
+    title: 'Hesap',
+    consents: 'Onaylar',
+    recordings: 'Kayıtlar',
+    noRecordings: 'Henüz kayıt yok.',
+    remove: {
+      title: 'Hesabı sil',
+      body: 'Hesap, okuyucu, okumalar, ölçümler ve kayıtlar bu cihazdan silinir. Geri alınamaz.',
+      button: 'Hesabı sil',
+      dialog: 'Hesap silinsin mi?',
+      confirm: 'Hesabı sil',
+      cancel: 'Vazgeç',
     },
   },
 
@@ -242,6 +469,21 @@ export const tr = {
     chaptersLabel: 'Bölümler',
     /** No chapter left to read (docs/ekranlar.md, "Tasarımı olmayan durumlar"). TODO(design) */
     seriesEnd: 'Yeni bölümler yolda.',
+    /** The weekly measurement's card while it is open (docs/planlar/faz-4.md, D17). TODO(design) */
+    measurement: {
+      title: '1 dakikalık ölçüm',
+      text: 'Haftada bir, metni bir dakika sesli oku.',
+      start: 'Ölçüme başla',
+    },
+  },
+
+  /** The weekly measurement's screen (docs/planlar/faz-4.md, karar 32; D17). TODO(design) */
+  measurement: {
+    title: '1 dakikalık ölçüm',
+    bubble: 'Metni sesli oku. Hata yapman sorun değil.',
+    /** A trial week's second reading waits for the child's tap. */
+    nextBubble: 'Bir metin daha. Hazır olduğunda mikrofona dokun.',
+    counter: (reading: number, total: number) => `${String(reading)}. okuma / ${String(total)}`,
   },
 
   /** The page card of the reading screens (G3, G4): "Kayıp Fenerin İzinde, 4. bölüm", "1 / 2". */

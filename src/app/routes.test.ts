@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { devPaths, extraPaths, screenPaths } from './routes';
+import { devPaths, extraPaths, parentExtraPaths, screenPaths } from './routes';
 
 describe('routes', () => {
   it('uses the paths of docs/ekranlar.md for every screen', () => {
@@ -27,7 +27,11 @@ describe('routes', () => {
   });
 
   it('adds the album and studio tabs and the developer pages', () => {
-    expect(extraPaths).toEqual({ album: '/album', studio: '/studyo' });
+    expect(extraPaths).toEqual({ album: '/album', studio: '/studyo', measurement: '/olcum' });
     expect(devPaths).toEqual({ showcase: '/gelistirme/vitrin', audio: '/gelistirme/ses' });
+  });
+
+  it('adds the parent’s account page (docs/planlar/faz-4.md, karar 36)', () => {
+    expect(parentExtraPaths).toEqual({ account: '/veli/hesap' });
   });
 });

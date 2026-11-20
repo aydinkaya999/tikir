@@ -27,6 +27,8 @@ export interface DemoSessionOptions {
   today?: () => LocalDate;
   /** An empty store brought to a setup step instead of the demo profile (Faz 3, karar 5). */
   setup?: SetupParam;
+  /** The store's recorder; the screen's own recorder when a test shares them, as the app does. */
+  recorder?: SessionStoreServices['recorder'];
 }
 
 export async function demoSessionStore(options: DemoSessionOptions = {}) {
@@ -53,7 +55,7 @@ export async function demoSessionStore(options: DemoSessionOptions = {}) {
   let id = 0;
   const services: SessionStoreServices = {
     repository: () => Promise.resolve(repository),
-    recorder: { remove: vi.fn(() => Promise.resolve()) },
+    recorder: options.recorder ?? { remove: vi.fn(() => Promise.resolve()) },
     today: options.today ?? (() => testToday),
     now: () => new Date('2026-11-21T09:20:00.000Z'),
     createId: () => {

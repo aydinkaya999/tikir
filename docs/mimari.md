@@ -32,10 +32,11 @@ Depo kökü web uygulamasıdır. Capacitor `ios/` ve `android/` klasörlerini k�
 │   ├── features/
 │   │   ├── session/      günlük seans (G1–G7), Albüm, Stüdyo, durum makinesi ve deposu;
 │   │   │                 paths.ts çocuk ekranlarının ve seans adımlarının adresleri
-│   │   ├── reading/      okuma metni, takip, hayalet, yarış çubuğu
+│   │   ├── reading/      okuma metni, takip, hayalet, yarış çubuğu, zamanlı ölçüm okuması
+│   │   ├── measurement/  haftalık 1 dakikalık ölçüm
 │   │   ├── onboarding/   K1–K4
 │   │   ├── library/      U1–U4
-│   │   ├── parent/       V1–V4, veli kapısı
+│   │   ├── parent/       V1–V4, hesap sayfası, veli kapısı
 │   │   └── dev/          bileşen vitrini, ses denemesi
 │   ├── domain/           saf mantık (aşağıda)
 │   ├── services/         arayüzler ve uygulamaları (aşağıda)
@@ -199,16 +200,25 @@ interface Narrator {
   estimateSeconds(page: Page): number;
 }
 
-// Kayıt (3. okuma). Faz 2a: dalga biçimi için levels; play() çalıcıyı ilk await'ten önce hazırlar (iPhone).
-// Faz 2b: requestApproval G5'teki "Gönder"dir; kayıt veli onayı bekler (approval: 'pending').
+// Kayıt (3. okuma, seviye tespiti, haftalık ölçüm). Faz 2a: dalga biçimi için levels; play() çalıcıyı
+// ilk await'ten önce hazırlar (iPhone). Faz 2b: requestApproval G5'teki "Gönder"dir; kayıt veli
+// onayı bekler (approval: 'pending'). Faz 4: approve V2'deki "Onayla"dır ('approved'); list hesap
+// sayfasının ve V2'nin listesidir (sessiz, yeniden eskiye); play'in aralığı V2'de bir kelimeyi çalar.
 // pause/resume: okuma duraklarken (çocuğun duraklatması, çıkış penceresi, Tıkır'ın yardımı) gelen
 // çerçeveler kayda girmez.
 interface Recorder {
   start(audio: AudioCapture): Promise<void>; stop(): Promise<{ id: Id; seconds: number; levels: number[] }>;
   pause(): void; resume(): void;
-  play(id: Id): Promise<void>; stopPlayback(): void; remove(id: Id): Promise<void>;
-  get(id: Id): Promise<{ id: Id; seconds: number; levels: number[]; approval?: 'pending' } | null>;
-  requestApproval(id: Id): Promise<void>;
+  play(id: Id, range?: { fromMs: number; toMs: number }): Promise<void>; stopPlayback(): void; remove(id: Id): Promise<void>;
+  get(id: Id): Promise<{ id: Id; seconds: number; levels: number[]; approval?: 'pending' | 'approved' } | null>;
+  requestApproval(id: Id): Promise<void>; approve(id: Id): Promise<void>;
+  list(): Promise<{ id: Id; createdAt: string; seconds: number; levels: number[]; approval?: 'pending' | 'approved' }[]>;
+}
+
+// Paylaşım (Faz 4, docs/kararlar.md T23): önce cihazın paylaşma penceresi, yoksa pano.
+interface ShareService {
+  canShare(): boolean;
+  share(content: { title: string; text: string }): Promise<'shared' | 'copied' | 'cancelled'>;
 }
 
 // Depo
@@ -240,6 +250,7 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 | `ReadingListener` | `FakeListener` (senaryolu) | `RemoteListener` (WebSocket) |
 | `Narrator` | `SpeechSynthesisNarrator`; ses yoksa `SilentNarrator` (yalnız zamanlı vurgu) | Hazır ses dosyaları |
 | `Recorder` | `PcmRecorder`: `AudioCapture` çerçeveleri WAV olarak IndexedDB'de (`docs/kararlar.md` T21) | Sunucuya yükleme |
+| `ShareService` | `BrowserShareService`: `navigator.share`, yoksa panoya yazma (T23) | Capacitor paylaşım eklentisi (Faz 7) |
 | `Repository` | `IndexedDbRepository`, ilk açılışta `seed/` ile dolar | `HttpRepository` |
 | `BookGenerator` | `MockBookGenerator` (aşağıda) | Arka uç |
 | `Telemetry` | `NoopTelemetry` | Kendi sunucumuza |
@@ -258,7 +269,8 @@ interface Telemetry { track(event: string, props?: Record<string, string | numbe
 
 - `listener/`: `ReadingListener` ve olay tipleri (`types.ts`), saf benzetim (`simulateReading.ts`), hazır senaryolar (`scenarios.ts`), `FakeListener` (senaryo ve elle kip). Ayrıntı: `docs/dinleme-hatti.md` bölüm 2–3.
 - `narrator/`: `Narrator`, `narrationTiming` ve `unitDurationMs` (`Narrator.ts`), `SilentNarrator`, `SpeechSynthesisNarrator` (`SpeechPort` dikişi, `browserSpeechPort`), `createNarrator` (cihazda Türkçe ses varsa konuşan, yoksa sessiz; çevrimiçi sesler metni üçüncü tarafa gönderdiği için kullanılmaz). Her anlam ünitesi ayrı bir konuşmadır; 1,5 sn içinde başlamayan ya da hata veren ünite sessiz zamanlanır, başlayıp bitmeyen ünite bir süre sonra bitmiş sayılır (`docs/kararlar.md` T8).
-- `recorder/`: `Recorder`, `RecordingStore` ve `IndexedDbRecordingStore`, `PcmRecorder` (T21).
+- `recorder/`: `Recorder`, `RecordingStore` ve `IndexedDbRecordingStore`, `PcmRecorder` (T21). Kayıt deposunun `list()`'i kayıtları imleçle tek tek okur ve sesi bırakır; günde bir kayıt birikir, hepsini belleğe almaz (Faz 4). `wav.ts`'teki `sliceWav` kaydın bir dilimini ayrı bir WAV yapar.
+- `share/`: `ShareService`, `BrowserShareService` (Faz 4, T23).
 - `repository/`: `Repository` ve `RepositoryUnavailableError`, şema (`db.ts`), paketlenen içerik (`seedContent.ts`), `IndexedDbRepository`. `src/app/services.ts` → `appRepository()` sayfa başına tek depo verir.
 - `id.ts`: `createId()`, `crypto.getRandomValues` ile RFC 4122 v4 (güvenli olmayan bağlamda `randomUUID` yok). `notify.ts`: `notifyAll()`, dinleyicileri sırayla çağırır; fırlatan dinleyiciyi `reportError` ile bildirir, ötekiler yine çağrılır.
 - Süre ölçen servisler ve hook'lar `now?: () => number` seçeneği alır (varsayılan `performance.now`); testler sahte saatle verir.
@@ -305,6 +317,19 @@ Ayrıntılı kararlar: `docs/planlar/faz-3.md`, "Kararlar".
 - **Girişler ve çıkışlar:** Ray ve kenar çubuğunun altındaki bağlantı ("Veli alanı", "Çocuk ekranı"); telefonda G1'in sağ üstünde kilit düğmesi ve veli şeridinin sağında "Çocuk ekranı" düğmesi. Veli şeridindeki çocuk etiketi profilden gelir.
 - **Yazı ayarının uygulanması** (`ReadingStyleScope`): Okuma metninin kabı çocuğun ayarını `data-reading-font`, `data-reading-size`, `data-reading-spacing` öznitelikleriyle taşır; `src/styles/tokens-extra.css` bunları `--reading-*` değişkenlerine bağlar. Kaplar: G3, G4 (dinlenen ve dinlemesiz), G6'nın metin katmanı, K3, V4'ün önizlemesi.
 - **V4:** Seçim önizlemede hemen görünür, depoya sırayla yazılır (son seçim en son). Önizleme kutusu en büyük iki ayarın görünmez kopyalarıyla aynı yükseklikte kalır; denetimler hiçbir seçimde yer değiştirmez. Karşılaştırma `trialComparison(data.assessments, ayar)` ile yapılır; günün verisi ölçümleri de taşır (`SessionData.assessments`).
+
+## Karne, haftalık ölçüm ve hesap (Faz 4)
+
+Ayrıntılı kararlar: `docs/planlar/faz-4.md`, "Kararlar" ve "Uygulamada verilen kararlar".
+
+- **Karnenin kuralları** (`src/domain/report.ts`): Hafta pazartesi başlar. Haftanın değeri, haftadaki denemesiz son ölçümdür; başlangıç ilk denemesiz ölçümdür (seviye tespiti ya da ilk haftalık ölçüm). Hedef geçmişi çocuk kaydındadır (`Child.goals`, `GoalChange { targetWcpm, setOn }`): bir haftanın hedefi o haftanın pazartesisinden önce konan son hedeftir, yoksa `firstTarget(başlangıç)`; başlangıçtan önceki haftaların hedefi yoktur. `sessionDays` günleri bitmiş, dinlemeden okunmuş (`unheard` ya da saklanmış okuması yok; bugünkü onaya bakmaz) ve boş diye işaretler; `weekErrors` seans okumalarındaki beş hata türünü sayar (yardım ve kendini düzeltme sayılmaz); `weekComment` beş durumdan birini seçer; `goalUpdate` "Hedefi güncelle"nin önereceği hedefi verir. Sınıf ortalaması `gradeAverageWcpm` (3. sınıf 90, 4. sınıf 98; 1. ve 2. sınıfta çizgi yok).
+- **Görünümler** (`src/features/parent/views.ts`): `summaryView` (V1), `stuckView` (V2), `assessmentView` (V3), `recordingRows` (kayıt satırları). Sayılar sayı, cümleler hazır metindir; tarih biçimleri `format.ts`'te ("16 Kasım", "16 Kasım Pazar", "10–16 Kasım"). Grafiğin ve gün şeridinin erişilebilir adları sayıları ekleriyle yazar (`withAblativeSuffix`, `withDativeSuffix`, `withPossessiveLocativeSuffix`). V2 kelimenin okunuşunu, kelimenin geçtiği son kayıtlı seans okumasından ve kelimenin süresinin 200 ms önünden ve arkasından çalar; kitaplık kitabı okunan seanslara bakılmaz (Faz 5).
+- **Telefon tasarımları kısaltır:** V1'de gün şeridi yok ("Hedefi güncelle" ve dinlemeden okunan gün satırı telefonda da görünür), V2'de üç kelime ve kısa ek zinciri kartı, V3'te alıntı yok. Bir öğenin iki biçimi (kısa ve uzun etiket, iki yerde yorum) DOM'da birlikte durur, CSS birini gösterir.
+- **Haftalık ölçüm** (`src/domain/measurement.ts`, `/olcum`): `measurementDue(ölçümler, ayar, bugün, onay)` ve `measurementReadings(metinler, ölçümler, ayar, bugün)`. Ölçüm, son denemesiz ölçümden 7 gün sonra (hiç yoksa hemen) ve yalnız onayla açılır, yapılana kadar açık kalır. Metinler kimlik sırasıyla, bir öncekinden sonraki; denemede ikinci metin onun ardından (tek metinli sınıfta aynı metin). Deneme sırası önceki deneme haftalarının sayısına göre döner; yarım kalan deneme haftasının eksik okuması hafta bitene kadar açık kalır. G1'de bölüm kartının altındaki kartın dokunuşu mikrofonu açar (T22); `/olcum` dinleyen adreslerdedir. Ekran K3'ün düzenini (`OnboardingLayout`, ilerlemesiz, "Geri dön"lü) ve okuma gövdesini (`MeasurementReading`) kullanır; çerçevesi `OnboardingShell name="measurement"`. Her okuma `saveMeasurement` ile yazılır; depo yalnız şu an açık olan okumayı ve yalnız onayla yazar. Son okuma yazılınca yol açılır; yarıda çıkılırsa okuma ve kaydı yazılmaz.
+- **Ortak zamanlı okuma** (`src/features/reading/MeasurementReading.tsx`): K3 ve haftalık ölçüm. Dinleyici, yardım, dakika ve payı (P15), kayıt, mikrofon ve "Okumayı bitir" buradadır; düzeni çağıran kurar (`render`). `startOnTap` okumayı açık mikrofonda bile dokunuşa kadar bekletir (deneme haftasının ikinci okuması).
+- **Depo eylemleri:** `setGoal` (yalnız önerilen hedef), `saveMeasurement`, `addDrillToWarmup` (öneriden yeni kartlar, yarından başlayarak günde iki; öneri silinir), `deleteRecording` (önce okumalardaki ve ölçümlerdeki göndermeler, sonra ses), `setConsent` (onay yeni verilince tarih yazılır, geri alınınca silinir), `deleteAccount` (`clearAll`, kayıtlar dahil; kurulum açılır). Günün verisi sınıfın ölçüm metinlerini (`passages`) ve ek zinciri önerisini (`drill`) de taşır.
+- **Hesap sayfası** (`/veli/hesap`, `parentExtraPaths`): onaylar (K1'in metinleriyle), kayıtlar (dinle, sil), hesabı silme. Ray ve kenar çubuğunun altında "Çocuk ekranı"nın üstünde "Hesap"; telefonda veli şeridinde düğme.
+- **Paylaşım** (`ShareService`, T23): V3'ün "Öğretmenle paylaş"ı yalnız metin gönderir (ad, sınıf, tarih, sayılar, düzey); panoya düşünce bir satır bunu söyler.
 
 ## Depolama ve örnek veri
 

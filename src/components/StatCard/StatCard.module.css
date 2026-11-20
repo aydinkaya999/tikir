@@ -25,9 +25,10 @@
   line-height: 1.05;
 }
 
+/* 14 px on phones and the web, 15 px on tablets (V1). */
 .plain .label {
   color: var(--color-muted);
-  font-size: var(--size-label);
+  font-size: var(--size-small);
   font-weight: var(--weight-semibold);
   line-height: 1.25;
 }

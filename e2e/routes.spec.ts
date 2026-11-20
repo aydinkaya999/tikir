@@ -25,6 +25,8 @@ const routes: ShellRoute[] = [
   { path: '/veli/olcum', shell: 'parent', nav: { phone: 'Ölçüm', web: 'Ölçüm' } },
   { path: '/veli/yazi', shell: 'parent', nav: { phone: 'Yazı', web: 'Yazı ayarı' } },
   { path: '/veli/kitap', shell: 'parent', nav: { phone: 'Kitaplar', web: 'Kitaplar' } },
+  // The account page has no tab of its own (docs/planlar/faz-4.md, karar 37).
+  { path: '/veli/hesap', shell: 'parent' },
 ];
 
 const viewports = {
@@ -291,6 +293,25 @@ test('the child and parent areas lead to each other at every width', async ({ pa
   await back.click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('[data-shell]')).toHaveAttribute('data-shell', 'child');
+});
+
+test('the account page opens from the rail, the sidebar and the phone strip', async ({ page }) => {
+  // docs/planlar/faz-4.md, karar 37: above "Çocuk ekranı" at the foot, beside it on the strip.
+  for (const viewport of ['web', 'tablet'] as const) {
+    await open(page, '/veli', viewport);
+    const account = page
+      .getByRole('navigation', { name: 'Veli gezinmesi' })
+      .getByRole('link', { name: 'Hesap' });
+    await expect(account).toBeVisible();
+    await account.click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Hesap' })).toBeVisible();
+  }
+
+  await open(page, '/veli', 'telefon');
+  const button = page.getByRole('link', { name: 'Hesap' });
+  await expect(button).toHaveCount(1);
+  await button.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Hesap' })).toBeVisible();
 });
 
 // docs/tasarim-sistemi.md, "Ek kurallar": a two-pane layout stacks when its content is narrower

@@ -21,7 +21,7 @@ export function ChildShell() {
       <ShellNav
         label={tr.nav.child.label}
         items={items}
-        footer={{ to: screenPaths.V1, label: tr.nav.child.parentArea, icon: 'lock' }}
+        footer={[{ to: screenPaths.V1, label: tr.nav.child.parentArea, icon: 'lock' }]}
       />
       <main className={styles.main}>
         <Outlet />

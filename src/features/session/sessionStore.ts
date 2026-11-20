@@ -3,10 +3,13 @@
 // screen moves on only once its step is stored. One action runs at a time; a second call while one
 // is running (a double tap) is ignored, and an action at the wrong place writes nothing.
 import { createStore, type StoreApi } from 'zustand/vanilla';
-import { defaultReadingStyle } from '../../domain/readingStyle';
+import { measurementReadings, type PlannedReading } from '../../domain/measurement';
+import { defaultReadingStyle, sameReadingStyle } from '../../domain/readingStyle';
+import { goalUpdate } from '../../domain/report';
 import { isCountedError, readingLevel, toReadingResult } from '../../domain/scoring';
 import {
   applyWarmupResult,
+  drillCards,
   type MissedWord,
   recordMisses,
   stuckKey,
@@ -21,6 +24,7 @@ import type {
   Book,
   Chapter,
   Child,
+  DrillSuggestion,
   Grade,
   Id,
   LocalDate,
@@ -28,6 +32,7 @@ import type {
   Parent,
   Passage,
   ReadingOutcome,
+  ReadingResult,
   ReadingStyle,
   Session,
   SetupStep,
@@ -83,8 +88,12 @@ export interface SessionData {
   /** Every session up to today, in date order; today's included once it exists. */
   sessions: Session[];
   cards: StuckWord[];
-  /** Every measurement, the level check first (V4's comparison; V3 in phase 4). */
+  /** Every measurement, the level check first (V1, V3, V4 and the weekly measurement). */
   assessments: Assessment[];
+  /** The measurement texts of the child's grade (the weekly measurement). */
+  passages: Passage[];
+  /** The suffix drill suggested for the warmup (V2); null when none is ready. */
+  drill: DrillSuggestion | null;
   today: LocalDate;
   session: Session | null;
 }
@@ -147,6 +156,24 @@ export interface SessionState {
   setReadingStyle: (style: ReadingStyle) => Promise<void>;
   /** P14: the microphone cannot be used, today's session goes on unheard. */
   continueUnheard: () => Promise<void>;
+  /** V1's "Hedefi güncelle": the offered target, from today; any other is ignored (Faz 4, karar 2). */
+  setGoal: (targetWcpm: number) => Promise<void>;
+  /**
+   * One reading of the weekly measurement (Faz 4, karar 3), with the parent's consent only. A
+   * reading that is not open now (made already, or another) is ignored.
+   */
+  saveMeasurement: (
+    outcome: ReadingOutcome,
+    meta: { reading: PlannedReading; startedAt: string; recordingId: Id | null },
+  ) => Promise<void>;
+  /** V2's "Isınmaya ekle" (Faz 4, karar 8): the number of new cards; null when ignored. */
+  addDrillToWarmup: () => Promise<number | null>;
+  /** The recording and every reading's reference to it (Faz 4, karar 5). */
+  deleteRecording: (id: Id) => Promise<void>;
+  /** The account page's consent: its date is written when the consent is newly given (karar 7). */
+  setConsent: (consent: { voiceProcessing: boolean; weeklyEmail: boolean }) => Promise<void>;
+  /** The account page's "Hesabı sil": everything stored goes, the setup opens (karar 6). */
+  deleteAccount: () => Promise<void>;
 }
 
 /** Every date sorts after this one: the lower end of "all the sessions". */
@@ -173,6 +200,24 @@ function withSession(sessions: readonly Session[], session: Session): Session[] 
   return [...sessions.filter((each) => each.date !== session.date), session].sort((a, b) =>
     a.date < b.date ? -1 : a.date > b.date ? 1 : 0,
   );
+}
+
+/** Every chapter's chains of the series: a drill word takes its chain from here (Faz 4, karar 8). */
+function seriesChains(series: Book): Record<string, string[]> {
+  const chains: Record<string, string[]> = {};
+  for (const chapter of series.chapters) {
+    Object.assign(chains, chapter.chains);
+  }
+  return chains;
+}
+
+function withoutRecording<T extends Pick<ReadingResult, 'recordingId'>>(reading: T, id: Id): T {
+  if (reading.recordingId !== id) {
+    return reading;
+  }
+  const copy = { ...reading };
+  delete copy.recordingId;
+  return copy;
 }
 
 /** The stumbles of a reading as cards to record: each word of the text once. */
@@ -233,13 +278,14 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
     async function readState(): Promise<Pick<SessionState, 'status' | 'data' | 'setup'>> {
       const repository = await services.repository();
       const today = services.today();
-      const [parent, child, books, sessions, cards, assessments] = await Promise.all([
+      const [parent, child, books, sessions, cards, assessments, drill] = await Promise.all([
         repository.getParent(),
         repository.getChild(),
         repository.listBooks(),
         repository.listSessions(firstDate, today),
         repository.listStuckWords(),
         repository.listAssessments(),
+        repository.getDrillSuggestion(),
       ]);
       if (parent === null || parent.setup !== undefined || child === null) {
         const step: SetupPlace = parent === null ? 'account' : (parent.setup ?? 'reader');
@@ -263,9 +309,22 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
         session === null
           ? chapterOf(series, nextSeriesChapter(sessions, series))
           : chapterOf(series, session.chapterRef.chapter);
+      const passages = await repository.listPassages(child.grade);
       return {
         status: 'ready',
-        data: { parent, child, series, chapter, sessions, cards, assessments, today, session },
+        data: {
+          parent,
+          child,
+          series,
+          chapter,
+          sessions,
+          cards,
+          assessments,
+          passages,
+          drill,
+          today,
+          session,
+        },
         setup: null,
       };
     }
@@ -649,6 +708,143 @@ export function createSessionStore(services: SessionStoreServices): StoreApi<Ses
             return;
           }
           await storeSession(current.data, { ...current.session, unheard: true });
+        }),
+
+      setGoal: (targetWcpm) =>
+        act(undefined, async () => {
+          const { data } = get();
+          if (data === null || goalUpdate(data.assessments, data.child.goals) !== targetWcpm) {
+            return;
+          }
+          const child: Child = {
+            ...data.child,
+            goals: [...(data.child.goals ?? []), { targetWcpm, setOn: data.today }],
+          };
+          await (await services.repository()).saveChild(child);
+          publish({ data: { ...data, child } });
+        }),
+
+      saveMeasurement: (outcome, meta) =>
+        act(undefined, async () => {
+          const { data } = get();
+          if (data === null || !data.parent.consent.voiceProcessing) {
+            return;
+          }
+          const reading = measurementReadings(
+            data.passages,
+            data.assessments,
+            data.child.readingStyle,
+            data.today,
+          ).find(
+            (planned) =>
+              planned.trial === meta.reading.trial &&
+              planned.passageId === meta.reading.passageId &&
+              sameReadingStyle(planned.style, meta.reading.style),
+          );
+          if (reading === undefined) {
+            return;
+          }
+          const result = toReadingResult(outcome, {
+            startedAt: meta.startedAt,
+            readingStyle: reading.style,
+            ...(meta.recordingId === null ? {} : { recordingId: meta.recordingId }),
+          });
+          const assessment: Assessment = {
+            id: services.createId(),
+            childId: data.child.id,
+            date: data.today,
+            passageId: reading.passageId,
+            result,
+            level: readingLevel(result.accuracy),
+            ...(reading.trial ? { trial: true } : {}),
+          };
+          await (await services.repository()).saveAssessment(assessment);
+          publish({ data: { ...data, assessments: [...data.assessments, assessment] } });
+        }),
+
+      addDrillToWarmup: () =>
+        act<number | null>(null, async () => {
+          const { data } = get();
+          if (data === null || data.drill === null) {
+            return null;
+          }
+          const added = drillCards(data.drill, data.cards, seriesChains(data.series), data.today);
+          const cards = [...data.cards, ...added];
+          const repository = await services.repository();
+          await repository.saveStuckWords(cards);
+          await repository.saveDrillSuggestion(null);
+          publish({ data: { ...data, cards, drill: null } });
+          return added.length;
+        }),
+
+      deleteRecording: (id) =>
+        act(undefined, async () => {
+          const { data } = get();
+          if (data === null) {
+            return;
+          }
+          const repository = await services.repository();
+          const sessions: Session[] = [];
+          for (const session of data.sessions) {
+            if (!session.readings.some((reading) => reading.recordingId === id)) {
+              sessions.push(session);
+              continue;
+            }
+            const cleared = {
+              ...session,
+              readings: session.readings.map((reading) => withoutRecording(reading, id)),
+            };
+            await repository.saveSession(cleared);
+            sessions.push(cleared);
+          }
+          const assessments: Assessment[] = [];
+          for (const assessment of data.assessments) {
+            if (assessment.result.recordingId !== id) {
+              assessments.push(assessment);
+              continue;
+            }
+            const cleared = { ...assessment, result: withoutRecording(assessment.result, id) };
+            await repository.saveAssessment(cleared);
+            assessments.push(cleared);
+          }
+          await services.recorder.remove(id);
+          const today = data.session;
+          const session =
+            today === null ? null : (sessions.find((each) => each.date === today.date) ?? today);
+          publish({ data: { ...data, sessions, assessments, session } });
+        }),
+
+      setConsent: (consent) =>
+        act(undefined, async () => {
+          const { data } = get();
+          if (data === null) {
+            return;
+          }
+          const previous = data.parent.consent;
+          const grantedAt = !consent.voiceProcessing
+            ? undefined
+            : previous.voiceProcessing
+              ? previous.grantedAt
+              : services.now().toISOString();
+          const parent: Parent = {
+            ...data.parent,
+            consent: {
+              voiceProcessing: consent.voiceProcessing,
+              weeklyEmail: consent.weeklyEmail,
+              ...(grantedAt === undefined ? {} : { grantedAt }),
+            },
+          };
+          await (await services.repository()).saveParent(parent);
+          publish({ data: { ...data, parent } });
+        }),
+
+      deleteAccount: () =>
+        act(undefined, async () => {
+          if (get().data === null) {
+            return;
+          }
+          await (await services.repository()).clearAll();
+          publish({ ...(await readState()), unheardDone: 0 });
         }),
     };
   });

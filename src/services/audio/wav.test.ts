@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { encodeWav, parseWav } from './wav';
+import { encodeWav, parseWav, sliceWav } from './wav';
 
 function ascii(view: DataView, offset: number): string {
   return String.fromCharCode(...[0, 1, 2, 3].map((step) => view.getUint8(offset + step)));
@@ -72,5 +72,28 @@ describe('parseWav', () => {
 
     expect(() => parseWav(float)).toThrow(/16-bit PCM/);
     expect(() => parseWav(eightBit)).toThrow(/16-bit PCM/);
+  });
+});
+
+describe('sliceWav', () => {
+  // One second at 16 kHz; each sample holds its own index.
+  const second = encodeWav(
+    Int16Array.from({ length: 16000 }, (_, index) => index),
+    16000,
+  );
+
+  it('keeps the samples between two times as a WAV of its own', () => {
+    const part = parseWav(sliceWav(second, 250, 500));
+
+    expect(part.sampleRate).toBe(16000);
+    expect(part.samples).toHaveLength(4000);
+    expect(part.samples[0]).toBe(4000);
+    expect(part.samples.at(-1)).toBe(7999);
+  });
+
+  it('keeps to the recording at its ends', () => {
+    expect(parseWav(sliceWav(second, -100, 200)).samples).toHaveLength(3200);
+    expect(parseWav(sliceWav(second, 900, 1500)).samples).toHaveLength(1600);
+    expect(parseWav(sliceWav(second, 600, 400)).samples).toHaveLength(0);
   });
 });

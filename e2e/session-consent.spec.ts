@@ -20,7 +20,7 @@ test('without the parent’s consent the session runs unheard and never opens th
   test.setTimeout(120_000);
   await prepareSessionPage(page);
   await openPaused(page, '/?demo=cocuk-sabahi&onay=kapali');
-  await page.getByRole('button', { name: 'Başla' }).click();
+  await page.getByRole('button', { name: 'Başla', exact: true }).click();
 
   // G2: the cards one by one, unheard.
   await expect(heading(page, 'Isınma')).toBeVisible();

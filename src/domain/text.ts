@@ -184,6 +184,41 @@ export function withPossessiveSuffix(count: number): string {
   return `${digits}’${buffer}${vowel}`;
 }
 
+const FRONT_VOWELS = new Set(['e', 'i', 'ö', 'ü', 'î']);
+/** Consonants that harden a following d to t: "70’ten", "4’ten". */
+const HARD_CONSONANTS = new Set(['ç', 'f', 'h', 'k', 'p', 's', 'ş', 't']);
+
+/** The spoken letters of a count: 58 → "elli sekiz". */
+function spokenLetters(count: number): string[] {
+  return letters(readCardinal(String(count))).map(toLowerTr);
+}
+
+/** e after a front last vowel, a after a back one: two-way harmony. */
+function twoWayVowel(characters: readonly string[]): 'e' | 'a' {
+  const lastVowel = characters.findLast(isVowel) ?? 'e';
+  return FRONT_VOWELS.has(lastVowel) ? 'e' : 'a';
+}
+
+/** A count with its ablative suffix, as in "58’den 71’e" (V1's chart): '70’ten', '90’dan'. */
+export function withAblativeSuffix(count: number): string {
+  const characters = spokenLetters(count);
+  const consonant = HARD_CONSONANTS.has(characters.at(-1) ?? '') ? 't' : 'd';
+  return `${String(count)}’${consonant}${twoWayVowel(characters)}n`;
+}
+
+/** A count with its dative suffix: '71’e', '2’ye', '6’ya', '90’a'. */
+export function withDativeSuffix(count: number): string {
+  const characters = spokenLetters(count);
+  const buffer = isVowel(characters.at(-1) ?? '') ? 'y' : '';
+  return `${String(count)}’${buffer}${twoWayVowel(characters)}`;
+}
+
+/** A count with the possessive and locative suffixes, as in "7 günün 5’inde" (V1's day strip). */
+export function withPossessiveLocativeSuffix(count: number): string {
+  const possessive = withPossessiveSuffix(count);
+  return `${possessive}nd${twoWayVowel(letters(possessive))}`;
+}
+
 type WrittenToken = Omit<Token, 'spoken'>;
 
 /**
@@ -390,11 +425,33 @@ export function passageChapter(passage: Passage, maxWords: number = passagePageW
   return { number: 0, title: passage.title, pages, questions: [], chains: {} };
 }
 
+/**
+ * Common names whose final l is soft (palatal), so the suffix takes a front vowel after a back one:
+ * "Kemal’in", not "Kemal’ın" (docs/planlar/faz-4.md, karar 38).
+ */
+const SOFT_L_NAMES = new Set([
+  'bilal',
+  'celal',
+  'cemal',
+  'hayal',
+  'hilal',
+  'ikbal',
+  'kemal',
+  'meral',
+  'nihal',
+  'zülal',
+]);
+
 /** A name with its genitive suffix: "Deniz’in", "Ali’nin", "Umut’un" (vowel harmony, a buffer n). */
 export function withGenitiveSuffix(name: string): string {
-  const characters = letters(name.trim());
+  const trimmed = name.trim();
+  const lastWord = trimmed.split(/\s+/u).at(-1) ?? trimmed;
+  if (SOFT_L_NAMES.has(toLowerTr(lastWord))) {
+    return `${trimmed}’in`;
+  }
+  const characters = letters(trimmed);
   const lastVowel = characters.findLast(isVowel) ?? 'i';
   const vowel = ORDINAL_VOWEL[toLowerTr(lastVowel)] ?? 'i';
   const buffer = isVowel(characters.at(-1) ?? '') ? 'n' : '';
-  return `${name.trim()}’${buffer}${vowel}n`;
+  return `${trimmed}’${buffer}${vowel}n`;
 }

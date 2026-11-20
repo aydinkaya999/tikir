@@ -9,7 +9,11 @@ import { MeetPage } from '../features/onboarding/MeetPage';
 import { LevelPage } from '../features/onboarding/LevelPage';
 import { ReaderPage } from '../features/onboarding/ReaderPage';
 import { AccountPage } from '../features/onboarding/AccountPage';
-import { AssessmentPage, StuckWordsPage, WeeklySummaryPage } from '../features/parent/pages';
+import { MeasurementPage } from '../features/measurement/MeasurementPage';
+import { AccountSettingsPage } from '../features/parent/AccountSettingsPage';
+import { AssessmentPage } from '../features/parent/AssessmentPage';
+import { StuckWordsPage } from '../features/parent/StuckWordsPage';
+import { SummaryPage } from '../features/parent/SummaryPage';
 import { ReadingStylePage } from '../features/parent/ReadingStylePage';
 import { AlbumPage } from '../features/session/AlbumPage';
 import { DonePage } from '../features/session/DonePage';
@@ -28,7 +32,7 @@ import { SessionRoot } from '../features/session/SessionRoot';
 import { createSessionStore, type SessionState } from '../features/session/sessionStore';
 import { localDateOf } from '../domain/date';
 import { tr } from '../i18n/tr';
-import { devPaths, extraPaths, screenPaths } from './routes';
+import { devPaths, extraPaths, parentExtraPaths, screenPaths } from './routes';
 import { appRepository, sessionDevices, sessionStoreServices } from './services';
 import { ChildShell } from './shells/ChildShell';
 import { FocusShell } from './shells/FocusShell';
@@ -132,6 +136,11 @@ export function appRoutes(session: AppSession): RouteObject[] {
               children: [{ path: screenPaths.U4, element: <BookReadyPage /> }],
             },
             {
+              // The weekly measurement borrows the level check's frame (Faz 4, karar 32).
+              element: <OnboardingShell name="measurement" />,
+              children: [{ path: extraPaths.measurement, element: <MeasurementPage /> }],
+            },
+            {
               element: <OnboardingShell />,
               children: [
                 { path: screenPaths.K1, element: <AccountPage /> },
@@ -147,10 +156,11 @@ export function appRoutes(session: AppSession): RouteObject[] {
                 {
                   element: <ParentShell />,
                   children: [
-                    { path: screenPaths.V1, element: <WeeklySummaryPage /> },
+                    { path: screenPaths.V1, element: <SummaryPage /> },
                     { path: screenPaths.V2, element: <StuckWordsPage /> },
                     { path: screenPaths.V3, element: <AssessmentPage /> },
                     { path: screenPaths.V4, element: <ReadingStylePage /> },
+                    { path: parentExtraPaths.account, element: <AccountSettingsPage /> },
                     { path: screenPaths.U2, element: <BookFromTextPage /> },
                   ],
                 },

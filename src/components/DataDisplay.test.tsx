@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Chip } from './Chip/Chip';
 import { LineChart } from './LineChart/LineChart';
@@ -83,6 +83,28 @@ describe('LineChart', () => {
 
     expect(Number(first?.getAttribute('cx'))).toBeCloseTo(38, 1);
     expect(Number(first?.getAttribute('cy'))).toBeCloseTo(242.4, 1);
+  });
+});
+
+describe('LineChart with one week', () => {
+  it('centres a single point and its value (the first week after the level check)', () => {
+    render(
+      <LineChart
+        label="Tek hafta"
+        points={[58]}
+        labels={['1. hafta']}
+        yTicks={[50, 60, 70]}
+        target={{ value: 70, label: 'Hedef 70' }}
+      />,
+    );
+    const [compact, wide] = screen.getAllByRole('img', { name: 'Tek hafta' });
+
+    // The plot runs from x 38 to 278 on phones and from 38 to 606 on wide screens.
+    expect(Number(compact?.querySelector('[data-point]')?.getAttribute('cx'))).toBeCloseTo(158, 1);
+    expect(Number(wide?.querySelector('[data-point]')?.getAttribute('cx'))).toBeCloseTo(322, 1);
+    const value = wide === undefined ? null : within(wide).getByText('58');
+    expect(Number(value?.getAttribute('x'))).toBeCloseTo(322, 1);
+    expect(value).toHaveAttribute('text-anchor', 'middle');
   });
 });
 

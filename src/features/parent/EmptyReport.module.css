@@ -1,0 +1,35 @@
+/* A report page without data: the page's title over one sentence in a card. TODO(design) */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-h1);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.15;
+}
+
+.card {
+  padding: 22px;
+  border: var(--border);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.text {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--size-body);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+@media (min-width: 700px) {
+  .page {
+    gap: 20px;
+  }
+}

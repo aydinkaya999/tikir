@@ -33,7 +33,7 @@
   --size-step-label: 15px;
   /* Microphone button while listening: light turquoise ring inside an ink ring (G2, G4, K3). */
   --ring-mic: 0 0 0 7px var(--color-turquoise-light), 0 0 0 9.5px var(--color-ink);
-  /* Stat cards (V1): plain number 24 → 34 px, hero number 52 → 64 px, hero label 15 px. */
+  /* Stat cards (V1): plain number 24 → 34 px, hero number 52 → 64 px, hero label 15/16/15 px. */
   --size-stat: 24px;
   --size-stat-hero: 52px;
   --size-stat-hero-label: 15px;
@@ -82,6 +82,19 @@
   --size-chapter-title: 24px;
   /* G1: the number under each chapter tile. */
   --size-tile-number: 13px;
+  /* V2: a stuck word (17/19/18 px); labels in the report's cards, 15/16/15 px (V2's error types,
+     V3's level band and sentence); the small details (status chips, the error's example, V3's
+     band ranges); the phone's drill card title. V3: the result's number (64/88 px) and its
+     excerpt (20/19 px; not on phones). */
+  --size-stuck-word: 17px;
+  --size-card-label: 15px;
+  --size-result: 64px;
+  --size-excerpt: 20px;
+  --size-detail: 13px;
+  --size-drill-title: 18px;
+  /* V1: the session days' boxes and their weekday labels. */
+  --radius-day: 8px;
+  --size-day: 13px;
   /* G7 (and G1 when the day is done): the small locked tile of the "Yarın" card. */
   --radius-tile-small: 10px;
   /* G2: the warmup word (33 px on phones, 50 px from 700 px). */
@@ -120,6 +133,10 @@
     --size-option-label: 17px;
     --size-stat: 34px;
     --size-stat-hero: 64px;
+    --size-stat-hero-label: 16px;
+    --size-stuck-word: 19px;
+    --size-card-label: 16px;
+    --size-result: 88px;
     --size-chapter-title: 30px;
     --size-warmup-word: 50px;
     --size-syllable: 28px;
@@ -139,6 +156,10 @@
 @media (min-width: 1200px) {
   :root {
     --size-subtitle: 15px;
+    --size-stat-hero-label: 15px;
+    --size-stuck-word: 18px;
+    --size-card-label: 15px;
+    --size-excerpt: 19px;
     --size-trial-text: 15px;
     --reading-size-0: 22px;
     --reading-size-1: 25px;

@@ -9,6 +9,8 @@ export const childPaths = {
   library: '/kitaplik',
   album: '/album',
   studio: '/studyo',
+  /** The weekly one-minute measurement (docs/planlar/faz-4.md, karar 35). */
+  measurement: '/olcum',
 } as const;
 
 export const sessionPaths = {
@@ -25,4 +27,5 @@ export const listeningPaths: readonly string[] = [
   sessionPaths.warmup,
   sessionPaths.read,
   onboardingPaths.level,
+  childPaths.measurement,
 ];
