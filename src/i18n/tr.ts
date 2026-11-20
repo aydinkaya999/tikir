@@ -230,6 +230,8 @@ export const tr = {
     /** A recording's row on V2 and the account page (D17). TODO(design) */
     recordings: {
       chapter: (chapter: number, date: string) => `${String(chapter)}. bölüm, ${date}`,
+      /** A library book's reading (docs/planlar/faz-5.md, D18). */
+      book: (title: string, date: string) => `${title}, ${date}`,
       measurement: (date: string) => `1 dakikalık ölçüm, ${date}`,
       /** V2: the recordings the child sent (docs/ekranlar.md's default; D17). */
       pendingTitle: 'Onay bekleyen kayıtlar',

@@ -86,6 +86,8 @@ export interface Book {
   insertedWords?: string[];
   /** What a generated book was made from: "Yeniden üret" asks for it again (docs/planlar/faz-5.md). */
   request?: BookRequest;
+  /** When the library got the book (ISO time): the newest is listed first. The series has none. */
+  createdAt?: string;
 }
 
 /** U2's "Uzunluk": short 120, medium 180, long 260 words (docs/urun.md section 6). */

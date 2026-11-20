@@ -204,7 +204,16 @@ export async function loadDemoProfile(
   await repository.saveParent(parent);
   await repository.saveChild(child);
 
-  const books: Book[] = [seriesBook(), ...sampleBooksJson.books.map((book) => bookFromSeed(book))];
+  // The sample books came before the timeline's first session, the content's first book last:
+  // the library lists it first, as U1 does.
+  const firstDay = Math.min(...demoJson.timeline.sessions.map((session) => session.day));
+  const books: Book[] = [
+    seriesBook(),
+    ...sampleBooksJson.books.map((book, index) => ({
+      ...bookFromSeed(book),
+      createdAt: morningOf(dateOf(firstDay - 1 - index)).toISOString(),
+    })),
+  ];
   for (const book of books.slice(1)) {
     await repository.saveBook(book);
   }

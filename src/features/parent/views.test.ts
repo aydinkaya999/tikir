@@ -391,6 +391,78 @@ describe('stuckView', () => {
   });
 });
 
+describe('the report and the library’s books', () => {
+  it('takes the example of a suffix error from a session that read a library book', async () => {
+    const data = await weekendData();
+    const monday = data.sessions.find((session) => session.date === '2026-11-09');
+    const reading = monday?.readings.find((each) =>
+      each.words.some((word) => word.status === 'suffix'),
+    );
+    const suffixed = reading?.words.find((word) => word.status === 'suffix');
+    const book = data.books.find((each) => each.id === monday?.chapterRef.bookId);
+    const written = (book?.chapters[0] === undefined ? [] : chapterTokens(book.chapters[0]))[
+      suffixed?.index ?? -1
+    ]?.word;
+    if (
+      monday === undefined ||
+      reading === undefined ||
+      suffixed === undefined ||
+      written === undefined
+    ) {
+      throw new Error('Monday’s library book has no suffix error.');
+    }
+    // Only Monday's error is heard: every other suffix error of the week stays as it was.
+    const sessions = data.sessions.map((session) =>
+      session === monday
+        ? {
+            ...session,
+            readings: session.readings.map((each) =>
+              each === reading
+                ? {
+                    ...each,
+                    words: each.words.map((word) =>
+                      word === suffixed ? { ...word, heard: 'koyuyor' } : word,
+                    ),
+                  }
+                : each,
+            ),
+          }
+        : session,
+    );
+
+    expect(
+      stuckView({ ...data, sessions }, []).errors.find((row) => row.type === 'suffix')?.example,
+    ).toBe(`${written} yerine koyuyor`);
+  });
+
+  it('names a recording of a library book’s reading by the book', async () => {
+    const data = await weekendData();
+    const sessions = data.sessions.map((session) =>
+      session.date === '2026-11-09'
+        ? {
+            ...session,
+            readings: session.readings.map((reading) =>
+              reading.attempt === 3 ? { ...reading, recordingId: 'kayit-kitap' } : reading,
+            ),
+          }
+        : session,
+    );
+
+    expect(
+      recordingRows({ ...data, sessions }, [
+        { id: 'kayit-kitap', createdAt: '2026-11-09T12:00:00.000Z', seconds: 64, levels: [] },
+      ]),
+    ).toEqual([
+      {
+        id: 'kayit-kitap',
+        label: 'Uzay İstasyonunda Gizemli Ses, 9 Kasım',
+        duration: '1:04',
+        approval: null,
+      },
+    ]);
+  });
+});
+
 describe('stuckView’s sentence for a week without errors', () => {
   it('says there were no stumbles only when the week was listened to', async () => {
     const data = await weekendData();
