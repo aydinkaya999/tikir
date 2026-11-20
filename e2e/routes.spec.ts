@@ -260,6 +260,10 @@ for (const route of twoPaneShells) {
       await page.goto(
         route.path === '/seans/oku' ? `${route.path}?demo=cocuk-sabahi&adim=read-1` : route.path,
       );
+      if (route.path === '/seans/oku') {
+        // G4 draws its controls when Tıkır's voice is ready, in a new pane: measure that one.
+        await expect(page.getByText('1. okuma / 3')).toBeVisible();
+      }
       const pane = page.locator(`[data-shell="${route.shell}"] [data-pane="main"]`);
       await expect(pane).toBeAttached();
 
